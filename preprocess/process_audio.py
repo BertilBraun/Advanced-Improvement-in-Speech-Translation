@@ -11,13 +11,21 @@ from typing import List
 from torch.nn.utils.rnn import pad_sequence
 from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
+comm = MPI.COMM_WORLD
+size = comm.Get_size()
+rank = comm.Get_rank()
+
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/dataset/
-DATASET_LOCATION = "/content/fairseq/examples/speech_to_text/data" 
+DATASET_LOCATION = Path("/content/fairseq/examples/speech_to_text/data")
+# Create folder if not yet exist
+DATASET_LOCATION.mkdir(exist_ok=True)
 
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/encoded_dataset/
-ENCODED_OUTPUT_ROOT = DATASET_LOCATION + "/encoded"
+ENCODED_OUTPUT_ROOT = DATASET_LOCATION / "encoded"
+# Create folder if not yet exist
+ENCODED_OUTPUT_ROOT.mkdir(exist_ok=True)
 
 # TODO Define your batch size
 BATCH_SIZE = 12
@@ -28,6 +36,34 @@ wav2VecDevice = 'cuda' if torch.cuda.is_available() else 'cpu'
 processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
 model = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h")
 model = model.to(wav2VecDevice)
+
+
+def load_dataset() -> tuple[LIBRISPEECH, LIBRISPEECH, LIBRISPEECH]:
+    
+    print("Fetching training data...")
+    train_data = LIBRISPEECH(out_root.as_posix(), url="train-clean-100", download=True) # TODO For final training set to 'train-clean-360'
+    print("Fetching dev data...")
+    dev_data = LIBRISPEECH(out_root.as_posix(), url="dev-clean", download=True)
+    print("Fetching test data...")
+    test_data = LIBRISPEECH(out_root.as_posix(), url="test-clean", download=True)
+    
+    return train_data, dev_data, test_data
+
+
+def ensure_dataset_loaded() -> tuple[LIBRISPEECH, LIBRISPEECH, LIBRISPEECH]:
+    if rank == 0:
+        # Only rank == 0 may download, otherwise conflicts will appear        
+        datasets = load_dataset()
+        
+        comm.Barrier()
+        
+        return datasets
+    
+    comm.Barrier()
+    
+    return load_dataset()
+
+     
 
 def extract_wav2vec_features_batch(
     waveforms: List[torch.FloatTensor],
@@ -71,11 +107,7 @@ def extract_wav2vec_features_batch(
         trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
         np.save(output_path, trimmed_feature)
 
-def process_dataset(dataset, feature_root) -> None:
-    comm = MPI.COMM_WORLD
-    size = comm.Get_size()
-    rank = comm.Get_rank()
-
+def process_dataset(dataset) -> None:
     total_data = len(dataset)
     data_per_node = total_data // size
 
@@ -88,7 +120,7 @@ def process_dataset(dataset, feature_root) -> None:
     for i in tqdm.tqdm(range(start, end), desc=f"Node {rank}"):
         wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
         batch_waveforms.append(torch.FloatTensor(wav))
-        batch_paths.append(feature_root / f"{spk_id}-{chapter_no}-{utt_no}.npy")
+        batch_paths.append(ENCODED_OUTPUT_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy")
 
         if len(batch_waveforms) == BATCH_SIZE:
             extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
@@ -102,22 +134,9 @@ def process_dataset(dataset, feature_root) -> None:
 
 # Main execution
 if __name__ == "__main__":
-    # Define folder path to store the data
-    out_root = Path(DATASET_LOCATION)
-    # Create folder if not yet exist
-    out_root.mkdir(exist_ok=True)
-
-    # TODO only rank == 0 may download, otherwise conflicts will appear
-    print("Fetching training data...")
-    train_data = LIBRISPEECH(out_root.as_posix(), url="train-clean-100", download=True) # TODO For final training set to 'train-clean-360'
-    print("Fetching dev data...")
-    dev_data = LIBRISPEECH(out_root.as_posix(), url="dev-clean", download=True)
-    print("Fetching test data...")
-    test_data = LIBRISPEECH(out_root.as_posix(), url="test-clean", download=True)
-
-    feature_root =  Path(ENCODED_OUTPUT_ROOT)
-    # Create folder if not yet exist
-    feature_root.mkdir(exist_ok=True)
+    out_root = DATASET_LOCATION
     
+    train_data, dev_data, test_data = ensure_dataset_loaded()
+
     for dataset in [train_data, dev_data, test_data]:
-        process_dataset(dataset, feature_root)
+        process_dataset(dataset)
