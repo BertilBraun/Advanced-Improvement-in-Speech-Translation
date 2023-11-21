@@ -108,7 +108,7 @@ if __name__ == "__main__":
     out_root.mkdir(exist_ok=True)
     
     print("Fetching training data...")
-    train_data = LIBRISPEECH(out_root.as_posix(), url="train-clean-100", download=True)
+    train_data = LIBRISPEECH(out_root.as_posix(), url="train-clean-100", download=True) # TODO For final training set to 'train-clean-360'
     print("Fetching dev data...")
     dev_data = LIBRISPEECH(out_root.as_posix(), url="dev-clean", download=True)
     print("Fetching test data...")
