@@ -106,7 +106,8 @@ if __name__ == "__main__":
     out_root = Path(DATASET_LOCATION)
     # Create folder if not yet exist
     out_root.mkdir(exist_ok=True)
-    
+
+    # TODO only rank == 0 may download, otherwise conflicts will appear
     print("Fetching training data...")
     train_data = LIBRISPEECH(out_root.as_posix(), url="train-clean-100", download=True) # TODO For final training set to 'train-clean-360'
     print("Fetching dev data...")
