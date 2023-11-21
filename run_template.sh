@@ -18,4 +18,6 @@ module load devel/python/3.8.6_gnu_10.2
 module load mpi/openmpi/4.1
 module load devel/cuda/10.2
 
+source <path/to/your/venv/folder>/bin/activate  # Activate your virtual environment.
+
 mpirun python <path to your python script>

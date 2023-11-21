@@ -1,6 +1,6 @@
 # Project Setup and Execution Guide
 
-This guide outlines the steps for setting up and running the speech processing project in a Python virtual environment. The project uses MPI for parallel processing and leverages PyTorch and the Hugging Face `transformers` library for audio data processing.
+This guide outlines the steps for setting up and running the project in a Python virtual environment. The project uses MPI for parallel processing and leverages PyTorch and the Hugging Face `transformers` library for audio data processing and LLaMA 2 for text processing.
 
 ## Prerequisites
 
