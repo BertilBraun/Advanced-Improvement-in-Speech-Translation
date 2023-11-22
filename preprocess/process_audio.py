@@ -140,3 +140,6 @@ if __name__ == "__main__":
 
     for dataset in [train_data, dev_data, test_data]:
         process_dataset(dataset)
+
+    # TODO requires also text processing and saving of the data into the appropriate folders and formats
+    
