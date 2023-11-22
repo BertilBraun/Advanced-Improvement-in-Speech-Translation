@@ -31,7 +31,7 @@ OUTPUT_DE_FILE = OUTPUT_FOLDER / f'output_{rank}.de'
 DATASET_URL = 'https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5'
     
 MODEL_PATH = "./llama-2-7b-chat.ggmlv3.q8_0.bin"
-MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/blob/main/llama-2-7b-chat.ggmlv3.q8_0.bin"
+MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/blob/main/llama-2-7b.Q5_K_M.gguf"
 
 LANGUAGE = Literal('en') | Literal('de')
 
