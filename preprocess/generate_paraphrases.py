@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Union
 
 import requests
 from mpi4py import MPI
@@ -16,24 +16,24 @@ size = comm.Get_size()
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/dataset/
 DATASET_FOLDER = Path('sample_data')
 DATASET_FOLDER.mkdir(exist_ok=True)
-    
+
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/paraphrased_dataset/
 OUTPUT_FOLDER = Path('sample_data')
 OUTPUT_FOLDER.mkdir(exist_ok=True)
 
 DATASET_EN = DATASET_FOLDER / 'train.de-en.en'
-DATASET_DE = DATASET_FOLDER /'train.de-en.de'    
+DATASET_DE = DATASET_FOLDER /'train.de-en.de'
 
 OUTPUT_EN_FILE = OUTPUT_FOLDER / f'output_{rank}.en'
 OUTPUT_DE_FILE = OUTPUT_FOLDER / f'output_{rank}.de'
 
 DATASET_URL = 'https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5'
-    
+
 MODEL_PATH = "./llama-2-7b-chat.ggmlv3.q8_0.bin"
 MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/blob/main/llama-2-7b.Q5_K_M.gguf"
 
-LANGUAGE = Literal('en') | Literal('de')
+LANGUAGE = Union[Literal['en'], Literal['de']]
 
 PROMPT = { # TODO Modify and play with this prompt to properly generate 5 good paraphrases
     'en': "Generate five distinct paraphrases of the following English sentence:\n'{}'\nParaphrases:",
@@ -52,13 +52,13 @@ def ensure_model_loaded() -> None:
         with open(MODEL_PATH, 'wb') as file:
             file.write(response.content)
         print("Model downloaded.")
-    
+
     comm.Barrier()
 
 
 def ensure_dataset_loaded() -> None:
     if rank == 0 and (not DATASET_EN.is_file() or not DATASET_DE.is_file()):
-           
+
         download_location = DATASET_FOLDER / 'data.zip'
         # Download and unzip command
         download_command = f"wget -nc -O '{download_location}' '{DATASET_URL}'"
@@ -70,23 +70,23 @@ def ensure_dataset_loaded() -> None:
         print("Unzipping dataset...")
         os.system(unzip_command)
         print("Dataset ready.")
-        
+
     comm.Barrier()
-     
+
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
-    
+
     # Format the prompt with the given sentence
     formatted_prompt = PROMPT[language].format(sentence)
 
     # Generate response using LLaMA 2
     # max_tokens=0 removes the response size limit
     output = LLM(formatted_prompt, max_tokens=0)
-    
+
     # Extract paraphrases from the response
     paraphrases_text = output["choices"][0]["text"]
-    
+
     # Use Spacy's sentence boundary detection to extract paraphrases
     doc = NLP[language](paraphrases_text)
     sentences = [sent.text.strip() for sent in doc.sents]
@@ -130,10 +130,10 @@ def read_dataset_segment(file_path: str, start_line: int, end_line: int) -> list
 def main() -> None:
     ensure_dataset_loaded()
     ensure_model_loaded()
-    
+
     # LLaMA model initialization
     LLM = Llama(model_path=MODEL_PATH, n_ctx=2048)
-    
+
     # Find out the number of lines in the dataset and split them evenly between processes
     num_lines = sum(1 for _ in open(DATASET_EN, 'r', encoding='utf-8'))
     lines_per_process = num_lines // size
