@@ -48,7 +48,7 @@ fi
 # TODO adjust paths and num-workers
 
 # Train the model in parallel
-CUDA_VISIBLE_DEVICES=0 fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
+fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
   --train-subset train-clean-100 --valid-subset dev-clean \
   --num-workers 4 --max-tokens 40000 --max-update 300000 \
   --task speech_to_text --criterion label_smoothed_cross_entropy --label-smoothing 0.1 --report-accuracy \

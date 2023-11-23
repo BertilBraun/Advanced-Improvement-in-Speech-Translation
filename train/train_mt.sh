@@ -50,7 +50,7 @@ if [ -z "$(ls -A $DATA_DIR)" ]; then
 fi
 
 # Binarize the data for training
-!fairseq-preprocess \
+fairseq-preprocess \
     --source-lang en --target-lang de \
     --trainpref "$DATA_DIR/spm.train.de-en" \
     --validpref "$DATA_DIR/spm.dev.de-en" \
@@ -62,7 +62,7 @@ fi
 # TODO adjust paths and num-workers
 
 # Train the model in parallel
-!CUDA_VISIBLE_DEVICES=0 fairseq-train \
+fairseq-train \
     "$BINARY_DATA_DIR/iwslt14.de-en" --save-dir $MODEL_DIR \
     --arch transformer --share-decoder-input-output-embed \
     --optimizer adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \

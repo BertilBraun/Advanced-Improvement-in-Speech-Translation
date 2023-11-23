@@ -15,7 +15,6 @@ import pandas as pd
 
 from examples.speech_to_text.data_utils import (
     create_zip,
-    extract_fbank_features,
     gen_config_yaml,
     gen_vocab,
     get_zip_manifest,
