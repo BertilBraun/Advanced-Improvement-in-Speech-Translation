@@ -24,4 +24,5 @@ module load devel/cuda/10.2
 
 source ${VENVDIR}/bin/activate  # Activate your virtual environment.
 
-mpirun python ${PYDIR}/process_audio.py
+# mpirun python ${PYDIR}/process_audio.py
+python ${PYDIR}/process_audio.py

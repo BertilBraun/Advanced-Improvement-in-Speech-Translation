@@ -1,4 +1,15 @@
-from mpi4py import MPI
+USE_MPI = False
+
+if USE_MPI:
+    from mpi4py import MPI
+    comm = MPI.COMM_WORLD
+    size = comm.Get_size()
+    rank = comm.Get_rank()
+else:
+    rank = 0
+    size = 1
+    
+from curses.ascii import US
 import torch
 from torchaudio.datasets import LIBRISPEECH
 import tqdm
@@ -26,10 +37,6 @@ from pathlib import Path
 from tqdm import tqdm
 from torch.utils.data import Subset
 import numpy as np
-
-comm = MPI.COMM_WORLD
-size = comm.Get_size()
-rank = comm.Get_rank()
 
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/
@@ -80,11 +87,13 @@ def ensure_dataset_loaded() -> tuple[LIBRISPEECH, LIBRISPEECH, LIBRISPEECH]:
         # Only rank == 0 may download, otherwise conflicts will appear        
         datasets = load_dataset()
         
-        comm.Barrier()
+        if USE_MPI:
+            comm.Barrier()
         
         return datasets
     
-    comm.Barrier()
+    if USE_MPI:
+        comm.Barrier()
     
     return load_dataset()
      
