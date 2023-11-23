@@ -1,7 +1,9 @@
 torch
 torchaudio
-mpi4py
+# mpi4py
 tqdm
 transformers
 llama-cpp-python
 spacy
+pandas
+numpy

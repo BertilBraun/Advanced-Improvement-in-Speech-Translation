@@ -12,7 +12,9 @@
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --mail-user=uxude@student.kit.edu  # notification email address
 
-export OMP_NUM_THREADS=40
+export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
+export VENVDIR=~/env                       # Export path to your virtual environment.
+export PYDIR=.    			                   # Export path to directory containing Python script.
 
 module purge                                    # Unload all currently loaded modules.
 module load compiler/gnu/10.2                   # Load required modules.  
@@ -20,7 +22,7 @@ module load devel/python/3.8.6_gnu_10.2
 module load mpi/openmpi/4.1
 module load devel/cuda/10.2
 
-source ~/env/bin/activate  # Activate your virtual environment.
+source ${VENVDIR}/bin/activate  # Activate your virtual environment.
 
 git clone https://github.com/facebookresearch/fairseq.git
 cd fairseq
@@ -48,7 +50,7 @@ fi
 # TODO adjust paths and num-workers
 
 # Train the model in parallel
-CUDA_VISIBLE_DEVICES=0 fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
+fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
   --train-subset train-clean-100 --valid-subset dev-clean \
   --num-workers 4 --max-tokens 40000 --max-update 300000 \
   --task speech_to_text --criterion label_smoothed_cross_entropy --label-smoothing 0.1 --report-accuracy \
