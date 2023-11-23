@@ -33,7 +33,7 @@ DATASET_URL = 'https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2
 MODEL_PATH = "./llama-2-7b-chat.ggmlv3.q8_0.bin"
 MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/blob/main/llama-2-7b.Q5_K_M.gguf"
 
-LANGUAGE = Literal('en') | Literal('de')
+# LANGUAGE = Literal('en') | Literal('de')
 
 PROMPT = { # TODO Modify and play with this prompt to properly generate 5 good paraphrases
     'en': "Generate five distinct paraphrases of the following English sentence:\n'{}'\nParaphrases:",
@@ -75,7 +75,7 @@ def ensure_dataset_loaded() -> None:
      
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
-def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
+def generate_paraphrases(LLM, sentence: str, language) -> list[str]:
     
     # Format the prompt with the given sentence
     formatted_prompt = PROMPT[language].format(sentence)
@@ -101,7 +101,7 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
     return paraphrases[:5]
 
 
-def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -> bool:
+def heuristic_is_paraphrase(candidate: str, original: str, language) -> bool:
     # Convert sentences to Spacy Doc objects
     doc_candidate = NLP[language](candidate)
     doc_original = NLP[language](original)

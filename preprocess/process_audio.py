@@ -11,24 +11,50 @@ from typing import List
 from torch.nn.utils.rnn import pad_sequence
 from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
+import pandas as pd
+
+from examples.speech_to_text.data_utils import (
+    create_zip,
+    extract_fbank_features,
+    gen_config_yaml,
+    gen_vocab,
+    get_zip_manifest,
+    save_df_to_tsv,
+)
+
+from torchaudio.datasets import LIBRISPEECH
+from pathlib import Path
+from tqdm import tqdm
+from torch.utils.data import Subset
+import numpy as np
+
 comm = MPI.COMM_WORLD
 size = comm.Get_size()
 rank = comm.Get_rank()
 
 # TODO adjust location for Cluster
+# Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/
+ROOT_LOCATION = Path("/content/fairseq/examples/speech_to_text")
+
+# TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/dataset/
-DATASET_LOCATION = Path("/content/fairseq/examples/speech_to_text/data")
+DATASET_LOCATION = ROOT_LOCATION / "data"
 # Create folder if not yet exist
 DATASET_LOCATION.mkdir(exist_ok=True)
 
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/encoded_dataset/
-ENCODED_OUTPUT_ROOT = DATASET_LOCATION / "encoded"
+ENCODED_OUTPUT_ROOT = ROOT_LOCATION / "encoded"
 # Create folder if not yet exist
 ENCODED_OUTPUT_ROOT.mkdir(exist_ok=True)
 
+OUTPUT_EMBEDDING_ZIP = ROOT_LOCATION / "encoded.zip"
+
 # TODO Define your batch size
 BATCH_SIZE = 12
+
+# TODO maybe adjust vocab size - 900 was used in the colab
+VOCAB_SIZE = 5000
 
 wav2VecDevice = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -41,11 +67,11 @@ model = model.to(wav2VecDevice)
 def load_dataset() -> tuple[LIBRISPEECH, LIBRISPEECH, LIBRISPEECH]:
     
     print("Fetching training data...")
-    train_data = LIBRISPEECH(out_root.as_posix(), url="train-clean-100", download=True) # TODO For final training set to 'train-clean-360'
+    train_data = LIBRISPEECH(DATASET_LOCATION.as_posix(), url="train-clean-100", download=True) # TODO For final training set to 'train-clean-360'
     print("Fetching dev data...")
-    dev_data = LIBRISPEECH(out_root.as_posix(), url="dev-clean", download=True)
+    dev_data = LIBRISPEECH(DATASET_LOCATION.as_posix(), url="dev-clean", download=True)
     print("Fetching test data...")
-    test_data = LIBRISPEECH(out_root.as_posix(), url="test-clean", download=True)
+    test_data = LIBRISPEECH(DATASET_LOCATION.as_posix(), url="test-clean", download=True)
     
     return train_data, dev_data, test_data
 
@@ -62,7 +88,6 @@ def ensure_dataset_loaded() -> tuple[LIBRISPEECH, LIBRISPEECH, LIBRISPEECH]:
     comm.Barrier()
     
     return load_dataset()
-
      
 
 def extract_wav2vec_features_batch(
@@ -107,7 +132,8 @@ def extract_wav2vec_features_batch(
         trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
         np.save(output_path, trimmed_feature)
 
-def process_dataset(dataset) -> None:
+
+def process_dataset_to_embeddings(dataset) -> None:
     total_data = len(dataset)
     data_per_node = total_data // size
 
@@ -132,14 +158,75 @@ def process_dataset(dataset) -> None:
 
     print(f"Node {rank} finished")
 
-# Main execution
-if __name__ == "__main__":
-    out_root = DATASET_LOCATION
+
+def process_dataset_manifest(train_data, dev_data, test_data):
+    MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
+
+    print("Fetching audio manifest...")
+    audio_paths, audio_lengths = get_zip_manifest(OUTPUT_EMBEDDING_ZIP)
+
+    for dataset, split_name in zip([train_data, dev_data, test_data],
+                                ["train-clean-100", "dev-clean", "test-clean"]):
+        
+        print(f"Fetching manifest from {split_name}...")
+        manifest = {c: [] for c in MANIFEST_COLUMNS}
+        
+        for _, _, utt, spk_id, chapter_no, utt_no in tqdm(dataset):
+            sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
+            manifest["id"].append(sample_id)
+            manifest["audio"].append(audio_paths[sample_id])
+            manifest["n_frames"].append(audio_lengths[sample_id])
+            manifest["tgt_text"].append(utt.lower())
+            manifest["speaker"].append(spk_id)
+            
+        save_df_to_tsv(
+            pd.DataFrame.from_dict(manifest), ROOT_LOCATION / f"{split_name}.tsv"
+        )
+
+
+def process_dataset_vocab():
+    # Collect train text to generate sentencepiece model and vocabulary later on
+    train_text = pd.read_csv(ROOT_LOCATION / "train-clean-100.tsv", sep='\t')["tgt_text"].tolist()
+    with open(ROOT_LOCATION / 'train_text.txt', 'w') as f:
+        f.write("\n".join(train_text))
+        
+    gen_vocab(
+        ROOT_LOCATION / 'train_text.txt',
+        ROOT_LOCATION / f"spm_unigram{VOCAB_SIZE}",
+        model_type='unigram',
+        vocab_size=VOCAB_SIZE,
+    )
     
-    train_data, dev_data, test_data = ensure_dataset_loaded()
 
-    for dataset in [train_data, dev_data, test_data]:
-        process_dataset(dataset)
+def process_dataset_config():
+    gen_config_yaml(
+        ROOT_LOCATION,
+        spm_filename=f"spm_unigram{VOCAB_SIZE}.model"
+    )
 
-    # TODO requires also text processing and saving of the data into the appropriate folders and formats
+
+# Main execution
+def main() -> None:    
+    datasets = ensure_dataset_loaded() # train_data, dev_data, test_data = datasets
+
+    for dataset in datasets:
+        process_dataset_to_embeddings(dataset)
+
+    if rank != 0:
+        # Only continue with root process, as the following steps are not as computationally expensive
+        return
+    
+    # Pack audio features into ZIP
+    print("ZIPing features...")
+    create_zip(ENCODED_OUTPUT_ROOT, OUTPUT_EMBEDDING_ZIP)
+
+    process_dataset_manifest(*datasets)
+    
+    process_dataset_vocab()
+    
+    process_dataset_config()
+    
+    
+if __name__ == "__main__":
+    main()
     
