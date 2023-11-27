@@ -7,6 +7,7 @@ import itertools
 import os
 from llama_cpp import Llama
 import spacy
+import random
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
@@ -39,6 +40,34 @@ PROMPT = { # TODO Modify and play with this prompt to properly generate 5 good p
     'en': "Generate five distinct paraphrases of the following English sentence:\n'{}'\nParaphrases:",
     'de': "Erzeugen Sie fünf unterschiedliche Paraphrasen des folgenden deutschen Satzes:\n'{}'\nParaphrasen:"
 }
+
+#Some alternatives to try for paraphrase genaration
+'''
+PROMPT_Variation = {
+    'en': "Provide five alternative expressions for the given sentence:\n'{}'\nAlternatives:",
+    'de': "Geben Sie fünf alternative Ausdrücke für den folgenden Satz an:\n'{}'\nAlternativen:"
+}
+
+PROMPT_Rephrase = {
+    'en': "Rephrase the following sentence in five different ways:\n'{}'\nRephrases:",
+    'de': "Umschreiben Sie den folgenden Satz auf fünf verschiedene Arten:\n'{}'\nUmschreibungen:"
+}
+
+PROMPT_Diversify = {
+    'en': "Diversify the expression of the given sentence in five ways:\n'{}'\nExpressions:",
+    'de': "Diversifizieren Sie den Ausdruck des folgenden Satzes auf fünf Arten:\n'{}'\nAusdrücke:"
+}
+
+PROMPT_AlternateVersions = {
+    'en': "Generate five alternate versions of the following sentence:\n'{}'\nVersions:",
+    'de': "Erstellen Sie fünf alternative Versionen des folgenden Satzes:\n'{}'\nVersionen:"
+}
+
+PROMPT_Rewrite = {
+    'en': "Rewrite the following sentence in five different ways:\n'{}'\nRewrites:",
+    'de': "Schreiben Sie den folgenden Satz auf fünf verschiedene Arten um:\n'{}'\nUmschreibungen:"
+}
+'''
 
 NLP = {
     'en': spacy.load('en_core_web_sm'),
@@ -91,6 +120,9 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
     doc = NLP[language](paraphrases_text)
     sentences = [sent.text.strip() for sent in doc.sents]
 
+    #Consider you have to generate initally more paraphrases if you use diversify with diversity_factor<1
+    sentences=diversify_paraphrases(sentences,diversity_factor=1)#adjust diversity factor appropriately 
+
     # Heuristics to identify and extract paraphrases
     paraphrases = [sent for sent in sentences if heuristic_is_paraphrase(sent, sentence)]
 
@@ -99,6 +131,19 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
 
     # Ensure only five paraphrases are returned
     return paraphrases[:5]
+
+
+# Diversify the list of paraphrases to cover a broader range of semantic variations
+# If you would like to work with 5 paraphrases and use diversify_paraphrases with a 
+# diversity_factor<1 you have to generate initially more paraphrases
+def diversify_paraphrases(paraphrases, diversity_factor=0.5):
+    num_paraphrases = len(paraphrases)
+    num_to_keep = max(int(num_paraphrases * diversity_factor), 1)
+    
+    # Randomly select paraphrases to keep
+    diversified_paraphrases = random.sample(paraphrases, num_to_keep)
+
+    return diversified_paraphrases
 
 
 def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -> bool:
