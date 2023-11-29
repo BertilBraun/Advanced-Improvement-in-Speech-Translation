@@ -51,3 +51,22 @@ This guide outlines the steps for setting up and running the project in a Python
    ```bash
    deactivate
    ```
+
+
+## Conda environment
+
+### Create Environment
+```shell
+conda env create -f environment.yml
+```
+
+## Updating Dependencies
+```shell
+conda env update -f environment.yml
+```
+
+## Add Dependency
+```shell
+conda install <package>
+conda env export > environment.yml
+```
