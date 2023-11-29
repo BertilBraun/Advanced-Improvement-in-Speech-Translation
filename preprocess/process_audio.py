@@ -1,3 +1,4 @@
+print("hello")
 USE_MPI = False
 
 if USE_MPI:
@@ -24,6 +25,8 @@ from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
 import pandas as pd
 
+print("middle import")
+
 from examples.speech_to_text.data_utils import (
     create_zip,
     gen_config_yaml,
@@ -37,10 +40,17 @@ from pathlib import Path
 from tqdm import tqdm
 from torch.utils.data import Subset
 import numpy as np
+import os
+
+print("imports done")
 
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/
-ROOT_LOCATION = Path("/content/fairseq/examples/speech_to_text")
+
+ROOT_LOCATION = Path(f"{os.getenv('HOME')}/fairseq/examples/speech_to_text")
+print(f"{ROOT_LOCATION = }")
+# ROOT_LOCATION = Path("~/test")
+
 
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/speech_to_text/dataset/
@@ -215,7 +225,9 @@ def process_dataset_config():
 
 # Main execution
 def main() -> None:    
+    print("starting")
     datasets = ensure_dataset_loaded() # train_data, dev_data, test_data = datasets
+    print("dataset is set")
 
     for dataset in datasets:
         process_dataset_to_embeddings(dataset)
