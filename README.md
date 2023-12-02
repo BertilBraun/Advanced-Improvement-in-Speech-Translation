@@ -70,3 +70,34 @@ conda env update -f environment.yml
 conda install <package>
 conda env export > environment.yml
 ```
+
+
+## BWUniCluster
+
+### Connect to Cluster
+```shell
+ssh <username>@uc2.scc.kit.edu
+```
+
+### Modules
+```shell
+module purge
+module load compiler/gnu/10.2
+module load devel/python/3.8.6_gnu_10.2
+module load mpi/openmpi/4.1
+module load devel/cuda/10.2
+module load devel/miniconda/23.9.0-py3.9.15
+```
+
+### Create Cuda Environment
+```shell
+conda create --name <env_name>
+conda activate <env_name>
+# Install required packages from requirements.txt
+conda install --file requirements.txt
+```
+
+### Launch Script
+```shell
+sbatch <script.sh>
+```
