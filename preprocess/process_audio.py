@@ -31,24 +31,24 @@ from examples.speech_to_text.data_utils import (
 
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/ASR/
-ROOT_LOCATION = Path(f"{os.getenv('HOME')}/asr")
+ROOT_LOCATION = Path(f"{os.getenv('HOME')}/PST/ASR")
 print(f"{ROOT_LOCATION = }")
 
 
 DATASET_LOCATION = ROOT_LOCATION / "data"
-DATASET_LOCATION.mkdir(exist_ok=True)
+DATASET_LOCATION.mkdir(parents=True, exist_ok=True)
 
 WAV2VEC_ROOT = ROOT_LOCATION / "wav2vec"
-WAV2VEC_ROOT.mkdir(exist_ok=True)
+WAV2VEC_ROOT.mkdir(parents=True, exist_ok=True)
 
 MEL_ROOT = ROOT_LOCATION / "mel"
-MEL_ROOT.mkdir(exist_ok=True)
+MEL_ROOT.mkdir(parents=True, exist_ok=True)
 
 WAV2VEC_OUTPUT_ROOT = WAV2VEC_ROOT / "encoded"
-WAV2VEC_OUTPUT_ROOT.mkdir(exist_ok=True)
+WAV2VEC_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
 MEL_OUTPUT_ROOT = MEL_ROOT / "encoded"
-MEL_OUTPUT_ROOT.mkdir(exist_ok=True)
+MEL_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
 WAV2VEC_EMBEDDING_ZIP = WAV2VEC_ROOT / "encoded.zip"
 MEL_EMBEDDING_ZIP = MEL_ROOT / "encoded.zip"

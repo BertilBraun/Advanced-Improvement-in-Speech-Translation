@@ -13,15 +13,16 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
-# TODO adjust location for Cluster
-# Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/dataset/
-DATASET_FOLDER = Path('sample_data')
-DATASET_FOLDER.mkdir(exist_ok=True)
 
 # TODO adjust location for Cluster
-# Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/paraphrased_dataset/
-OUTPUT_FOLDER = Path('sample_data')
-OUTPUT_FOLDER.mkdir(exist_ok=True)
+# Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/
+ROOT_FOLDER = Path(f"{os.getenv('HOME')}/PST/MT")
+
+DATASET_FOLDER = ROOT_FOLDER / 'dataset'
+DATASET_FOLDER.mkdir(parents=True, exist_ok=True)
+
+OUTPUT_FOLDER = ROOT_FOLDER / 'output'
+OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
 
 DATASET_EN = DATASET_FOLDER / 'train.de-en.en'
 DATASET_DE = DATASET_FOLDER /'train.de-en.de'
