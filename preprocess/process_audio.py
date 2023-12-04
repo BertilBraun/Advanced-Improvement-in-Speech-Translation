@@ -104,37 +104,41 @@ def extract_wav2vec_features_batch(
     if all(path.is_file() for path in output_paths) and not overwrite:
         return
 
-    # Store original lengths and remove the first dimension
-    original_lengths = [wav.shape[1] for wav in waveforms]
-    waveforms_squeezed = [wav.squeeze(0) for wav in waveforms]
-    batch_waveforms = pad_sequence(waveforms_squeezed, batch_first=True)
-    max_padded_length = batch_waveforms.shape[1]
+    try:
+        # Store original lengths and remove the first dimension
+        original_lengths = [wav.shape[1] for wav in waveforms]
+        waveforms_squeezed = [wav.squeeze(0) for wav in waveforms]
+        batch_waveforms = pad_sequence(waveforms_squeezed, batch_first=True)
+        max_padded_length = batch_waveforms.shape[1]
 
-    # Add a channel dimension
-    batch_waveforms = batch_waveforms.unsqueeze(1)
+        # Add a channel dimension
+        batch_waveforms = batch_waveforms.unsqueeze(1)
 
-    # Process the batch
-    processed_values = processor(batch_waveforms, sampling_rate=sample_rate, return_tensors="pt").input_values
-    processed_values = processed_values.squeeze(0).squeeze(1)
-    processed_values = processed_values.to(device)
+        # Process the batch
+        processed_values = processor(batch_waveforms, sampling_rate=sample_rate, return_tensors="pt").input_values
+        processed_values = processed_values.squeeze(0).squeeze(1)
+        processed_values = processed_values.to(device)
 
-    with torch.no_grad():
-        features = model(processed_values).last_hidden_state
-    feature_length = features.shape[1]
+        with torch.no_grad():
+            features = model(processed_values).last_hidden_state
+        feature_length = features.shape[1]
 
-    # Trim the features based on original lengths and save
-    for feature, original_length, output_path in zip(features, original_lengths, output_paths):
-        # Calculate the length ratio and apply it to the feature length
-        length_ratio = original_length / max_padded_length
-        trimmed_length = int(length_ratio * feature_length)
+        # Trim the features based on original lengths and save
+        for feature, original_length, output_path in zip(features, original_lengths, output_paths):
+            # Calculate the length ratio and apply it to the feature length
+            length_ratio = original_length / max_padded_length
+            trimmed_length = int(length_ratio * feature_length)
 
-        # Optionally add a small buffer to avoid cutting off too much
-        buffer = 5  # You can adjust this buffer
-        trimmed_length = min(trimmed_length + buffer, feature_length)
+            # Optionally add a small buffer to avoid cutting off too much
+            buffer = 5  # You can adjust this buffer
+            trimmed_length = min(trimmed_length + buffer, feature_length)
 
-        # Trim the feature
-        trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
-        np.save(output_path, trimmed_feature)
+            # Trim the feature
+            trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
+            np.save(output_path, trimmed_feature)
+    except Exception as e:
+        print(f"Error at embedding {output_paths}: {e}")
+        return
 
 
 def process_dataset_to_wav2vec_embeddings(dataset):
@@ -148,7 +152,12 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     batch_paths = []
 
     for i in tqdm(range(start, end), desc=f"Node {rank}"):
-        wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
+        try:
+            wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
+        except Exception as e:
+            print(f"Error at wav2vec {i}: {e}")
+            continue
+        
         batch_waveforms.append(torch.FloatTensor(wav))
         batch_paths.append(WAV2VEC_OUTPUT_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy")
 
@@ -164,7 +173,12 @@ def process_dataset_to_wav2vec_embeddings(dataset):
 
 
 def process_dataset_to_mel_spectrogram(dataset):
-    for wav, sample_rate, _, spk_id, chapter_no, utt_no in tqdm(dataset):
+    for i in tqdm(range(len(dataset)), desc=f"Mel"):
+        try:
+            wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
+        except Exception as e:
+            print(f"Error at Mel {i}: {e}")
+            continue
         sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
         extract_fbank_features(
                 wav, sample_rate, MEL_OUTPUT_ROOT / f"{sample_id}.npy"
@@ -221,7 +235,9 @@ def main():
 
     for dataset in datasets:
         process_dataset_to_wav2vec_embeddings(dataset)
-        process_dataset_to_mel_spectrogram(dataset)
+        if rank == 0:
+            # Only rank == 0 processes the mel spectrograms as they are not as computationally expensive
+            process_dataset_to_mel_spectrogram(dataset)
 
     if rank != 0:
         # Only continue with root process, as the following steps are not as computationally expensive
