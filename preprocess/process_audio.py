@@ -44,13 +44,14 @@ WAV2VEC_ROOT.mkdir(parents=True, exist_ok=True)
 MEL_ROOT = ROOT_LOCATION / "mel"
 MEL_ROOT.mkdir(parents=True, exist_ok=True)
 
-WAV2VEC_OUTPUT_ROOT = WAV2VEC_ROOT / "encoded"
-WAV2VEC_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
-
-MEL_OUTPUT_ROOT = MEL_ROOT / "encoded"
-MEL_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
-
+ENCODING_FOLDER_NAME = "encoded"
 ZIP_FILE_NAME = "encoded.zip"
+
+WAV2VEC_ENCODING_ROOT = WAV2VEC_ROOT / ENCODING_FOLDER_NAME
+WAV2VEC_ENCODING_ROOT.mkdir(parents=True, exist_ok=True)
+
+MEL_ENCODING_ROOT = MEL_ROOT / ENCODING_FOLDER_NAME
+MEL_ENCODING_ROOT.mkdir(parents=True, exist_ok=True)
 
 # TODO Define your batch size
 BATCH_SIZE = 12
@@ -93,8 +94,9 @@ def ensure_dataset_loaded():
     return load_dataset()
      
      
-def for_in_dataset(dataset, desc=""):
-    for i in tqdm(range(len(dataset)), desc=desc):
+def for_in_dataset(dataset, desc="", start=0, end=None):
+    end = len(dataset) if end is None else end
+    for i in tqdm(range(start, end), desc=desc):
         try:
             data = dataset[i]
         except Exception as e:
@@ -159,15 +161,9 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     batch_waveforms = []
     batch_paths = []
 
-    for i in tqdm(range(start, end), desc=f"Node {rank}"):
-        try:
-            wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
-        except Exception as e:
-            print(f"Error loading dataset at wav2vec {i}: {e}")
-            continue
-
-        batch_waveforms.append(torch.FloatTensor(wav))
-        batch_paths.append(WAV2VEC_OUTPUT_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy")
+    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Wav2vec {rank}", start=start, end=end):
+        batch_waveforms.append(torch.FloatTensor(wav, device=device))
+        batch_paths.append(WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy")
 
         if len(batch_waveforms) == BATCH_SIZE:
             extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
@@ -177,14 +173,14 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     if batch_waveforms:
         extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
 
-    print(f"Node {rank} finished")
+    print(f"Node {rank} finished processing wav2vec embeddings for {end - start} samples")
 
 
 def process_dataset_to_mel_spectrogram(dataset):
     for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Mel"):
         sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
         extract_fbank_features(
-                wav, sample_rate, MEL_OUTPUT_ROOT / f"{sample_id}.npy"
+                wav, sample_rate, MEL_ENCODING_ROOT / f"{sample_id}.npy"
         )
 
 
@@ -192,10 +188,13 @@ def process_dataset_manifest(datasets, root_location):
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
     print("Fetching audio manifest...")
-    audio_paths, audio_lengths = get_zip_manifest(root_location / ZIP_FILE_NAME)
+    all_encodings_zip_file = root_location / ZIP_FILE_NAME
+    audio_paths, audio_lengths = get_zip_manifest(all_encodings_zip_file)
 
-    for dataset, dataset_name in zip(datasets, DATASET_NAMES):
-        
+    # assert len(audio_paths) == len(audio_lengths)
+    assert len(datasets) == len(DATASET_NAMES)
+    
+    for dataset, dataset_name in zip(datasets, DATASET_NAMES):        
         print(f"Fetching manifest from {dataset_name}...")
         manifest = {c: [] for c in MANIFEST_COLUMNS}
         
@@ -248,11 +247,11 @@ def main():
         return
     
     # Pack audio features into ZIP
-    for root_location, encoded_location in zip(
-        [WAV2VEC_ROOT, MEL_ROOT],
-        [WAV2VEC_OUTPUT_ROOT, MEL_OUTPUT_ROOT]
-    ):
-        create_zip(encoded_location, root_location / ZIP_FILE_NAME)
+    for root_location in (WAV2VEC_ROOT, MEL_ROOT):
+        
+        encodings_folder = root_location / ENCODING_FOLDER_NAME
+        zip_file = root_location / ZIP_FILE_NAME
+        create_zip(encodings_folder, zip_file)
         
         process_dataset_manifest(datasets, root_location)
         
