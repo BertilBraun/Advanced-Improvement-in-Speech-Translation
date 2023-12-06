@@ -2,16 +2,20 @@
 
 #SBATCH --job-name=PST_train_asr           # job name
 #SBATCH --partition=gpu_8                  # TODO mby GPU queue for the resource allocation.
-#SBATCH --time=4:00:00                     # TODO wall-clock time limit  
+#SBATCH --time=6:00:00                     # TODO wall-clock time limit  
 #SBATCH --mem=200000                       # TODO memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --mail-user=uxude@student.kit.edu  # notification email address
+#SBATCH --gres=gpu:8
+#SBATCH --output=~/PST/ASR/logs/train_output.txt
+#SBATCH --error=~/PST/ASR/logs/train_error.txt
+
 
 # call ~/setup.sh
-source ~/setup.sh
+source ~/Advanced-Improvement-in-Speech-Translation/setup.sh
 
 # Define the model types in an array
 MODEL_TYPES=("wav2vec" "mel")

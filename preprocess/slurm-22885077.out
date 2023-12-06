@@ -1,0 +1,23 @@
+INFO:fairseq.tasks.text_to_speech:Please install tensorboardX: pip install tensorboardX
+ROOT_LOCATION = PosixPath('/home/kit/stud/ubppd/PST/ASR')
+Traceback (most recent call last):
+  File "./process_audio.py", line 39, in <module>
+    DATASET_LOCATION.mkdir(exist_ok=True)
+  File "/opt/bwhpc/common/devel/python/3.8.6_gnu_10.2/lib/python3.8/pathlib.py", line 1287, in mkdir
+    self._accessor.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kit/stud/ubppd/PST/ASR/data'
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n487
+Job ID: 22885077
+Cluster: uc2
+User/Group: ubppd/stud
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 00:00:10
+CPU Efficiency: 3.05% of 00:05:28 core-walltime
+Job Wall-clock time: 00:02:44
+Memory Utilized: 439.29 MB
+Memory Efficiency: 0.22% of 195.31 GB
