@@ -25,4 +25,6 @@ unset __conda_setup
 	
 conda activate nmt
 
+pip install --editable ~/fairseq/
+
 export PYTHONPATH="~/fairseq/:$PYTHONPATH"
