@@ -10,6 +10,7 @@ else:
     size = 1
     
 import os
+from regex import W
 import torch
 import pandas as pd
 import numpy as np
@@ -50,8 +51,7 @@ WAV2VEC_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 MEL_OUTPUT_ROOT = MEL_ROOT / "encoded"
 MEL_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
-WAV2VEC_EMBEDDING_ZIP = WAV2VEC_ROOT / "encoded.zip"
-MEL_EMBEDDING_ZIP = MEL_ROOT / "encoded.zip"
+ZIP_FILE_NAME = "encoded.zip"
 
 # TODO Define your batch size
 BATCH_SIZE = 12
@@ -72,10 +72,10 @@ model = model.to(device)
 
 def load_dataset():    
     print("Fetching data...")
-    return (
+    return [
         LIBRISPEECH(DATASET_LOCATION.as_posix(), url=dataset_name, download=True)
         for dataset_name in DATASET_NAMES
-    ) # train_data, dev_data, test_data
+     ] # train_data, dev_data, test_data
 
 
 def ensure_dataset_loaded():
@@ -93,6 +93,15 @@ def ensure_dataset_loaded():
     
     return load_dataset()
      
+     
+def for_in_dataset(dataset, desc=""):
+    for i in tqdm(range(len(dataset)), desc=desc):
+        try:
+            data = dataset[i]
+        except Exception as e:
+            print(f"Error loading dataset at {desc} {i}: {e}")
+            continue
+        yield data
 
 def extract_wav2vec_features_batch(
     waveforms, #: List[torch.FloatTensor],
@@ -151,13 +160,8 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     batch_waveforms = []
     batch_paths = []
 
-    for i in tqdm(range(start, end), desc=f"Node {rank}"):
-        try:
-            wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
-        except Exception as e:
-            print(f"Error at wav2vec {i}: {e}")
-            continue
-        
+    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset[start:end], desc=f"Node {rank}"):
+
         batch_waveforms.append(torch.FloatTensor(wav))
         batch_paths.append(WAV2VEC_OUTPUT_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy")
 
@@ -173,29 +177,25 @@ def process_dataset_to_wav2vec_embeddings(dataset):
 
 
 def process_dataset_to_mel_spectrogram(dataset):
-    for i in tqdm(range(len(dataset)), desc=f"Mel"):
-        try:
-            wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
-        except Exception as e:
-            print(f"Error at Mel {i}: {e}")
-            continue
+    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Mel"):
         sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
         extract_fbank_features(
                 wav, sample_rate, MEL_OUTPUT_ROOT / f"{sample_id}.npy"
         )
 
-def process_dataset_manifest(datasets, zip_path, root_location):
+
+def process_dataset_manifest(datasets, root_location):
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
     print("Fetching audio manifest...")
-    audio_paths, audio_lengths = get_zip_manifest(zip_path)
+    audio_paths, audio_lengths = get_zip_manifest(root_location / ZIP_FILE_NAME)
 
-    for dataset, split_name in zip(datasets, DATASET_NAMES):
+    for dataset, dataset_name in zip(datasets, DATASET_NAMES):
         
-        print(f"Fetching manifest from {split_name}...")
+        print(f"Fetching manifest from {dataset_name}...")
         manifest = {c: [] for c in MANIFEST_COLUMNS}
         
-        for _, _, utt, spk_id, chapter_no, utt_no in tqdm(dataset):
+        for (_, _, utt, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Manifest {dataset_name}"):
             sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
             manifest["id"].append(sample_id)
             manifest["audio"].append(audio_paths[sample_id])
@@ -204,7 +204,7 @@ def process_dataset_manifest(datasets, zip_path, root_location):
             manifest["speaker"].append(spk_id)
             
         save_df_to_tsv(
-            pd.DataFrame.from_dict(manifest), root_location / f"{split_name}.tsv"
+            pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv"
         )
 
 
@@ -244,13 +244,13 @@ def main():
         return
     
     # Pack audio features into ZIP
-    for zip_path, root_location in zip(
-        [WAV2VEC_EMBEDDING_ZIP, MEL_EMBEDDING_ZIP],
-        [WAV2VEC_OUTPUT_ROOT, MEL_OUTPUT_ROOT],
+    for root_location, encoded_location in zip(
+        [WAV2VEC_ROOT, MEL_ROOT],
+        [WAV2VEC_OUTPUT_ROOT, MEL_OUTPUT_ROOT]
     ):
-        create_zip(root_location, zip_path)
+        create_zip(encoded_location, root_location / ZIP_FILE_NAME)
         
-        process_dataset_manifest(datasets, zip_path, root_location)
+        process_dataset_manifest(datasets, root_location)
         
         process_dataset_vocab(root_location)
         
