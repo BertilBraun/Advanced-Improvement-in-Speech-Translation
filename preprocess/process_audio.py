@@ -10,7 +10,6 @@ else:
     size = 1
     
 import os
-from regex import W
 import torch
 import pandas as pd
 import numpy as np
