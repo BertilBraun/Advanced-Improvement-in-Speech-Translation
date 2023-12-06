@@ -159,7 +159,12 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     batch_waveforms = []
     batch_paths = []
 
-    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset[start:end], desc=f"Node {rank}"):
+    for i in tqdm(range(start, end), desc=f"Node {rank}"):
+        try:
+            wav, sample_rate, _, spk_id, chapter_no, utt_no = dataset[i]
+        except Exception as e:
+            print(f"Error loading dataset at wav2vec {i}: {e}")
+            continue
 
         batch_waveforms.append(torch.FloatTensor(wav))
         batch_paths.append(WAV2VEC_OUTPUT_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy")
