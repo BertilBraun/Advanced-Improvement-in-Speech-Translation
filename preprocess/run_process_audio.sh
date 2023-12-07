@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO must be completly on the GPU
-
 #SBATCH --job-name=PST_process_audio       # job name
 #SBATCH --partition=gpu_4	               # check gpu queue for the resource allocation.
 #SBATCH --time=01:00:00                    # wall-clock time limit  
