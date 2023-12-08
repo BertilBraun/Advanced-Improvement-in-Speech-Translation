@@ -13,8 +13,8 @@
 #SBATCH --output=/home/kit/stud/ubppd/asr/logs/output.txt
 #SBATCH --error=/home/kit/stud/ubppd/asr/logs/error.txt
 
-# call ~/setup.sh
-source ~/setup.sh
+# call ../setup.sh
+source ../setup.sh
 
 # mpirun python ${PYDIR}/process_audio.py
 python ${PYDIR}/process_audio.py

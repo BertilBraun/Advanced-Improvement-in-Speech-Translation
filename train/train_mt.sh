@@ -1,54 +1,47 @@
 #!/bin/bash
 
-# TODO Can this be run on the GPU?
-
 #SBATCH --job-name=PST_train_asr           # job name
-#SBATCH --partition=gpu_8                  # TODO mby GPU queue for the resource allocation.
-#SBATCH --time=2:00:00                     # TODO wall-clock time limit  
-#SBATCH --mem=200000                       # TODO memory per node
+#SBATCH --partition=gpu_8                  # mby GPU queue for the resource allocation.
+#SBATCH --time=2:00:00                     # wall-clock time limit  
+#SBATCH --mem=200000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
-#SBATCH --cpus-per-task=8                  # number of CPUs required per MPI task
+#SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
-#SBATCH --mail-user=uxude@student.kit.edu  # notification email address
+#SBATCH --mail-user=ubppd@student.kit.edu  # notification email address
 #SBATCH --gres=gpu:8
 #SBATCH --output=~/PST/MT/logs/output.txt
 #SBATCH --error=~/PST/MT/logs/error.txt
 
-# call ~/setup.sh
-source ~/setup.sh
+# call ../setup.sh
+source ../setup.sh
 
-# TODO Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/paraphrased_dataset/
-DATA_DIR=~/fairseq/examples/translation/sample_data
-
-# TODO Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/binarized_dataset/
-BINARY_DATA_DIR=~/fairseq/examples/translation/sample_data
-
-# TODO Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/models/
-MODEL_DIR=~/fairseq/examples/translation/models
+DATA_DIR=~/PST/MT/dataset
+PARAPHRASED_DATA_DIR=~/PST/MT/output
+BINARY_DATA_DIR=~/PST/MT/binarized_dataset
+MODEL_DIR=~/PST/MT/models
 
 # create folders if they don't exist
 mkdir -p $DATA_DIR
+mkdir -p $PARAPHRASED_DATA_DIR
 mkdir -p $BINARY_DATA_DIR
 mkdir -p $MODEL_DIR
 
-# if DATA_DIR is empty, print error and return
-if [ -z "$(ls -A $DATA_DIR)" ]; then
-  echo "Error: DATA_DIR is empty. Run preprocess/run_generate_paraphrases.sh first."
+# if PARAPHRASED_DATA_DIR is empty, print error and return
+if [ -z "$(ls -A $PARAPHRASED_DATA_DIR)" ]; then
+  echo "Error: PARAPHRASED_DATA_DIR is empty. Run preprocess/run_generate_paraphrases.sh first."
   exit 1
 fi
 
 # Binarize the data for training
 fairseq-preprocess \
     --source-lang en --target-lang de \
-    --trainpref "$DATA_DIR/spm.train.de-en" \
+    --trainpref "$PARAPHRASED_DATA_DIR/spm.train.de-en" \ 
     --validpref "$DATA_DIR/spm.dev.de-en" \
     --testpref "$DATA_DIR/spm.tst.de-en" \
     --destdir "$BINARY_DATA_DIR/iwslt14.de-en" \
     --thresholdtgt 0 --thresholdsrc 0 \
     --workers 8
-
-# TODO adjust paths and num-workers
 
 # Train the model in parallel
 fairseq-train \

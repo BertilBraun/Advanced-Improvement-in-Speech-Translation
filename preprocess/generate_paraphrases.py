@@ -1,21 +1,25 @@
+USE_MPI = False
+
+if USE_MPI:
+    from mpi4py import MPI
+    comm = MPI.COMM_WORLD
+    size = comm.Get_size()
+    rank = comm.Get_rank()
+else:
+    rank = 0
+    size = 1
+
 from pathlib import Path
 from typing import Literal, Union
 
 import requests
-from mpi4py import MPI
 import itertools
 import os
 from llama_cpp import Llama
 import spacy
 import random
 
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-size = comm.Get_size()
 
-
-# TODO adjust location for Cluster
-# Something like: /pfs/work7/workspace/scratch/uxxxx-PST/text_translation/
 ROOT_FOLDER = Path(f"{os.getenv('HOME')}/PST/MT")
 
 DATASET_FOLDER = ROOT_FOLDER / 'dataset'
@@ -83,7 +87,8 @@ def ensure_model_loaded() -> None:
             file.write(response.content)
         print("Model downloaded.")
 
-    comm.Barrier()
+    if USE_MPI:
+        comm.Barrier()
 
 
 def ensure_dataset_loaded() -> None:
@@ -101,7 +106,8 @@ def ensure_dataset_loaded() -> None:
         os.system(unzip_command)
         print("Dataset ready.")
 
-    comm.Barrier()
+    if USE_MPI:
+        comm.Barrier()
 
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
@@ -200,6 +206,27 @@ def main() -> None:
             for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
                 en_file.write(f"{en_p}\n")
                 de_file.write(f"{de_p}\n")
+                
+    print(f"Process {rank} finished generating paraphrases.")
+    
+    if USE_MPI:
+        comm.Barrier()
+        
+    if rank == 0:
+        # Concatenate all output files
+        os.system(f"cat {OUTPUT_FOLDER}/output_*.en > {OUTPUT_FOLDER}/output.en")
+        os.system(f"cat {OUTPUT_FOLDER}/output_*.de > {OUTPUT_FOLDER}/output.de")
+
+        # Remove the individual output files
+        os.system(f"rm {OUTPUT_FOLDER}/output_*.en")
+        os.system(f"rm {OUTPUT_FOLDER}/output_*.de")
+
+        print("Done concatenating output files.")
+        
+        # Write the output files into "spm.train.de-en"
+        for de, en in zip(open(OUTPUT_FOLDER / 'output.de', 'r', encoding='utf-8'), open(OUTPUT_FOLDER / 'output.en', 'r', encoding='utf-8')):
+            with open(OUTPUT_FOLDER / 'spm.train.de-en', 'w', encoding='utf-8') as file:
+                file.write(f"{de.strip()}\t{en.strip()}\n")
 
 if __name__ == "__main__":
     main()
