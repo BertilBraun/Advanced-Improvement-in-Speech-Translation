@@ -21,11 +21,19 @@ fairseq-generate "$DATA_DIR" \
     --path "$MODEL_DIR/checkpoint_best.pt" \
     --max-tokens 50000 --beam 5 --scoring wer > $PRED_LOG
 
+echo "Prediction done for $model"
 
 grep ^H $PRED_LOG | sed 's/^H-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp.txt
 grep ^T $PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/ref.txt
 
+echo "Prediction files written for $model"
+echo "Sample predictions:"
+
 head $PRED_OUTPUT_DIR/hyp.txt
+
+echo "Sample references:"
+
 head $PRED_OUTPUT_DIR/ref.txt
 
+echo "WER:"
 tail -n 1 $PRED_LOG
