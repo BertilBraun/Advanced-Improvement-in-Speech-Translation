@@ -42,7 +42,9 @@ for model in "${MODEL_TYPES[@]}"; do
         --task speech_to_text --criterion label_smoothed_cross_entropy --label-smoothing 0.1 --report-accuracy \
         --arch s2t_transformer_s --share-decoder-input-output-embed \
         --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
-        --clip-norm 10.0 --seed 1 --update-freq 8
+        --clip-norm 10.0 --seed 1 --update-freq 8 \
+        --keep-last-epochs 2 --save-interval-updates 100 --keep-best-checkpoints 1
+
 
     # Log the completion of training for the current model
     echo "Training completed for $model."
