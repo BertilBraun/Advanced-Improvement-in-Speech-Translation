@@ -58,7 +58,7 @@ MEL_ENCODING_ROOT.mkdir(parents=True, exist_ok=True)
 BATCH_SIZE = 12
 
 # TODO maybe adjust vocab size - 900 was used in the colab
-VOCAB_SIZE = 5000
+VOCAB_SIZE = 900
 
 # TODO For final training set to 'train-clean-360'?
 DATASET_NAMES = ["train-clean-100", "dev-clean", "test-clean"]
