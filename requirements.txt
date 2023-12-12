@@ -8,3 +8,7 @@ spacy
 pandas
 numpy
 sentencepiece
+soundfile
+datasets
+jiwer
+librosa

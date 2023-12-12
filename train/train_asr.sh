@@ -20,10 +20,12 @@ source ../setup.sh
 # Define the model types in an array
 MODEL_TYPES=("wav2vec" "mel")
 
+ROOT=~/PST/ASR
+
 for model in "${MODEL_TYPES[@]}"; do
     # Set directories based on the model type
-    DATA_DIR=~/PST/ASR/$model
-    MODEL_DIR=~/PST/ASR/models/$model
+    DATA_DIR=$ROOT/$model
+    MODEL_DIR=$ROOT/$model
 
     # Create folders if they don't exist
     mkdir -p $DATA_DIR
