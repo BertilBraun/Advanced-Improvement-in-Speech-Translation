@@ -8,8 +8,8 @@ DATA_DIR=~/PST/ASR/$model
 MODEL_DIR=~/PST/ASR/models/$model
 
 
-PRED_OUTPUT_DIR="~/PST/ASR/predictions/$model"
-PRED_LOG="$PRED_OUTPUT_DIR/en_s2t.pred.log"
+PRED_OUTPUT_DIR=~/PST/ASR/predictions/$model
+PRED_LOG=$PRED_OUTPUT_DIR/en_s2t.pred.log
 
 mkdir -p $PRED_OUTPUT_DIR
 
