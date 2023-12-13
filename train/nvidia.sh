@@ -11,8 +11,8 @@
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --mail-user=ubppd@student.kit.edu  # notification email address
 #SBATCH --gres=gpu:8
-#SBATCH --output=/home/kit/stud/ubppd/PST/ASR/logs/train_output_sbatch.txt
-#SBATCH --error=/home/kit/stud/ubppd/PST/ASR/logs/train_error_sbatch.txt
+#SBATCH --output=/home/kit/stud/ubppd/PST/ASR/logs/train_output_sbatch_%j.txt
+#SBATCH --error=/home/kit/stud/ubppd/PST/ASR/logs/train_error_sbatch_%j.txt
 
 
 # call ../setup.sh

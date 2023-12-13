@@ -10,8 +10,8 @@
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --mail-user=ubppd@student.kit.edu  # notification email address
 #SBATCH --gres=gpu:1
-#SBATCH --output=~/PST/MT/logs/output.txt
-#SBATCH --error=~/PST/MT/logs/error.txt
+#SBATCH --output=~/PST/MT/logs/output_%j.txt
+#SBATCH --error=~/PST/MT/logs/error_%j.txt
 
 # call ../setup.sh
 source ../setup.sh
