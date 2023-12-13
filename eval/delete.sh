@@ -2,7 +2,7 @@
 
 source ../setup.sh
 
-model="wav2vec_worst" # "wav2vec" or "mel"
+model="wav2vec" # "wav2vec" or "mel"
 
 DATA_DIR=~/PST/ASR/$model
 MODEL_DIR=~/PST/ASR/models/$model
@@ -18,7 +18,7 @@ echo "Starting prediction for $model"
 fairseq-generate "$DATA_DIR" \
     --config-yaml config.yaml --gen-subset test-clean \
     --task speech_to_text \
-    --path "$MODEL_DIR/checkpoint_best.pt" \
+    --path "/home/kit/stud/ubppd/PST/ASR/models/wav2vec_worst/checkpoint.best_loss_9.2360.pt" \
     --max-tokens 50000 --beam 5 --scoring wer > $PRED_LOG
 
 echo "Prediction done for $model"
