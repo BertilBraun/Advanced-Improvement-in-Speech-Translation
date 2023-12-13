@@ -2,13 +2,14 @@ USE_MPI = False
 
 if USE_MPI:
     from mpi4py import MPI
+
     comm = MPI.COMM_WORLD
     size = comm.Get_size()
     rank = comm.Get_rank()
 else:
     rank = 0
     size = 1
-    
+
 import os
 import torch
 import pandas as pd
@@ -26,7 +27,7 @@ from examples.speech_to_text.data_utils import (
     gen_vocab,
     get_zip_manifest,
     save_df_to_tsv,
-    extract_fbank_features
+    extract_fbank_features,
 )
 
 # TODO adjust location for Cluster
@@ -57,12 +58,12 @@ MEL_ENCODING_ROOT.mkdir(parents=True, exist_ok=True)
 BATCH_SIZE = 12
 
 # TODO maybe adjust vocab size - 900 was used in the colab
-VOCAB_SIZE = 5000
+VOCAB_SIZE = 900
 
 # TODO For final training set to 'train-clean-360'?
 DATASET_NAMES = ["train-clean-100", "dev-clean", "test-clean"]
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Load Wav2Vec model
 processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
@@ -70,30 +71,30 @@ model = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h")
 model = model.to(device)
 
 
-def load_dataset():    
+def load_dataset():
     print("Fetching data...")
     return [
         LIBRISPEECH(DATASET_LOCATION.as_posix(), url=dataset_name, download=True)
         for dataset_name in DATASET_NAMES
-     ] # train_data, dev_data, test_data
+    ]  # train_data, dev_data, test_data
 
 
 def ensure_dataset_loaded():
     if rank == 0:
-        # Only rank == 0 may download, otherwise conflicts will appear        
+        # Only rank == 0 may download, otherwise conflicts will appear
         datasets = load_dataset()
-        
+
         if USE_MPI:
             comm.Barrier()
-        
+
         return datasets
-    
+
     if USE_MPI:
         comm.Barrier()
-    
+
     return load_dataset()
-     
-     
+
+
 def for_in_dataset(dataset, desc="", start=0, end=None):
     end = len(dataset) if end is None else end
     for i in tqdm(range(start, end), desc=desc):
@@ -104,11 +105,12 @@ def for_in_dataset(dataset, desc="", start=0, end=None):
             continue
         yield data
 
+
 def extract_wav2vec_features_batch(
-    waveforms, #: List[torch.FloatTensor],
-    sample_rate, #: int,
-    output_paths, #: List[Path],
-    overwrite = False #: bool = False
+    waveforms,  #: List[torch.FloatTensor],
+    sample_rate,  #: int,
+    output_paths,  #: List[Path],
+    overwrite=False,  #: bool = False
 ):
     # Check if all output files exist and if overwrite is not allowed
     if all(path.is_file() for path in output_paths) and not overwrite:
@@ -125,7 +127,9 @@ def extract_wav2vec_features_batch(
         batch_waveforms = batch_waveforms.unsqueeze(1)
 
         # Process the batch
-        processed_values = processor(batch_waveforms, sampling_rate=sample_rate, return_tensors="pt").input_values
+        processed_values = processor(
+            batch_waveforms, sampling_rate=sample_rate, return_tensors="pt"
+        ).input_values
         processed_values = processed_values.squeeze(0).squeeze(1)
         processed_values = processed_values.to(device)
 
@@ -134,7 +138,9 @@ def extract_wav2vec_features_batch(
         feature_length = features.shape[1]
 
         # Trim the features based on original lengths and save
-        for feature, original_length, output_path in zip(features, original_lengths, output_paths):
+        for feature, original_length, output_path in zip(
+            features, original_lengths, output_paths
+        ):
             # Calculate the length ratio and apply it to the feature length
             length_ratio = original_length / max_padded_length
             trimmed_length = int(length_ratio * feature_length)
@@ -161,9 +167,13 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     batch_waveforms = []
     batch_paths = []
 
-    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Wav2vec {rank}", start=start, end=end):
+    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(
+        dataset, desc=f"Wav2vec {rank}", start=start, end=end
+    ):
         batch_waveforms.append(torch.FloatTensor(wav, device=device))
-        batch_paths.append(WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy")
+        batch_paths.append(
+            WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
+        )
 
         if len(batch_waveforms) == BATCH_SIZE:
             extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
@@ -173,15 +183,17 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     if batch_waveforms:
         extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
 
-    print(f"Node {rank} finished processing wav2vec embeddings for {end - start} samples")
+    print(
+        f"Node {rank} finished processing wav2vec embeddings for {end - start} samples"
+    )
 
 
 def process_dataset_to_mel_spectrogram(dataset):
-    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Mel"):
+    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(
+        dataset, desc=f"Mel"
+    ):
         sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
-        extract_fbank_features(
-                wav, sample_rate, MEL_ENCODING_ROOT / f"{sample_id}.npy"
-        )
+        extract_fbank_features(wav, sample_rate, MEL_ENCODING_ROOT / f"{sample_id}.npy")
 
 
 def process_dataset_manifest(datasets, root_location):
@@ -193,19 +205,21 @@ def process_dataset_manifest(datasets, root_location):
 
     # assert len(audio_paths) == len(audio_lengths)
     assert len(datasets) == len(DATASET_NAMES)
-    
-    for dataset, dataset_name in zip(datasets, DATASET_NAMES):        
+
+    for dataset, dataset_name in zip(datasets, DATASET_NAMES):
         print(f"Fetching manifest from {dataset_name}...")
         manifest = {c: [] for c in MANIFEST_COLUMNS}
-        
-        for (_, _, utt, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Manifest {dataset_name}"):
+
+        for (_, _, utt, spk_id, chapter_no, utt_no) in for_in_dataset(
+            dataset, desc=f"Manifest {dataset_name}"
+        ):
             sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
             manifest["id"].append(sample_id)
             manifest["audio"].append(audio_paths[sample_id])
             manifest["n_frames"].append(audio_lengths[sample_id])
             manifest["tgt_text"].append(utt.lower())
             manifest["speaker"].append(spk_id)
-            
+
         save_df_to_tsv(
             pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv"
         )
@@ -213,28 +227,27 @@ def process_dataset_manifest(datasets, root_location):
 
 def process_dataset_vocab(root_location):
     # Collect train text to generate sentencepiece model and vocabulary later on
-    train_text = pd.read_csv(root_location / f"{DATASET_NAMES[0]}.tsv", sep='\t')["tgt_text"].tolist()
-    with open(root_location / 'train_text.txt', 'w') as f:
+    train_text = pd.read_csv(root_location / f"{DATASET_NAMES[0]}.tsv", sep="\t")[
+        "tgt_text"
+    ].tolist()
+    with open(root_location / "train_text.txt", "w") as f:
         f.write("\n".join(train_text))
-        
+
     gen_vocab(
-        root_location / 'train_text.txt',
+        root_location / "train_text.txt",
         root_location / f"spm_unigram{VOCAB_SIZE}",
-        model_type='unigram',
+        model_type="unigram",
         vocab_size=VOCAB_SIZE,
     )
-    
+
 
 def process_dataset_config(root_location):
-    gen_config_yaml(
-        root_location,
-        spm_filename=f"spm_unigram{VOCAB_SIZE}.model"
-    )
+    gen_config_yaml(root_location, spm_filename=f"spm_unigram{VOCAB_SIZE}.model")
 
 
 # Main execution
-def main():    
-    datasets = ensure_dataset_loaded() # train_data, dev_data, test_data = datasets
+def main():
+    datasets = ensure_dataset_loaded()  # train_data, dev_data, test_data = datasets
 
     for dataset in datasets:
         process_dataset_to_wav2vec_embeddings(dataset)
@@ -245,20 +258,20 @@ def main():
     if rank != 0:
         # Only continue with root process, as the following steps are not as computationally expensive
         return
-    
+
     # Pack audio features into ZIP
     for root_location in (WAV2VEC_ROOT, MEL_ROOT):
-        
+
         encodings_folder = root_location / ENCODING_FOLDER_NAME
         zip_file = root_location / ZIP_FILE_NAME
         create_zip(encodings_folder, zip_file)
-        
+
         process_dataset_manifest(datasets, root_location)
-        
+
         process_dataset_vocab(root_location)
-        
-        process_dataset_config(root_location)    
-    
+
+        process_dataset_config(root_location)
+
+
 if __name__ == "__main__":
     main()
-    
