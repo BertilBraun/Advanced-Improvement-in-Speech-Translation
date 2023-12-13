@@ -49,8 +49,9 @@ for model in "${MODEL_TYPES[@]}"; do
         --arch s2t_transformer_s --share-decoder-input-output-embed \
         --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
         --clip-norm 10.0 --seed 1 --update-freq 8 \
-        --keep-last-epochs 2 --save-interval-updates 100 --keep-best-checkpoints 1 \
-	>> o.txt
+        --keep-last-epochs 1 --save-interval-updates 100 --keep-best-checkpoints 1 \
+        --model-parallel-size 8 --tensorboard-logdir $MODEL_DIR/tensorboard 
+
 
     # Log the completion of training for the current model
     echo "Training completed for $model."
