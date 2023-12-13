@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Redirect stdout and stderr to log files
-exec > >(tee -ia ~/PST/ASR/logs/train_output.txt) 2> >(tee -ia ~/PST/ASR/logs/train_error.txt >&2)
-
 
 #SBATCH --job-name=PST_train_asr_w2v           # job name
 #SBATCH --partition=gpu_8                  # mby GPU queue for the resource allocation.
@@ -14,8 +11,8 @@ exec > >(tee -ia ~/PST/ASR/logs/train_output.txt) 2> >(tee -ia ~/PST/ASR/logs/tr
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --mail-user=ubppd@student.kit.edu  # notification email address
 #SBATCH --gres=gpu:8
-#SBATCH --output=~/PST/ASR/logs/train_output_sbatch.txt
-#SBATCH --error=~/PST/ASR/logs/train_error_sbatch.txt
+#SBATCH --output=/home/kit/stud/ubppd/PST/ASR/logs/train_output_sbatch.txt
+#SBATCH --error=/home/kit/stud/ubppd/PST/ASR/logs/train_error_sbatch.txt
 
 
 # call ../setup.sh
@@ -42,7 +39,7 @@ for model in "${MODEL_TYPES[@]}"; do
     # Train the model in parallel
     fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
         --train-subset train-clean-100 --valid-subset dev-clean \
-        --num-workers 4 --max-tokens 40000 --max-update 300000 \
+        --num-workers 4 --max-tokens 40000 --max-update 3100 \
         --task speech_to_text --criterion label_smoothed_cross_entropy --label-smoothing 0.1 --report-accuracy \
         --arch s2t_transformer_s --share-decoder-input-output-embed \
         --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
