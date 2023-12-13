@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Redirect stdout and stderr to log files
-exec > >(tee -ia ~/PST/ASR/logs/train_output.txt) 2> >(tee -ia ~/PST/ASR/logs/train_error.txt >&2)
-
-
 #SBATCH --job-name=PST_train_asr_w2v           # job name
 #SBATCH --partition=gpu_8                  # mby GPU queue for the resource allocation.
 #SBATCH --time=06:00:00                     # wall-clock time limit  
