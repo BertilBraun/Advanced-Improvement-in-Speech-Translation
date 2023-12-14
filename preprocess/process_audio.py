@@ -170,10 +170,13 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(
         dataset, desc=f"Wav2vec {rank}", start=start, end=end
     ):
-        batch_waveforms.append(torch.FloatTensor(wav, device=device))
-        batch_paths.append(
-            WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
-        )
+        file = WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
+        
+        if not file.is_file():
+            batch_waveforms.append(torch.FloatTensor(wav, device=device))
+            batch_paths.append(
+                WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
+            )
 
         if len(batch_waveforms) == BATCH_SIZE:
             extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
@@ -192,8 +195,9 @@ def process_dataset_to_mel_spectrogram(dataset):
     for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(
         dataset, desc=f"Mel"
     ):
-        sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
-        extract_fbank_features(wav, sample_rate, MEL_ENCODING_ROOT / f"{sample_id}.npy")
+        file = MEL_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
+        if not file.is_file():
+            extract_fbank_features(wav, sample_rate, file)
 
 
 def process_dataset_manifest(datasets, root_location):

@@ -1,5 +1,5 @@
 
-export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
+export OMP_NUM_THREADS=1 # ${SLURM_CPUS_PER_TASK}
 export PYDIR=.    			                   # Export path to directory containing Python script.
 
 module purge                                    # Unload all currently loaded modules.
@@ -25,7 +25,7 @@ unset __conda_setup
 	
 conda activate nmt
 
-# TODO check pip install --editable ~/fairseq/
+pip install --editable ~/fairseq/
 
 export PYTHONPATH="~/fairseq/:$PYTHONPATH"
 export PATH="~/fairseq/:$PATH"
