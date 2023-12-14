@@ -261,10 +261,16 @@ def main():
 
     # Pack audio features into ZIP
     for root_location in (WAV2VEC_ROOT, MEL_ROOT):
-
+        
         encodings_folder = root_location / ENCODING_FOLDER_NAME
         zip_file = root_location / ZIP_FILE_NAME
-        create_zip(encodings_folder, zip_file)
+        if not zip_file.is_file():
+            create_zip(encodings_folder, zip_file)
+
+        # delete old tsv, txt, model files from root_location
+        for file in root_location.glob("*"):
+            if file.is_file() and file.suffix in [".tsv", ".txt", ".model"]:
+                file.unlink()
 
         process_dataset_manifest(datasets, root_location)
 
