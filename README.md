@@ -6,6 +6,42 @@
     ssh <username>@uc2.scc.kit.edu
     ```
 
+    The very first action should be, to create a shared workspace:
+
+    ```bash
+    ws_allocate ASR 60 # 60 Days
+    ws_allocate MT 60 # 60 Days
+    ```
+
+    Add users to the workspace:
+
+    ```bash
+    setfacl -Rm u:USERNAME:rwX,d:u:USERNAME:rwX $(ws_find ASR)
+    setfacl -Rm u:USERNAME:rwX,d:u:USERNAME:rwX $(ws_find MT)
+    ```
+
+    To access the workspace, run:
+
+    ```bash
+    cd $(ws_find ASR)
+    cd $(ws_find MT)
+    ```
+
+    To check the remaining time of the workspace, run:
+
+    ```bash
+    ws_list
+    ```
+
+    To extend the workspace, run:
+
+    ```bash
+    ws_extend ASR 30 # 30 Days
+    ws_extend MT 30 # 30 Days
+    ```
+
+    Note that this is automatically done in the `setup.sh` script once the workspace is about to expire.
+
 2. Download the project
 
     ```bash

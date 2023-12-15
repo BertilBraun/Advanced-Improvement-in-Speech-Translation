@@ -4,11 +4,11 @@ source ../setup.sh
 
 model="wav2vec_worst" # "wav2vec" or "mel"
 
-DATA_DIR=~/ASR/$model
-MODEL_DIR=~/ASR/models/$model
+DATA_DIR=$(ws_find ASR)/$model
+MODEL_DIR=$(ws_find ASR)/models/$model
 
 
-PRED_OUTPUT_DIR=~/ASR/predictions/$model
+PRED_OUTPUT_DIR=$(ws_find ASR)/predictions/$model
 PRED_LOG=$PRED_OUTPUT_DIR/en_s2t.pred.log
 
 mkdir -p $PRED_OUTPUT_DIR

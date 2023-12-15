@@ -9,8 +9,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:8
-#SBATCH --output=~/ASR/logs/train_output_sbatch_%j.txt
-#SBATCH --error=~/ASR/logs/train_error_sbatch_%j.txt
+#SBATCH --output=/pfs/work7/workspace/scratch/uxude-ASR/logs/train_output_sbatch_%j.txt
+#SBATCH --error=/pfs/work7/workspace/scratch/uxude-ASR/logs/train_error_sbatch_%j.txt
 
 
 # call ../setup.sh
@@ -19,7 +19,7 @@ source ../setup.sh
 # Define the model types in an array
 MODEL_TYPES=("wav2vec" "mel")
 
-ROOT=~/ASR
+ROOT=$(ws_find ASR)
 
 for model in "${MODEL_TYPES[@]}"; do
     # Set directories based on the model type

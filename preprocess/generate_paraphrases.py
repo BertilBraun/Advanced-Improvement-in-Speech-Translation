@@ -20,8 +20,7 @@ from llama_cpp import Llama
 import spacy
 import random
 
-
-ROOT_FOLDER = Path(f"{os.getenv('HOME')}/MT")
+ROOT_FOLDER = Path("/pfs/work7/workspace/scratch/uxude-MT")
 
 DATASET_FOLDER = ROOT_FOLDER / "dataset"
 DATASET_FOLDER.mkdir(parents=True, exist_ok=True)

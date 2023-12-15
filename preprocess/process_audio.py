@@ -10,7 +10,6 @@ else:
     rank = 0
     size = 1
 
-import os
 import torch
 import pandas as pd
 import numpy as np
@@ -30,9 +29,7 @@ from examples.speech_to_text.data_utils import (
     extract_fbank_features,
 )
 
-# TODO adjust location for Cluster
-# Something like: /pfs/work7/workspace/scratch/uxxxx-PST/ASR/
-ROOT_LOCATION = Path(f"{os.getenv('HOME')}/ASR")
+ROOT_LOCATION = Path("/pfs/work7/workspace/scratch/uxude-ASR")
 
 DATASET_LOCATION = ROOT_LOCATION / "data"
 DATASET_LOCATION.mkdir(parents=True, exist_ok=True)
