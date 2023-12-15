@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=PST_train_asr           # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=02:00:00                    # wall-clock time limit  
+#SBATCH --time=12:00:00                    # wall-clock time limit  
 #SBATCH --mem=150000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -11,7 +11,6 @@
 #SBATCH --gres=gpu:1
 #SBATCH --output=../../ASR/logs/train_output_sbatch_%j.txt
 #SBATCH --error=../../ASR/logs/train_error_sbatch_%j.txt
-
 
 # call ../setup.sh
 source ../setup.sh
@@ -39,7 +38,7 @@ for model in "${MODEL_TYPES[@]}"; do
     # Train the model in parallel
     fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
         --train-subset train-clean-100 --valid-subset dev-clean \
-        --num-workers 4 --max-tokens 40000 --max-update 300000 \
+        --num-workers 2 --max-tokens 40000 --max-update 300000 \
         --task speech_to_text --criterion label_smoothed_cross_entropy --label-smoothing 0.1 --report-accuracy \
         --arch s2t_transformer_s --share-decoder-input-output-embed \
         --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
@@ -48,7 +47,6 @@ for model in "${MODEL_TYPES[@]}"; do
         --model-parallel-size 1 --tensorboard-logdir $MODEL_DIR/tensorboard 
     
     # TODO somehow --model-parallel-size > 1 requires a module which is not properly installed with fairseq
-
 
     # Log the completion of training for the current model
     echo "Training completed for $model."

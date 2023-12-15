@@ -196,6 +196,15 @@ def process_dataset_to_mel_spectrogram(dataset):
             extract_fbank_features(wav, sample_rate, file)
 
 
+def cleanup_utterance(utt: str):
+    # cleanup the utterance to make it easier for the ASR model to learn
+    modified = utt.lower()
+    
+    # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
+    modified = "".join([c for c in modified if c.isalpha() or c == " " or c.isdigit()])
+    
+    return modified
+
 def process_dataset_manifest(datasets, root_location):
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
@@ -217,7 +226,7 @@ def process_dataset_manifest(datasets, root_location):
             manifest["id"].append(sample_id)
             manifest["audio"].append(audio_paths[sample_id])
             manifest["n_frames"].append(audio_lengths[sample_id])
-            manifest["tgt_text"].append(utt.lower())
+            manifest["tgt_text"].append(cleanup_utterance(utt))
             manifest["speaker"].append(spk_id)
 
         save_df_to_tsv(
@@ -247,17 +256,8 @@ def process_dataset_config(root_location):
 
 # Main execution
 def main():
+    assert not USE_MPI, "MPI is not supported yet (no longer supported...)"
     datasets = ensure_dataset_loaded()  # train_data, dev_data, test_data = datasets
-
-    for dataset in datasets:
-        process_dataset_to_wav2vec_embeddings(dataset)
-        if rank == 0:
-            # Only rank == 0 processes the mel spectrograms as they are not as computationally expensive
-            process_dataset_to_mel_spectrogram(dataset)
-
-    if rank != 0:
-        # Only continue with root process, as the following steps are not as computationally expensive
-        return
 
     # Pack audio features into ZIP
     for root_location in (WAV2VEC_ROOT, MEL_ROOT):
@@ -265,6 +265,14 @@ def main():
         encodings_folder = root_location / ENCODING_FOLDER_NAME
         zip_file = root_location / ZIP_FILE_NAME
         if not zip_file.is_file():
+            
+            for dataset in datasets:
+                if root_location == WAV2VEC_ROOT:
+                    process_dataset_to_wav2vec_embeddings(dataset)
+                if root_location == MEL_ROOT:
+                    # Only rank == 0 processes the mel spectrograms as they are not as computationally expensive
+                    process_dataset_to_mel_spectrogram(dataset)
+
             create_zip(encodings_folder, zip_file)
 
         # delete old tsv, txt, model files from root_location
