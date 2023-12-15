@@ -13,5 +13,5 @@ datasets
 jiwer
 librosa
 sacremoses
-evaluate
+# evaluate
 shutil
