@@ -46,6 +46,8 @@ for model in "${MODEL_TYPES[@]}"; do
         --clip-norm 10.0 --seed 1 --update-freq 8 \
         --keep-last-epochs 1 --save-interval-updates 100 --keep-best-checkpoints 1 \
         --model-parallel-size 1 --tensorboard-logdir $MODEL_DIR/tensorboard 
+    
+    # TODO somehow --model-parallel-size > 1 requires a module which is not properly installed with fairseq
 
 
     # Log the completion of training for the current model
