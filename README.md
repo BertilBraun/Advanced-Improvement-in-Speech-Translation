@@ -55,11 +55,7 @@
 
 5. Submitting to the cluster
 
-    Once you are sure that the script is executable and runs without errors, you can submit it to the cluster:
-
-    ```bash
-    sbatch run_YOUR_SCRIPT.sh
-    ```
+    Once you are sure that the script is executable and runs without errors, you can submit it to the cluster.
 
     Make sure, to have set the correct `SBATCH` parameters in the script, such as `timeouts`, required cluster `cores` and `GPUs` and the `job-name`. Ensure, that the correct and required modules are being loaded by calling the `~/AI-ST/setup.sh` script.
 
@@ -76,3 +72,35 @@
     #SBATCH --output=~/ASR/logs/output_%j.txt   # standard output and error log
     #SBATCH --error=~/ASR/logs/error_%j.txt     # %j is the job id, making each log file unique, therefore not overwriting each other
     ```
+
+    To then submit the script to the cluster, run:
+
+    ```bash
+    sbatch run_YOUR_SCRIPT.sh
+    ```
+
+6. Monitoring
+
+    To monitor the status of your job, run:
+
+    ```bash
+    squeue -u <username>
+    ```
+
+    To cancel a job, run:
+
+    ```bash
+    scancel <job-id>
+    ```
+
+    The logs of the job are stored in the `~/ASR/logs` directory or `~/MT/logs` directory, depending on the task. The output and error logs are named `output_<job-id>.txt` and `error_<job-id>.txt`, respectively. The `job-id` is the number that is returned when submitting the job to the cluster.
+
+7. Downloading the results
+
+    To download the results from the cluster, run:
+
+    ```bash
+    scp [-r] <username>@uc2.scc.kit.edu:~/<PATH-ON-REMOTE> <LOCAL-PATH>
+    ```
+
+    The `-r` flag is only required if you want to download a directory.
