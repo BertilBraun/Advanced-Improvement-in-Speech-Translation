@@ -1,5 +1,17 @@
 #!/bin/bash
 
+#SBATCH --job-name=PST_eval_st             # job name
+#SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
+#SBATCH --time=01:00:00                    # wall-clock time limit  
+#SBATCH --mem=150000                       # memory per node
+#SBATCH --nodes=1                          # number of nodes to be used
+#SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
+#SBATCH --ntasks-per-node=1                # maximum count of tasks per node
+#SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
+#SBATCH --gres=gpu:1
+#SBATCH --output=../../ST/logs/eval_output_sbatch_%j.txt
+#SBATCH --error=../../ST/logs/eval_error_sbatch_%j.txt
+
 
 # TODO We might want to train multiple models with different hyperparameters and then use an ensemble of them for evaluation.
 # TODO Before evaluation, we might want to run a LLM on the generated output, to possibly improve the results.
