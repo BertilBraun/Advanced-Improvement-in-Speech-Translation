@@ -10,11 +10,22 @@ module load compiler/gnu/10.2                   # Load required modules.
 # conda initialize
 source ~/miniconda3/bin/activate nmt
 
-# if fairseq is not cloned into ~/fairseq, install it
-if [ ! -d "~/fairseq" ]; then
+if [ -d "~/fairseq" ]; then
+    echo "Fairseq directory exists. Checking if installed..."
+
+    # Check if fairseq is installed
+    if pip list | grep -q fairseq; then
+        echo "Fairseq is already installed. Skipping installation."
+    else
+        echo "Fairseq directory exists but not installed. Installing..."
+        pip install --editable ~/fairseq/
+    fi
+else
+    echo "Fairseq directory does not exist. Cloning and installing..."
     git clone https://github.com/facebookresearch/fairseq.git ~/fairseq
     pip install --editable ~/fairseq/
 fi
+
 
 export PYTHONPATH="~/fairseq/:$PYTHONPATH"
 export PATH="~/fairseq/:$PATH"
