@@ -24,7 +24,7 @@ ROOT=~/ASR
 for model in "${MODEL_TYPES[@]}"; do
     # Set directories based on the model type
     DATA_DIR=$ROOT/$model
-    MODEL_DIR=$ROOT/$model
+    MODEL_DIR=$ROOT/models/$model
 
     # Create folders if they don't exist
     mkdir -p $DATA_DIR
