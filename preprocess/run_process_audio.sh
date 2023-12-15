@@ -9,8 +9,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=/pfs/work7/workspace/scratch/uxude-ASR/logs/output_%j.txt
-#SBATCH --error=/pfs/work7/workspace/scratch/uxude-ASR/logs/error_%j.txt
+#SBATCH --output=~/ASR/logs/output_%j.txt
+#SBATCH --error=~/ASR/logs/error_%j.txt
 
 # call ../setup.sh
 source ../setup.sh

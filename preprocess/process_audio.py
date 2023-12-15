@@ -29,7 +29,7 @@ from examples.speech_to_text.data_utils import (
     extract_fbank_features,
 )
 
-ROOT_LOCATION = Path("/pfs/work7/workspace/scratch/uxude-ASR")
+ROOT_LOCATION = Path(f"{os.environ['HOME']}/ASR")
 
 DATASET_LOCATION = ROOT_LOCATION / "data"
 DATASET_LOCATION.mkdir(parents=True, exist_ok=True)

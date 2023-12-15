@@ -27,8 +27,8 @@ check_and_extend_workspace() {
 }
 
 # Check and extend workspaces
-check_and_extend_workspace ASR 30
-check_and_extend_workspace MT 30
+# check_and_extend_workspace ASR 30
+# check_and_extend_workspace MT 30
 
 
 
