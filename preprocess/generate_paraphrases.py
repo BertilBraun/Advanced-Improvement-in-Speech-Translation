@@ -21,7 +21,7 @@ import spacy
 import random
 
 
-ROOT_FOLDER = Path(f"{os.getenv('HOME')}/PST/MT")
+ROOT_FOLDER = Path(f"{os.getenv('HOME')}/MT")
 
 DATASET_FOLDER = ROOT_FOLDER / "dataset"
 DATASET_FOLDER.mkdir(parents=True, exist_ok=True)

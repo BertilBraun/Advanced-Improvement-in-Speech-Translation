@@ -32,7 +32,7 @@ from examples.speech_to_text.data_utils import (
 
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/ASR/
-ROOT_LOCATION = Path(f"{os.getenv('HOME')}/PST/ASR")
+ROOT_LOCATION = Path(f"{os.getenv('HOME')}/ASR")
 print(f"{ROOT_LOCATION = }")
 
 

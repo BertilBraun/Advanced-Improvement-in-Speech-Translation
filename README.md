@@ -9,7 +9,7 @@
 2. Download the project
 
     ```bash
-    git clone https://github.com/BertilBraun/Advanced-Improvement-in-Speech-Translation.git AI-ST
+    git clone https://github.com/BertilBraun/Advanced-Improvement-in-Speech-Translation.git PST
     ```
 
 3. Create a virtual environment
@@ -62,6 +62,6 @@
     #SBATCH --ntasks-per-node=1                     # maximum count of tasks per node
     #SBATCH --mail-type=ALL                         # Notify user by email when certain event types occur.
     #SBATCH --gres=gpu:4                            # number of GPUs required per node 
-    #SBATCH --output=~/PST/ASR/logs/output_%j.txt   # standard output and error log
-    #SBATCH --error=~/PST/ASR/logs/error_%j.txt     # %j is the job id, making each log file unique, therefore not overwriting each other
+    #SBATCH --output=~/ASR/logs/output_%j.txt   # standard output and error log
+    #SBATCH --error=~/ASR/logs/error_%j.txt     # %j is the job id, making each log file unique, therefore not overwriting each other
     ```

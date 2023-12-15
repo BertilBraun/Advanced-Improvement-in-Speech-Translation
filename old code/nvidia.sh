@@ -10,8 +10,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:2
-#SBATCH --output=~/PST/ASR/logs/nvidia_output_%j.txt
-#SBATCH --error=~/PST/ASR/logs/nvidia_error_%j.txt
+#SBATCH --output=~/ASR/logs/nvidia_output_%j.txt
+#SBATCH --error=~/ASR/logs/nvidia_error_%j.txt
 
 
 # call ../setup.sh
@@ -19,7 +19,7 @@ source ../setup.sh
 
 # Start nvidia-smi in the background and redirect its output to a file
 GPU_MONITOR_INTERVAL=60 # Interval in seconds
-GPU_LOG_FILE=~/PST/ASR/logs/gpu_usage.log
+GPU_LOG_FILE=~/ASR/logs/gpu_usage.log
 while true; do
     nvidia-smi >> "$GPU_LOG_FILE"
     sleep $GPU_MONITOR_INTERVAL
@@ -31,8 +31,8 @@ MODEL_TYPES=("wav2vec")
 
 for model in "${MODEL_TYPES[@]}"; do
     # Set directories based on the model type
-    DATA_DIR=~/PST/ASR/$model
-    MODEL_DIR=~/PST/ASR/models/$model
+    DATA_DIR=~/ASR/$model
+    MODEL_DIR=~/ASR/models/$model
 
     # Create folders if they don't exist
     mkdir -p $DATA_DIR

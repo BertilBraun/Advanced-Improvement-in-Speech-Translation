@@ -1,6 +1,5 @@
 
 export OMP_NUM_THREADS=1 # ${SLURM_CPUS_PER_TASK}
-export PYDIR=.    			                   # Export path to directory containing Python script.
 
 module purge                                    # Unload all currently loaded modules.
 module load compiler/gnu/10.2                   # Load required modules.  
@@ -24,6 +23,7 @@ unset __conda_setup
 	
 conda activate nmt
 
+# if fairseq is not cloned into ~/fairseq, install it
 if [ ! -d "~/fairseq" ]; then
     git clone https://github.com/facebookresearch/fairseq.git ~/fairseq
     pip install --editable ~/fairseq/

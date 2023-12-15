@@ -9,11 +9,11 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=~/PST/MT/logs/output_%j.txt
-#SBATCH --error=~/PST/MT/logs/error_%j.txt
+#SBATCH --output=~/MT/logs/output_%j.txt
+#SBATCH --error=~/MT/logs/error_%j.txt
 
 # call ../setup.sh
 source ../setup.sh
 
-# mpirun python ${PYDIR}/generate_paraphrases.py
-python ${PYDIR}/generate_paraphrases.py
+# mpirun python generate_paraphrases.py
+python generate_paraphrases.py
