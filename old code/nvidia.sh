@@ -10,8 +10,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:2
-#SBATCH --output=~/ASR/logs/nvidia_output_%j.txt
-#SBATCH --error=~/ASR/logs/nvidia_error_%j.txt
+#SBATCH --output=../../ASR/logs/nvidia_output_%j.txt
+#SBATCH --error=../../ASR/logs/nvidia_error_%j.txt
 
 
 # call ../setup.sh

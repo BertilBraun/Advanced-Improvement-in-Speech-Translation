@@ -13,3 +13,5 @@ datasets
 jiwer
 librosa
 sacremoses
+evaluate
+shutil

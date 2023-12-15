@@ -105,8 +105,8 @@
     #SBATCH --ntasks-per-node=1                     # maximum count of tasks per node
     #SBATCH --mail-type=ALL                         # Notify user by email when certain event types occur.
     #SBATCH --gres=gpu:4                            # number of GPUs required per node 
-    #SBATCH --output=~/ASR/logs/output_%j.txt   # standard output and error log
-    #SBATCH --error=~/ASR/logs/error_%j.txt     # %j is the job id, making each log file unique, therefore not overwriting each other
+    #SBATCH --output=../../ASR/logs/output_%j.txt   # standard output and error log
+    #SBATCH --error=../../ASR/logs/error_%j.txt     # %j is the job id, making each log file unique, therefore not overwriting each other
     ```
 
     To then submit the script to the cluster, run:
