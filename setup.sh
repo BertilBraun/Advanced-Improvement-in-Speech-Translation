@@ -10,7 +10,7 @@ module load compiler/gnu/10.2                   # Load required modules.
 # conda initialize
 source ~/miniconda3/bin/activate nmt
 
-if [ -d "~/fairseq" ]; then
+if [ -d ~/fairseq ]; then
     echo "Fairseq directory exists. Checking if installed..."
 
     # Check if fairseq is installed
