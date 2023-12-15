@@ -75,6 +75,17 @@
     ./setup.sh
     ```
 
+    Alternatively, you can create a virtual environment and install the required packages manually:
+
+    ```bash
+    cd ~/PST
+    conda create --name nmt
+    conda activate nmt
+    conda install python=3.10.13
+    ./setup.sh
+    pip install -r requirements.txt
+    ```
+
 4. Running
 
     Ensure that the scripts start executing on the login node to avoid errors after the job has been submitted to the cluster.
