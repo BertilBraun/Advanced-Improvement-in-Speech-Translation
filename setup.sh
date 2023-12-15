@@ -7,20 +7,8 @@ module load compiler/gnu/10.2                   # Load required modules.
 # module load mpi/openmpi/4.1
 # module load devel/cuda/10.2
 
-# >>> conda initialize >>>
-__conda_setup="$('~/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "~/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "~/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="~/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-	
+# conda initialize
+source ~/miniconda/etc/profile.d/conda.sh
 conda activate nmt
 
 # if fairseq is not cloned into ~/fairseq, install it
