@@ -14,7 +14,7 @@ if [ -d ~/fairseq ]; then
     echo "Fairseq directory exists. Checking if installed..."
 
     # Check if fairseq is installed
-    if pip list | grep -q fairseq; then
+    if pip list | grep fairseq; then
         echo "Fairseq is already installed. Skipping installation."
     else
         echo "Fairseq directory exists but not installed. Installing..."
