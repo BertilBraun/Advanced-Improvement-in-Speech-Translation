@@ -12,3 +12,4 @@ soundfile
 datasets
 jiwer
 librosa
+sacremoses

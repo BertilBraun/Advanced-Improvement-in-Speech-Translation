@@ -2,7 +2,7 @@
 
 source ../setup.sh
 
-model="wav2vec_worst" # "wav2vec" or "mel"
+model="wav2vec" # "wav2vec" or "mel"
 
 DATA_DIR=~/ASR/$model
 MODEL_DIR=~/ASR/models/$model
