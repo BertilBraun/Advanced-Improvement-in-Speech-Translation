@@ -10,6 +10,7 @@ else:
     rank = 0
     size = 1
 
+import os
 import torch
 import pandas as pd
 import numpy as np
