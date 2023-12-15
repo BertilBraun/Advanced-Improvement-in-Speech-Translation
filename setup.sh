@@ -8,8 +8,7 @@ module load compiler/gnu/10.2                   # Load required modules.
 # module load devel/cuda/10.2
 
 # conda initialize
-source ~/miniconda/etc/profile.d/conda.sh
-conda activate nmt
+source ~/miniconda3/bin/activate nmt
 
 # if fairseq is not cloned into ~/fairseq, install it
 if [ ! -d "~/fairseq" ]; then
