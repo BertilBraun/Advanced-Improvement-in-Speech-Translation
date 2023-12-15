@@ -171,7 +171,7 @@ def process_dataset_to_wav2vec_embeddings(dataset):
         file = WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
         
         if not file.is_file():
-            batch_waveforms.append(torch.tensor(wav, device=device, dtype=torch.float))
+            batch_waveforms.append(wav.to(device=device, dtype=torch.float))
             batch_paths.append(
                 WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
             )
