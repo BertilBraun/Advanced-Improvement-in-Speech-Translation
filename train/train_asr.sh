@@ -8,7 +8,6 @@
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
-#SBATCH --mail-user=ubppd@student.kit.edu  # notification email address
 #SBATCH --gres=gpu:8
 #SBATCH --output=~/PST/ASR/logs/train_output_sbatch_%j.txt
 #SBATCH --error=~/PST/ASR/logs/train_error_sbatch_%j.txt

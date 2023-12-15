@@ -114,7 +114,6 @@ dependencies:
       - bitarray==2.8.3
       - colorama==0.4.6
       - cython==3.0.6
-      - fairseq==0.12.2
       - fsspec==2023.10.0
       - hydra-core==1.0.7
       - jinja2==3.1.2
@@ -151,4 +150,4 @@ dependencies:
       - tqdm==4.66.1
       - triton==2.1.0
       - typing-extensions==4.8.0
-prefix: /home/kit/stud/ubppd/miniconda3/envs/nmt
+prefix: ~/miniconda3/envs/nmt
