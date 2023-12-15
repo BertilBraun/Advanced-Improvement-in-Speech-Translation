@@ -33,8 +33,6 @@ from examples.speech_to_text.data_utils import (
 # TODO adjust location for Cluster
 # Something like: /pfs/work7/workspace/scratch/uxxxx-PST/ASR/
 ROOT_LOCATION = Path(f"{os.getenv('HOME')}/ASR")
-print(f"{ROOT_LOCATION = }")
-
 
 DATASET_LOCATION = ROOT_LOCATION / "data"
 DATASET_LOCATION.mkdir(parents=True, exist_ok=True)
@@ -173,7 +171,7 @@ def process_dataset_to_wav2vec_embeddings(dataset):
         file = WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
         
         if not file.is_file():
-            batch_waveforms.append(torch.FloatTensor(wav, device=device))
+            batch_waveforms.append(torch.tensor(wav, device=device, dtype=torch.float))
             batch_paths.append(
                 WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
             )

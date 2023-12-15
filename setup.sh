@@ -29,3 +29,5 @@ fi
 
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
+
+echo "Setup complete. Starting script execution..."
