@@ -5,7 +5,7 @@ import shutil
 import datetime
 import sentencepiece as spm
 from evaluate import load
-from datasets import load_dataset
+from datasets import load_dataset, Dataset
 from transformers import Wav2Vec2Processor, Wav2Vec2Model, Speech2TextForConditionalGeneration, Speech2TextConfig, TrainingArguments, Trainer, Speech2TextTokenizer, DataCollatorWithPadding
 
 wer_metric = load("wer")
@@ -14,6 +14,9 @@ TRAIN_DATASET = "train.100"
 
 TOKENIZER_PATH = "tokenizer.model"
 TOKENIZER_VOCAB_SIZE = 900
+
+INPUT_VALUES = "input_values"
+LABELS = "labels"
 
 
 def train_and_save_tokenizer():
@@ -35,7 +38,6 @@ def train_and_save_tokenizer():
         )
         
         print("Tokenizer trained")
-        # os.remove(TOKENIZER_VOCAB_TRAIN_FILE)
     
     return spm.SentencePieceProcessor(model_file=TOKENIZER_PATH)
     
@@ -43,6 +45,7 @@ def train_and_save_tokenizer():
 tokenizer = train_and_save_tokenizer()
 processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
 wav2vec_model = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h")
+
 
 def compute_metrics(pred):
     predictions = pred.predictions
@@ -78,58 +81,63 @@ def prepare_data(batch):
     labels = tokenizer.encode(batch["text"], out_type=int)
 
     # Update the batch
-    batch["input_values"] = embeddings
-    batch["labels"] = torch.tensor(labels)
+    batch[INPUT_VALUES] = embeddings
+    batch[LABELS] = torch.tensor(labels)
 
     return batch
 
-def padd_data(percentile_95_audio, percentile_95_labels):
+def padd_data(percentile_95_audio, percentile_95_labels, feature_size=768):
     def _padd_data(batch):
-        inputs = batch["input_values"]
-        labels = batch["labels"]
+        inputs = batch[INPUT_VALUES]  # List of 768-dim tensors
+        labels = batch[LABELS]        # List of ints
 
-        # Pad input_values and labels
-        padded_inputs = torch.zeros(percentile_95_audio)
-        padded_labels = torch.full((percentile_95_labels,), -100)  # Using -100 which is typically used to ignore in loss computation
+        # Convert each input to a tensor if they are not already
+        inputs = [torch.tensor(input, dtype=torch.float) if not isinstance(input, torch.Tensor) else input for input in inputs]
 
-        # Copy the data to the padded tensors
-        seq_len = min(percentile_95_audio, inputs.shape[0])
-        label_len = min(percentile_95_labels, labels.shape[0])
+        # Stack the inputs to create a single tensor
+        inputs = torch.stack(inputs)
 
-        padded_inputs[:seq_len] = inputs[:seq_len]
-        padded_labels[:label_len] = labels[:label_len]
+        # Initialize padded tensors
+        padded_inputs = torch.zeros((percentile_95_audio, feature_size), dtype=torch.float)
+        padded_labels = torch.full((percentile_95_labels,), tokenizer.pad_id(), dtype=torch.long)
+
+        # Calculate actual lengths and ensure they don't exceed the predetermined padding sizes
+        actual_seq_len = min(inputs.shape[0], percentile_95_audio)
+        actual_label_len = min(len(labels), percentile_95_labels)
+
+        # Copy data to padded tensors
+        padded_inputs[:actual_seq_len, :] = inputs[:actual_seq_len, :]
+        padded_labels[:actual_label_len] = torch.tensor(labels, dtype=torch.long)[:actual_label_len]
 
         # Update the batch
-        batch["input_values"] = padded_inputs
-        batch["labels"] = padded_labels
+        batch[INPUT_VALUES] = padded_inputs
+        batch[LABELS] = padded_labels
 
         return batch
     return _padd_data
 
 def calculate_percentiles(processed_dataset):
-
     # Calculate lengths
-    audio_lengths = [len(data['input_values']) for data in processed_dataset]
-    label_lengths = [len(data['lables']) for data in processed_dataset]
+    audio_lengths = [len(data[INPUT_VALUES]) for data in processed_dataset]
+    label_lengths = [len(data[LABELS]) for data in processed_dataset]
 
     # Calculate 95th percentiles
     percentile_95_audio = np.percentile(audio_lengths, 95)
     percentile_95_labels = np.percentile(label_lengths, 95)
 
-    return percentile_95_audio, percentile_95_labels
-
+    return int(percentile_95_audio), int(percentile_95_labels)
 
 def load_and_preprocess_data(split, dataset_path):
     dataset_file = f"{dataset_path}/{split}_processed.pt"
-    if os.path.isfile(dataset_file):
+    if os.path.exists(dataset_file):
         print(f"Loading processed {split} dataset from {dataset_file}")
-        return torch.load(dataset_file)
+        return Dataset.load_from_disk(dataset_file)
     else:
         print(f"Loading and processing {split} dataset...")
         dataset = load_dataset("librispeech_asr", "clean", split=split)
 
         # TODO Optional: Subset the dataset if needed
-        dataset = dataset.select(range(50))  # Select first 50 samples for testing
+        dataset = dataset.select(range(20))  # Select first 50 samples for testing
 
         processed_dataset = dataset.map(prepare_data, remove_columns=["audio"])
 
@@ -140,8 +148,10 @@ def load_and_preprocess_data(split, dataset_path):
         print("Padding data...")        
         padded_dataset = processed_dataset.map(padd_data(percentile_95_audio, percentile_95_labels))
        
+        padded_dataset.set_format(type="torch", columns=[INPUT_VALUES, LABELS])
         print(f"Processed {split} dataset, saving to {dataset_file}...")
-        torch.save(padded_dataset, dataset_file)
+        
+        padded_dataset.save_to_disk(dataset_file)
         return padded_dataset
 
 dataset_path = "./processed_datasets"
@@ -195,32 +205,35 @@ training_args = TrainingArguments(
     save_total_limit=1,  # Keep only the best checkpoint
     load_best_model_at_end=True,
 )
+# Ensure that each batch in your dataset includes 'input_values'
+for batch in train_ds:
+    assert INPUT_VALUES in batch, f"'{INPUT_VALUES}' missing from batch"
+    assert LABELS in batch, f"'{LABELS}' missing from batch"
+    assert batch[INPUT_VALUES] is not None, f"'{INPUT_VALUES}' is None"
+    assert batch[LABELS] is not None, f"'{LABELS}' is None"
+for batch in train_ds:
+    print(type(batch[INPUT_VALUES]))
+    assert isinstance(batch[INPUT_VALUES], torch.Tensor), f"'{INPUT_VALUES}' is not a FloatTensor"
+    assert batch[INPUT_VALUES].dtype == torch.float, f"'{INPUT_VALUES}' is not a FloatTensor"
+    assert isinstance(batch[LABELS], torch.Tensor), f"'{LABELS}' is not a LongTensor"
+    assert batch[LABELS].dtype == torch.long, f"'{LABELS}' is not a LongTensor"
+print("All batches have the correct keys")
 
+print(train_ds)
+train_ds = train_ds.remove_columns(["file", "text", "speaker_id", "chapter_id", "id"])
+print(train_ds)
+val_ds = val_ds.remove_columns(["file", "text", "speaker_id", "chapter_id", "id"])
+test_ds = test_ds.remove_columns(["file", "text", "speaker_id", "chapter_id", "id"])
 
-class CustomDataCollator:
-    def __init__(self, tokenizer, max_length=None):
-        self.tokenizer = tokenizer
-        self.max_length = max_length
+train_ds = train_ds.rename_column('input_values', 'input_features')
+val_ds = val_ds.rename_column('input_values', 'input_features')
+test_ds = test_ds.rename_column('input_values', 'input_features')
 
-    def __call__(self, batch):
-        print(batch[0].keys())
-        # Find the longest sequence in the batch
-        max_length = self.max_length or max(len(x['input_values']) for x in batch)
+train_ds = train_ds.rename_column('labels', 'decoder_input_ids')
+val_ds = val_ds.rename_column('labels', 'decoder_input_ids')
+test_ds = test_ds.rename_column('labels', 'decoder_input_ids')
 
-        # Pad all sequences to the length of the longest sequence
-        for item in batch:
-            input_length = len(item['input_values'])
-            item['input_values'] = item['input_values'] + [0] * (max_length - input_length)  # Adjust padding value if needed
-            item['labels'] = item['labels'] + [self.tokenizer.pad_id()] * (max_length - len(item['labels']))
-
-        # Create tensors
-        input_values = torch.tensor([x['input_values'] for x in batch], dtype=torch.float32)
-        labels = torch.tensor([x['labels'] for x in batch], dtype=torch.long)
-
-        return {"input_values": input_values, "labels": labels}
-
-
-data_collator = CustomDataCollator(tokenizer=tokenizer)
+print(model.forward.__doc__)
 
 # Initialize Trainer
 trainer = Trainer(
@@ -228,7 +241,6 @@ trainer = Trainer(
     args=training_args,
     train_dataset=train_ds,
     eval_dataset=val_ds,
-    data_collator=data_collator,
     compute_metrics=compute_metrics
 )
 
