@@ -27,5 +27,5 @@ else
 fi
 
 
-export PYTHONPATH="~/fairseq/:$PYTHONPATH"
-export PATH="~/fairseq/:$PATH"
+export PYTHONPATH=~/fairseq/:$PYTHONPATH
+export PATH=~/fairseq/:$PATH
