@@ -33,9 +33,8 @@ rm -rf fairseq
 echo "Fairseq: Cloning and installing..."
 
 git clone https://github.com/pytorch/fairseq.git
-git submodule update --init --recursive
-
 cd fairseq
+git submodule update --init --recursive
 pip install --editable ./
 
 
