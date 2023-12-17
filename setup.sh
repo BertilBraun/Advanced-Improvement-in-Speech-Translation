@@ -2,11 +2,11 @@
 
 export OMP_NUM_THREADS=1 # ${SLURM_CPUS_PER_TASK}
 
-module purge                                    # Unload all currently loaded modules.
-module load compiler/gnu/10.2                   # Load required modules.  
+# module purge                                    # Unload all currently loaded modules.
+# module load compiler/gnu/10.2                   # Load required modules.  
 # module load devel/python/3.8.6_gnu_10.2
 # module load mpi/openmpi/4.1
-# module load devel/cuda/10.2
+# module load devel/cuda/11.8
 
 
 # Function to check if extension to the workspace is needed

@@ -15,12 +15,15 @@ pip install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp
 
 
 module load devel/cuda/11.8
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+conda install pytorch=2.0.1+cu118 torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 
 export TORCH_CUDA_ARCH_LIST="3.5;5.0;6.0;6.1;7.0;7.5;8.0;8.6+PTX"
 
 
 git clone https://github.com/pytorch/fairseq.git
 cd fairseq
+pip install torch==2.0.1+cu118 torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+
 pip install -r requirements.txt
 python setup.py build develop
