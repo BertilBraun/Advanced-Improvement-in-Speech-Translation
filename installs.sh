@@ -25,7 +25,7 @@ cd ~/miniconda3/bin
 cd ~
 
 python -m pip install --upgrade pip
-pip3 install torch torchvision torchaudio
+pip3 install torch torchvision torchaudio Cython
 
 python PST/cuda_test.py
 
@@ -40,6 +40,8 @@ git submodule update --init --recursive
 sed -i 's/args.input_feat_per_channel \* args.input_channels,/768, # args.input_feat_per_channel \* args.input_channels/' fairseq/models/speech_to_text/s2t_transformer.py
 
 pip install --editable ./
+python setup.py build_ext --inplace
+
 
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
