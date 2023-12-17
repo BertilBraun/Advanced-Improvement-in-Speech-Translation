@@ -16,9 +16,9 @@ module purge
 module load devel/cuda/11.8
 
 # conda initialize
-source ~/miniconda3/bin/env remove -n pst
-source ~/miniconda3/bin/create -n pst python=3.8
-source ~/miniconda3/bin/activate pst
+source ~/miniconda3/bin/conda env remove -n pst
+source ~/miniconda3/bin/conda create -n pst python=3.8
+source ~/miniconda3/bin/conda activate pst
 
 python -m pip install --upgrade pip
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
