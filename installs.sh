@@ -22,10 +22,13 @@ cd ~/miniconda3/bin
 ./conda create -y -n pst python=3.8
 ./activate pst
 
+
+conda install -c conda-forge gcc_linux-64 gxx_linux-64
+
 cd ~
 
 python -m pip install --upgrade pip
-pip3 install torch torchvision torchaudio # Cython
+pip3 install torch torchvision torchaudio
 
 python PST/cuda_test.py
 
