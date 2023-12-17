@@ -17,9 +17,9 @@ module purge
 
 # conda initialize
 cd ~/miniconda3/bin
-#./deactivate
-#conda env remove -n pst
-#conda create -y -n pst python=3.8
+./deactivate
+conda env remove -n pst
+conda create -y -n pst python=3.7
 ./activate pst
 
 
@@ -27,49 +27,49 @@ cd ~/miniconda3/bin
 
 cd ~
 
-#python -m pip install --upgrade pip
+python -m pip install --upgrade pip
 #pip3 install torch torchvision torchaudio cython
 
 # pip install -r PST/requirements.txt
 
-#python PST/cuda_test.py
+python PST/cuda_test.py
 
-#rm -rf fairseq
-#echo "Fairseq: Cloning and installing..."
+rm -rf fairseq
+echo "Fairseq: Cloning and installing..."
 
-#git clone https://github.com/pytorch/fairseq.git
+git clone https://github.com/pytorch/fairseq.git
 cd fairseq
 # git submodule update --init --recursive
 
 # in fairseq/models/speech_to_text/s2t_transformer.py replace "args.input_feat_per_channel * args.input_channels," with "768, # args.input_feat_per_channel * args.input_channels"
-#sed -i 's/args.input_feat_per_channel \* args.input_channels,/768, # args.input_feat_per_channel \* args.input_channels/' fairseq/models/speech_to_text/s2t_transformer.py
+sed -i 's/args.input_feat_per_channel \* args.input_channels,/768, # args.input_feat_per_channel \* args.input_channels/' fairseq/models/speech_to_text/s2t_transformer.py
 
-#echo "Starting fairseq build..."
-#echo "========================================================================"
+echo "Starting fairseq build..."
+echo "========================================================================"
 
 python setup.py build_ext --inplace
 
-#echo "========================================================================"
+echo "========================================================================"
 
 #git submodule update --init --recursive
-#pip install --editable ./
-#pip install ./
+#pip install --editable .
+pip install .
 
 # copy fairseq install to site-packages
-#cp -r ~/fairseq/fairseq/ ~/miniconda3/envs/pst/lib/python3.8/site-packages/fairseq/
+cp -r ~/fairseq/fairseq/ ~/miniconda3/envs/pst/lib/python3.8/site-packages/fairseq/
 # copy fairseq example to site-packages
-#cp -r ~/fairseq/examples/ ~/miniconda3/envs/pst/lib/python3.8/site-packages/examples/
+cp -r ~/fairseq/examples/ ~/miniconda3/envs/pst/lib/python3.8/site-packages/examples/
 
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
 
-#which python
-#python --version
+which python
+python --version
 
 cd ~/PST
-#pip install -r requirements.txt
+pip install -r requirements.txt
 
-#echo "Setup complete. Starting script execution..."
+echo "Setup complete. Starting script execution..."
 
 cd train
 ./train_asr.sh

@@ -16,3 +16,7 @@ sacremoses
 # evaluate
 # shutil
 editdistance
+omegaconf
+hydra-core
+bitarray
+sacrebleu
