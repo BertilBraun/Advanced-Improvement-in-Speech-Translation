@@ -9,18 +9,18 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=../../ST/logs/setup_%j.txt
-#SBATCH --error=../../ST/logs/setup_%j.txt
+#SBATCH --output=setup_log.txt
+#SBATCH --error=setup_error.txt
 
 module purge
 module load devel/cuda/11.8
 
 # conda initialize
 cd ~/miniconda3/bin
-./deactivate
+./conda deactivate
 ./conda env remove -n pst
 ./conda create -y -n pst python=3.8
-./activate pst
+./conda activate pst
 
 cd ~
 
