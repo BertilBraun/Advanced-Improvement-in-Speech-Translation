@@ -18,8 +18,8 @@ module purge
 # conda initialize
 cd ~/miniconda3/bin
 ./deactivate
-./conda env remove -n pst
-./conda create -y -n pst python=3.8
+conda env remove -n pst
+conda create -y -n pst python=3.8
 ./activate pst
 
 
@@ -37,12 +37,18 @@ echo "Fairseq: Cloning and installing..."
 
 git clone https://github.com/pytorch/fairseq.git
 cd fairseq
-git submodule update --init --recursive
 
 # in fairseq/models/speech_to_text/s2t_transformer.py replace "args.input_feat_per_channel * args.input_channels," with "768, # args.input_feat_per_channel * args.input_channels"
 sed -i 's/args.input_feat_per_channel \* args.input_channels,/768, # args.input_feat_per_channel \* args.input_channels/' fairseq/models/speech_to_text/s2t_transformer.py
 
+echo "Starting fairseq build..."
+echo "========================================================================"
+
 python setup.py build_ext --inplace
+
+echo "========================================================================"
+
+git submodule update --init --recursive
 pip install --editable ./
 
 
