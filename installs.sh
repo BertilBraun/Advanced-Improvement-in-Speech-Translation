@@ -17,13 +17,13 @@ module purge
 
 # conda initialize
 cd ~/miniconda3/bin
-conda init bash
+source ~/.bashrc
 conda deactivate
 conda deactivate
 conda deactivate
 conda env remove -n pst
 conda create -y -n pst python=3.7
-conda activate pst
+source activate pst
 
 python --version
 conda install -c conda-forge gcc_linux-64 gxx_linux-64 cmake ninja
