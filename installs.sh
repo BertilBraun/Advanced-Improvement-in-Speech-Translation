@@ -13,7 +13,7 @@
 #SBATCH --error=setup_error.txt
 
 module purge
-module load devel/cuda/11.8
+# module load devel/cuda/11.8
 
 # conda initialize
 cd ~/miniconda3/bin
@@ -25,7 +25,7 @@ cd ~/miniconda3/bin
 cd ~
 
 python -m pip install --upgrade pip
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip3 install torch torchvision torchaudio
 
 python PST/cuda_test.py
 
