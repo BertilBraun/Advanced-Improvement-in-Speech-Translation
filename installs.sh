@@ -17,10 +17,10 @@ module load devel/cuda/11.8
 
 # conda initialize
 cd ~/miniconda3/bin
-deactivate
-conda env remove -n pst
-conda create -y -n pst python=3.8
-activate pst
+./deactivate
+./conda env remove -n pst
+./conda create -y -n pst python=3.8
+./activate pst
 
 cd ~
 
