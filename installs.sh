@@ -17,6 +17,7 @@ module purge
 
 # conda initialize
 cd ~/miniconda3/bin
+conda init bash
 conda deactivate
 conda deactivate
 conda deactivate
@@ -25,17 +26,16 @@ conda create -y -n pst python=3.7
 conda activate pst
 
 python --version
-#conda install -c conda-forge gcc_linux-64 gxx_linux-64
-
-cd ~
+conda install -c conda-forge gcc_linux-64 gxx_linux-64 cmake ninja
 
 python -m pip install --upgrade pip
-#pip3 install torch torchvision torchaudio cython
 
-pip install -r PST/requirements.txt
+cd ~/PST
+pip install -r requirements.txt
 
-python PST/cuda_test.py
+python cuda_test.py
 
+cd ~
 rm -rf fairseq
 echo "Fairseq: Cloning and installing..."
 

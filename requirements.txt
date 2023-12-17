@@ -20,3 +20,4 @@ omegaconf
 hydra-core
 bitarray
 sacrebleu
+cython
