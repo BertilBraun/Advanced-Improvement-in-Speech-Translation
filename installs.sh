@@ -28,7 +28,10 @@ conda install -c conda-forge gcc_linux-64 gxx_linux-64
 cd ~
 
 python -m pip install --upgrade pip
-pip3 install torch torchvision torchaudio
+pip3 install torch torchvision torchaudio cython
+
+pip install -r PST/requirements.txt
+
 
 python PST/cuda_test.py
 
@@ -56,7 +59,7 @@ export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
 
 cd ~/PST
-pip install -r requirements.txt
+#pip install -r requirements.txt
 
 echo "Setup complete. Starting script execution..."
 
