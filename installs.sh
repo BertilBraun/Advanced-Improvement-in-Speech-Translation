@@ -22,7 +22,7 @@ conda env remove -n pst
 conda create -y -n pst python=3.7
 ./activate pst
 
-
+python --version
 #conda install -c conda-forge gcc_linux-64 gxx_linux-64
 
 cd ~
@@ -30,7 +30,7 @@ cd ~
 python -m pip install --upgrade pip
 #pip3 install torch torchvision torchaudio cython
 
-# pip install -r PST/requirements.txt
+pip install -r PST/requirements.txt
 
 python PST/cuda_test.py
 
