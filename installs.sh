@@ -44,4 +44,5 @@ export PATH=~/fairseq/:$PATH
 
 echo "Setup complete. Starting script execution..."
 
-source train/train_asr.sh
+cd ~/PST/train/
+./train_asr.sh
