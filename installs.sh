@@ -23,12 +23,12 @@ conda create -y -n pst python=3.8
 ./activate pst
 
 
-conda install -c conda-forge gcc_linux-64 gxx_linux-64
+#conda install -c conda-forge gcc_linux-64 gxx_linux-64
 
 cd ~
 
 python -m pip install --upgrade pip
-pip3 install torch torchvision torchaudio cython
+#pip3 install torch torchvision torchaudio cython
 
 # pip install -r PST/requirements.txt
 
@@ -67,7 +67,7 @@ which python
 python --version
 
 cd ~/PST
-#pip install -r requirements.txt
+pip install -r requirements.txt
 
 echo "Setup complete. Starting script execution..."
 
