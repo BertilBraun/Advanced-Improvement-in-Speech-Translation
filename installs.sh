@@ -26,7 +26,7 @@ conda create -y -n pst python=3.7
 source activate pst
 
 python --version
-conda install -c conda-forge gcc_linux-64 gxx_linux-64 cmake ninja
+conda install -y -c conda-forge gcc_linux-64 gxx_linux-64 cmake ninja
 
 python -m pip install --upgrade pip
 
