@@ -54,6 +54,10 @@ echo "========================================================================"
 git submodule update --init --recursive
 pip install --editable ./
 
+# copy fairseq install to site-packages
+cp -r ~/fairseq ~/miniconda3/envs/pst/lib/python3.8/site-packages/
+# copy fairseq example to site-packages
+cp -r ~/fairseq/examples ~/miniconda3/envs/pst/lib/python3.8/site-packages/
 
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
