@@ -44,7 +44,7 @@ export PATH=~/fairseq/:$PATH
 echo "Setup complete. Starting script execution..."
 
 # in fairseq/models/speech_to_text/s2t_transformer.py replace "args.input_feat_per_channel * args.input_channels," with "768, # args.input_feat_per_channel * args.input_channels"
-sed -i 's/args.input_feat_per_channel \* args.input_channels,/768, # args.input_feat_per_channel \* args.input_channels/' /fairseq/models/speech_to_text/s2t_transformer.py
+sed -i 's/args.input_feat_per_channel \* args.input_channels,/768, # args.input_feat_per_channel \* args.input_channels/' fairseq/models/speech_to_text/s2t_transformer.py
 
 cd ~/PST/train/
 ./train_asr.sh
