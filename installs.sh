@@ -56,12 +56,15 @@ echo "========================================================================"
 #pip install --editable ./
 
 # copy fairseq install to site-packages
-cp -r ~/fairseq ~/miniconda3/envs/pst/lib/python3.8/site-packages/
+cp -r ~/fairseq/fairseq/ ~/miniconda3/envs/pst/lib/python3.8/site-packages/fairseq/
 # copy fairseq example to site-packages
-cp -r ~/fairseq/examples ~/miniconda3/envs/pst/lib/python3.8/site-packages/
+cp -r ~/fairseq/examples/ ~/miniconda3/envs/pst/lib/python3.8/site-packages/examples/
 
-export PYTHONPATH=~/fairseq/:$PYTHONPATH
-export PATH=~/fairseq/:$PATH
+# export PYTHONPATH=~/fairseq/:$PYTHONPATH
+# export PATH=~/fairseq/:$PATH
+
+which python
+python --version
 
 cd ~/PST
 #pip install -r requirements.txt
