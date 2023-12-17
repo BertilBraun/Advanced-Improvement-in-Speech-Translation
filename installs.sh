@@ -16,22 +16,26 @@ module purge
 module load devel/cuda/11.8
 
 # conda initialize
-source ~/miniconda3/bin/conda env remove -n pst
-source ~/miniconda3/bin/conda create -n pst python=3.8
-source ~/miniconda3/bin/conda activate pst
+cd ~/miniconda3/bin
+conda env remove -n pst
+conda create -n pst python=3.8
+conda activate pst
+
+cd ~
 
 python -m pip install --upgrade pip
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
-python cuda_test.py
+python PST/cuda_test.py
 
-rm -rf ~/fairseq
+rm -rf fairseq
 echo "Fairseq: Cloning and installing..."
 
-git clone https://github.com/pytorch/fairseq.git ~/fairseq
+git clone https://github.com/pytorch/fairseq.git
 git submodule update --init --recursive
 
-pip install --editable ~/fairseq/
+cd fairseq
+pip install --editable ./
 
 
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
