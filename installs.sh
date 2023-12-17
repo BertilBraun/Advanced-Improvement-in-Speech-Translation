@@ -20,7 +20,7 @@ cd ~/miniconda3/bin
 ./deactivate
 conda env remove -n pst
 conda create -y -n pst python=3.7
-./activate pst
+conda activate pst
 
 python --version
 #conda install -c conda-forge gcc_linux-64 gxx_linux-64
