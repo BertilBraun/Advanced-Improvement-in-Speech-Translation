@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=PST_eval_mt             # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=01:00:00                    # wall-clock time limit  
-#SBATCH --mem=150000                       # memory per node
+#SBATCH --time=00:30:00                    # wall-clock time limit  
+#SBATCH --mem=40000                        # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
