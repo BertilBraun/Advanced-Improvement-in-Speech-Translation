@@ -17,7 +17,9 @@ module purge
 
 # conda initialize
 cd ~/miniconda3/bin
-./deactivate
+conda deactivate
+conda deactivate
+conda deactivate
 conda env remove -n pst
 conda create -y -n pst python=3.7
 conda activate pst
