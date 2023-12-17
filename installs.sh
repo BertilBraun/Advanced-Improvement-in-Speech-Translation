@@ -9,8 +9,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=setup_log.txt
-#SBATCH --error=setup_error.txt
+#SBATCH --output=log.txt
+#SBATCH --error=log.txt
 
 module purge
 # module load devel/cuda/11.8
