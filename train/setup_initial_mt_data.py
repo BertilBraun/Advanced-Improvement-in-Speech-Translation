@@ -7,7 +7,7 @@ import sentencepiece as spm
 
 ROOT_FOLDER = Path(f"{os.environ['HOME']}/MT")
 
-DATASET_FOLDER = ROOT_FOLDER / "dataset"
+DATASET_FOLDER = ROOT_FOLDER / "initial_dataset"
 DATASET_FOLDER.mkdir(parents=True, exist_ok=True)
 
 DATASET_EN = DATASET_FOLDER / "train.de-en.en"

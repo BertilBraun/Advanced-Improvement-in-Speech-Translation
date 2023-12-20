@@ -1,14 +1,14 @@
 #!/bin/bash
 
 #SBATCH --job-name=PST_train_asr           # job name
-#SBATCH --partition=gpu_8                  # mby GPU queue for the resource allocation.
-#SBATCH --time=2:00:00                     # wall-clock time limit  
-#SBATCH --mem=200000                       # memory per node
+#SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
+#SBATCH --time=24:00:00                    # wall-clock time limit  
+#SBATCH --mem=40000                        # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
-#SBATCH --gres=gpu:8
+#SBATCH --gres=gpu:1
 #SBATCH --output=../../MT/logs/train_mt_%j.txt
 #SBATCH --error=../../MT/logs/train_mt_%j.txt
 
