@@ -1,11 +1,8 @@
 
 from pathlib import Path
-from typing import Literal, Union
+from tqdm import tqdm
 
-import requests
-import itertools
 import os
-import random
 import sentencepiece as spm
 
 ROOT_FOLDER = Path(f"{os.environ['HOME']}/MT")
@@ -51,7 +48,7 @@ def main() -> None:
         for lang in ["de", "en"]:
             with open(f"{DATASET_FOLDER}/{partition}.de-en.{lang}", "r") as f_in, \
                  open(f"{DATASET_FOLDER}/spm.{partition}.de-en.{lang}", "w") as f_out:
-                for line_idx, line in enumerate(f_in.readlines()):
+                for line in tqdm(f_in.readlines(), desc=f"Segmenting {partition}.{lang}"):
                     # Segmented into subwords
                     line_segmented = spm_model.encode(line.strip(), out_type=str)
                     # Join the subwords into a string
