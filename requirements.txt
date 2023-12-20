@@ -21,3 +21,4 @@ hydra-core
 bitarray
 sacrebleu
 cython
+deep_translator

@@ -63,6 +63,10 @@ echo "WER ASR:"
 tail -n 1 $PRED_LOG
 
 
+# TODO translate the ref_asr.txt file to German using a SOTA MT model to have a reference for the MT evaluation
+python translate.py --input_file $PRED_OUTPUT_DIR/ref_asr.txt --output_file $PRED_OUTPUT_DIR/ref_asr_de.txt
+
+
 
 MT_DATA_DIR=~/ST/data/MT
 MT_MODEL_DIR=~/MT/models
