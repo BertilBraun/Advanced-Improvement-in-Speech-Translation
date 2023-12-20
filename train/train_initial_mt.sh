@@ -29,7 +29,7 @@ python setup_initial_mt_data.py
 # Binarize the data for training
 fairseq-preprocess \
     --source-lang en --target-lang de \
-    --trainpref "$DATA_DIR/spm.train.de-en" \ 
+    --trainpref "$DATA_DIR/spm.train.de-en" \
     --validpref "$DATA_DIR/spm.dev.de-en" \
     --testpref "$DATA_DIR/spm.tst.de-en" \
     --destdir "$BINARY_DATA_DIR/iwslt14.de-en" \
