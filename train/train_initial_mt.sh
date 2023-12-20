@@ -44,7 +44,7 @@ fairseq-train \
     --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
-    --keep-last-epochs 2 --save-interval-updates 100 --keep-best-checkpoints 1 \
+    --keep-last-epochs 2 --save-interval-updates 10000 --keep-best-checkpoints 1 \
     --max-tokens 4096 \
     --max-epoch 200 \
     --fp16
