@@ -4,7 +4,7 @@ import sentencepiece as spm
 
 
 
-def translate_file(input_file, output_file, src_lng, target_lng):
+def translate_file(input_file, output_file, src_lng, target_lng, spm_output_model_file):
     print("Translating file...")
     
     with open(input_file, "r", encoding="utf-8") as f:
@@ -23,6 +23,18 @@ def translate_file(input_file, output_file, src_lng, target_lng):
     
     print("Translated file")
     for line in translated[:100]:
+        print(line)
+        
+        
+    spm_output_model = spm.SentencePieceProcessor(model_file=spm_output_model_file)
+    
+    translated = [
+        spm_output_model.encode(line.strip(), out_type=str)
+        for line in translated
+    ]
+    
+    print("Encoded output file")
+    for line in translated[:10]:
         print(line)
 
     with open(output_file, "w", encoding="utf-8") as f:
