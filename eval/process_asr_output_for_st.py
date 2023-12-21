@@ -10,7 +10,7 @@ def translate_file(input_file, output_file, src_lng, target_lng):
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
-    lines = lines[:10]
+    lines = lines[:100]
     
     translator = GoogleTranslator(source=src_lng, target=target_lng) 
 
@@ -22,7 +22,7 @@ def translate_file(input_file, output_file, src_lng, target_lng):
     ]
     
     print("Translated file")
-    for line in translated[:10]:
+    for line in translated[:100]:
         print(line)
 
     with open(output_file, "w", encoding="utf-8") as f:
@@ -51,22 +51,17 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
         print(line)
         
     lines = [
-        spm_output_model.encode(line)
+        spm_output_model.encode(line.strip(), out_type=str)
         for line in lines
     ]
     
     print("Encoded output file")
     for line in lines[:10]:
         print(line)
-        
-    lines = [
-        " ".join(line)
-        for line in lines
-    ]
-    
+            
     with open(output_file, "w", encoding="utf-8") as f:
         for line in lines:
-            f.write(line + "\n")
+            f.write(" ".join(line) + "\n")
             
     print("Done processing hypothesis file!")
 
