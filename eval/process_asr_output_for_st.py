@@ -95,7 +95,7 @@ if __name__ == "__main__":
     
     print("Starting processing...")
     
-    translate_file(args.ref_input_file, args.ref_output_file, args.src_lng, args.target_lng)
+    translate_file(args.ref_input_file, args.ref_output_file, args.src_lng, args.target_lng, args.spm_output_file)
     
     process_hypothesis_file(args.hyp_input_file, args.hyp_output_file, args.spm_input_file, args.spm_output_file)
     
