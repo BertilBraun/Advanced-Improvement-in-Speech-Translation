@@ -5,6 +5,7 @@ import sentencepiece as spm
 
 
 def translate_file(input_file, output_file, src_lng, target_lng):
+    print("Translating file...")
     
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
@@ -17,12 +18,19 @@ def translate_file(input_file, output_file, src_lng, target_lng):
         translator.translate(line)
         for line in lines
     ]
+    
+    print("Translated file")
+    for line in translated[:10]:
+        print(line)
 
     with open(output_file, "w", encoding="utf-8") as f:
         f.write("\n".join(translated))
+        
+    print("Done translating file!")
 
 
 def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_output_model_file):
+    print("Processing hypothesis file...")
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
@@ -55,6 +63,8 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
     with open(output_file, "w", encoding="utf-8") as f:
         for line in lines:
             f.write(line + "\n")
+            
+    print("Done processing hypothesis file!")
 
 if __name__ == "__main__":
 
@@ -72,6 +82,10 @@ if __name__ == "__main__":
     # Use the Google Translate API to translate the input file
     # and write the output to the output file.
     
+    print("Starting processing...")
+    
     translate_file(args.ref_input_file, args.ref_output_file, args.src_lng, args.target_lng)
     
     process_hypothesis_file(args.hyp_input_file, args.hyp_output_file, args.spm_input_file, args.spm_output_file)
+    
+    print("Done processing!")

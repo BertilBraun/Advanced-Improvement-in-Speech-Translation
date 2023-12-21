@@ -46,11 +46,11 @@ mkdir -p $ASR_DATA_DIR
 
 echo "Starting ASR prediction for $asr_model"
 
-fairseq-generate $ASR_DATA_DIR \
-    --config-yaml config.yaml --gen-subset test-clean \
-    --task speech_to_text \
-    --path $ASR_MODEL_DIR/checkpoint_best.pt \
-    --max-tokens 50000 --beam 5 --scoring wer > $ASR_PRED_LOG
+# fairseq-generate $ASR_DATA_DIR \
+#     --config-yaml config.yaml --gen-subset test-clean \
+#     --task speech_to_text \
+#     --path $ASR_MODEL_DIR/checkpoint_best.pt \
+#     --max-tokens 50000 --beam 5 --scoring wer > $ASR_PRED_LOG
 
 echo "Prediction done for $asr_model"
 
