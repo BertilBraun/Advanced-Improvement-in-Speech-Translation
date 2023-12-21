@@ -29,7 +29,7 @@ def translate_file(input_file, output_file, src_lng, target_lng, spm_output_mode
     spm_output_model = spm.SentencePieceProcessor(model_file=spm_output_model_file)
     
     translated = [
-        spm_output_model.encode(line.strip(), out_type=str)
+        " ".join(spm_output_model.encode(line.strip(), out_type=str))
         for line in translated
     ]
     
@@ -63,7 +63,7 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
         print(line)
         
     lines = [
-        spm_output_model.encode(line.strip(), out_type=str)
+        " ".join(spm_output_model.encode(line.strip(), out_type=str))
         for line in lines
     ]
     
@@ -73,7 +73,7 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
             
     with open(output_file, "w", encoding="utf-8") as f:
         for line in lines:
-            f.write(" ".join(line) + "\n")
+            f.write(line + "\n")
             
     print("Done processing hypothesis file!")
 
