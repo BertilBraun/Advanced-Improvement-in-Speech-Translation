@@ -35,7 +35,14 @@ ASR_MODEL_DIR=~/ASR/models/$asr_model
 PRED_OUTPUT_DIR=~/ST/predictions
 ASR_PRED_LOG=$PRED_OUTPUT_DIR/en_s2t.pred.log
 
+
+MT_DATA_DIR=~/ST/data/MT
+MT_MODEL_DIR=~/MT/models
+
+MT_PRED_LOG=$PRED_OUTPUT_DIR/en-de.pred.log
+
 mkdir -p $PRED_OUTPUT_DIR
+mkdir -p $ASR_DATA_DIR
 
 echo "Starting ASR prediction for $asr_model"
 
@@ -63,21 +70,20 @@ echo "WER ASR:"
 tail -n 1 $PRED_LOG
 
 
-# TODO translate the ref_asr.txt file to German using a SOTA MT model to have a reference for the MT evaluation
-python translate.py --input_file $PRED_OUTPUT_DIR/ref_asr.txt --output_file $PRED_OUTPUT_DIR/ref_asr_de.txt
+python process_asr_output_for_st.py \
+    --ref_input_file $PRED_OUTPUT_DIR/ref_asr.txt \
+    --ref_output_file $PRED_OUTPUT_DIR/asr_out.de \
+    --hyp_input_file $PRED_OUTPUT_DIR/hyp_asr.txt \
+    --hyp_output_file $PRED_OUTPUT_DIR/asr_out.en \
+    --spm_input_file ~/ASR/wav2vec/spm_unigram900.model \
+    --spm_output_file ~/PST/train/bpe.model
 
-
-
-MT_DATA_DIR=~/ST/data/MT
-MT_MODEL_DIR=~/MT/models
-
-MT_PRED_LOG=$PRED_OUTPUT_DIR/en-de.pred.log
 
 echo "Starting translation..."
 
 fairseq-preprocess \
     --source-lang en --target-lang de \
-    --testpref $PRED_OUTPUT_DIR/hyp_asr.txt \
+    --testpref $PRED_OUTPUT_DIR/input_mt.txt \
     --destdir $MT_DATA_DIR/eval.de-en \
     --thresholdtgt 0 --thresholdsrc 0 \
     --workers 8
