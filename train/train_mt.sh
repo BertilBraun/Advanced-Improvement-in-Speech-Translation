@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --job-name=PST_train_asr           # job name
+#SBATCH --job-name=PST_train_mt            # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=24:00:00                    # wall-clock time limit  
+#SBATCH --time=12:00:00                    # wall-clock time limit  
 #SBATCH --mem=40000                        # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -50,7 +50,7 @@ fairseq-train \
     --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
-    --keep-last-epochs 2 --save-interval-updates 10000 --keep-best-checkpoints 1 \
+    --keep-last-epochs 2 --save-interval-updates 50000 --keep-best-checkpoints 1 \
     --max-tokens 4096 \
-    --max-epoch 200 \
+    --max-epoch 120 \
     --fp16

@@ -10,8 +10,18 @@ from fairseq.model_parallel.megatron.mpu import (
 )
 
 
+git submodule sync
 git submodule update --init --recursive
+git submodule update --init fairseq/model_parallel/megatron
 pip install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+
+
+
+
+
+
+
+------------------- Does not work below -------------------
 
 
 module load devel/cuda/11.8
