@@ -10,7 +10,7 @@ def translate_file(input_file, output_file, src_lng, target_lng, spm_output_mode
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
-    lines = lines[:10]
+    lines = lines[:50]
     
     translator = GoogleTranslator(source=src_lng, target=target_lng) 
 
@@ -22,7 +22,7 @@ def translate_file(input_file, output_file, src_lng, target_lng, spm_output_mode
     ]
     
     print("Translated file")
-    for line in translated[:50]:
+    for line in translated[:2]:
         print(line)
         
         
