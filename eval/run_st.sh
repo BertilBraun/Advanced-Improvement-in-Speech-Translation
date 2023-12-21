@@ -83,6 +83,8 @@ echo "Starting translation..."
 
 fairseq-preprocess \
     --source-lang en --target-lang de \
+    --srcdict ~/MT/initial_binarized_dataset/iwslt14.de-en/dict.en.txt \
+    --tgtdict ~/MT/initial_binarized_dataset/iwslt14.de-en/dict.de.txt \
     --testpref $PRED_OUTPUT_DIR/input_mt.txt \
     --destdir $MT_DATA_DIR/eval.de-en \
     --thresholdtgt 0 --thresholdsrc 0 \
