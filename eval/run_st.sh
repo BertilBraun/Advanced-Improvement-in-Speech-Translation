@@ -67,7 +67,7 @@ echo "Sample references:"
 head $PRED_OUTPUT_DIR/ref_asr.txt
 
 echo "WER ASR:"
-tail -n 1 $PRED_LOG
+tail -n 1 $ASR_PRED_LOG
 
 
 python process_asr_output_for_st.py \
