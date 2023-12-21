@@ -10,7 +10,7 @@ def translate_file(input_file, output_file, src_lng, target_lng):
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
-    lines = lines[:100]
+    lines = lines[:10]
     
     translator = GoogleTranslator(source=src_lng, target=target_lng) 
 
@@ -36,7 +36,7 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
-    lines = lines[:100]
+    lines = lines[:10]
         
     spm_input_model = spm.SentencePieceProcessor(model_file=spm_input_model_file)
     spm_output_model = spm.SentencePieceProcessor(model_file=spm_output_model_file)
