@@ -29,7 +29,7 @@ source ../setup.sh
 
 asr_model="wav2vec" # "wav2vec" or "mel"
 
-ASR_DATA_DIR=~/ST/data/ASR
+ASR_DATA_DIR=~/ST/data/ASR/$asr_model
 ASR_MODEL_DIR=~/ASR/models/$asr_model
 
 PRED_OUTPUT_DIR=~/ST/predictions
