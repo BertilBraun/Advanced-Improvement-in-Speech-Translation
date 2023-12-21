@@ -22,7 +22,7 @@ def translate_file(input_file, output_file, src_lng, target_lng, spm_output_mode
     ]
     
     print("Translated file")
-    for line in translated[:100]:
+    for line in translated[:50]:
         print(line)
         
         
@@ -34,7 +34,7 @@ def translate_file(input_file, output_file, src_lng, target_lng, spm_output_mode
     ]
     
     print("Encoded output file")
-    for line in translated[:10]:
+    for line in translated[:2]:
         print(line)
 
     with open(output_file, "w", encoding="utf-8") as f:
@@ -48,7 +48,7 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
-    lines = lines[:10]
+    lines = lines[:50]
         
     spm_input_model = spm.SentencePieceProcessor(model_file=spm_input_model_file)
     spm_output_model = spm.SentencePieceProcessor(model_file=spm_output_model_file)
@@ -59,7 +59,7 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
     ]
     
     print("Decoded input file")
-    for line in lines[:10]:
+    for line in lines[:2]:
         print(line)
         
     lines = [
@@ -68,7 +68,7 @@ def process_hypothesis_file(input_file, output_file, spm_input_model_file, spm_o
     ]
     
     print("Encoded output file")
-    for line in lines[:10]:
+    for line in lines[:2]:
         print(line)
             
     with open(output_file, "w", encoding="utf-8") as f:

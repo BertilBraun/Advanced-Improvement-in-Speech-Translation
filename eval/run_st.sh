@@ -60,11 +60,11 @@ grep ^T $ASR_PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPU
 echo "Prediction files written for $asr_model"
 echo "Sample predictions:"
 
-head $PRED_OUTPUT_DIR/hyp_asr.txt
+head -2 $PRED_OUTPUT_DIR/hyp_asr.txt
 
 echo "Sample references:"
 
-head $PRED_OUTPUT_DIR/ref_asr.txt
+head -2 $PRED_OUTPUT_DIR/ref_asr.txt
 
 echo "WER ASR:"
 tail -n 1 $ASR_PRED_LOG
@@ -107,11 +107,11 @@ grep ^T $MT_PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT
 echo "Translations files written"
 echo "Sample predictions:"
 
-head $PRED_OUTPUT_DIR/hyp_mt.txt
+head -2 $PRED_OUTPUT_DIR/hyp_mt.txt
 
 echo "Sample references:"
 
-head $PRED_OUTPUT_DIR/ref_mt.txt
+head -2 $PRED_OUTPUT_DIR/ref_mt.txt
 
 echo "WER:"
 tail -n 1 $MT_PRED_LOG
