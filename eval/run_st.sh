@@ -50,13 +50,15 @@ fairseq-generate $ASR_DATA_DIR \
     --config-yaml config.yaml --gen-subset test-clean \
     --task speech_to_text \
     --path $ASR_MODEL_DIR/checkpoint_best.pt \
-    --max-tokens 50000 --beam 5 --scoring wer \
+    --max-tokens 50000 --beam 10 --scoring wer \
     --nbest 10 > $ASR_PRED_LOG
 
 echo "Prediction done for $asr_model"
 
 grep ^H $ASR_PRED_LOG | sed 's/^H-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp_asr.txt
 grep ^T $ASR_PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/ref_asr.txt
+
+# TODO how is the output structured?
 
 echo "Prediction files written for $asr_model"
 echo "Sample predictions:"
