@@ -4,7 +4,10 @@ from typing import Literal, Union
 import requests
 import itertools
 import os
+import sentencepiece as spm
+from tqdm import tqdm
 from llama_cpp import Llama
+from datasets import load_dataset
 import spacy
 import random
 
@@ -20,8 +23,8 @@ OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
 DATASET_EN = DATASET_FOLDER / "train.de-en.en"
 DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 
-OUTPUT_EN_FILE = OUTPUT_FOLDER / f"output.en"
-OUTPUT_DE_FILE = OUTPUT_FOLDER / f"output.de"
+OUTPUT_EN_FILE = OUTPUT_FOLDER / "train.paraphrased.de-en.en"
+OUTPUT_DE_FILE = OUTPUT_FOLDER / "train.paraphrased.de-en.de"
 
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
@@ -170,30 +173,29 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
     return True
 
 
-def read_dataset_segment(file_path: str, start_line: int, end_line: int) -> list[str]:
+def read_dataset_segment(file_path: str) -> list[str]:
     with open(file_path, "r", encoding="utf-8") as file:
-        return [
-            line.strip() for i, line in enumerate(file) if start_line <= i < end_line
-        ]
+        return [ line.strip() for line in file ]
 
 
 def main() -> None:
     ensure_dataset_loaded()
     ensure_model_loaded()
-
+     
+    datasets = [
+        load_dataset(f"wmt{i}", "de-en", split="train")
+        for i in range(14, 20)
+    ]
+        
     # LLaMA model initialization
     LLM = Llama(model_path=MODEL_PATH, n_ctx=2048)
 
-    # Find out the number of lines in the dataset and split them evenly between processes
-    num_lines = sum(1 for _ in open(DATASET_EN, "r", encoding="utf-8"))
-
     # Read the dataset segment for this process
-    english_sentences = read_dataset_segment(DATASET_EN, 0, num_lines)
-    german_sentences = read_dataset_segment(DATASET_DE, 0, num_lines)
+    english_sentences = read_dataset_segment(DATASET_EN)
+    german_sentences = read_dataset_segment(DATASET_DE)
 
-    with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file, open(
-        OUTPUT_DE_FILE, "w", encoding="utf-8"
-    ) as de_file:
+    with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
+        open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file:
         # For each sentence pair in the dataset segment, generate paraphrases and write all combinations to files
         for en, de in zip(english_sentences, german_sentences):
             en_paraphrases = [en] + generate_paraphrases(LLM, en, "en")
@@ -203,26 +205,50 @@ def main() -> None:
             for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
                 en_file.write(f"{en_p}\n")
                 de_file.write(f"{de_p}\n")
+           
+        english_sentences = [
+            sentence
+            for dataset in datasets
+            for sentence in dataset["train"]["en"]
+        ]
+        german_sentences = [
+            sentence
+            for dataset in datasets
+            for sentence in dataset["train"]["de"]
+        ]
+        
+        for en, de in zip(english_sentences, german_sentences):
+            en_paraphrases = [en] + generate_paraphrases(LLM, en, "en")
+            de_paraphrases = [de] + generate_paraphrases(LLM, de, "de")
 
+            # Generate all combinations of English and German paraphrases and write directly to files
+            for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
+                en_file.write(f"{en_p}\n")
+                de_file.write(f"{de_p}\n")
+        
+        
     print("Finished generating paraphrases.")
 
-    # Concatenate all output files
-    os.system(f"cat {OUTPUT_FOLDER}/output_*.en > {OUTPUT_FOLDER}/output.en")
-    os.system(f"cat {OUTPUT_FOLDER}/output_*.de > {OUTPUT_FOLDER}/output.de")
 
-    # Remove the individual output files
-    os.system(f"rm {OUTPUT_FOLDER}/output_*.en")
-    os.system(f"rm {OUTPUT_FOLDER}/output_*.de")
+    spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
+                                model_prefix="bpe",
+                                vocab_size=5000)
 
-    print("Done concatenating output files.")
+    print('Finished training sentencepiece model.')
+    
+    spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
 
-    # Write the output files into "spm.train.de-en"
-    for de, en in zip(
-        open(OUTPUT_FOLDER / "output.de", "r", encoding="utf-8"),
-        open(OUTPUT_FOLDER / "output.en", "r", encoding="utf-8"),
-    ):
-        with open(OUTPUT_FOLDER / "spm.train.de-en", "w", encoding="utf-8") as file:
-            file.write(f"{de.strip()}\t{en.strip()}\n")
+    partition = "train_paraphrased"
+
+    for lang in ["de", "en"]:
+        with open(f"{DATASET_FOLDER}/{partition}.de-en.{lang}", "r") as f_in, \
+                open(f"{DATASET_FOLDER}/spm.{partition}.de-en.{lang}", "w") as f_out:
+            for line in tqdm(f_in.readlines(), desc=f"Segmenting {partition}.{lang}"):
+                # Segmented into subwords
+                line_segmented = spm_model.encode(line.strip(), out_type=str)
+                # Join the subwords into a string
+                line_segmented = " ".join(line_segmented)
+                f_out.write(line_segmented + "\n")
 
 
 if __name__ == "__main__":

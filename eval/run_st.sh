@@ -96,8 +96,8 @@ fairseq-generate $MT_DATA_DIR/eval.de-en \
       --source-lang en \
       --target-lang de \
       --path $MT_MODEL_DIR/checkpoint_best.pt \
-      --batch-size 256 \
-      --beam 4 \
+      --batch-size 64 \
+      --beam 16 \
       --remove-bpe=sentencepiece > $MT_PRED_LOG
 
 echo "Translations done"

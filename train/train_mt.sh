@@ -35,16 +35,16 @@ fi
 # Binarize the data for training
 fairseq-preprocess \
     --source-lang en --target-lang de \
-    --trainpref "$PARAPHRASED_DATA_DIR/spm.train.de-en" \ 
-    --validpref "$DATA_DIR/spm.dev.de-en" \
-    --testpref "$DATA_DIR/spm.tst.de-en" \
-    --destdir "$BINARY_DATA_DIR/iwslt14.de-en" \
+    --trainpref $PARAPHRASED_DATA_DIR/spm.train_paraphrased.de-en \
+    --validpref $DATA_DIR/spm.dev.de-en \
+    --testpref $DATA_DIR/spm.tst.de-en \
+    --destdir $BINARY_DATA_DIR/iwslt14.de-en \
     --thresholdtgt 0 --thresholdsrc 0 \
     --workers 8
 
 # Train the model in parallel
 fairseq-train \
-    "$BINARY_DATA_DIR/iwslt14.de-en" --save-dir $MODEL_DIR \
+    $BINARY_DATA_DIR/iwslt14.de-en --save-dir $MODEL_DIR \
     --arch transformer --share-decoder-input-output-embed \
     --optimizer adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
     --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
