@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=PST_train_asr           # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=12:00:00                    # wall-clock time limit  
+#SBATCH --time=48:00:00                    # wall-clock time limit  
 #SBATCH --mem=40000                        # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -16,7 +16,9 @@
 source ../setup.sh
 
 # Define the model types in an array
-MODEL_TYPES=("wav2vec" "mel")
+# MODEL_TYPES=("wav2vec" "mel")
+# actually only wav2vec is used
+MODEL_TYPES=("wav2vec")
 
 ROOT=~/ASR
 
@@ -37,10 +39,11 @@ for model in "${MODEL_TYPES[@]}"; do
 
     # Train the model in parallel
     fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
-        --train-subset train-clean-100 --valid-subset dev-clean \
+        --train-subset train-clean-360 --valid-subset dev-clean \
         --num-workers 2 --max-tokens 40000 --max-update 300000 \
-        --task speech_to_text --criterion label_smoothed_cross_entropy --label-smoothing 0.1 --report-accuracy \
-        --arch s2t_transformer_s --share-decoder-input-output-embed \
+        --task speech_to_text --criterion ctc \
+        --label-smoothing 0.1 --report-accuracy \
+        --arch s2t_transformer_m --share-decoder-input-output-embed \
         --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
         --clip-norm 10.0 --seed 1 --update-freq 8 \
         --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
