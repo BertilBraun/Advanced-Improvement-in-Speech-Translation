@@ -9,8 +9,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=../../ST/logs/eval_st_%j.txt
-#SBATCH --error=../../ST/logs/eval_st_%j.txt
+#SBATCH --output=eval_st_log_%j.txt
+#SBATCH --error=eval_st_log_%j.txt
 
 
 # TODO We might want to train multiple models with different hyperparameters and then use an ensemble of them for evaluation.
