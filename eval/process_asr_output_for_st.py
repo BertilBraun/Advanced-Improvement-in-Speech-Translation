@@ -89,7 +89,6 @@ def process_reference_text(lines):
     # TODO otherwise, this should at least be the original reference text without any processing, which we do during ASR preprocessing
     print("Translating file...")
 
-
     # text_mapping = {"original": [], "target": []}
     text_mapping = load_df_from_tsv(ASR_ROOT / "text.tsv")
     
