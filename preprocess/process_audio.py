@@ -217,11 +217,12 @@ def process_dataset_manifest(datasets, root_location):
 
     # assert len(audio_paths) == len(audio_lengths)
     assert len(datasets) == len(DATASET_NAMES)
+    
+    text_mapping = {"original": [], "target": []}
 
     for dataset, dataset_name in zip(datasets, DATASET_NAMES):
         print(f"Fetching manifest from {dataset_name}...")
         manifest = {c: [] for c in MANIFEST_COLUMNS}
-        text_mapping = {"original": [], "target": []}
 
         for (_, _, utt, spk_id, chapter_no, utt_no) in for_in_dataset(
             dataset, desc=f"Manifest {dataset_name}"
@@ -239,15 +240,16 @@ def process_dataset_manifest(datasets, root_location):
         save_df_to_tsv(
             pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv"
         )
-        save_df_to_tsv(
-            pd.DataFrame.from_dict(text_mapping), root_location / f"{dataset_name}_text.tsv"
-        )
+        
+    save_df_to_tsv(
+        pd.DataFrame.from_dict(text_mapping), root_location / "text.tsv"
+    )
 
 
 def process_dataset_vocab(root_location):
     # Collect train text to generate sentencepiece model and vocabulary later on
-    train_text = pd.read_csv(root_location / f"{DATASET_NAMES[0]}_text.tsv", sep="\t")[
-        "target"
+    train_text = pd.read_csv(root_location / f"{DATASET_NAMES[0]}.tsv", sep="\t")[
+        "tgt_text"
     ].tolist()
     with open(root_location / "train_text.txt", "w") as f:
         f.write("\n".join(train_text))

@@ -74,9 +74,7 @@ python process_asr_output_for_st.py \
     --ref_input_file $PRED_OUTPUT_DIR/ref_asr.txt \
     --ref_output_file $PRED_OUTPUT_DIR/asr_out.de \
     --hyp_input_file $PRED_OUTPUT_DIR/hyp_asr.txt \
-    --hyp_output_file $PRED_OUTPUT_DIR/asr_out.en \
-    --spm_input_file ~/ASR/wav2vec/spm_unigram900.model \
-    --spm_output_file ~/PST/train/bpe.model
+    --hyp_output_file $PRED_OUTPUT_DIR/asr_out.en
 
 
 echo "Starting translation..."
