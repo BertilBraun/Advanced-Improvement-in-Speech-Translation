@@ -30,6 +30,8 @@ from examples.speech_to_text.data_utils import (
     extract_fbank_features,
 )
 
+OVERWRITE_ZIP = True
+
 ROOT_LOCATION = Path(f"{os.environ['HOME']}/ASR")
 
 DATASET_LOCATION = ROOT_LOCATION / "data"
@@ -54,10 +56,10 @@ MEL_ENCODING_ROOT.mkdir(parents=True, exist_ok=True)
 BATCH_SIZE = 12
 
 # TODO maybe adjust vocab size - 900 was used in the colab
-VOCAB_SIZE = 900
+VOCAB_SIZE = 1000
 
 # TODO For final training set to 'train-clean-360'?
-DATASET_NAMES = ["train-clean-100", "dev-clean", "test-clean"]
+DATASET_NAMES = ["train-clean-360", "dev-clean", "test-clean"]
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -205,6 +207,7 @@ def cleanup_utterance(utt: str):
     
     return modified
 
+
 def process_dataset_manifest(datasets, root_location):
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
@@ -218,6 +221,7 @@ def process_dataset_manifest(datasets, root_location):
     for dataset, dataset_name in zip(datasets, DATASET_NAMES):
         print(f"Fetching manifest from {dataset_name}...")
         manifest = {c: [] for c in MANIFEST_COLUMNS}
+        text_mapping = {"original": [], "target": []}
 
         for (_, _, utt, spk_id, chapter_no, utt_no) in for_in_dataset(
             dataset, desc=f"Manifest {dataset_name}"
@@ -228,16 +232,22 @@ def process_dataset_manifest(datasets, root_location):
             manifest["n_frames"].append(audio_lengths[sample_id])
             manifest["tgt_text"].append(cleanup_utterance(utt))
             manifest["speaker"].append(spk_id)
+            
+            text_mapping["original"].append(utt)
+            text_mapping["target"].append(cleanup_utterance(utt))
 
         save_df_to_tsv(
             pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv"
+        )
+        save_df_to_tsv(
+            pd.DataFrame.from_dict(text_mapping), root_location / f"{dataset_name}_text.tsv"
         )
 
 
 def process_dataset_vocab(root_location):
     # Collect train text to generate sentencepiece model and vocabulary later on
-    train_text = pd.read_csv(root_location / f"{DATASET_NAMES[0]}.tsv", sep="\t")[
-        "tgt_text"
+    train_text = pd.read_csv(root_location / f"{DATASET_NAMES[0]}_text.tsv", sep="\t")[
+        "target"
     ].tolist()
     with open(root_location / "train_text.txt", "w") as f:
         f.write("\n".join(train_text))
@@ -260,11 +270,11 @@ def main():
     datasets = ensure_dataset_loaded()  # train_data, dev_data, test_data = datasets
 
     # Pack audio features into ZIP
-    for root_location in (WAV2VEC_ROOT, MEL_ROOT):
+    for root_location in (WAV2VEC_ROOT,): # (WAV2VEC_ROOT, MEL_ROOT):
         
         encodings_folder = root_location / ENCODING_FOLDER_NAME
         zip_file = root_location / ZIP_FILE_NAME
-        if not zip_file.is_file():
+        if not zip_file.is_file() or OVERWRITE_ZIP:
             
             for dataset in datasets:
                 if root_location == WAV2VEC_ROOT:

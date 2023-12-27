@@ -52,5 +52,5 @@ fairseq-train \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
     --keep-last-epochs 2 --save-interval-updates 50000 --keep-best-checkpoints 1 \
     --max-tokens 4096 \
-    --max-epoch 120 \
+    --max-epoch 100 \
     --fp16
