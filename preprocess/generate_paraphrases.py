@@ -22,8 +22,8 @@ OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
 DATASET_EN = DATASET_FOLDER / "train.de-en.en"
 DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 
-OUTPUT_EN_FILE = OUTPUT_FOLDER / "train.paraphrased.de-en.en"
-OUTPUT_DE_FILE = OUTPUT_FOLDER / "train.paraphrased.de-en.de"
+OUTPUT_EN_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.en"
+OUTPUT_DE_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.de"
 
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
@@ -255,12 +255,10 @@ def main() -> None:
     
     spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
 
-    partition = "train_paraphrased"
-
     for lang in ["de", "en"]:
-        with open(f"{DATASET_FOLDER}/{partition}.de-en.{lang}", "r") as f_in, \
-                open(f"{DATASET_FOLDER}/spm.{partition}.de-en.{lang}", "w") as f_out:
-            for line in tqdm(f_in.readlines(), desc=f"Segmenting {partition}.{lang}"):
+        with open(f"{DATASET_FOLDER}/train_paraphrased.de-en.{lang}", "r") as f_in, \
+                open(f"{DATASET_FOLDER}/spm.train_paraphrased.de-en.{lang}", "w") as f_out:
+            for line in tqdm(f_in.readlines(), desc=f"Segmenting {lang}"):
                 # Segmented into subwords
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
                 # Join the subwords into a string
