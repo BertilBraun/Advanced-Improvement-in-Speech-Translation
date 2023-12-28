@@ -3,6 +3,7 @@ from typing import Literal, Union
 
 import itertools
 import os
+import regex
 import sentencepiece as spm
 from tqdm import tqdm
 from llama_cpp import Llama
@@ -117,8 +118,11 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
     print(f"Paraphrases text: {paraphrases_text}")
 
     # Use Spacy's sentence boundary detection to extract paraphrases
-    doc = NLP[language](paraphrases_text)
-    sentences = [sent.text.strip() for sent in doc.sents]
+    # doc = NLP[language](paraphrases_text)
+    # sentences = [sent.text.strip() for sent in doc.sents]
+    sentences = [
+        cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
+    ]
 
     # Consider you have to generate initally more paraphrases if you use diversify with diversity_factor<1
     sentences = diversify_paraphrases(
@@ -143,6 +147,23 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
 
     # Ensure only five paraphrases are returned
     return paraphrases[:5]
+
+
+def cleanup_paraphrase(sent: str) -> str:
+    sent = sent.strip()
+    
+    # Remove leading and trailing quotation marks
+    if sent.startswith('"') and sent.endswith('"'):
+        sent = sent[1:-1]
+    
+    # Remove leading enumeration "\d+[\.:]"
+    regex_enumeration = r"^\d+[\.:]"
+    sent = regex.sub(regex_enumeration, "", sent)
+    
+    # Remove leading and trailing whitespace
+    sent = sent.strip()
+    
+    return sent    
 
 
 # Diversify the list of paraphrases to cover a broader range of semantic variations
