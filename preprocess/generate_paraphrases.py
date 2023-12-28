@@ -29,8 +29,12 @@ OUTPUT_DE_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.de"
 
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
-MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b-chat.ggmlv3.q8_0.bin"
+MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b.Q5_K_M.gguf"
 MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q5_K_M.gguf"
+
+# Smaller apparently faster model 
+MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b.Q4_K_M.gguf"
+MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_K_M.gguf"
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
 
