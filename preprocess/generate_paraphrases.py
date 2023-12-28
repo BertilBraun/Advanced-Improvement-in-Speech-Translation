@@ -113,6 +113,8 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
 
     # Extract paraphrases from the response
     paraphrases_text = output["choices"][0]["text"]
+    
+    print(f"Paraphrases text: {paraphrases_text}")
 
     # Use Spacy's sentence boundary detection to extract paraphrases
     doc = NLP[language](paraphrases_text)
