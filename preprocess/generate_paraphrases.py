@@ -78,7 +78,8 @@ except OSError:
     
 
 def ensure_model_loaded() -> None:
-    if not MODEL_PATH.is_file():
+    # if model not found, download it
+    if not MODEL_PATH.is_file() or not os.path.exists(MODEL_PATH):
         print(f"Model not found at {MODEL_PATH}. Downloading...")
         response = requests.get(MODEL_URL, allow_redirects=True)
         with open(MODEL_PATH.as_posix(), "wb") as file:
