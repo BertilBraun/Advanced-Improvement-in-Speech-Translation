@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Literal, Union
 
-import requests
 import itertools
 import os
 import sentencepiece as spm
@@ -77,11 +76,10 @@ except OSError:
 
 def ensure_model_loaded() -> None:
     # if model not found, download it
-    if not MODEL_PATH.is_file() or not os.path.exists(MODEL_PATH):
+    if not os.path.exists(MODEL_PATH):
         print(f"Model not found at {MODEL_PATH}. Downloading...")
-        response = requests.get(MODEL_URL, allow_redirects=True)
-        with open(MODEL_PATH.as_posix(), "wb") as file:
-            file.write(response.content)
+        download_command = f"wget -nc -O '{MODEL_PATH}' '{MODEL_URL}'"
+        os.system(download_command) 
         print("Model downloaded.")
     print(f"Model ready at '{MODEL_PATH}'.")
 
@@ -104,6 +102,7 @@ def ensure_dataset_loaded() -> None:
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
+    print(f"Generating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
     formatted_prompt = PROMPT[language].format(sentence)
@@ -128,11 +127,17 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
     paraphrases = [
         sent for sent in sentences if heuristic_is_paraphrase(sent, sentence)
     ]
+    non_paraphrases = [
+        sent for sent in sentences if sent not in paraphrases
+    ]
+    print(f"Non paraphrases: {non_paraphrases}")
 
     if len(paraphrases) < 5:
         print(
             f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'"
         )
+        
+    print(f"Possible paraphrases: {paraphrases}")
 
     # Ensure only five paraphrases are returned
     return paraphrases[:5]
@@ -199,6 +204,8 @@ def main() -> None:
     # Read the dataset segment for this process
     english_sentences = read_dataset_segment(DATASET_EN)
     german_sentences = read_dataset_segment(DATASET_DE)
+    
+    print(f"Generating paraphrases for {len(english_sentences)} sentence pairs...")
 
     with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
         open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file:
@@ -222,6 +229,8 @@ def main() -> None:
             for dataset in datasets
             for sentence in dataset["train"]["de"]
         ]
+        
+        print(f"Generating paraphrases for {len(english_sentences)} sentence pairs...")
         
         for en, de in zip(english_sentences, german_sentences):
             en_paraphrases = [en] + generate_paraphrases(LLM, en, "en")
