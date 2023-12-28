@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 from typing import Literal, Union
 
 import itertools
@@ -35,7 +36,7 @@ LANGUAGE = Union[Literal["en"], Literal["de"]]
 
 PROMPT = {  # TODO Modify and play with this prompt to properly generate 5 good paraphrases
     "en": "Generate five distinct paraphrases of the following English sentence:\n'{}'\nParaphrases:",
-    "de": "Erzeugen Sie fünf unterschiedliche Paraphrasen des folgenden deutschen Satzes:\n'{}'\nParaphrasen:",
+    "de": "Schreiben Sie den folgenden Satz auf fünf verschiedene Arten um:\n'{}'\nUmschreibungen:",
 }
 
 # Some alternatives to try for paraphrase genaration
@@ -225,46 +226,35 @@ def main() -> None:
     LLM = Llama(model_path=MODEL_PATH.as_posix(), n_ctx=2048)
 
     # Read the dataset segment for this process
-    english_sentences = read_dataset_segment(DATASET_EN)
-    german_sentences = read_dataset_segment(DATASET_DE)
-    
+    english_sentences = read_dataset_segment(DATASET_EN) + [
+            sentence
+            for dataset in datasets
+            for sentence in dataset["train"]["en"]
+        ]
+    german_sentences = read_dataset_segment(DATASET_DE) + [
+            sentence
+            for dataset in datasets
+            for sentence in dataset["train"]["de"]
+        ]
+     
     print(f"Generating paraphrases for {len(english_sentences)} sentence pairs...")
+    if len(english_sentences) != len(german_sentences):
+        print("Warning: English and German sentences are not the same length.")
 
     with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
         open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file:
         # For each sentence pair in the dataset segment, generate paraphrases and write all combinations to files
         for en, de in zip(english_sentences, german_sentences):
+            start = time.time()
             en_paraphrases = [en] + generate_paraphrases(LLM, en, "en")
             de_paraphrases = [de] + generate_paraphrases(LLM, de, "de")
+            print(f"Paraphrases generated in {time.time() - start} seconds.")
 
             # Generate all combinations of English and German paraphrases and write directly to files
             for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
                 en_file.write(f"{en_p}\n")
                 de_file.write(f"{de_p}\n")
            
-        english_sentences = [
-            sentence
-            for dataset in datasets
-            for sentence in dataset["train"]["en"]
-        ]
-        german_sentences = [
-            sentence
-            for dataset in datasets
-            for sentence in dataset["train"]["de"]
-        ]
-        
-        print(f"Generating paraphrases for {len(english_sentences)} sentence pairs...")
-        
-        for en, de in zip(english_sentences, german_sentences):
-            en_paraphrases = [en] + generate_paraphrases(LLM, en, "en")
-            de_paraphrases = [de] + generate_paraphrases(LLM, de, "de")
-
-            # Generate all combinations of English and German paraphrases and write directly to files
-            for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
-                en_file.write(f"{en_p}\n")
-                de_file.write(f"{de_p}\n")
-        
-        
     print("Finished generating paraphrases.")
 
 
