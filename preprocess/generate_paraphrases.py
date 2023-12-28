@@ -68,8 +68,14 @@ PROMPT_Rewrite = {
 }
 """
 
-NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
-
+try:
+    NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
+except OSError:
+    print("Downloading Spacy models...")
+    os.system("python -m spacy download en")
+    os.system("python -m spacy download de")
+    NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
+    
 
 def ensure_model_loaded() -> None:
     if not MODEL_PATH.is_file():
@@ -183,12 +189,12 @@ def main() -> None:
     ensure_model_loaded()
      
     datasets = [
-        load_dataset(f"wmt{i}", "de-en", split="train")
-        for i in range(14, 20)
+        load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
+        for i in range(14, 15) # TODO set back to 20
     ]
         
     # LLaMA model initialization
-    LLM = Llama(model_path=MODEL_PATH, n_ctx=2048)
+    LLM = Llama(model_path=MODEL_PATH.as_posix(), n_ctx=2048)
 
     # Read the dataset segment for this process
     english_sentences = read_dataset_segment(DATASET_EN)
