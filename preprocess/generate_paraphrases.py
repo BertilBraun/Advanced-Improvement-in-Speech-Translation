@@ -85,6 +85,7 @@ def ensure_model_loaded() -> None:
         with open(MODEL_PATH.as_posix(), "wb") as file:
             file.write(response.content)
         print("Model downloaded.")
+    print(f"Model ready at '{MODEL_PATH}'.")
 
 
 def ensure_dataset_loaded() -> None:
