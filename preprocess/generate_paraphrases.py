@@ -164,6 +164,12 @@ def cleanup_paraphrase(sent: str) -> str:
     # Remove leading and trailing whitespace
     sent = sent.strip()
     
+    # Remove leading and trailing quotation marks again, as they might have only been around the text without the enumeration
+    if sent.startswith('"') and sent.endswith('"'):
+        sent = sent[1:-1]
+        
+    sent = sent.strip()
+    
     return sent    
 
 
