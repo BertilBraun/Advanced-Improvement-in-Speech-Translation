@@ -127,7 +127,7 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
 
     # Heuristics to identify and extract paraphrases
     paraphrases = [
-        sent for sent in sentences if heuristic_is_paraphrase(sent, sentence)
+        sent for sent in sentences if heuristic_is_paraphrase(sent, sentence, language)
     ]
     non_paraphrases = [
         sent for sent in sentences if sent not in paraphrases
@@ -164,7 +164,7 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
     doc_original = NLP[language](original)
 
     # Semantic similarity (using Spacy's built-in similarity method)
-    similarity_threshold = 0.7  # TODO Adjust this threshold as needed
+    similarity_threshold = 0.4  # TODO Adjust this threshold as needed
     if doc_candidate.similarity(doc_original) < similarity_threshold:
         return False
 
@@ -176,7 +176,7 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
         return False
 
     # Length similarity (within a certain percentage difference)
-    length_diff_threshold = 0.2  # TODO 20% length difference threshold
+    length_diff_threshold = 0.4  # TODO 40% length difference threshold
     if (
         abs(len(candidate) - len(original)) / max(len(candidate), len(original))
         > length_diff_threshold
