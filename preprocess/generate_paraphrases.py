@@ -223,38 +223,45 @@ def read_dataset_segment(file_path: str) -> list[str]:
         return [ line.strip() for line in file ]
 
 
-def main() -> None:
+def data_generator():
     ensure_dataset_loaded()
+    
+    # Read the dataset segment for this process
+    english_sentences = read_dataset_segment(DATASET_EN)
+    german_sentences = read_dataset_segment(DATASET_DE)
+     
+    if len(english_sentences) != len(german_sentences):
+        print("Warning: English and German sentences are not the same length.")
+    
+    print(f"Original dataset length: {len(english_sentences)}")
+    
+    yield from zip(english_sentences, german_sentences)
+    
+    for i in range(14, 20):
+        print(f"Loading WMT{i} dataset...")
+        dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
+        print(f"Now processing WMT{i} dataset...")
+        print(f"Dataset length: {len(dataset['translation'])}")
+        
+        yield from zip(
+            (sentence["en"] for sentence in dataset["translation"]),
+            (sentence["de"] for sentence in dataset["translation"])
+        )
+     
+
+
+def main() -> None:
     ensure_model_loaded()
      
-    datasets = [
-        load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
-        for i in range(14, 20)
-    ]
-        
     # LLaMA model initialization
     LLM = Llama(model_path=MODEL_PATH.as_posix(), n_ctx=2048)
 
-    # Read the dataset segment for this process
-    english_sentences = read_dataset_segment(DATASET_EN) + [
-            sentence["en"]
-            for dataset in datasets
-            for sentence in dataset["translation"]
-        ]
-    german_sentences = read_dataset_segment(DATASET_DE) + [
-            sentence["de"]
-            for dataset in datasets
-            for sentence in dataset["translation"]
-        ]
-     
-    print(f"Generating paraphrases for {len(english_sentences)} sentence pairs...")
-    if len(english_sentences) != len(german_sentences):
-        print("Warning: English and German sentences are not the same length.")
+    print("Generating paraphrases for all sentence pairs...")
 
     with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
         open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file:
         # For each sentence pair in the dataset segment, generate paraphrases and write all combinations to files
-        for en, de in zip(english_sentences, german_sentences):
+        for en, de in data_generator():
             start = time.time()
             en_paraphrases = [en] + generate_paraphrases(LLM, en, "en")
             de_paraphrases = [de] + generate_paraphrases(LLM, de, "de")
