@@ -43,13 +43,13 @@ for model in "${MODEL_TYPES[@]}"; do
         --train-subset train-clean-360 --valid-subset dev-clean \
         --num-workers 2 --max-tokens 40000 --max-update 300000 \
         --task speech_to_text --criterion ctc \
-        --label-smoothing 0.1 --report-accuracy \
         --arch s2t_transformer_m --share-decoder-input-output-embed \
         --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
         --clip-norm 10.0 --seed 1 --update-freq 8 \
         --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
-        --model-parallel-size 1 --tensorboard-logdir $MODEL_DIR/tensorboard 
-    
+        --model-parallel-size 1 --tensorboard-logdir $MODEL_DIR/tensorboard
+        # --label-smoothing 0.1 --report-accuracy \
+
     # TODO somehow --model-parallel-size > 1 requires a module which is not properly installed with fairseq
 
     # Log the completion of training for the current model
