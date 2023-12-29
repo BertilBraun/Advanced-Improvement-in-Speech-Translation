@@ -237,14 +237,14 @@ def main() -> None:
 
     # Read the dataset segment for this process
     english_sentences = read_dataset_segment(DATASET_EN) + [
-            sentence
+            sentence["en"]
             for dataset in datasets
-            for sentence in dataset["translation"]["en"]
+            for sentence in dataset["translation"]
         ]
     german_sentences = read_dataset_segment(DATASET_DE) + [
-            sentence
+            sentence["de"]
             for dataset in datasets
-            for sentence in dataset["translation"]["de"]
+            for sentence in dataset["translation"]
         ]
      
     print(f"Generating paraphrases for {len(english_sentences)} sentence pairs...")
