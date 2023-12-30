@@ -9,11 +9,9 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=paraphrases_logs_%j.txt
-#SBATCH --error=paraphrases_logs_%j.txt
 
 # call ../setup.sh
 source ../setup.sh
 
 # mpirun python generate_paraphrases.py
-python generate_paraphrases.py
+python generate_paraphrases.py >> paraphrases_logs_$SLURM_JOB_ID.txt 2>&1

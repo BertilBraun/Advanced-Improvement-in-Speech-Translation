@@ -9,11 +9,9 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=../../ASR/logs/process_audio_%j.txt
-#SBATCH --error=../../ASR/logs/process_audio_%j.txt
 
 # call ../setup.sh
 source ../setup.sh
 
 # mpirun python process_audio.py
-python process_audio.py
+python process_audio.py >> process_audio_$SLURM_JOB_ID.txt 2>&1
