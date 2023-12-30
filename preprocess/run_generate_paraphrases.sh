@@ -9,7 +9,6 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --open-mode=append
 #SBATCH --output=paraphrases_logs_%j.txt
 #SBATCH --error=paraphrases_logs_%j.txt
 
