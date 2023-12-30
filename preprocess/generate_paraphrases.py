@@ -254,7 +254,7 @@ def main() -> None:
     ensure_model_loaded()
      
     # LLaMA model initialization
-    LLM = Llama(model_path=MODEL_PATH.as_posix(), n_ctx=2048)
+    LLM = Llama(model_path=MODEL_PATH.as_posix()) # , n_ctx=2048)
 
     print("Generating paraphrases for all sentence pairs...")
 
