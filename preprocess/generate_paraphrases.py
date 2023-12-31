@@ -188,6 +188,9 @@ def cleanup_paraphrase(sent: str) -> str:
     regex_enumeration = r"^\d+[\.:]"
     sent = regex.sub(regex_enumeration, "", sent)
     
+    regex_bullet = r"^\s*[\*\-]\s*"
+    sent = regex.sub(regex_bullet, "", sent)
+
     # Remove leading and trailing whitespace
     sent = sent.strip()
     
