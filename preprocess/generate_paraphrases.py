@@ -103,12 +103,15 @@ BASE_PROMPT_TOKEN_LENGTH = {
     "de": len(TOKENIZER.encode(PROMPT["de"].format(""))) - 1,
 }
 
+# 5 is the number of paraphrases to generate 
+# 1.5 states that the paraphrase can be 50% longer than the input sentence
+PROMPT_LENGTH_MULTIPLIER = 1.5 * 5 
 
 def generate(prompt: str, base_prompt_token_length: int) -> str:
     encoding = TOKENIZER(prompt, return_tensors="pt")
     input_ids = encoding["input_ids"].to(DEVICE)
     
-    max_new_tokens = (input_ids.shape[-1] - base_prompt_token_length) * 1.5 # Allow Sentence to be 50% longer than the input sentence
+    max_new_tokens = (input_ids.shape[-1] - base_prompt_token_length) * PROMPT_LENGTH_MULTIPLIER
  
     generation_config = GenerationConfig(
         temperature=0.1,
