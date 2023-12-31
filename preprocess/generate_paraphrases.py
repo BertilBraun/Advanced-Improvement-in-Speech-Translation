@@ -7,7 +7,9 @@ import os
 import regex
 import sentencepiece as spm
 from tqdm import tqdm
-from llama_cpp import Llama
+from transformers import AutoTokenizer
+import transformers
+import torch
 from datasets import load_dataset
 import spacy
 import random
@@ -35,6 +37,8 @@ MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-
 # Smaller apparently faster model 
 MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b.Q4_K_M.gguf"
 MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_K_M.gguf"
+
+MODEL = "meta-llama/Llama-2-7b-chat-hf"
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
 
@@ -107,7 +111,7 @@ def ensure_dataset_loaded() -> None:
 
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
-def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
+def generate_paraphrases(tokenizer, pipeline, sentence: str, language: LANGUAGE) -> list[str]:
     print(f"Generating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
@@ -115,10 +119,11 @@ def generate_paraphrases(LLM, sentence: str, language: LANGUAGE) -> list[str]:
 
     # Generate response using LLaMA 2
     # max_tokens=0 removes the response size limit
-    output = LLM(formatted_prompt, max_tokens=0)
+    # output = LLM(formatted_prompt, max_tokens=0)
 
     # Extract paraphrases from the response
-    paraphrases_text = output["choices"][0]["text"]
+    # paraphrases_text = output["choices"][0]["text"]
+    paraphrases_text = generate(formatted_prompt, pipeline, tokenizer)
     
     print(f"Paraphrases text: {paraphrases_text}")
 
@@ -249,12 +254,30 @@ def data_generator():
         )
      
 
+def generate(prompt, pipeline, tokenizer):
+    sequences = pipeline(
+        prompt,
+        do_sample=True,
+        top_k=10,
+        num_return_sequences=1,
+        eos_token_id=tokenizer.eos_token_id,
+        max_length=200,
+    )
+    return sequences[0]["generated_text"]
+
 
 def main() -> None:
     ensure_model_loaded()
      
     # LLaMA model initialization
-    LLM = Llama(model_path=MODEL_PATH.as_posix()) # , n_ctx=2048)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL)
+    pipeline = transformers.pipeline(
+        "text-generation",
+        model=MODEL,
+        torch_dtype=torch.float16,
+        device_map="auto",
+    )
+    # LLM = Llama(model_path=MODEL_PATH.as_posix()) # , n_ctx=2048)
 
     print("Generating paraphrases for all sentence pairs...")
 
@@ -263,8 +286,9 @@ def main() -> None:
         # For each sentence pair in the dataset segment, generate paraphrases and write all combinations to files
         for en, de in data_generator():
             start = time.time()
-            en_paraphrases = [en] + generate_paraphrases(LLM, en, "en")
-            de_paraphrases = [de] + generate_paraphrases(LLM, de, "de")
+            print(f"Generating paraphrases for '{en}' and '{de}'...", flush=True)
+            en_paraphrases = [en] + generate_paraphrases(tokenizer, pipeline, en, "en")
+            de_paraphrases = [de] + generate_paraphrases(tokenizer, pipeline, de, "de")
             print(f"Paraphrases generated in {time.time() - start} seconds.")
 
             # Generate all combinations of English and German paraphrases and write directly to files
@@ -273,7 +297,6 @@ def main() -> None:
                 de_file.write(f"{de_p}\n")
            
     print("Finished generating paraphrases.")
-
 
     spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
                                 model_prefix="bpe",
