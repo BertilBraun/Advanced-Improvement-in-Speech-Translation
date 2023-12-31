@@ -28,6 +28,9 @@ DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 OUTPUT_EN_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.en"
 OUTPUT_DE_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.de"
 
+LOG_FILE = OUTPUT_FOLDER / "paraphrases.log"
+SEPARATOR = "  SEPARATOR  "
+
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
@@ -310,7 +313,8 @@ def main() -> None:
     print("Generating paraphrases for all sentence pairs...")
 
     with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
-        open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file:
+        open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
+        open(LOG_FILE, "a", encoding="utf-8") as log_file:
         # For each sentence pair in the dataset segment, generate paraphrases and write all combinations to files
         for en, de in data_generator():
             start = time.time()
@@ -323,6 +327,8 @@ def main() -> None:
             for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
                 en_file.write(f"{en_p}\n")
                 de_file.write(f"{de_p}\n")
+                
+            log_file.write(SEPARATOR.join([en, de, *en_paraphrases, *de_paraphrases]) + "\n")
            
     print("Finished generating paraphrases.")
 
