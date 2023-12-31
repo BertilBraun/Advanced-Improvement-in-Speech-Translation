@@ -102,15 +102,22 @@ def generate(prompt: str) -> str:
         top_p=0.75,
         repetition_penalty=1.1,
     )
+    generation_config = GenerationConfig(
+        num_beams=1,
+        do_sample=False,
+    )
+
+    print("Generating...")
     with torch.inference_mode():
         encoded_output = LLM.generate(
             input_ids=input_ids,
             generation_config=generation_config,
             return_dict_in_generate=True,
             output_scores=True,
-            max_new_tokens=256,
+            max_new_tokens=64, # TODO increase this if you want longer paraphrases
         )
     
+    print("Output:", encoded_output)
     decoded_output = TOKENIZER.decode(encoded_output.sequences[0])
     response = decoded_output.replace(prompt, "").strip()
     
