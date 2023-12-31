@@ -38,8 +38,7 @@ MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-
 MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b.Q4_K_M.gguf"
 MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_K_M.gguf"
 
-MODEL = "decapoda-research/llama-7b"
-"meta-llama/Llama-2-7b-chat-hf"
+MODEL = "meta-llama/Llama-2-7b"
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
 
