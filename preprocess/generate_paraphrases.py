@@ -83,6 +83,7 @@ print("Loading LLaMA...")
 # TODO from here (https://www.mlexpert.io/machine-learning/tutorials/alpaca-and-llama-inference)
 # TODO ref for llama 2 here (https://huggingface.co/blog/llama2)
 LLAMA_MODEL = "baffo32/decapoda-research-llama-7B-hf"
+LLAMA_MODEL = "meta-llama/Llama-2-7b-chat-hf"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 TOKENIZER = LlamaTokenizer.from_pretrained(LLAMA_MODEL)
