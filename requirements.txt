@@ -1,9 +1,7 @@
 torch
 torchaudio
-# mpi4py
 tqdm
 transformers
-llama-cpp-python
 spacy
 pandas
 numpy
@@ -22,3 +20,5 @@ bitarray
 sacrebleu
 cython
 deep_translator
+accelerate
+bitsandbytes

@@ -81,7 +81,7 @@ TOKENIZER = LlamaTokenizer.from_pretrained(LLAMA_MODEL)
  
 LLM = LlamaForCausalLM.from_pretrained(
     LLAMA_MODEL,
-    load_in_8bit=True,
+    # load_in_8bit=True,
     device_map="auto",
 )
 LLM.config.pad_token_id = TOKENIZER.pad_token_id = 0  # unk
