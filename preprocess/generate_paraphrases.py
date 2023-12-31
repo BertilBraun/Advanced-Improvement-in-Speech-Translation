@@ -114,7 +114,7 @@ def generate(prompt: str, base_prompt_token_length: int) -> str:
     max_new_tokens = (input_ids.shape[-1] - base_prompt_token_length) * PROMPT_LENGTH_MULTIPLIER
  
     generation_config = GenerationConfig(
-        temperature=0.1,
+        temperature=0.1, # TODO really low temperature but still get hallucinations
         top_p=0.75,
         repetition_penalty=1.1,
     )
@@ -139,17 +139,16 @@ def generate(prompt: str, base_prompt_token_length: int) -> str:
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
+    if len(sentence) > 75: # TODO having to skip long sentences because of hallucinations
+        print(f"Warning: Sentence '{sentence}' is is too long for paraphrase generation. Skipping.")
+        return [sentence]
+    
     print(f"Generating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
     formatted_prompt = PROMPT[language].format(sentence)
 
     # Generate response using LLaMA 2
-    # max_tokens=0 removes the response size limit
-    # output = LLM(formatted_prompt, max_tokens=0)
-
-    # Extract paraphrases from the response
-    # paraphrases_text = output["choices"][0]["text"]
     paraphrases_text = generate(formatted_prompt, BASE_PROMPT_TOKEN_LENGTH[language])
     
     print(f"Paraphrases text: {paraphrases_text}")
@@ -157,9 +156,9 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     # Use Spacy's sentence boundary detection to extract paraphrases
     # doc = NLP[language](paraphrases_text)
     # sentences = [sent.text.strip() for sent in doc.sents]
-    sentences = [
+    sentences = list(set((
         cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
-    ]
+    )))
 
     # Consider you have to generate initally more paraphrases if you use diversify with diversity_factor<1
     sentences = diversify_paraphrases(
@@ -176,14 +175,12 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     print(f"Non paraphrases: {non_paraphrases}")
 
     if len(paraphrases) < 5:
-        print(
-            f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'"
-        )
+        print(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
         
     print(f"Possible paraphrases: {paraphrases}")
 
     # Ensure only five paraphrases are returned
-    return paraphrases[:5]
+    return paraphrases # TODO currently return all [:5]
 
 
 def cleanup_paraphrase(sent: str) -> str:
