@@ -7,7 +7,7 @@ import os
 import regex
 import sentencepiece as spm
 from tqdm import tqdm
-from transformers import AutoTokenizer
+from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig
 import transformers
 import torch
 from datasets import load_dataset
@@ -39,7 +39,6 @@ MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b.Q4_K_M.gguf"
 MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_K_M.gguf"
 
 MODEL = "meta-llama/Llama-2-7b-chat-hf"
-MODEL = "decapoda-research/llama-7b-hf"
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
 
@@ -84,6 +83,23 @@ except OSError:
     os.system("python -m spacy download de")
     NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
     
+    
+LLAMA_MODEL = "decapoda-research/llama-7b-hf"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+TOKENIZER = LlamaTokenizer.from_pretrained(LLAMA_MODEL)
+ 
+LLM = LlamaForCausalLM.from_pretrained(
+    LLAMA_MODEL,
+    load_in_8bit=True,
+    device_map="auto",
+)
+LLM.config.pad_token_id = TOKENIZER.pad_token_id = 0  # unk
+LLM.config.bos_token_id = 1
+LLM.config.eos_token_id = 2
+ 
+LLM = LLM.eval()
+LLM = torch.compile(LLM)
 
 def ensure_model_loaded() -> None:
     # if model not found, download it
@@ -112,7 +128,7 @@ def ensure_dataset_loaded() -> None:
 
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
-def generate_paraphrases(tokenizer, pipeline, sentence: str, language: LANGUAGE) -> list[str]:
+def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     print(f"Generating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
@@ -124,7 +140,7 @@ def generate_paraphrases(tokenizer, pipeline, sentence: str, language: LANGUAGE)
 
     # Extract paraphrases from the response
     # paraphrases_text = output["choices"][0]["text"]
-    paraphrases_text = generate(formatted_prompt, pipeline, tokenizer)
+    paraphrases_text = generate(formatted_prompt)
     
     print(f"Paraphrases text: {paraphrases_text}")
 
@@ -255,31 +271,31 @@ def data_generator():
         )
      
 
-def generate(prompt, pipeline, tokenizer):
-    sequences = pipeline(
-        prompt,
-        do_sample=True,
-        top_k=10,
-        num_return_sequences=1,
-        eos_token_id=tokenizer.eos_token_id,
-        max_length=200,
+def generate(prompt: str) -> str:
+    encoding = TOKENIZER(prompt, return_tensors="pt")
+    input_ids = encoding["input_ids"].to(DEVICE)
+ 
+    generation_config = GenerationConfig(
+        temperature=0.1,
+        top_p=0.75,
+        repetition_penalty=1.1,
     )
-    return sequences[0]["generated_text"]
+    with torch.inference_mode():
+        encoded_output = LLM.generate(
+            input_ids=input_ids,
+            generation_config=generation_config,
+            return_dict_in_generate=True,
+            output_scores=True,
+            max_new_tokens=256,
+        )
+    
+    decoded_output = TOKENIZER.decode(encoded_output.sequences[0])
+    response = decoded_output.replace(prompt, "").strip()
+    
+    return response
 
 
 def main() -> None:
-    ensure_model_loaded()
-     
-    # LLaMA model initialization
-    tokenizer = AutoTokenizer.from_pretrained(MODEL)
-    pipeline = transformers.pipeline(
-        "text-generation",
-        model=MODEL,
-        torch_dtype=torch.float16,
-        device_map="auto",
-    )
-    # LLM = Llama(model_path=MODEL_PATH.as_posix()) # , n_ctx=2048)
-
     print("Generating paraphrases for all sentence pairs...")
 
     with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
@@ -288,8 +304,8 @@ def main() -> None:
         for en, de in data_generator():
             start = time.time()
             print(f"Generating paraphrases for '{en}' and '{de}'...", flush=True)
-            en_paraphrases = [en] + generate_paraphrases(tokenizer, pipeline, en, "en")
-            de_paraphrases = [de] + generate_paraphrases(tokenizer, pipeline, de, "de")
+            en_paraphrases = [en] + generate_paraphrases(en, "en")
+            de_paraphrases = [de] + generate_paraphrases(de, "de")
             print(f"Paraphrases generated in {time.time() - start} seconds.")
 
             # Generate all combinations of English and German paraphrases and write directly to files
