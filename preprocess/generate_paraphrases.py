@@ -98,10 +98,17 @@ LLM = torch.compile(LLM)
 LLM = LLM.to(DEVICE)
 print("LLaMA ready.")
 
+BASE_PROMPT_TOKEN_LENGTH = {
+    "en": len(TOKENIZER.encode(PROMPT["en"].format(""))) - 1,
+    "de": len(TOKENIZER.encode(PROMPT["de"].format(""))) - 1,
+}
 
-def generate(prompt: str) -> str:
+
+def generate(prompt: str, base_prompt_token_length: int) -> str:
     encoding = TOKENIZER(prompt, return_tensors="pt")
     input_ids = encoding["input_ids"].to(DEVICE)
+    
+    max_new_tokens = (input_ids.shape[-1] - base_prompt_token_length) * 1.5 # Allow Sentence to be 50% longer than the input sentence
  
     generation_config = GenerationConfig(
         temperature=0.1,
@@ -119,7 +126,7 @@ def generate(prompt: str) -> str:
             generation_config=generation_config,
             return_dict_in_generate=True,
             output_scores=True,
-            max_new_tokens=64, # TODO increase this if you want longer paraphrases
+            max_new_tokens=max_new_tokens,
         )
     
     decoded_output = TOKENIZER.decode(encoded_output.sequences[0])
@@ -140,7 +147,7 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
 
     # Extract paraphrases from the response
     # paraphrases_text = output["choices"][0]["text"]
-    paraphrases_text = generate(formatted_prompt)
+    paraphrases_text = generate(formatted_prompt, BASE_PROMPT_TOKEN_LENGTH[language])
     
     print(f"Paraphrases text: {paraphrases_text}")
 
@@ -183,14 +190,22 @@ def cleanup_paraphrase(sent: str) -> str:
     for quote in ['"', "'"]:
         if sent.startswith(quote) and sent.endswith(quote):
             sent = sent[1:-1]
+            
+    sent = sent.strip()
     
-    # Remove leading enumeration "\d+[\.:]"
-    regex_enumeration = r"^\d+[\.:]"
+    # Remove leading enumeration "1." or "1:" or "1)" or "(1)"
+    regex_enumeration = r"^\s*(\d+[\.:)]|\(\d+\))"
     sent = regex.sub(regex_enumeration, "", sent)
     
-    regex_bullet = r"^\s*[\*\-]\s*"
-    sent = regex.sub(regex_bullet, "", sent)
-
+    # Remove leading enumeration "-*."    
+    for start in "-*.":
+        if sent.startswith(start):
+            sent = sent[1:]
+            
+    # Remove leading emumeration "a)" or "a." or "a:" or (a)" but only for one or two letters
+    regex_enumeration = r"^(\s*[a-zA-Z]{1,2}[\.:)]|\([a-zA-Z]{1,2}\))"
+    sent = regex.sub(regex_enumeration, "", sent)
+    
     # Remove leading and trailing whitespace
     sent = sent.strip()
     
