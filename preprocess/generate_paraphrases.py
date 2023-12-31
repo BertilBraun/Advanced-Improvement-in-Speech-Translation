@@ -73,7 +73,12 @@ except OSError:
     os.system("python -m spacy download de")
     NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
     
-    
+
+print("Loading LLaMA...")
+
+# TODO I think this is llama 1 and not llama 2
+# TODO from here (https://www.mlexpert.io/machine-learning/tutorials/alpaca-and-llama-inference)
+# TODO ref for llama 2 here (https://huggingface.co/blog/llama2)
 LLAMA_MODEL = "baffo32/decapoda-research-llama-7B-hf"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -91,6 +96,7 @@ LLM.config.eos_token_id = 2
 LLM = LLM.eval()
 LLM = torch.compile(LLM)
 LLM = LLM.to(DEVICE)
+print("LLaMA ready.")
 
 
 def generate(prompt: str) -> str:
@@ -102,12 +108,11 @@ def generate(prompt: str) -> str:
         top_p=0.75,
         repetition_penalty=1.1,
     )
-    generation_config = GenerationConfig(
-        num_beams=1,
-        do_sample=False,
-    )
+    # generation_config = GenerationConfig( # Greedy
+    #     num_beams=1,
+    #     do_sample=False,
+    # )
 
-    print("Generating...")
     with torch.inference_mode():
         encoded_output = LLM.generate(
             input_ids=input_ids,
@@ -117,7 +122,6 @@ def generate(prompt: str) -> str:
             max_new_tokens=64, # TODO increase this if you want longer paraphrases
         )
     
-    print("Output:", encoded_output)
     decoded_output = TOKENIZER.decode(encoded_output.sequences[0])
     response = decoded_output.replace(prompt, "").strip()
     
@@ -176,8 +180,9 @@ def cleanup_paraphrase(sent: str) -> str:
     sent = sent.strip()
     
     # Remove leading and trailing quotation marks
-    if sent.startswith('"') and sent.endswith('"'):
-        sent = sent[1:-1]
+    for quote in ['"', "'"]:
+        if sent.startswith(quote) and sent.endswith(quote):
+            sent = sent[1:-1]
     
     # Remove leading enumeration "\d+[\.:]"
     regex_enumeration = r"^\d+[\.:]"
@@ -187,8 +192,9 @@ def cleanup_paraphrase(sent: str) -> str:
     sent = sent.strip()
     
     # Remove leading and trailing quotation marks again, as they might have only been around the text without the enumeration
-    if sent.startswith('"') and sent.endswith('"'):
-        sent = sent[1:-1]
+    for quote in ['"', "'"]:
+        if sent.startswith(quote) and sent.endswith(quote):
+            sent = sent[1:-1]
         
     sent = sent.strip()
     
