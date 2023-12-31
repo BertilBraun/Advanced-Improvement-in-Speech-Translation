@@ -319,10 +319,10 @@ def main() -> None:
         # For each sentence pair in the dataset segment, generate paraphrases and write all combinations to files
         for en, de in data_generator():
             start = time.time()
-            print(f"Generating paraphrases for '{en}' and '{de}'...", flush=True)
+            print(f"\n\nGenerating paraphrases for '{en}' and '{de}'...", flush=True)
             en_paraphrases = [en] + generate_paraphrases(en, "en")
             de_paraphrases = [de] + generate_paraphrases(de, "de")
-            print(f"Paraphrases generated in {time.time() - start} seconds.")
+            print(f"Paraphrases generated in {round(time.time() - start, 2)} seconds.")
 
             # Generate all combinations of English and German paraphrases and write directly to files
             for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
