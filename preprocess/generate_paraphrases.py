@@ -8,7 +8,6 @@ import regex
 import sentencepiece as spm
 from tqdm import tqdm
 from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig
-import transformers
 import torch
 from datasets import load_dataset
 import spacy
@@ -30,15 +29,6 @@ OUTPUT_EN_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.en"
 OUTPUT_DE_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.de"
 
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
-
-MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b.Q5_K_M.gguf"
-MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q5_K_M.gguf"
-
-# Smaller apparently faster model 
-MODEL_PATH = HOME_FOLDER / "ST/llama-2-7b.Q4_K_M.gguf"
-MODEL_URL = "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q4_K_M.gguf"
-
-MODEL = "meta-llama/Llama-2-7b-chat-hf"
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
 
@@ -84,7 +74,7 @@ except OSError:
     NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
     
     
-LLAMA_MODEL = "decapoda-research/llama-7b-hf"
+LLAMA_MODEL = "baffo32/decapoda-research-llama-7B-hf"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 TOKENIZER = LlamaTokenizer.from_pretrained(LLAMA_MODEL)
@@ -100,32 +90,31 @@ LLM.config.eos_token_id = 2
  
 LLM = LLM.eval()
 LLM = torch.compile(LLM)
-
-def ensure_model_loaded() -> None:
-    # if model not found, download it
-    if not os.path.exists(MODEL_PATH):
-        print(f"Model not found at {MODEL_PATH}. Downloading...")
-        download_command = f"wget -nc -O '{MODEL_PATH}' '{MODEL_URL}'"
-        os.system(download_command) 
-        print("Model downloaded.")
-    print(f"Model ready at '{MODEL_PATH}'.")
+LLM = LLM.to(DEVICE)
 
 
-def ensure_dataset_loaded() -> None:
-    if not DATASET_EN.is_file() or not DATASET_DE.is_file():
-
-        download_location = DATASET_FOLDER / "data.zip"
-        # Download and unzip command
-        download_command = f"wget -nc -O '{download_location}' '{DATASET_URL}'"
-        unzip_command = f"unzip -o '{download_location}' -d '{DATASET_FOLDER}'"
-
-        # Execute download and unzip commands
-        print("Checking and downloading dataset...")
-        os.system(download_command)
-        print("Unzipping dataset...")
-        os.system(unzip_command)
-        print("Dataset ready.")
-
+def generate(prompt: str) -> str:
+    encoding = TOKENIZER(prompt, return_tensors="pt")
+    input_ids = encoding["input_ids"].to(DEVICE)
+ 
+    generation_config = GenerationConfig(
+        temperature=0.1,
+        top_p=0.75,
+        repetition_penalty=1.1,
+    )
+    with torch.inference_mode():
+        encoded_output = LLM.generate(
+            input_ids=input_ids,
+            generation_config=generation_config,
+            return_dict_in_generate=True,
+            output_scores=True,
+            max_new_tokens=256,
+        )
+    
+    decoded_output = TOKENIZER.decode(encoded_output.sequences[0])
+    response = decoded_output.replace(prompt, "").strip()
+    
+    return response
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
@@ -246,6 +235,21 @@ def read_dataset_segment(file_path: str) -> list[str]:
 
 
 def data_generator():
+    def ensure_dataset_loaded() -> None:
+        if not DATASET_EN.is_file() or not DATASET_DE.is_file():
+
+            download_location = DATASET_FOLDER / "data.zip"
+            # Download and unzip command
+            download_command = f"wget -nc -O '{download_location}' '{DATASET_URL}'"
+            unzip_command = f"unzip -o '{download_location}' -d '{DATASET_FOLDER}'"
+
+            # Execute download and unzip commands
+            print("Checking and downloading dataset...")
+            os.system(download_command)
+            print("Unzipping dataset...")
+            os.system(unzip_command)
+            print("Dataset ready.")
+
     ensure_dataset_loaded()
     
     # Read the dataset segment for this process
@@ -270,30 +274,6 @@ def data_generator():
             (sentence["de"] for sentence in dataset["translation"])
         )
      
-
-def generate(prompt: str) -> str:
-    encoding = TOKENIZER(prompt, return_tensors="pt")
-    input_ids = encoding["input_ids"].to(DEVICE)
- 
-    generation_config = GenerationConfig(
-        temperature=0.1,
-        top_p=0.75,
-        repetition_penalty=1.1,
-    )
-    with torch.inference_mode():
-        encoded_output = LLM.generate(
-            input_ids=input_ids,
-            generation_config=generation_config,
-            return_dict_in_generate=True,
-            output_scores=True,
-            max_new_tokens=256,
-        )
-    
-    decoded_output = TOKENIZER.decode(encoded_output.sequences[0])
-    response = decoded_output.replace(prompt, "").strip()
-    
-    return response
-
 
 def main() -> None:
     print("Generating paraphrases for all sentence pairs...")
