@@ -219,53 +219,13 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
             max_new_tokens=max_new_tokens,
         )
     
-    decoded_outputs = TOKENIZER[lng].batch_decode(generated_ids)
+    decoded_outputs = TOKENIZER[lng].batch_decode(generated_ids, skip_special_tokens=True)
+    decoded_inputs = TOKENIZER[lng].batch_decode(model_inputs.input_ids, skip_special_tokens=True)
     
     return [
         output.replace(prompt, "").strip()
-        for output, prompt in zip(decoded_outputs, prompts)
+        for output, prompt in zip(decoded_outputs, decoded_inputs)
     ]
-
-# Generates 5 paraphrases for the input sentence with LLaMA 2
-def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
-    if len(sentence) > 100: # TODO having to skip long sentences because of hallucinations
-        log(f"Warning: Sentence '{sentence}' is is too long for paraphrase generation. Skipping.")
-        return [sentence]
-    
-    log(f"\nGenerating paraphrases for '{sentence}' in {language}...")
-
-    # Format the prompt with the given sentence
-    formatted_prompt = PROMPT[language].format(sentence)
-
-    # Generate response using LLaMA 2
-    paraphrases_text = generate([formatted_prompt], language)[0]
-    
-    log(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
-
-    sentences = list(set((
-        cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
-    )))
-
-    # Heuristics to identify and extract paraphrases
-    paraphrases = [
-        sent for sent in sentences if heuristic_is_paraphrase(sent, sentence, language)
-    ]
-    non_paraphrases = [
-        sent for sent in sentences if sent not in paraphrases
-    ]
-    log("Non paraphrases:")
-    for sent in non_paraphrases:
-        log(f"    {sent}")
-
-    if len(paraphrases) < 5:
-        log(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
-        
-    log("Paraphrases:")
-    for sent in paraphrases:
-        log(f"    {sent}")
-
-    # Ensure only five paraphrases are returned
-    return paraphrases # TODO currently return all [:5]
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> list[list[str]]:    
