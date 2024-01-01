@@ -445,7 +445,7 @@ def main() -> None:
             
         for ens, des in batch_tuples(data_generator(), 10):
             start = time.time()
-            log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...", flush=True)
+            log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
             en_paraphrases = generate_batched_paraphrases(ens, "en")
             de_paraphrases = generate_batched_paraphrases(des, "de")
             log(f"Paraphrases generated in {round(time.time() - start, 2)} seconds.")
