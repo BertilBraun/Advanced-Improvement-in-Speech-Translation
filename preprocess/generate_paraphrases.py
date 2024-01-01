@@ -154,8 +154,10 @@ Originalsatz: '{}'
 
 PROMPT = {
     "en": """[INST] <<SYS>>
-As a professional writer, your expertise is in crafting accurate and engaging paraphrases. Generate five distinct English paraphrases of the sentence provided below. Each paraphrase should fully convey the original meaning without adding extraneous information. Aim for a balance between retaining the essence of the sentence and presenting it in a fresh, clear manner.
+You are a professional writer, your expertise is in crafting accurate and engaging paraphrases.
 <</SYS>>
+Generate five distinct English paraphrases of the sentence provided below. Each paraphrase should fully convey the original meaning without adding extraneous information. Aim for a balance between retaining the essence of the sentence and presenting it in a fresh, clear manner.
+
 Original Sentence: 'We know that, right? We've experienced that.'
 [/INST]Paraphrases:
 1. "That's something we understand, isn't it? It's been part of our experiences."
@@ -168,15 +170,17 @@ Original Sentence: '{}'
 [/INST]Paraphrases:
 1.""",
     "de": """[INST] <<SYS>>
-Als professioneller Schriftsteller liegt Ihre Expertise darin, genaue und ansprechende Paraphrasen zu erstellen. Erzeugen Sie fünf verschiedene deutsche Paraphrasen des unten angegebenen Satzes. Jede Paraphrase sollte die ursprüngliche Bedeutung vollständig vermitteln, ohne zusätzliche Informationen hinzuzufügen. Streben Sie nach einem Gleichgewicht zwischen dem Erhalt der Essenz des Satzes und dessen frischer, klarer Darstellung.
+Sie sind ein professioneller deutscher Schriftsteller, der sich auf das Verfassen von Paraphrasen spezialisiert hat.
 <</SYS>>
-Originalsatz: 'Wir wissen das, oder? Das haben wir selbst erlebt.'
+Erstellen sie fünf verschiedene Paraphrasen des untenstehenden Satzes in flüssigem und natürlichem Deutsch. Jede Paraphrase sollte die ursprüngliche Bedeutung vollständig vermitteln, ohne zusätzliche Informationen hinzuzufügen. Achten Sie darauf, dass ausschließlich Deutsch verwendet wird und der Satzbau klar und korrekt ist.
+
+Originalsatz: 'Um das zu verdeutlichen, habe ich mir ein kleines Spiel ausgedacht.'
 [/INST]Deutsche Paraphrasen:
-1. "Das ist uns bekannt, nicht wahr? Wir haben diese Erfahrung gemacht."
-2. "Das verstehen wir, richtig? Wir haben das selbst durchlebt."
-3. "Uns ist das bewusst, oder? Wir haben das persönlich erfahren."
-4. "Wir sind uns dessen klar, nicht wahr? Das ist ein Teil unserer Erfahrungen."
-5. "Ist das nicht etwas, das wir kennen? Wir haben es am eigenen Leib erfahren."
+1. "Zur Veranschaulichung habe ich ein kleines Spiel entwickelt."
+2. "Ein kleines Spiel soll das besser illustrieren, das ich mir ausgedacht habe."
+3. "Ich habe ein kleines Spiel konzipiert, um dies zu demonstrieren."
+4. "Um das klarzumachen, entwarf ich ein kleines Spiel."
+5. "Ein kleines Spiel, das ich erfunden habe, soll dies verdeutlichen."
 </s><s>[INST]
 Originalsatz: '{}'
 [/INST]Deutsche Paraphrasen:
@@ -191,7 +195,6 @@ BASE_PROMPT_TOKEN_LENGTH = {
 log(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 
 
-# TODO can paraphrase generation be batched? https://github.com/huggingface/transformers/issues/25353
 def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
     model_inputs = TOKENIZER[lng](prompts, return_tensors="pt", padding=True).to(DEVICE)
     
@@ -205,17 +208,11 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
         do_sample=True,
         num_beams=1,
     )
-    # generation_config = GenerationConfig( # Greedy
-    #     num_beams=1,
-    #     do_sample=False,
-    # )
 
     with torch.inference_mode():
         generated_ids = LLM[lng].generate(
             **model_inputs,
             generation_config=generation_config,
-            #return_dict_in_generate=True,
-            #output_scores=True,
             max_new_tokens=max_new_tokens,
         )
     
