@@ -7,7 +7,7 @@ import os
 import regex
 import sentencepiece as spm
 from tqdm import tqdm
-from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig
+from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 import torch
 from datasets import load_dataset
 import spacy
@@ -89,16 +89,16 @@ print(f"Using device: {DEVICE}")
 print("Loading Tokenizer")
 
 TOKENIZER = {
-    "en": LlamaTokenizer.from_pretrained(LLAMA_MODEL["en"]),
-    "de": LlamaTokenizer.from_pretrained(LLAMA_MODEL["de"]),
+    "en": AutoTokenizer.from_pretrained(LLAMA_MODEL["en"]),
+    "de": AutoTokenizer.from_pretrained(LLAMA_MODEL["de"]),
 }
 
 print("Tokenizer ready.")
 print("Loading LLaMA model.")
  
 LLM = {
-    "en": LlamaForCausalLM.from_pretrained(LLAMA_MODEL["en"]),
-    "de": LlamaForCausalLM.from_pretrained(LLAMA_MODEL["de"]),
+    "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], low_cpu_mem_usage=True, load_in_8bit=True),
+    "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"], low_cpu_mem_usage=True, load_in_8bit=True),
 }
 
 print("Configuring LLaMA model.")
