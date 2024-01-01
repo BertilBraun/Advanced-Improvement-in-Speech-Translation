@@ -415,22 +415,27 @@ def data_generator():
         )
      
      
-def batch_tuples(iterable, batch_size=1):
+def batch_tuples(iterable, batch_size=1, values_per_tuple=2):
     # take in a generator of tuples and yield a generator of tuples of batch_size
     # i.e. [(1, 2), (3, 4), (5, 6)] should yield [((1,3), (2,4)), ((5,), (6,))] for batch_size=2
-    max_length = max(len(x) for x in iterable)
-    lists = [[] for _ in range(max_length)]
-    for tup in iterable:
+    
+    items = []
+    for item in iterable:
+        items.append(item)
+        if len(items) == batch_size:
+            lists = [[] for _ in range(values_per_tuple)]
+            for tup in items:
+                for i, item in enumerate(tup):
+                    lists[i].append(item)
+            yield tuple(lists)            
+            items = []
+    
+    lists = [[] for _ in range(values_per_tuple)]
+    for tup in items:
         for i, item in enumerate(tup):
             lists[i].append(item)
-            
-        if len(lists[0]) == batch_size:
-            yield tuple(lists)
-            lists = [[] for _ in range(max_length)]
-            
-    if lists[0]:
-        yield tuple(lists)
-            
+    yield tuple(lists)
+                
 def main() -> None:
     log("Generating paraphrases for all sentence pairs...")
     
