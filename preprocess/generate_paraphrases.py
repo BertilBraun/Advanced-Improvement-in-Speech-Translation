@@ -438,7 +438,9 @@ def main() -> None:
             log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
             en_paraphrases = generate_batched_paraphrases(ens, "en")
             de_paraphrases = generate_batched_paraphrases(des, "de")
-            log(f"Paraphrases generated in {round(time.time() - start, 2)} seconds.")
+            log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
+            new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
+            log(f"New paraphrases generated: {new_paraphrases}")
 
             # Generate all combinations of English and German paraphrases and write directly to files
             for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
