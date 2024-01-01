@@ -9,8 +9,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=../../ASR/logs/eval_asr_%j.txt
-#SBATCH --error=../../ASR/logs/eval_asr_%j.txt
+#SBATCH --output=eval_asr_logs_%j.txt
+#SBATCH --error=eval_asr_logs_%j.txt
 
 source ../setup.sh
 
