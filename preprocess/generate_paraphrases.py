@@ -171,8 +171,8 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
         generated_ids = LLM[lng].generate(
             **model_inputs,
             generation_config=generation_config,
-            return_dict_in_generate=True,
-            output_scores=True,
+            #return_dict_in_generate=True,
+            #output_scores=True,
             max_new_tokens=max_new_tokens,
         )
     
