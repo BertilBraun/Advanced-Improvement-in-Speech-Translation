@@ -37,7 +37,7 @@ LANGUAGE = Union[Literal["en"], Literal["de"]]
 
 PROMPT = {  # TODO Modify and play with this prompt to properly generate 5 good paraphrases
     "en": "Generate five distinct paraphrases of the following English sentence:\n'{}'\nParaphrases:",
-    "de": "Schreiben Sie den folgenden Satz auf fünf verschiedene Arten um:\n'{}'\nUmschreibungen:",
+    "de": "Schreiben Sie den folgenden Satz auf fünf verschiedene Arten auf Deutsch um:\n'{}'\nUmschreibungen:",
 }
 
 # Some alternatives to try for paraphrase genaration
@@ -96,9 +96,14 @@ TOKENIZER = {
 print("Tokenizer ready.")
 print("Loading LLaMA model.")
  
+llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"])
+# LLM = {
+#     "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
+#     "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
+# }
 LLM = {
-    "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
-    "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
+    "en": llama,
+    "de": llama,
 }
 
 print("Configuring LLaMA model.")
