@@ -114,8 +114,8 @@ print("Configuring LLaMA model.")
 
 for language, model in LLM.items():
     model.config.pad_token_id = TOKENIZER[language].pad_token_id = 0  # unk
-    model.config.bos_token_id = TOKENIZER[language].bos_token_id #= 1  # bos
-    model.config.eos_token_id = TOKENIZER[language].eos_token_id #= 2  # eos
+    model.config.bos_token_id = 1  # bos
+    model.config.eos_token_id = 2  # eos
     
     model = model.eval()
     model = torch.compile(model)
@@ -131,8 +131,8 @@ BASE_PROMPT_TOKEN_LENGTH = {
 print(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 
 # 5 is the number of paraphrases to generate 
-# 1.5 states that the paraphrase can be 50% longer than the input sentence
-PROMPT_LENGTH_MULTIPLIER = 1.5 * 5 
+# 1.5 states that the paraphrase can be 65% longer than the input sentence
+PROMPT_LENGTH_MULTIPLIER = 1.65 * 5 
 
 
 # TODO can paraphrase generation be batched? https://github.com/huggingface/transformers/issues/25353
@@ -159,7 +159,6 @@ def generate(prompt: str, lng: LANGUAGE) -> str:
             return_dict_in_generate=True,
             output_scores=True,
             max_new_tokens=max_new_tokens,
-            pad_token_id=TOKENIZER[lng].eos_token_id,
         )
     
     decoded_output = TOKENIZER[lng].decode(encoded_output.sequences[0], skip_special_tokens=True)
@@ -251,7 +250,7 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
     doc_original = NLP[language](original)
 
     # Semantic similarity (using Spacy's built-in similarity method)
-    similarity_threshold = 0.4  # TODO Adjust this threshold as needed
+    similarity_threshold = 0.2  # TODO Adjust this threshold as needed
     if doc_candidate.similarity(doc_original) < similarity_threshold:
         return False
 
@@ -263,7 +262,7 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
         return False
 
     # Length similarity (within a certain percentage difference)
-    length_diff_threshold = 0.4  # TODO 40% length difference threshold
+    length_diff_threshold = 0.65  # TODO 65% length difference threshold
     if (
         abs(len(candidate) - len(original)) / max(len(candidate), len(original))
         > length_diff_threshold
