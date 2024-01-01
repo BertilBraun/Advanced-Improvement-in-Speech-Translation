@@ -2,11 +2,14 @@ import argparse
 import os
 from pathlib import Path
 from deep_translator import GoogleTranslator
-import requests
 import sentencepiece as spm
+from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig, BitsAndBytesConfig
+import torch
 
 from examples.speech_to_text.data_utils import load_df_from_tsv
-from llama_cpp import Llama
+
+def log(*args, **kwargs):
+    print(*args, **kwargs, flush=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--ref_input_file", type=str)
@@ -23,11 +26,6 @@ ASR_ROOT = HOME / "ASR/wav2vec"
 SPM_INPUT_FILE = ASR_ROOT / "spm_unigram1000.model"
 SPM_OUTPUT_FILE = HOME / "PST/train/bpe.model"
 
-MODEL_PATH = HOME / "ST/llama-2-7b-chat.ggmlv3.q8_0.bin"
-MODEL_URL = (
-    "https://huggingface.co/TheBloke/Llama-2-7B-GGUF/blob/main/llama-2-7b.Q5_K_M.gguf"
-)
-
 
 LLM_POSTEDITING_PROMPT = """Enhance the following ASR output by adding punctuation and selecting the most probable transcription from the given hypotheses.
 
@@ -43,21 +41,74 @@ Output the most likely and accurately punctuated ASR transcription:
 """
 
 
-def ensure_model_loaded() -> None:
-    if not MODEL_PATH.is_file():
-        print(f"Model not found at {MODEL_PATH}. Downloading...")
-        response = requests.get(MODEL_URL, allow_redirects=True)
-        with open(MODEL_PATH.as_posix(), "wb") as file:
-            file.write(response.content)
-        print("Model downloaded.")
+log("Loading LLaMA...")
+
+LLAMA_MODEL = "meta-llama/Llama-2-7b-chat-hf"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+log(f"Using device: {DEVICE}")
+log("Loading Tokenizer")
+
+
+TOKENIZER = AutoTokenizer.from_pretrained(LLAMA_MODEL, padding_side="left")
+TOKENIZER.pad_token = TOKENIZER.eos_token
+
+log("Tokenizer ready.")
+log("Loading LLaMA model.")
+ 
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+LLM = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL, quantization_config=bnb_config, device_map="auto")
+
+log("Configuring LLaMA model.")
+
+LLM.config.pad_token_id = TOKENIZER.pad_token_id = 0  # unk
+LLM.config.bos_token_id = 1  # bos
+LLM.config.eos_token_id = 2  # eos
+
+log("LLaMA ready.")
+
+
+def generate(prompts: list[str]) -> list[str]:
+    model_inputs = TOKENIZER(prompts, return_tensors="pt", padding=True).to(DEVICE)
+     
+    generation_config = GenerationConfig(
+        temperature=0.2, # TODO really low temperature but still get hallucinations
+        top_p=0.75,
+        repetition_penalty=1.1,
+        do_sample=True,
+        num_beams=1,
+    )
+    
+    max_new_tokens = model_inputs.input_ids.shape[-1] * 2
+
+    with torch.inference_mode():
+        generated_ids = LLM.generate(
+            **model_inputs,
+            generation_config=generation_config,
+            max_new_tokens=max_new_tokens,
+        )
+    
+    decoded_outputs = TOKENIZER.batch_decode(generated_ids, skip_special_tokens=True)
+    decoded_inputs = TOKENIZER.batch_decode(model_inputs.input_ids, skip_special_tokens=True)
+    
+    return [
+        output.replace(prompt, "").strip()
+        for output, prompt in zip(decoded_outputs, decoded_inputs)
+    ]
 
 
 def sample_print(data_list):
     DELIMITER = "----------------------------------------"
-    print(DELIMITER)
+    log(DELIMITER)
     for data in data_list[:2]:
-        print(data)
-    print(DELIMITER)
+        log(data)
+    log(DELIMITER)
 
 
 def process_reference_file():
@@ -73,7 +124,7 @@ def process_reference_file():
         for line in lines
     ]
     
-    print("Encoded output file")
+    log("Encoded output file")
     sample_print(lines)
 
     with open(args.ref_output_file, "w", encoding="utf-8") as f:
@@ -81,7 +132,7 @@ def process_reference_file():
 
 
 def process_hypothesis_file():
-    print("Processing hypothesis file...")
+    log("Processing hypothesis file...")
     with open(args.hyp_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
@@ -93,7 +144,7 @@ def process_hypothesis_file():
         for line in lines
     ]
     
-    print("Decoded input file")
+    log("Decoded input file")
     sample_print(lines)
     
     lines = process_hypothesis_text(lines)
@@ -103,19 +154,19 @@ def process_hypothesis_file():
         for line in lines
     ]
     
-    print("Encoded output file")
+    log("Encoded output file")
     sample_print(lines)
             
     with open(args.hyp_output_file, "w", encoding="utf-8") as f:
         for line in lines:
             f.write(line + "\n")
             
-    print("Done processing hypothesis file!")
+    log("Done processing hypothesis file!")
 
 
 def process_reference_text(lines):
     # TODO this should be temporary as we should get a ST dataset in the future
-    print("Translating file...")
+    log("Translating file...")
 
     # text_mapping = {"original": [], "target": []}
     text_mapping = load_df_from_tsv(ASR_ROOT / "text.tsv")
@@ -133,11 +184,11 @@ def process_reference_text(lines):
     
     translator = GoogleTranslator(source=args.src_lng, target=args.target_lng) 
 
-    print(f"Translating... (target language: {args.target_lng})")
+    log(f"Translating... (target language: {args.target_lng})")
 
     translated = translator.translate_batch(lines)
     
-    print("Translated file")
+    log("Translated file")
     sample_print(translated)
     
     return translated
@@ -147,13 +198,10 @@ def process_hypothesis_text(lines):
     # process hypothesis text, for example, add punctuation, capitalization, etc.
     # use a LLM to post-process the hypothesis text
     
-    # LLaMA model initialization
-    LLM = Llama(model_path=MODEL_PATH.as_posix(), n_ctx=2048)
-    
     processed_lines = []
     
     for i in range(0, len(lines), 10):
-        print(f"Processing lines {i} to {i+10}...")
+        log(f"Processing lines {i} to {i+10}...")
         hypotheses = lines[i:i+10]
         prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES="\n".join(hypotheses))
         
@@ -161,7 +209,7 @@ def process_hypothesis_text(lines):
         max_length = (len(prompt) + max_hypothesis_length) * 1.5
         
         # LLaMA model inference
-        post_processed = LLM(prompt, max_length=0)["choices"][0]["text"]
+        post_processed = generate([prompt])[0]
         
         processed_lines.append(post_processed)
         
@@ -170,10 +218,10 @@ def process_hypothesis_text(lines):
 
 
 if __name__ == "__main__":
-    print("Starting processing...")
+    log("Starting processing...")
     
     process_reference_file()
     
     process_hypothesis_file()
     
-    print("Done processing!")
+    log("Done processing!")
