@@ -38,34 +38,6 @@ DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
 
-# Some alternatives to try for paraphrase genaration
-"""
-PROMPT_Variation = {
-    'en': "Provide five alternative expressions for the given sentence:\n'{}'\nAlternatives:",
-    'de': "Geben Sie fünf alternative Ausdrücke für den folgenden Satz an:\n'{}'\nAlternativen:"
-}
-
-PROMPT_Rephrase = {
-    'en': "Rephrase the following sentence in five different ways:\n'{}'\nRephrases:",
-    'de': "Umschreiben Sie den folgenden Satz auf fünf verschiedene Arten:\n'{}'\nUmschreibungen:"
-}
-
-PROMPT_Diversify = {
-    'en': "Diversify the expression of the given sentence in five ways:\n'{}'\nExpressions:",
-    'de': "Diversifizieren Sie den Ausdruck des folgenden Satzes auf fünf Arten:\n'{}'\nAusdrücke:"
-}
-
-PROMPT_AlternateVersions = {
-    'en': "Generate five alternate versions of the following sentence:\n'{}'\nVersions:",
-    'de': "Erstellen Sie fünf alternative Versionen des folgenden Satzes:\n'{}'\nVersionen:"
-}
-
-PROMPT_Rewrite = {
-    'en': "Rewrite the following sentence in five different ways:\n'{}'\nRewrites:",
-    'de': "Schreiben Sie den folgenden Satz auf fünf verschiedene Arten um:\n'{}'\nUmschreibungen:"
-}
-"""
-
 try:
     NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
 except OSError:
@@ -127,30 +99,12 @@ for language, model in LLM.items():
     
     # TODO test with this again model = model.eval()
     # TODO test with this again model = torch.compile(model)
-    # model = model.to(DEVICE)
 
 log("LLaMA ready.")
 
 # 5 is the number of paraphrases to generate 
-# 1.5 states that the paraphrase can be 65% longer than the input sentence
+# 1.65 states that the paraphrase can be 65% longer than the input sentence
 PROMPT_LENGTH_MULTIPLIER = 1.65 * 5 
-
-PROMPT = {  # TODO Modify and play with this prompt to properly generate 5 good paraphrases
-    "en": """[INST] <<SYS>>
-As a professional writer, your expertise is in crafting accurate and engaging paraphrases. Generate five distinct English paraphrases of the sentence provided below. Each paraphrase should fully convey the original meaning without adding extraneous information. Aim for a balance between retaining the essence of the sentence and presenting it in a fresh, clear manner.
-<</SYS>>
-
-Original Sentence: '{}'
-[/INST]Paraphrases:
-""",
-    "de": """[INST] <<SYS>>
-Als professioneller Schriftsteller liegt Ihre Expertise im Verfassen von genauen und ansprechenden Paraphrasen. Erzeugen Sie fünf unterschiedliche deutsche Paraphrasen des unten angegebenen Satzes. Jede Paraphrase sollte die ursprüngliche Bedeutung vollständig vermitteln, ohne überflüssige Informationen hinzuzufügen. Streben Sie nach einem Gleichgewicht zwischen dem Bewahren des Wesens des Satzes und seiner frischen, klaren Darstellung.
-<</SYS>>
-
-Originalsatz: '{}'
-[/INST]Deutsche Paraphrasen:
-"""
-}
 
 PROMPT = {
     "en": """[INST] <<SYS>>
@@ -202,7 +156,7 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
     max_new_tokens = BASE_PROMPT_TOKEN_LENGTH[lng] + (max_input_length - BASE_PROMPT_TOKEN_LENGTH[lng]) * PROMPT_LENGTH_MULTIPLIER
  
     generation_config = GenerationConfig(
-        temperature=0.2, # TODO really low temperature but still get hallucinations
+        temperature=0.4, # TODO really low temperature but still get hallucinations
         top_p=0.75,
         repetition_penalty=1.1,
         do_sample=True,
@@ -436,11 +390,15 @@ def main() -> None:
         for ens, des in batch_tuples(data_generator(), 10):
             start = time.time()
             log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
-            en_paraphrases = generate_batched_paraphrases(ens, "en")
-            de_paraphrases = generate_batched_paraphrases(des, "de")
-            log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
-            new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
-            log(f"New paraphrases generated: {new_paraphrases}")
+            try:
+                en_paraphrases = generate_batched_paraphrases(ens, "en")
+                de_paraphrases = generate_batched_paraphrases(des, "de")
+                log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
+                new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
+                log(f"New paraphrases generated: {new_paraphrases}")
+            except Exception as e:
+                log(f"Error generating paraphrases: {e}")
+                continue
 
             # Generate all combinations of English and German paraphrases and write directly to files
             for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):

@@ -27,19 +27,31 @@ SPM_INPUT_FILE = ASR_ROOT / "spm_unigram1000.model"
 SPM_OUTPUT_FILE = HOME / "PST/train/bpe.model"
 
 
-LLM_POSTEDITING_PROMPT = """Enhance the following ASR output by adding punctuation and selecting the most probable transcription from the given hypotheses.
+LLM_POSTEDITING_PROMPT = """[INST] <<SYS>>
+You are a professional specialized in ASR (Automatic Speech Recognition) transcription enhancement.
+<</SYS>>
+Task:
+1. Punctuation Restoration: Add necessary punctuation to make the sentences grammatically correct and more readable.
+2. Evaluate the hypotheses for accuracy and likelihood of being the correct representation of the spoken text.
+3. Select the best hypothesis that accurately reflects the original spoken text.
 
 Input list of the 10 best ASR hypotheses:
-{HYPOTHESES}
+1. "mr jones said meet me at 10 am in the conference room"
+2. "mister jones said meet me at ten a m in the conference room"
+3. "mr jones said meet me at ten am in the conference room"
+4. "mister jones said meet me at 10 am in the conference room"
+5. "mr jones said meet me at ten in the morning in the conference room"
+6. "mr jones said meet me at 10 in the conference room"
+7. "mister jones said meet me at ten in the conference room"
+8. "mr jones said meet me at 10 in the conference room"
+9. "mr jones said meet me at ten a m in the conference room"
+10. "mister jones said meet me at 10 a m in the conference room"[/INST]
+Best Hypothesis: "Mr. Jones said, 'Meet me at 10 a.m. in the conference room.'"
 
-Task:
-1. Punctuation Restoration: Go through each hypothesis and add necessary punctuation (periods, commas, question marks, etc.) to make the sentences grammatically correct and more readable. Consider natural pauses, intonation, and grammatical structure.
-2. Hypothesis Evaluation: Evaluate each punctuated hypothesis for its likelihood to be the most accurate representation of the spoken text. Consider factors like context, grammar, and completeness of the sentences.
-3. Selection of the Best Hypothesis: From the punctuated and evaluated hypotheses, select the one that is most likely to be the correct transcription of the original speech. 
-
-Output the most likely and accurately punctuated ASR transcription:
-"""
-
+</s><s>[INST]
+Input list of the 10 best ASR hypotheses:
+{HYPOTHESES}[/INST]
+Best Hypothesis:"""
 
 log("Loading LLaMA...")
 
@@ -199,6 +211,25 @@ def process_hypothesis_text(lines):
     # use a LLM to post-process the hypothesis text
     
     processed_lines = []
+    
+    # process in batches of 10
+    num_samples_per_prompt = 10
+    batch_size = 10
+    batch = []
+    for i in range(0, len(lines), num_samples_per_prompt):
+        prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES="\n".join(lines[i:i+num_samples_per_prompt]))
+        batch.append(prompt)
+        
+        if len(batch) == batch_size:
+            log(f"Processing batch {i//batch_size}...")
+            processed_lines.extend(generate(batch))
+            batch = []
+            
+    if len(batch) > 0:
+        log(f"Processing batch {i//batch_size}...")
+        processed_lines.extend(generate(batch))
+    
+    return processed_lines
     
     for i in range(0, len(lines), 10):
         log(f"Processing lines {i} to {i+10}...")
