@@ -122,8 +122,8 @@ for language, model in LLM.items():
     model.config.bos_token_id = 1  # bos
     model.config.eos_token_id = 2  # eos
     
-    model = model.eval()
-    model = torch.compile(model)
+    # model = model.eval()
+    # model = torch.compile(model)
     model = model.to(DEVICE)
 
 print("LLaMA ready.")
