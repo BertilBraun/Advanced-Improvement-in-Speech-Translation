@@ -31,6 +31,8 @@ DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 OUTPUT_EN_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.en"
 OUTPUT_DE_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.de"
 
+SPM_OUTPUT_FILE = OUTPUT_FOLDER / "spm.train_paraphrased.de-en.{}"
+
 LOG_FILE = OUTPUT_FOLDER / "paraphrases.log"
 SEPARATOR = "  SEPARATOR  "
 
@@ -209,7 +211,7 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
         non_paraphrases = [
             sent for sent in sentences if sent not in paraphrases
         ]
-        log("\n\nNon paraphrases:")
+        log("Non paraphrases:")
         for sent in non_paraphrases:
             log(f"    {sent}")
 
@@ -320,6 +322,18 @@ def read_dataset_segment(file_path: str) -> list[str]:
 
 
 def data_generator():
+    for i in range(14, 20):
+        log(f"Loading WMT{i} dataset...")
+        dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
+        log(f"Now processing WMT{i} dataset...")
+        log(f"Dataset length: {len(dataset['translation'])}")
+        
+        yield from zip(
+            (sentence["en"] for sentence in dataset["translation"]),
+            (sentence["de"] for sentence in dataset["translation"])
+        )
+
+def our_data_generator():    
     def ensure_dataset_loaded() -> None:
         if not DATASET_EN.is_file() or not DATASET_DE.is_file():
 
@@ -348,17 +362,6 @@ def data_generator():
     
     yield from zip(english_sentences, german_sentences)
     
-    for i in range(14, 20):
-        log(f"Loading WMT{i} dataset...")
-        dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
-        log(f"Now processing WMT{i} dataset...")
-        log(f"Dataset length: {len(dataset['translation'])}")
-        
-        yield from zip(
-            (sentence["en"] for sentence in dataset["translation"]),
-            (sentence["de"] for sentence in dataset["translation"])
-        )
-     
      
 def batch_tuples(iterable, batch_size=1, values_per_tuple=2):
     # take in a generator of tuples and yield a generator of tuples of batch_size
@@ -388,7 +391,15 @@ def main() -> None:
         open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
         open(LOG_FILE, "a", encoding="utf-8") as log_file:
             
-        for ens, des in batch_tuples(data_generator(), 10):
+        start_paraphrasing = time.time()
+        total_paraphrases = 0
+        total_written_paraphrases = 0
+            
+        for ens, des in batch_tuples(our_data_generator(), 10):
+            if time.time() - start_paraphrasing > 60 * 60 * 12: # 12 hours
+                log("12 hours have passed. Stopping paraphrasing.")
+                break
+            
             start = time.time()
             log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
             try:
@@ -397,6 +408,7 @@ def main() -> None:
                 log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
                 new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
                 log(f"New paraphrases generated: {new_paraphrases}")
+                total_paraphrases += new_paraphrases
             except Exception as e:
                 log(f"Error generating paraphrases: {e}")
                 continue
@@ -406,6 +418,9 @@ def main() -> None:
                 for en_p, de_p in itertools.product(en_ps, de_ps):
                     en_file.write(f"{en_p}\n")
                     de_file.write(f"{de_p}\n")
+                    en_file.flush()
+                    de_file.flush()
+                    total_written_paraphrases += 1
                    
                 # Json dump the paraphrases to the log file
                 json.dump({
@@ -413,6 +428,11 @@ def main() -> None:
                     "de_paraphrases": de_ps,
                 }, log_file)
                 log_file.write("\n")
+                log_file.flush()
+                
+            log(f"Total paraphrases generated: {total_paraphrases}")
+            log(f"Total paraphrases written: {total_written_paraphrases}")
+            log(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
 
     log("Finished generating paraphrases.")
 
@@ -424,16 +444,27 @@ def main() -> None:
     
     spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
 
-    for lang in ["de", "en"]:
-        with open(f"{DATASET_FOLDER}/train_paraphrased.de-en.{lang}", "r") as f_in, \
-                open(f"{DATASET_FOLDER}/spm.train_paraphrased.de-en.{lang}", "w") as f_out:
-            for line in tqdm(f_in.readlines(), desc=f"Segmenting {lang}"):
+    for file, lang in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), ("de", "en")):
+        with open(file, "r", encoding="utf-8") as f_in, \
+                open(SPM_OUTPUT_FILE.format(lang), "w", encoding="utf-8") as f_out:
+            for line in tqdm(f_in.readlines(), desc=f"Segmenting {lang} our Dataset"):
                 # Segmented into subwords
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
                 # Join the subwords into a string
                 line_segmented = " ".join(line_segmented)
                 f_out.write(line_segmented + "\n")
+                
+            f_out.flush()
+            
+            for en, de in tqdm(data_generator(), desc=f"Segmenting {lang} WMT"):
+                # Segmented into subwords
+                line = en if lang == "en" else de
+                line_segmented = spm_model.encode(line.strip(), out_type=str)
+                # Join the subwords into a string
+                line_segmented = " ".join(line_segmented)
+                f_out.write(line_segmented + "\n")
 
+            f_out.flush()
 
 if __name__ == "__main__":
     main()
