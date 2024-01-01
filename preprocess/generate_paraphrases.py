@@ -85,15 +85,23 @@ LLAMA_MODEL = {
 }
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
+print(f"Using device: {DEVICE}")
+print("Loading Tokenizer")
+
 TOKENIZER = {
     "en": LlamaTokenizer.from_pretrained(LLAMA_MODEL["en"]),
     "de": LlamaTokenizer.from_pretrained(LLAMA_MODEL["de"]),
 }
+
+print("Tokenizer ready.")
+print("Loading LLaMA model.")
  
 LLM = {
     "en": LlamaForCausalLM.from_pretrained(LLAMA_MODEL["en"]),
     "de": LlamaForCausalLM.from_pretrained(LLAMA_MODEL["de"]),
 }
+
+print("Configuring LLaMA model.")
 
 for language, model in LLM.items():
     model.config.pad_token_id = TOKENIZER[language].pad_token_id = 0  # unk
@@ -110,6 +118,8 @@ BASE_PROMPT_TOKEN_LENGTH = {
     "en": len(TOKENIZER["en"].encode(PROMPT["en"].format(""))) - 1,
     "de": len(TOKENIZER["de"].encode(PROMPT["de"].format(""))) - 1,
 }
+
+print(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 
 # 5 is the number of paraphrases to generate 
 # 1.5 states that the paraphrase can be 50% longer than the input sentence
