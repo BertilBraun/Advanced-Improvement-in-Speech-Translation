@@ -13,6 +13,9 @@ import torch
 from datasets import load_dataset
 import spacy
 
+def log(*args, **kwargs):
+    print(*args, **kwargs, flush=True)
+
 HOME_FOLDER = Path(f"{os.environ['HOME']}")
 ROOT_FOLDER = HOME_FOLDER / "MT"
 
@@ -66,13 +69,13 @@ PROMPT_Rewrite = {
 try:
     NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
 except OSError:
-    print("Downloading Spacy models...")
+    log("Downloading Spacy models...")
     os.system("python -m spacy download en")
     os.system("python -m spacy download de")
     NLP = {"en": spacy.load("en_core_web_sm"), "de": spacy.load("de_core_news_sm")}
     
 
-print("Loading LLaMA...")
+log("Loading LLaMA...")
 
 LLAMA_MODEL = {
     "en": "meta-llama/Llama-2-7b-chat-hf",
@@ -80,8 +83,8 @@ LLAMA_MODEL = {
 }
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-print(f"Using device: {DEVICE}")
-print("Loading Tokenizer")
+log(f"Using device: {DEVICE}")
+log("Loading Tokenizer")
 
 # TOKENIZER = {
 #     "en": AutoTokenizer.from_pretrained(LLAMA_MODEL["en"]),
@@ -94,8 +97,8 @@ TOKENIZER = {
     "de": tokenizer,
 }
 
-print("Tokenizer ready.")
-print("Loading LLaMA model.")
+log("Tokenizer ready.")
+log("Loading LLaMA model.")
  
 # LLM = {
 #     "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
@@ -115,7 +118,7 @@ LLM = {
     "de": llama,
 }
 
-print("Configuring LLaMA model.")
+log("Configuring LLaMA model.")
 
 for language, model in LLM.items():
     model.config.pad_token_id = TOKENIZER[language].pad_token_id = 0  # unk
@@ -126,7 +129,7 @@ for language, model in LLM.items():
     # TODO test with this again model = torch.compile(model)
     # model = model.to(DEVICE)
 
-print("LLaMA ready.")
+log("LLaMA ready.")
 
 # 5 is the number of paraphrases to generate 
 # 1.5 states that the paraphrase can be 65% longer than the input sentence
@@ -154,7 +157,7 @@ BASE_PROMPT_TOKEN_LENGTH = {
     "de": len(TOKENIZER["de"].encode(PROMPT["de"].format(""))) - 1,
 }
 
-print(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
+log(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 
 
 # TODO can paraphrase generation be batched? https://github.com/huggingface/transformers/issues/25353
@@ -195,10 +198,10 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     if len(sentence) > 100: # TODO having to skip long sentences because of hallucinations
-        print(f"Warning: Sentence '{sentence}' is is too long for paraphrase generation. Skipping.")
+        log(f"Warning: Sentence '{sentence}' is is too long for paraphrase generation. Skipping.")
         return [sentence]
     
-    print(f"\nGenerating paraphrases for '{sentence}' in {language}...")
+    log(f"\nGenerating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
     formatted_prompt = PROMPT[language].format(sentence)
@@ -206,7 +209,7 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     # Generate response using LLaMA 2
     paraphrases_text = generate([formatted_prompt], language)[0]
     
-    print(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
+    log(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
 
     sentences = list(set((
         cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
@@ -219,23 +222,23 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     non_paraphrases = [
         sent for sent in sentences if sent not in paraphrases
     ]
-    print("Non paraphrases:")
+    log("Non paraphrases:")
     for sent in non_paraphrases:
-        print(f"    {sent}")
+        log(f"    {sent}")
 
     if len(paraphrases) < 5:
-        print(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
+        log(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
         
-    print("Paraphrases:")
+    log("Paraphrases:")
     for sent in paraphrases:
-        print(f"    {sent}")
+        log(f"    {sent}")
 
     # Ensure only five paraphrases are returned
     return paraphrases # TODO currently return all [:5]
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> list[list[str]]:    
-    print(f"\nGenerating paraphrases for '{sentences}' in '{language}'...")
+    log(f"\nGenerating paraphrases for '{sentences}' in '{language}'...")
     
     sentence_too_long = [len(sentence) > 100 for sentence in sentences]
 
@@ -249,7 +252,7 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
     
     for sentence, paraphrases_text in zip(sentences, paraphrased_texts):
     
-        print(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
+        log(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
 
         sentences = list(set((
             cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
@@ -262,16 +265,16 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
         non_paraphrases = [
             sent for sent in sentences if sent not in paraphrases
         ]
-        print("Non paraphrases:")
+        log("Non paraphrases:")
         for sent in non_paraphrases:
-            print(f"    {sent}")
+            log(f"    {sent}")
 
         if len(paraphrases) < 5:
-            print(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
+            log(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
             
-        print("Paraphrases:")
+        log("Paraphrases:")
         for sent in paraphrases:
-            print(f"    {sent}")
+            log(f"    {sent}")
 
         # Ensure only five paraphrases are returned            
         all_paraphrases.append(paraphrases) # TODO currently return all [:5]
@@ -381,11 +384,11 @@ def data_generator():
             unzip_command = f"unzip -o '{download_location}' -d '{DATASET_FOLDER}'"
 
             # Execute download and unzip commands
-            print("Checking and downloading dataset...")
+            log("Checking and downloading dataset...")
             os.system(download_command)
-            print("Unzipping dataset...")
+            log("Unzipping dataset...")
             os.system(unzip_command)
-            print("Dataset ready.")
+            log("Dataset ready.")
 
     ensure_dataset_loaded()
     
@@ -394,17 +397,17 @@ def data_generator():
     german_sentences = read_dataset_segment(DATASET_DE)
      
     if len(english_sentences) != len(german_sentences):
-        print("Warning: English and German sentences are not the same length.")
+        log("Warning: English and German sentences are not the same length.")
     
-    print(f"Original dataset length: {len(english_sentences)}")
+    log(f"Original dataset length: {len(english_sentences)}")
     
     yield from zip(english_sentences, german_sentences)
     
     for i in range(14, 20):
-        print(f"Loading WMT{i} dataset...")
+        log(f"Loading WMT{i} dataset...")
         dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
-        print(f"Now processing WMT{i} dataset...")
-        print(f"Dataset length: {len(dataset['translation'])}")
+        log(f"Now processing WMT{i} dataset...")
+        log(f"Dataset length: {len(dataset['translation'])}")
         
         yield from zip(
             (sentence["en"] for sentence in dataset["translation"]),
@@ -429,7 +432,7 @@ def batch_tuples(iterable, batch_size=1):
         yield tuple(lists)
             
 def main() -> None:
-    print("Generating paraphrases for all sentence pairs...")
+    log("Generating paraphrases for all sentence pairs...")
     
     with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
         open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
@@ -437,10 +440,10 @@ def main() -> None:
             
         for ens, des in batch_tuples(data_generator(), 10):
             start = time.time()
-            print(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...", flush=True)
+            log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...", flush=True)
             en_paraphrases = generate_batched_paraphrases(ens, "en")
             de_paraphrases = generate_batched_paraphrases(des, "de")
-            print(f"Paraphrases generated in {round(time.time() - start, 2)} seconds.")
+            log(f"Paraphrases generated in {round(time.time() - start, 2)} seconds.")
 
             # Generate all combinations of English and German paraphrases and write directly to files
             for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
@@ -455,13 +458,13 @@ def main() -> None:
                 }, log_file)
                 log_file.write("\n")
 
-    print("Finished generating paraphrases.")
+    log("Finished generating paraphrases.")
 
     spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
                                 model_prefix="bpe",
                                 vocab_size=5000)
 
-    print('Finished training sentencepiece model.')
+    log('Finished training sentencepiece model.')
     
     spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
 
