@@ -8,6 +8,7 @@ import regex
 import sentencepiece as spm
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
+from bitsandbytes import BitsAndBytesConfig
 import torch
 from datasets import load_dataset
 import spacy
@@ -104,7 +105,15 @@ print("Loading LLaMA model.")
 #     "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
 #     "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
 # }
-llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], load_in_4bit=True)
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], quantization_config=bnb_config)
 LLM = {
     "en": llama,
     "de": llama,
