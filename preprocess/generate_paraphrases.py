@@ -81,7 +81,7 @@ print("Loading LLaMA...")
 
 LLAMA_MODEL = {
     "en": "meta-llama/Llama-2-7b-chat-hf",
-    "de": "jphme/em_german_7b_v01",
+    "de": "jphme/em_german_mistral_v01", # "em_german_7b_v01",
 }
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -150,14 +150,14 @@ def generate(prompt: str, lng: LANGUAGE) -> str:
             max_new_tokens=max_new_tokens,
         )
     
-    decoded_output = TOKENIZER[lng].decode(encoded_output.sequences[0])
+    decoded_output = TOKENIZER[lng].decode(encoded_output.sequences[0], skip_special_tokens=True)
     response = decoded_output.replace(prompt, "").strip()
     
     return response
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
-    if len(sentence) > 75: # TODO having to skip long sentences because of hallucinations
+    if len(sentence) > 100: # TODO having to skip long sentences because of hallucinations
         print(f"Warning: Sentence '{sentence}' is is too long for paraphrase generation. Skipping.")
         return [sentence]
     
@@ -169,19 +169,11 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     # Generate response using LLaMA 2
     paraphrases_text = generate(formatted_prompt, language)
     
-    print(f"Paraphrases text: {paraphrases_text}")
+    print(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
 
-    # Use Spacy's sentence boundary detection to extract paraphrases
-    # doc = NLP[language](paraphrases_text)
-    # sentences = [sent.text.strip() for sent in doc.sents]
     sentences = list(set((
         cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
     )))
-
-    # Consider you have to generate initally more paraphrases if you use diversify with diversity_factor<1
-    sentences = diversify_paraphrases(
-        sentences, diversity_factor=1
-    )  # adjust diversity factor appropriately
 
     # Heuristics to identify and extract paraphrases
     paraphrases = [
@@ -190,12 +182,16 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     non_paraphrases = [
         sent for sent in sentences if sent not in paraphrases
     ]
-    print(f"Non paraphrases: {non_paraphrases}")
+    print("Non paraphrases:")
+    for sent in non_paraphrases:
+        print(f"    {sent}")
 
     if len(paraphrases) < 5:
         print(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
         
-    print(f"Possible paraphrases: {paraphrases}")
+    print("Paraphrases:")
+    for sent in paraphrases:
+        print(f"    {sent}")
 
     # Ensure only five paraphrases are returned
     return paraphrases # TODO currently return all [:5]
@@ -235,19 +231,6 @@ def cleanup_paraphrase(sent: str) -> str:
     sent = sent.strip()
     
     return sent    
-
-
-# Diversify the list of paraphrases to cover a broader range of semantic variations
-# If you would like to work with 5 paraphrases and use diversify_paraphrases with a
-# diversity_factor<1 you have to generate initially more paraphrases
-def diversify_paraphrases(paraphrases, diversity_factor=0.5):
-    num_paraphrases = len(paraphrases)
-    num_to_keep = max(int(num_paraphrases * diversity_factor), 1)
-
-    # Randomly select paraphrases to keep
-    diversified_paraphrases = random.sample(paraphrases, num_to_keep)
-
-    return diversified_paraphrases
 
 
 def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -> bool:
