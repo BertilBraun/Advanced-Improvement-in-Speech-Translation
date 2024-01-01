@@ -11,7 +11,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 import torch
 from datasets import load_dataset
 import spacy
-import random
 
 HOME_FOLDER = Path(f"{os.environ['HOME']}")
 ROOT_FOLDER = HOME_FOLDER / "MT"
@@ -88,19 +87,24 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {DEVICE}")
 print("Loading Tokenizer")
 
+# TOKENIZER = {
+#     "en": AutoTokenizer.from_pretrained(LLAMA_MODEL["en"]),
+#     "de": AutoTokenizer.from_pretrained(LLAMA_MODEL["de"]),
+# }
+tokenizer = AutoTokenizer.from_pretrained(LLAMA_MODEL["en"])
 TOKENIZER = {
-    "en": AutoTokenizer.from_pretrained(LLAMA_MODEL["en"]),
-    "de": AutoTokenizer.from_pretrained(LLAMA_MODEL["de"]),
+    "en": tokenizer,
+    "de": tokenizer,
 }
 
 print("Tokenizer ready.")
 print("Loading LLaMA model.")
  
-llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"])
 # LLM = {
 #     "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
 #     "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
 # }
+llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"])
 LLM = {
     "en": llama,
     "de": llama,
