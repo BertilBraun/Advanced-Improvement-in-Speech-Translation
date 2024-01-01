@@ -144,7 +144,7 @@ print(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 PROMPT_LENGTH_MULTIPLIER = 1.65 * 5 
 
 PROMPT_TEMPLATE = """<s>[INST] <<SYS>>
-You are a professional writer.
+You are a professional writer. You only output the paraphrases that paraphrase the entire sentence and you do not add additional information. You ensure that the inputs meaning is preserved. You are writing in {lng}.
 <</SYS>>
 
 {} [/INST]"""
@@ -176,7 +176,7 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
             max_new_tokens=max_new_tokens,
         )
     
-    decoded_outputs = TOKENIZER[lng].batch_decode(generated_ids, skip_special_tokens=True)
+    decoded_outputs = TOKENIZER[lng].batch_decode(generated_ids)
     
     return [
         output.replace(prompt, "").strip()
@@ -192,7 +192,7 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     print(f"\nGenerating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
-    formatted_prompt = PROMPT_TEMPLATE.format(PROMPT[language].format(sentence))
+    formatted_prompt = PROMPT_TEMPLATE.format(PROMPT[language].format(sentence), lng=language)
 
     # Generate response using LLaMA 2
     paraphrases_text = generate([formatted_prompt], language)[0]
