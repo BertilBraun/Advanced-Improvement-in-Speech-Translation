@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import time
 from typing import Literal, Union
@@ -132,19 +133,19 @@ print("LLaMA ready.")
 PROMPT_LENGTH_MULTIPLIER = 1.65 * 5 
 
 PROMPT = {  # TODO Modify and play with this prompt to properly generate 5 good paraphrases
-    "en": """<s>[INST] <<SYS>>
+    "en": """[INST] <<SYS>>
 As a professional writer, your expertise is in crafting accurate and engaging paraphrases. Generate five distinct English paraphrases of the sentence provided below. Each paraphrase should fully convey the original meaning without adding extraneous information. Aim for a balance between retaining the essence of the sentence and presenting it in a fresh, clear manner.
 <</SYS>>
 
 Original Sentence: '{}'
 [/INST]Paraphrases:
 """,
-    "de": """<s>[INST] <<SYS>>
+    "de": """[INST] <<SYS>>
 Als professioneller Schriftsteller liegt Ihre Expertise im Verfassen von genauen und ansprechenden Paraphrasen. Erzeugen Sie fünf unterschiedliche deutsche Paraphrasen des unten angegebenen Satzes. Jede Paraphrase sollte die ursprüngliche Bedeutung vollständig vermitteln, ohne überflüssige Informationen hinzuzufügen. Streben Sie nach einem Gleichgewicht zwischen dem Bewahren des Wesens des Satzes und seiner frischen, klaren Darstellung.
 <</SYS>>
 
 Originalsatz: '{}'
-[/INST]Paraphrasen:
+[/INST]Deutsche Paraphrasen:
 """
 }
 
@@ -232,9 +233,77 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     # Ensure only five paraphrases are returned
     return paraphrases # TODO currently return all [:5]
 
+# Generates 5 paraphrases for the input sentence with LLaMA 2
+def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> list[list[str]]:    
+    print(f"\nGenerating paraphrases for '{sentences}' in '{language}'...")
+    
+    sentence_too_long = [len(sentence) > 100 for sentence in sentences]
+
+    # Format the prompt with the given sentence
+    prompted = [PROMPT[language].format(sentence) for sentence, too_long in zip(sentences, sentence_too_long) if not too_long]
+
+    # Generate response using LLaMA 2
+    paraphrased_texts = generate(prompted, language)
+    
+    all_paraphrases = []
+    
+    for sentence, paraphrases_text in zip(sentences, paraphrased_texts):
+    
+        print(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
+
+        sentences = list(set((
+            cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
+        )))
+
+        # Heuristics to identify and extract paraphrases
+        paraphrases = [
+            sent for sent in sentences if heuristic_is_paraphrase(sent, sentence, language)
+        ]
+        non_paraphrases = [
+            sent for sent in sentences if sent not in paraphrases
+        ]
+        print("Non paraphrases:")
+        for sent in non_paraphrases:
+            print(f"    {sent}")
+
+        if len(paraphrases) < 5:
+            print(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
+            
+        print("Paraphrases:")
+        for sent in paraphrases:
+            print(f"    {sent}")
+
+        # Ensure only five paraphrases are returned            
+        all_paraphrases.append(paraphrases) # TODO currently return all [:5]
+
+    # at the the indices, where the sentence was too long, insert an empty list
+    for i, too_long in enumerate(sentence_too_long):
+        if too_long:
+            all_paraphrases.insert(i, [])
+
+    # add the original sentence to the list of paraphrases at the beginning
+    for i, sentence in enumerate(sentences):
+        all_paraphrases[i].insert(0, sentence)
+        
+    return all_paraphrases 
+
 
 def cleanup_paraphrase(sent: str) -> str:
     sent = sent.replace("<s>", "").replace("</s>", "").strip()
+    
+    # if it ends with a ')' then replace the last bracketed part with ''
+    # find the first matching bracket from the end of the sentence
+    open_brackets = 0
+    for i, char in enumerate(reversed(sent)):
+        if char == ")":
+            open_brackets += 1
+        elif char == "(":
+            open_brackets -= 1
+            
+        if open_brackets == 0:
+            # remove the bracketed part
+            sent = sent[:-i]
+            break            
     
     # Remove leading and trailing quotation marks
     for quote in ['"', "'"]:
@@ -342,28 +411,50 @@ def data_generator():
             (sentence["de"] for sentence in dataset["translation"])
         )
      
-
+     
+def batch_tuples(iterable, batch_size=1):
+    # take in a generator of tuples and yield a generator of tuples of batch_size
+    # i.e. [(1, 2), (3, 4), (5, 6)] should yield [((1,3), (2,4)), ((5,), (6,))] for batch_size=2
+    max_length = max(len(x) for x in iterable)
+    lists = [[] for _ in range(max_length)]
+    for tup in iterable:
+        for i, item in enumerate(tup):
+            lists[i].append(item)
+            
+        if len(lists[0]) == batch_size:
+            yield tuple(lists)
+            lists = [[] for _ in range(max_length)]
+            
+    if lists[0]:
+        yield tuple(lists)
+            
 def main() -> None:
     print("Generating paraphrases for all sentence pairs...")
-
+    
     with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
         open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
         open(LOG_FILE, "a", encoding="utf-8") as log_file:
-        # For each sentence pair in the dataset segment, generate paraphrases and write all combinations to files
-        for en, de in data_generator():
+            
+        for ens, des in batch_tuples(data_generator(), 10):
             start = time.time()
-            print(f"\n\nGenerating paraphrases for '{en}' and '{de}'...", flush=True)
-            en_paraphrases = [en] + generate_paraphrases(en, "en")
-            de_paraphrases = [de] + generate_paraphrases(de, "de")
+            print(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...", flush=True)
+            en_paraphrases = generate_batched_paraphrases(ens, "en")
+            de_paraphrases = generate_batched_paraphrases(des, "de")
             print(f"Paraphrases generated in {round(time.time() - start, 2)} seconds.")
 
             # Generate all combinations of English and German paraphrases and write directly to files
-            for en_p, de_p in itertools.product(en_paraphrases, de_paraphrases):
-                en_file.write(f"{en_p}\n")
-                de_file.write(f"{de_p}\n")
-                
-            log_file.write(SEPARATOR.join([en, de, *en_paraphrases, *de_paraphrases]) + "\n")
-           
+            for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
+                for en_p, de_p in itertools.product(en_ps, de_ps):
+                    en_file.write(f"{en_p}\n")
+                    de_file.write(f"{de_p}\n")
+                   
+                # Json dump the paraphrases to the log file
+                json.dump({
+                    "en_paraphrases": en_ps,
+                    "de_paraphrases": de_ps,
+                }, log_file)
+                log_file.write("\n")
+
     print("Finished generating paraphrases.")
 
     spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
