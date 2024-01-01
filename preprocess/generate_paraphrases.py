@@ -97,8 +97,8 @@ print("Tokenizer ready.")
 print("Loading LLaMA model.")
  
 LLM = {
-    "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], low_cpu_mem_usage=True, load_in_8bit=True),
-    "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"], low_cpu_mem_usage=True, load_in_8bit=True),
+    "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
+    "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
 }
 
 print("Configuring LLaMA model.")
