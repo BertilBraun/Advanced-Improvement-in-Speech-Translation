@@ -193,15 +193,21 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
     # Generate response using LLaMA 2
     paraphrased_texts = generate(prompted, language)
     
-    all_paraphrases = []
+    all_paraphrases = [[sentence] for sentence in sentences]
     
-    for sentence, paraphrases_text in zip(short_sentences, paraphrased_texts):
+    paraphrased_texts_index = 0
+    for i, sentence in enumerate(sentences):
+        if sentence_too_long[i]:
+            continue
     
         log(f"\n\nParaphrases text for sentence '{sentence}':")
         #log(f"\"\"\"{paraphrases_text}\"\"\"")
+        
+        paraphrased_text = paraphrased_texts[paraphrased_texts_index]
+        paraphrased_texts_index += 1
 
         sentences = list(set((
-            cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
+            cleanup_paraphrase(sent) for sent in paraphrased_text.split("\n") if cleanup_paraphrase(sent)
         )))
 
         # Heuristics to identify and extract paraphrases
@@ -222,18 +228,9 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
         for sent in paraphrases:
             log(f"    {sent}")
 
-        # Ensure only five paraphrases are returned            
-        all_paraphrases.append(paraphrases) # TODO currently return all [:5]
+        # Ensure only five paraphrases are returned    
+        all_paraphrases[i].extend(paraphrases) # TODO currently return all [:5]
 
-    # at the the indices, where the sentence was too long, insert an empty list
-    for i, too_long in enumerate(sentence_too_long):
-        if too_long:
-            all_paraphrases.insert(i, [])
-
-    # add the original sentence to the list of paraphrases at the beginning
-    for i, sentence in enumerate(sentences):
-        all_paraphrases[i].insert(0, sentence)
-        
     return all_paraphrases 
 
 
@@ -395,7 +392,7 @@ def main() -> None:
         total_paraphrases = 0
         total_written_paraphrases = 0
             
-        for ens, des in batch_tuples(our_data_generator(), 10):
+        for ens, des in batch_tuples(our_data_generator(), 10): # TODO experiment, are larger batches better?
             if time.time() - start_paraphrasing > 60 * 60 * 12: # 12 hours
                 log("12 hours have passed. Stopping paraphrasing.")
                 break
