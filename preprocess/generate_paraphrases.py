@@ -109,7 +109,7 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_compute_dtype=torch.bfloat16
 )
 
-llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], quantization_config=bnb_config)
+llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], quantization_config=bnb_config, device_map="auto")
 LLM = {
     "en": llama,
     "de": llama,
@@ -122,9 +122,9 @@ for language, model in LLM.items():
     model.config.bos_token_id = 1  # bos
     model.config.eos_token_id = 2  # eos
     
-    # model = model.eval()
-    # model = torch.compile(model)
-    model = model.to(DEVICE)
+    # TODO test with this again model = model.eval()
+    # TODO test with this again model = torch.compile(model)
+    # model = model.to(DEVICE)
 
 print("LLaMA ready.")
 
