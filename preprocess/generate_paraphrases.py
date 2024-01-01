@@ -34,11 +34,6 @@ DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2
 
 LANGUAGE = Union[Literal["en"], Literal["de"]]
 
-PROMPT = {  # TODO Modify and play with this prompt to properly generate 5 good paraphrases
-    "en": "Generate five distinct paraphrases of the following English sentence:\n'{}'\nParaphrases:",
-    "de": "Schreiben Sie den folgenden Satz auf fünf verschiedene Arten auf Deutsch um:\n'{}'\nUmschreibungen:",
-}
-
 # Some alternatives to try for paraphrase genaration
 """
 PROMPT_Variation = {
@@ -132,22 +127,33 @@ for language, model in LLM.items():
 
 print("LLaMA ready.")
 
+# 5 is the number of paraphrases to generate 
+# 1.5 states that the paraphrase can be 65% longer than the input sentence
+PROMPT_LENGTH_MULTIPLIER = 1.65 * 5 
+
+PROMPT = {  # TODO Modify and play with this prompt to properly generate 5 good paraphrases
+    "en": """<s>[INST] <<SYS>>
+As a professional writer, your expertise is in crafting accurate and engaging paraphrases. Generate five distinct English paraphrases of the sentence provided below. Each paraphrase should fully convey the original meaning without adding extraneous information. Aim for a balance between retaining the essence of the sentence and presenting it in a fresh, clear manner.
+<</SYS>>
+
+Original Sentence: '{}'
+[/INST]Paraphrases:
+""",
+    "de": """<s>[INST] <<SYS>>
+Als professioneller Schriftsteller liegt Ihre Expertise im Verfassen von genauen und ansprechenden Paraphrasen. Erzeugen Sie fünf unterschiedliche deutsche Paraphrasen des unten angegebenen Satzes. Jede Paraphrase sollte die ursprüngliche Bedeutung vollständig vermitteln, ohne überflüssige Informationen hinzuzufügen. Streben Sie nach einem Gleichgewicht zwischen dem Bewahren des Wesens des Satzes und seiner frischen, klaren Darstellung.
+<</SYS>>
+
+Originalsatz: '{}'
+[/INST]Paraphrasen:
+"""
+}
+
 BASE_PROMPT_TOKEN_LENGTH = {
     "en": len(TOKENIZER["en"].encode(PROMPT["en"].format(""))) - 1,
     "de": len(TOKENIZER["de"].encode(PROMPT["de"].format(""))) - 1,
 }
 
 print(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
-
-# 5 is the number of paraphrases to generate 
-# 1.5 states that the paraphrase can be 65% longer than the input sentence
-PROMPT_LENGTH_MULTIPLIER = 1.65 * 5 
-
-PROMPT_TEMPLATE = """<s>[INST] <<SYS>>
-You are a professional writer. You only output the paraphrases that paraphrase the entire sentence and you do not add additional information. You ensure that the inputs meaning is preserved. You are writing in {lng}.
-<</SYS>>
-
-{} [/INST]"""
 
 
 # TODO can paraphrase generation be batched? https://github.com/huggingface/transformers/issues/25353
@@ -161,6 +167,8 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
         temperature=0.2, # TODO really low temperature but still get hallucinations
         top_p=0.75,
         repetition_penalty=1.1,
+        do_sample=True,
+        num_beams=1,
     )
     # generation_config = GenerationConfig( # Greedy
     #     num_beams=1,
@@ -192,7 +200,7 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     print(f"\nGenerating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
-    formatted_prompt = PROMPT_TEMPLATE.format(PROMPT[language].format(sentence), lng=language)
+    formatted_prompt = PROMPT[language].format(sentence)
 
     # Generate response using LLaMA 2
     paraphrases_text = generate([formatted_prompt], language)[0]
