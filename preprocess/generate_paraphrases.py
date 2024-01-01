@@ -79,43 +79,47 @@ except OSError:
 
 print("Loading LLaMA...")
 
-# TODO I think this is llama 1 and not llama 2
-# TODO from here (https://www.mlexpert.io/machine-learning/tutorials/alpaca-and-llama-inference)
-# TODO ref for llama 2 here (https://huggingface.co/blog/llama2)
-LLAMA_MODEL = "baffo32/decapoda-research-llama-7B-hf"
-LLAMA_MODEL = "meta-llama/Llama-2-7b-chat-hf"
+LLAMA_MODEL = {
+    "en": "meta-llama/Llama-2-7b-chat-hf",
+    "de": "jphme/em_german_7b_v01",
+}
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-TOKENIZER = LlamaTokenizer.from_pretrained(LLAMA_MODEL)
+TOKENIZER = {
+    "en": LlamaTokenizer.from_pretrained(LLAMA_MODEL["en"]),
+    "de": LlamaTokenizer.from_pretrained(LLAMA_MODEL["de"]),
+}
  
-LLM = LlamaForCausalLM.from_pretrained(
-    LLAMA_MODEL,
-    # load_in_8bit=True,
-    device_map="auto",
-)
-LLM.config.pad_token_id = TOKENIZER.pad_token_id = 0  # unk
-LLM.config.bos_token_id = 1
-LLM.config.eos_token_id = 2
- 
-LLM = LLM.eval()
-LLM = torch.compile(LLM)
-LLM = LLM.to(DEVICE)
+LLM = {
+    "en": LlamaForCausalLM.from_pretrained(LLAMA_MODEL["en"]),
+    "de": LlamaForCausalLM.from_pretrained(LLAMA_MODEL["de"]),
+}
+
+for language, model in LLM.items():
+    model.config.pad_token_id = TOKENIZER[language].pad_token_id = 0  # unk
+    model.config.bos_token_id = 1
+    model.config.eos_token_id = 2
+    
+    model = model.eval()
+    model = torch.compile(model)
+    model = model.to(DEVICE)
+
 print("LLaMA ready.")
 
 BASE_PROMPT_TOKEN_LENGTH = {
-    "en": len(TOKENIZER.encode(PROMPT["en"].format(""))) - 1,
-    "de": len(TOKENIZER.encode(PROMPT["de"].format(""))) - 1,
+    "en": len(TOKENIZER["en"].encode(PROMPT["en"].format(""))) - 1,
+    "de": len(TOKENIZER["de"].encode(PROMPT["de"].format(""))) - 1,
 }
 
 # 5 is the number of paraphrases to generate 
 # 1.5 states that the paraphrase can be 50% longer than the input sentence
 PROMPT_LENGTH_MULTIPLIER = 1.5 * 5 
 
-def generate(prompt: str, base_prompt_token_length: int) -> str:
-    encoding = TOKENIZER(prompt, return_tensors="pt")
+def generate(prompt: str, lng: LANGUAGE) -> str:
+    encoding = TOKENIZER[lng](prompt, return_tensors="pt")
     input_ids = encoding["input_ids"].to(DEVICE)
     
-    max_new_tokens = (input_ids.shape[-1] - base_prompt_token_length) * PROMPT_LENGTH_MULTIPLIER
+    max_new_tokens = (input_ids.shape[-1] - BASE_PROMPT_TOKEN_LENGTH[lng]) * PROMPT_LENGTH_MULTIPLIER
  
     generation_config = GenerationConfig(
         temperature=0.1, # TODO really low temperature but still get hallucinations
@@ -128,7 +132,7 @@ def generate(prompt: str, base_prompt_token_length: int) -> str:
     # )
 
     with torch.inference_mode():
-        encoded_output = LLM.generate(
+        encoded_output = LLM[lng].generate(
             input_ids=input_ids,
             generation_config=generation_config,
             return_dict_in_generate=True,
@@ -136,7 +140,7 @@ def generate(prompt: str, base_prompt_token_length: int) -> str:
             max_new_tokens=max_new_tokens,
         )
     
-    decoded_output = TOKENIZER.decode(encoded_output.sequences[0])
+    decoded_output = TOKENIZER[lng].decode(encoded_output.sequences[0])
     response = decoded_output.replace(prompt, "").strip()
     
     return response
@@ -147,13 +151,13 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
         print(f"Warning: Sentence '{sentence}' is is too long for paraphrase generation. Skipping.")
         return [sentence]
     
-    print(f"Generating paraphrases for '{sentence}' in {language}...")
+    print(f"\nGenerating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
     formatted_prompt = PROMPT[language].format(sentence)
 
     # Generate response using LLaMA 2
-    paraphrases_text = generate(formatted_prompt, BASE_PROMPT_TOKEN_LENGTH[language])
+    paraphrases_text = generate(formatted_prompt, language)
     
     print(f"Paraphrases text: {paraphrases_text}")
 
@@ -188,7 +192,7 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
 
 
 def cleanup_paraphrase(sent: str) -> str:
-    sent = sent.strip()
+    sent = sent.replace("<s>", "").replace("</s>", "").strip()
     
     # Remove leading and trailing quotation marks
     for quote in ['"', "'"]:
