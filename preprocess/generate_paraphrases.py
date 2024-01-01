@@ -152,6 +152,37 @@ Originalsatz: '{}'
 """
 }
 
+PROMPT = {
+    "en": """[INST] <<SYS>>
+As a professional writer, your expertise is in crafting accurate and engaging paraphrases. Generate five distinct English paraphrases of the sentence provided below. Each paraphrase should fully convey the original meaning without adding extraneous information. Aim for a balance between retaining the essence of the sentence and presenting it in a fresh, clear manner.
+<</SYS>>
+Original Sentence: 'We know that, right? We've experienced that.'
+[/INST]Paraphrases:
+1. "That's something we understand, isn't it? It's been part of our experiences."
+2. "We're aware of that, correct? We've gone through it ourselves."
+3. "That's known to us, right? We have lived through that."
+4. "We are cognizant of that, aren't we? We've felt that in our own lives."
+5. "Isn't that familiar to us? We've personally encountered it."
+</s><s>[INST]
+Original Sentence: '{}'
+[/INST]Paraphrases:
+1.""",
+    "de": """[INST] <<SYS>>
+Als professioneller Schriftsteller liegt Ihre Expertise darin, genaue und ansprechende Paraphrasen zu erstellen. Erzeugen Sie fünf verschiedene deutsche Paraphrasen des unten angegebenen Satzes. Jede Paraphrase sollte die ursprüngliche Bedeutung vollständig vermitteln, ohne zusätzliche Informationen hinzuzufügen. Streben Sie nach einem Gleichgewicht zwischen dem Erhalt der Essenz des Satzes und dessen frischer, klarer Darstellung.
+<</SYS>>
+Originalsatz: 'Wir wissen das, oder? Das haben wir selbst erlebt.'
+[/INST]Deutsche Paraphrasen:
+1. "Das ist uns bekannt, nicht wahr? Wir haben diese Erfahrung gemacht."
+2. "Das verstehen wir, richtig? Wir haben das selbst durchlebt."
+3. "Uns ist das bewusst, oder? Wir haben das persönlich erfahren."
+4. "Wir sind uns dessen klar, nicht wahr? Das ist ein Teil unserer Erfahrungen."
+5. "Ist das nicht etwas, das wir kennen? Wir haben es am eigenen Leib erfahren."
+</s><s>[INST]
+Originalsatz: '{}'
+[/INST]Deutsche Paraphrasen:
+1."""
+}
+
 BASE_PROMPT_TOKEN_LENGTH = {
     "en": len(TOKENIZER["en"].encode(PROMPT["en"].format(""))) - 1,
     "de": len(TOKENIZER["de"].encode(PROMPT["de"].format(""))) - 1,
@@ -241,18 +272,19 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
     log(f"\nGenerating paraphrases for '{sentences}' in '{language}'...")
     
     sentence_too_long = [len(sentence) > 100 for sentence in sentences]
+    short_sentences = [sentence for sentence, too_long in zip(sentences, sentence_too_long) if not too_long]
 
     # Format the prompt with the given sentence
-    prompted = [PROMPT[language].format(sentence) for sentence, too_long in zip(sentences, sentence_too_long) if not too_long]
+    prompted = [PROMPT[language].format(sentence) for sentence in short_sentences]
 
     # Generate response using LLaMA 2
     paraphrased_texts = generate(prompted, language)
     
     all_paraphrases = []
     
-    for sentence, paraphrases_text in zip(sentences, paraphrased_texts):
+    for sentence, paraphrases_text in zip(short_sentences, paraphrased_texts):
     
-        log(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
+        log(f"\n\nParaphrases text for sentence '{sentence}':\n\"\"\"{paraphrases_text}\"\"\"")
 
         sentences = list(set((
             cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
@@ -265,12 +297,12 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
         non_paraphrases = [
             sent for sent in sentences if sent not in paraphrases
         ]
-        log("Non paraphrases:")
+        log("\nNon paraphrases:")
         for sent in non_paraphrases:
             log(f"    {sent}")
 
         if len(paraphrases) < 5:
-            log(f"Warning: Only {len(paraphrases)} paraphrases generated for '{sentence}'")
+            log(f"\nWarning: Only {len(paraphrases)} paraphrases generated for '{sentence}'\n")
             
         log("Paraphrases:")
         for sent in paraphrases:
@@ -292,7 +324,7 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
 
 
 def cleanup_paraphrase(sent: str) -> str:
-    sent = sent.replace("<s>", "").replace("</s>", "").strip()
+    sent = sent.replace("<s>", "").replace("</s>", "").replace("<unk>", "").strip()
     
     # if it ends with a ')' then replace the last bracketed part with ''
     # find the first matching bracket from the end of the sentence
