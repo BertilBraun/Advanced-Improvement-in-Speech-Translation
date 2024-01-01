@@ -105,8 +105,8 @@ print("Configuring LLaMA model.")
 
 for language, model in LLM.items():
     model.config.pad_token_id = TOKENIZER[language].pad_token_id = 0  # unk
-    model.config.bos_token_id = 1
-    model.config.eos_token_id = 2
+    model.config.bos_token_id = TOKENIZER[language].bos_token_id #= 1  # bos
+    model.config.eos_token_id = TOKENIZER[language].eos_token_id #= 2  # eos
     
     model = model.eval()
     model = torch.compile(model)
@@ -125,6 +125,8 @@ print(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 # 1.5 states that the paraphrase can be 50% longer than the input sentence
 PROMPT_LENGTH_MULTIPLIER = 1.5 * 5 
 
+
+# TODO can paraphrase generation be batched? https://github.com/huggingface/transformers/issues/25353
 def generate(prompt: str, lng: LANGUAGE) -> str:
     encoding = TOKENIZER[lng](prompt, return_tensors="pt")
     input_ids = encoding["input_ids"].to(DEVICE)
@@ -148,6 +150,7 @@ def generate(prompt: str, lng: LANGUAGE) -> str:
             return_dict_in_generate=True,
             output_scores=True,
             max_new_tokens=max_new_tokens,
+            pad_token_id=TOKENIZER[lng].eos_token_id,
         )
     
     decoded_output = TOKENIZER[lng].decode(encoded_output.sequences[0], skip_special_tokens=True)
