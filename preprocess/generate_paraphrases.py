@@ -287,18 +287,19 @@ def cleanup_paraphrase(sent: str) -> str:
     sent = sent.replace("<s>", "").replace("</s>", "").replace("<unk>", "").strip()
     
     # if it ends with a ')' then replace the last bracketed part with ''
-    # find the first matching bracket from the end of the sentence
-    open_brackets = 0
-    for i, char in enumerate(reversed(sent)):
-        if char == ")":
-            open_brackets += 1
-        elif char == "(":
-            open_brackets -= 1
-            
-        if open_brackets == 0:
-            # remove the bracketed part
-            sent = sent[:-i]
-            break            
+    if sent.endswith(")"):
+        # find the first matching bracket from the end of the sentence
+        open_brackets = 0
+        for i, char in enumerate(reversed(sent)):
+            if char == ")":
+                open_brackets += 1
+            elif char == "(":
+                open_brackets -= 1
+                
+            if open_brackets == 0:
+                # remove the bracketed part
+                sent = sent[:-i]
+                break            
     
     # Remove leading and trailing quotation marks
     for quote in ['"', "'"]:
