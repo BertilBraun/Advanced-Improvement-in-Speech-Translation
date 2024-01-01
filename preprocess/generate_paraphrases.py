@@ -7,8 +7,7 @@ import os
 import regex
 import sentencepiece as spm
 from tqdm import tqdm
-from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
-from bitsandbytes import BitsAndBytesConfig
+from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig, BitsAndBytesConfig
 import torch
 from datasets import load_dataset
 import spacy
@@ -92,7 +91,8 @@ print("Loading Tokenizer")
 #     "en": AutoTokenizer.from_pretrained(LLAMA_MODEL["en"]),
 #     "de": AutoTokenizer.from_pretrained(LLAMA_MODEL["de"]),
 # }
-tokenizer = AutoTokenizer.from_pretrained(LLAMA_MODEL["en"])
+tokenizer = AutoTokenizer.from_pretrained(LLAMA_MODEL["en"], padding_side="left")
+tokenizer.pad_token = tokenizer.eos_token
 TOKENIZER = {
     "en": tokenizer,
     "de": tokenizer,
@@ -143,16 +143,22 @@ print(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 # 1.5 states that the paraphrase can be 65% longer than the input sentence
 PROMPT_LENGTH_MULTIPLIER = 1.65 * 5 
 
+PROMPT_TEMPLATE = """<s>[INST] <<SYS>>
+You are a professional writer.
+<</SYS>>
+
+{} [/INST]"""
+
 
 # TODO can paraphrase generation be batched? https://github.com/huggingface/transformers/issues/25353
-def generate(prompt: str, lng: LANGUAGE) -> str:
-    encoding = TOKENIZER[lng](prompt, return_tensors="pt")
-    input_ids = encoding["input_ids"].to(DEVICE)
+def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
+    model_inputs = TOKENIZER[lng](prompts, return_tensors="pt", padding=True).to(DEVICE)
     
-    max_new_tokens = (input_ids.shape[-1] - BASE_PROMPT_TOKEN_LENGTH[lng]) * PROMPT_LENGTH_MULTIPLIER
+    max_input_length = model_inputs.input_ids.shape[-1]
+    max_new_tokens = BASE_PROMPT_TOKEN_LENGTH[lng] + (max_input_length - BASE_PROMPT_TOKEN_LENGTH[lng]) * PROMPT_LENGTH_MULTIPLIER
  
     generation_config = GenerationConfig(
-        temperature=0.1, # TODO really low temperature but still get hallucinations
+        temperature=0.2, # TODO really low temperature but still get hallucinations
         top_p=0.75,
         repetition_penalty=1.1,
     )
@@ -162,18 +168,20 @@ def generate(prompt: str, lng: LANGUAGE) -> str:
     # )
 
     with torch.inference_mode():
-        encoded_output = LLM[lng].generate(
-            input_ids=input_ids,
+        generated_ids = LLM[lng].generate(
+            **model_inputs,
             generation_config=generation_config,
             return_dict_in_generate=True,
             output_scores=True,
             max_new_tokens=max_new_tokens,
         )
     
-    decoded_output = TOKENIZER[lng].decode(encoded_output.sequences[0], skip_special_tokens=True)
-    response = decoded_output.replace(prompt, "").strip()
+    decoded_outputs = TOKENIZER[lng].batch_decode(generated_ids, skip_special_tokens=True)
     
-    return response
+    return [
+        output.replace(prompt, "").strip()
+        for output, prompt in zip(decoded_outputs, prompts)
+    ]
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
@@ -184,10 +192,10 @@ def generate_paraphrases(sentence: str, language: LANGUAGE) -> list[str]:
     print(f"\nGenerating paraphrases for '{sentence}' in {language}...")
 
     # Format the prompt with the given sentence
-    formatted_prompt = PROMPT[language].format(sentence)
+    formatted_prompt = PROMPT_TEMPLATE.format(PROMPT[language].format(sentence))
 
     # Generate response using LLaMA 2
-    paraphrases_text = generate(formatted_prompt, language)
+    paraphrases_text = generate([formatted_prompt], language)[0]
     
     print(f"Paraphrases text: \"\"\"{paraphrases_text}\"\"\"")
 
