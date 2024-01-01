@@ -104,7 +104,7 @@ print("Loading LLaMA model.")
 #     "en": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
 #     "de": AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["de"]), #, low_cpu_mem_usage=True, load_in_8bit=True),
 # }
-llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], low_cpu_mem_usage=True, load_in_4bit=True)
+llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], load_in_4bit=True)
 LLM = {
     "en": llama,
     "de": llama,
