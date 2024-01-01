@@ -180,7 +180,7 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
 
 # Generates 5 paraphrases for the input sentence with LLaMA 2
 def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> list[list[str]]:    
-    log(f"\nGenerating paraphrases for '{sentences}' in '{language}'...")
+    log(f"\nGenerating paraphrases in '{language}'...")
     
     sentence_too_long = [len(sentence) > 100 for sentence in sentences]
     short_sentences = [sentence for sentence, too_long in zip(sentences, sentence_too_long) if not too_long]
@@ -195,7 +195,8 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
     
     for sentence, paraphrases_text in zip(short_sentences, paraphrased_texts):
     
-        log(f"\n\nParaphrases text for sentence '{sentence}':\n\"\"\"{paraphrases_text}\"\"\"")
+        log(f"\n\nParaphrases text for sentence '{sentence}':")
+        #log(f"\"\"\"{paraphrases_text}\"\"\"")
 
         sentences = list(set((
             cleanup_paraphrase(sent) for sent in paraphrases_text.split("\n") if cleanup_paraphrase(sent)
@@ -208,7 +209,7 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
         non_paraphrases = [
             sent for sent in sentences if sent not in paraphrases
         ]
-        log("\nNon paraphrases:")
+        log("\n\nNon paraphrases:")
         for sent in non_paraphrases:
             log(f"    {sent}")
 
