@@ -320,16 +320,28 @@ def read_dataset_segment(file_path: str) -> list[str]:
 
 
 def data_generator():
+    # WMT 14-19 datasets, but generate a set from these to avoid duplicates
+    s = set()    
+    total_sizes = 0
+    
     for i in range(14, 20):
         log(f"Loading WMT{i} dataset...")
         dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
         log(f"Now processing WMT{i} dataset...")
         log(f"Dataset length: {len(dataset['translation'])}")
+        total_sizes += len(dataset["translation"])
         
-        yield from zip(
-            (sentence["en"] for sentence in dataset["translation"]),
-            (sentence["de"] for sentence in dataset["translation"])
+        # extend the set with the new sentences
+        s.update(
+            (sentence["en"], sentence["de"]) for sentence in dataset["translation"]
         )
+
+    # convert the set to a list
+    s = list(s)
+    log(f"Total dataset length: {len(s)}")
+    log(f"Removed {total_sizes - len(s)} duplicates.")
+    
+    return s
 
 def our_data_generator():    
     def ensure_dataset_loaded() -> None:
