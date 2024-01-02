@@ -456,6 +456,8 @@ def main() -> None:
     spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
     
     log("BPE model ready.")
+    
+    datasets = data_generator()
 
     for file, lang in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), ("de", "en")):
         log(f"Segmenting {lang} dataset...")
@@ -470,7 +472,7 @@ def main() -> None:
                 
             f_out.flush()
             
-            for en, de in tqdm(data_generator(), desc=f"Segmenting {lang} WMT"):
+            for en, de in tqdm(datasets, desc=f"Segmenting {lang} WMT"):
                 # Segmented into subwords
                 line = en if lang == "en" else de
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
