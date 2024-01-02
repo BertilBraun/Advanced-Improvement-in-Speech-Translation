@@ -150,6 +150,7 @@ BASE_PROMPT_TOKEN_LENGTH = {
 
 log(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 
+PARAPHRASE_GENERATE_TIME = 0 # 60 * 60 * 12 # 12 hours # TODO temporarily disabled
 
 def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
     model_inputs = TOKENIZER[lng](prompts, return_tensors="pt", padding=True).to(DEVICE)
@@ -384,66 +385,67 @@ def batch_tuples(iterable, batch_size=1, values_per_tuple=2):
 def main() -> None:
     log("Generating paraphrases for all sentence pairs...")
     
-    with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
-        open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
-        open(LOG_FILE, "a", encoding="utf-8") as log_file:
-            
-        start_paraphrasing = time.time()
-        total_paraphrases = 0
-        total_written_paraphrases = 0
-            
-        for ens, des in batch_tuples(our_data_generator(), 10): # TODO experiment, are larger batches better?
-            if time.time() - start_paraphrasing > 60 * 60 * 12: # 12 hours
-                log("12 hours have passed. Stopping paraphrasing.")
-                break
-            
-            start = time.time()
-            log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
-            try:
-                en_paraphrases = generate_batched_paraphrases(ens, "en")
-                de_paraphrases = generate_batched_paraphrases(des, "de")
-                log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
-                new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
-                log(f"New paraphrases generated: {new_paraphrases}")
-                total_paraphrases += new_paraphrases
-            except Exception as e:
-                log(f"Error generating paraphrases: {e}")
-                continue
-
-            # Generate all combinations of English and German paraphrases and write directly to files
-            for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
-                for en_p, de_p in itertools.product(en_ps, de_ps):
-                    en_file.write(f"{en_p}\n")
-                    de_file.write(f"{de_p}\n")
-                    en_file.flush()
-                    de_file.flush()
-                    total_written_paraphrases += 1
-                   
-                # Json dump the paraphrases to the log file
-                json.dump({
-                    "en_paraphrases": en_ps,
-                    "de_paraphrases": de_ps,
-                }, log_file)
-                log_file.write("\n")
-                log_file.flush()
+    if PARAPHRASE_GENERATE_TIME != 0:
+        with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
+            open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
+            open(LOG_FILE, "a", encoding="utf-8") as log_file:
                 
-            log(f"Total paraphrases generated: {total_paraphrases}")
-            log(f"Total paraphrases written: {total_written_paraphrases}")
-            log(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
+            start_paraphrasing = time.time()
+            total_paraphrases = 0
+            total_written_paraphrases = 0
+                
+            for ens, des in batch_tuples(our_data_generator(), 10): # TODO experiment, are larger batches better?
+                if time.time() - start_paraphrasing > PARAPHRASE_GENERATE_TIME:
+                    log("12 hours have passed. Stopping paraphrasing.")
+                    break
+                
+                start = time.time()
+                log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
+                try:
+                    en_paraphrases = generate_batched_paraphrases(ens, "en")
+                    de_paraphrases = generate_batched_paraphrases(des, "de")
+                    log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
+                    new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
+                    log(f"New paraphrases generated: {new_paraphrases}")
+                    total_paraphrases += new_paraphrases
+                except Exception as e:
+                    log(f"Error generating paraphrases: {e}")
+                    continue
 
-    log("Finished generating paraphrases.")
+                # Generate all combinations of English and German paraphrases and write directly to files
+                for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
+                    for en_p, de_p in itertools.product(en_ps, de_ps):
+                        en_file.write(f"{en_p}\n")
+                        de_file.write(f"{de_p}\n")
+                        en_file.flush()
+                        de_file.flush()
+                        total_written_paraphrases += 1
+                    
+                    # Json dump the paraphrases to the log file
+                    json.dump({
+                        "en_paraphrases": en_ps,
+                        "de_paraphrases": de_ps,
+                    }, log_file)
+                    log_file.write("\n")
+                    log_file.flush()
+                    
+                log(f"Total paraphrases generated: {total_paraphrases}")
+                log(f"Total paraphrases written: {total_written_paraphrases}")
+                log(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
 
-    spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
-                                model_prefix="bpe",
-                                vocab_size=5000)
+        log("Finished generating paraphrases.")
 
-    log('Finished training sentencepiece model.')
+        spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
+                                    model_prefix="bpe",
+                                    vocab_size=5000)
+
+        log('Finished training sentencepiece model.')
     
     spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
 
     for file, lang in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), ("de", "en")):
         with open(file, "r", encoding="utf-8") as f_in, \
-                open(SPM_OUTPUT_FILE.format(lang), "w", encoding="utf-8") as f_out:
+                open(SPM_OUTPUT_FILE.as_posix().format(lang), "w", encoding="utf-8") as f_out:
             for line in tqdm(f_in.readlines(), desc=f"Segmenting {lang} our Dataset"):
                 # Segmented into subwords
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
