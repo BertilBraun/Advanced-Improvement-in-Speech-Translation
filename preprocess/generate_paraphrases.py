@@ -442,8 +442,11 @@ def main() -> None:
         log('Finished training sentencepiece model.')
     
     spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
+    
+    log("BPE model ready.")
 
     for file, lang in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), ("de", "en")):
+        log(f"Segmenting {lang} dataset...")
         with open(file, "r", encoding="utf-8") as f_in, \
                 open(SPM_OUTPUT_FILE.as_posix().format(lang), "w", encoding="utf-8") as f_out:
             for line in tqdm(f_in.readlines(), desc=f"Segmenting {lang} our Dataset"):
