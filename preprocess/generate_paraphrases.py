@@ -406,10 +406,17 @@ def main() -> None:
             total_paraphrases = 0
             total_written_paraphrases = 0
                 
-            for ens, des in batch_tuples(our_data_generator(), 10): # TODO experiment, are larger batches better?
+            for ens, des in batch_tuples(our_data_generator(), 20): # TODO experiment, are larger batches better?
                 if time.time() - start_paraphrasing > PARAPHRASE_GENERATE_TIME:
                     log("12 hours have passed. Stopping paraphrasing.")
-                    break
+                    
+                    # write the remaining sentences to the files
+                    for en, de in zip(ens, des):
+                        en_file.write(f"{en}\n")
+                        de_file.write(f"{de}\n")
+                        total_written_paraphrases += 1
+                    
+                    continue
                 
                 start = time.time()
                 log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
