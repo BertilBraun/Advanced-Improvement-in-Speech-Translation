@@ -17,7 +17,7 @@ source ../setup.sh
 
 DATA_DIR=~/MT/dataset
 PARAPHRASED_DATA_DIR=~/MT/output
-BINARY_DATA_DIR=~/MT/binarized_dataset
+BINARY_DATA_DIR=/pfs/work7/workspace/scratch/uxude-MT/binarized_dataset
 MODEL_DIR=~/MT/models
 
 # create folders if they don't exist
