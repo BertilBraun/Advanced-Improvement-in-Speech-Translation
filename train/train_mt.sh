@@ -39,8 +39,7 @@ fairseq-preprocess \
     --validpref $DATA_DIR/spm.dev.de-en \
     --testpref $DATA_DIR/spm.tst.de-en \
     --destdir $BINARY_DATA_DIR/iwslt14.de-en \
-    --thresholdtgt 0 --thresholdsrc 0 \
-    --workers 8
+    --thresholdtgt 0 --thresholdsrc 0
 
 # Train the model in parallel
 fairseq-train \
