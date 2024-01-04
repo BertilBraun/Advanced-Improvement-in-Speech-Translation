@@ -59,13 +59,16 @@ def data_generator():
     
     return s
 
+s = set()
 
 def translation_pair_check(en, de):
+    global s
     # only keep sentences that are only ascii characters
     for sentence in (en, de):
         for i, c in enumerate(sentence):
-            if ord(c) >= 256 and c != "–":
-                print(f"{sentence} at index {i} with character {c} ord(c): {ord(c)}) is not ascii.")
+            if ord(c) >= 256 and c not in "–“’‘„”":
+                s.add((sentence, i, c, ord(c)))
+                #print(f"{sentence} at index {i} with character {c} ord(c): {ord(c)}) is not ascii.")
                 return False
     return True
 
@@ -97,6 +100,9 @@ if __name__ == "__main__":
                 print(en, de)
                 
     log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
+    log("Non-ascii characters:")
+    for sentence, i, c, ord_c in s:
+        log(c, ord_c)
 
     spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
                                 model_prefix="bpe",
