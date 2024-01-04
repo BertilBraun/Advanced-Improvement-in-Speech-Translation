@@ -62,7 +62,7 @@ def data_generator():
 
 def translation_pair_check(en, de):
     # only keep sentences that are only ascii characters
-    return all(ord(c) < 128 for c in en) and all(ord(c) < 128 for c in de)
+    return all(ord(c) < 256 for c in en) and all(ord(c) < 256 for c in de)
 
 
 if __name__ == "__main__":
