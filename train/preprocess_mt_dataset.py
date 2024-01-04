@@ -34,12 +34,14 @@ LOG_FILE = OUTPUT_FOLDER / "paraphrases.log"
 SEPARATOR = "  SEPARATOR  "
 
 
+ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—β"
+
 def data_generator():
     # WMT 14-19 datasets, but generate a set from these to avoid duplicates
     s = set()    
     total_sizes = 0
     
-    for i in range(14, 15):
+    for i in range(14, 20):
         log(f"Loading WMT{i} dataset...")
         dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
         log(f"Now processing WMT{i} dataset...")
@@ -59,19 +61,13 @@ def data_generator():
     
     return s
 
-from collections import Counter
-s = Counter()
 
 def translation_pair_check(en, de):
-    global s
     # only keep sentences that are only ascii characters
-    for sentence in (en, de):
-        for i, c in enumerate(sentence):
-            if ord(c) >= 256 and c not in "–“’‘„”":
-                s.update(c)
-                #print(f"{sentence} at index {i} with character {c} ord(c): {ord(c)}) is not ascii.")
-                return False
-    return True
+    def ascii_check(s):
+        return all(ord(c) < 256 or c in ALLOWED_NON_ASCII_CHARS for c in s)
+    
+    return ascii_check(en) and ascii_check(de)
 
 
 if __name__ == "__main__":
@@ -99,10 +95,6 @@ if __name__ == "__main__":
                 skipped_lines += 1
                 
     log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
-    log("Non-ascii characters:")
-    # print the non-ascii characters sorted by frequency
-    for c, count in s.most_common():
-        log(f"{c}: {count}")
 
     spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
                                 model_prefix="bpe",
