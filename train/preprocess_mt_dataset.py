@@ -59,7 +59,8 @@ def data_generator():
     
     return s
 
-s = set()
+from collections import Counter
+s = Counter()
 
 def translation_pair_check(en, de):
     global s
@@ -67,7 +68,7 @@ def translation_pair_check(en, de):
     for sentence in (en, de):
         for i, c in enumerate(sentence):
             if ord(c) >= 256 and c not in "–“’‘„”":
-                s.add((sentence, i, c, ord(c)))
+                s.update(c)
                 #print(f"{sentence} at index {i} with character {c} ord(c): {ord(c)}) is not ascii.")
                 return False
     return True
@@ -89,7 +90,6 @@ if __name__ == "__main__":
                 f_de.write(de)
             else:
                 skipped_lines += 1
-                print(en, de)
             
         for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
             if translation_pair_check(en, de):
@@ -97,12 +97,12 @@ if __name__ == "__main__":
                 f_de.write(de)
             else:
                 skipped_lines += 1
-                print(en, de)
                 
     log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
     log("Non-ascii characters:")
-    for sentence, i, c, ord_c in s:
-        log(c, ord_c)
+    # print the non-ascii characters sorted by frequency
+    for c, count in s.most_common():
+        log(f"{c}: {count}")
 
     spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
                                 model_prefix="bpe",
