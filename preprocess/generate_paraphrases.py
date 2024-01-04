@@ -6,11 +6,8 @@ from typing import Literal, Union
 import itertools
 import os
 import regex
-import sentencepiece as spm
-from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig, BitsAndBytesConfig
 import torch
-from datasets import load_dataset
 import spacy
 
 def log(*args, **kwargs):
@@ -31,8 +28,6 @@ DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 OUTPUT_EN_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.en"
 OUTPUT_DE_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.de"
 
-SPM_OUTPUT_FILE = OUTPUT_FOLDER / "spm.train_paraphrased.de-en.{}"
-
 LOG_FILE = OUTPUT_FOLDER / "paraphrases.log"
 SEPARATOR = "  SEPARATOR  "
 
@@ -51,25 +46,15 @@ except OSError:
 
 log("Loading LLaMA...")
 
-LLAMA_MODEL = {
-    "en": "meta-llama/Llama-2-7b-chat-hf",
-    "de": "jphme/em_german_mistral_v01", # "em_german_7b_v01",
-}
+LLAMA_MODEL = "meta-llama/Llama-2-7b-chat-hf",
+
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 log(f"Using device: {DEVICE}")
 log("Loading Tokenizer")
 
-# TOKENIZER = {
-#     "en": AutoTokenizer.from_pretrained(LLAMA_MODEL["en"]),
-#     "de": AutoTokenizer.from_pretrained(LLAMA_MODEL["de"]),
-# }
-tokenizer = AutoTokenizer.from_pretrained(LLAMA_MODEL["en"], padding_side="left")
-tokenizer.pad_token = tokenizer.eos_token
-TOKENIZER = {
-    "en": tokenizer,
-    "de": tokenizer,
-}
+TOKENIZER = AutoTokenizer.from_pretrained(LLAMA_MODEL, padding_side="left")
+TOKENIZER.pad_token = TOKENIZER.eos_token
 
 log("Tokenizer ready.")
 log("Loading LLaMA model.")
@@ -86,22 +71,14 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_compute_dtype=torch.bfloat16
 )
 
-llama = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL["en"], quantization_config=bnb_config, device_map="auto")
-LLM = {
-    "en": llama,
-    "de": llama,
-}
+LLM = AutoModelForCausalLM.from_pretrained(LLAMA_MODEL, quantization_config=bnb_config, device_map="auto")
 
 log("Configuring LLaMA model.")
 
-for language, model in LLM.items():
-    model.config.pad_token_id = TOKENIZER[language].pad_token_id = 0  # unk
-    model.config.bos_token_id = 1  # bos
-    model.config.eos_token_id = 2  # eos
+LLM.config.pad_token_id = TOKENIZER.pad_token_id = 0  # unk
+LLM.config.bos_token_id = 1  # bos
+LLM.config.eos_token_id = 2  # eos
     
-    # TODO test with this again model = model.eval()
-    # TODO test with this again model = torch.compile(model)
-
 log("LLaMA ready.")
 
 # 5 is the number of paraphrases to generate 
@@ -144,16 +121,14 @@ Originalsatz: '{}'
 }
 
 BASE_PROMPT_TOKEN_LENGTH = {
-    "en": len(TOKENIZER["en"].encode(PROMPT["en"].format(""))) - 1,
-    "de": len(TOKENIZER["de"].encode(PROMPT["de"].format(""))) - 1,
+    "en": len(TOKENIZER.encode(PROMPT["en"].format(""))) - 1,
+    "de": len(TOKENIZER.encode(PROMPT["de"].format(""))) - 1,
 }
 
 log(f"Base prompt token length: {BASE_PROMPT_TOKEN_LENGTH}")
 
-PARAPHRASE_GENERATE_TIME = 0 # 60 * 60 * 12 # 12 hours # TODO temporarily disabled
-
 def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
-    model_inputs = TOKENIZER[lng](prompts, return_tensors="pt", padding=True).to(DEVICE)
+    model_inputs = TOKENIZER(prompts, return_tensors="pt", padding=True).to(DEVICE)
     
     max_input_length = model_inputs.input_ids.shape[-1]
     max_new_tokens = BASE_PROMPT_TOKEN_LENGTH[lng] + (max_input_length - BASE_PROMPT_TOKEN_LENGTH[lng]) * PROMPT_LENGTH_MULTIPLIER
@@ -167,14 +142,14 @@ def generate(prompts: list[str], lng: LANGUAGE) -> list[str]:
     )
 
     with torch.inference_mode():
-        generated_ids = LLM[lng].generate(
+        generated_ids = LLM.generate(
             **model_inputs,
             generation_config=generation_config,
             max_new_tokens=max_new_tokens,
         )
     
-    decoded_outputs = TOKENIZER[lng].batch_decode(generated_ids, skip_special_tokens=True)
-    decoded_inputs = TOKENIZER[lng].batch_decode(model_inputs.input_ids, skip_special_tokens=True)
+    decoded_outputs = TOKENIZER.batch_decode(generated_ids, skip_special_tokens=True)
+    decoded_inputs = TOKENIZER.batch_decode(model_inputs.input_ids, skip_special_tokens=True)
     
     return [
         output.replace(prompt, "").strip()
@@ -319,30 +294,6 @@ def read_dataset_segment(file_path: str) -> list[str]:
         return [ line.strip() for line in file ]
 
 
-def data_generator():
-    # WMT 14-19 datasets, but generate a set from these to avoid duplicates
-    s = set()    
-    total_sizes = 0
-    
-    for i in range(14, 20):
-        log(f"Loading WMT{i} dataset...")
-        dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
-        log(f"Now processing WMT{i} dataset...")
-        log(f"Dataset length: {len(dataset['translation'])}")
-        total_sizes += len(dataset["translation"])
-        
-        # extend the set with the new sentences
-        s.update(
-            (sentence["en"], sentence["de"]) for sentence in dataset["translation"]
-        )
-
-    # convert the set to a list
-    s = list(s)
-    log(f"Total dataset length: {len(s)}")
-    log(f"Removed {total_sizes - len(s)} duplicates.")
-    
-    return s
-
 def our_data_generator():    
     def ensure_dataset_loaded() -> None:
         if not DATASET_EN.is_file() or not DATASET_DE.is_file():
@@ -393,101 +344,52 @@ def batch_tuples(iterable, batch_size=1, values_per_tuple=2):
         for i, item in enumerate(tup):
             lists[i].append(item)
     yield tuple(lists)
+    
                 
-def main() -> None:
+if __name__ == "__main__":
     log("Generating paraphrases for all sentence pairs...")
     
-    if PARAPHRASE_GENERATE_TIME != 0:
-        with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
-            open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
-            open(LOG_FILE, "a", encoding="utf-8") as log_file:
-                
-            start_paraphrasing = time.time()
-            total_paraphrases = 0
-            total_written_paraphrases = 0
-                
-            for ens, des in batch_tuples(our_data_generator(), 20): # TODO experiment, are larger batches better?
-                if time.time() - start_paraphrasing > PARAPHRASE_GENERATE_TIME:
-                    log("12 hours have passed. Stopping paraphrasing.")
-                    
-                    # write the remaining sentences to the files
-                    for en, de in zip(ens, des):
-                        en_file.write(f"{en}\n")
-                        de_file.write(f"{de}\n")
-                        total_written_paraphrases += 1
-                    
-                    continue
-                
-                start = time.time()
-                log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
-                try:
-                    en_paraphrases = generate_batched_paraphrases(ens, "en")
-                    de_paraphrases = generate_batched_paraphrases(des, "de")
-                    log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
-                    new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
-                    log(f"New paraphrases generated: {new_paraphrases}")
-                    total_paraphrases += new_paraphrases
-                except Exception as e:
-                    log(f"Error generating paraphrases: {e}")
-                    continue
-
-                # Generate all combinations of English and German paraphrases and write directly to files
-                for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
-                    for en_p, de_p in itertools.product(en_ps, de_ps):
-                        en_file.write(f"{en_p}\n")
-                        de_file.write(f"{de_p}\n")
-                        en_file.flush()
-                        de_file.flush()
-                        total_written_paraphrases += 1
-                    
-                    # Json dump the paraphrases to the log file
-                    json.dump({
-                        "en_paraphrases": en_ps,
-                        "de_paraphrases": de_ps,
-                    }, log_file)
-                    log_file.write("\n")
-                    log_file.flush()
-                    
-                log(f"Total paraphrases generated: {total_paraphrases}")
-                log(f"Total paraphrases written: {total_written_paraphrases}")
-                log(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
-
-        log("Finished generating paraphrases.")
-
-        spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
-                                    model_prefix="bpe",
-                                    vocab_size=5000)
-
-        log('Finished training sentencepiece model.')
-    
-    spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
-    
-    log("BPE model ready.")
-    
-    datasets = data_generator()
-
-    for file, lang in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), ("de", "en")):
-        log(f"Segmenting {lang} dataset...")
-        with open(file, "r", encoding="utf-8") as f_in, \
-                open(SPM_OUTPUT_FILE.as_posix().format(lang), "w", encoding="utf-8") as f_out:
-            for line in tqdm(f_in.readlines(), desc=f"Segmenting {lang} our Dataset"):
-                # Segmented into subwords
-                line_segmented = spm_model.encode(line.strip(), out_type=str)
-                # Join the subwords into a string
-                line_segmented = " ".join(line_segmented)
-                f_out.write(line_segmented + "\n")
-                
-            f_out.flush()
+    with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
+        open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
+        open(LOG_FILE, "a", encoding="utf-8") as log_file:
             
-            for en, de in tqdm(datasets, desc=f"Segmenting {lang} WMT"):
-                # Segmented into subwords
-                line = en if lang == "en" else de
-                line_segmented = spm_model.encode(line.strip(), out_type=str)
-                # Join the subwords into a string
-                line_segmented = " ".join(line_segmented)
-                f_out.write(line_segmented + "\n")
+        start_paraphrasing = time.time()
+        total_paraphrases = 0
+        total_written_paraphrases = 0
+            
+        for ens, des in batch_tuples(our_data_generator(), 20): # TODO experiment, are larger batches better?
+            start = time.time()
+            log(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
+            try:
+                en_paraphrases = generate_batched_paraphrases(ens, "en")
+                de_paraphrases = generate_batched_paraphrases(des, "de")
+                log(f"\nParaphrases generated in {round(time.time() - start, 2)} seconds.")
+                new_paraphrases = sum(len(paraphrases) for paraphrases in en_paraphrases) + sum(len(paraphrases) for paraphrases in de_paraphrases) - len(ens) - len(des)
+                log(f"New paraphrases generated: {new_paraphrases}")
+                total_paraphrases += new_paraphrases
+            except Exception as e:
+                log(f"Error generating paraphrases: {e}")
+                continue
 
-            f_out.flush()
+            # Generate all combinations of English and German paraphrases and write directly to files
+            for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
+                for en_p, de_p in itertools.product(en_ps, de_ps):
+                    en_file.write(f"{en_p}\n")
+                    de_file.write(f"{de_p}\n")
+                    en_file.flush()
+                    de_file.flush()
+                    total_written_paraphrases += 1
+                
+                # Json dump the paraphrases to the log file
+                json.dump({
+                    "en_paraphrases": en_ps,
+                    "de_paraphrases": de_ps,
+                }, log_file)
+                log_file.write("\n")
+                log_file.flush()
+                
+            log(f"Total paraphrases generated: {total_paraphrases}")
+            log(f"Total paraphrases written: {total_written_paraphrases}")
+            log(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
 
-if __name__ == "__main__":
-    main()
+    log("Finished generating paraphrases.")

@@ -32,18 +32,20 @@ if [ -z "$(ls -A $PARAPHRASED_DATA_DIR)" ]; then
   exit 1
 fi
 
+python preprocess_mt_dataset.py
+
 # Binarize the data for training
 fairseq-preprocess \
     --source-lang en --target-lang de \
-    --trainpref $PARAPHRASED_DATA_DIR/spm.train_paraphrased.de-en \
+    --trainpref $PARAPHRASED_DATA_DIR/spm.train_complete.de-en \
     --validpref $DATA_DIR/spm.dev.de-en \
     --testpref $DATA_DIR/spm.tst.de-en \
-    --destdir $BINARY_DATA_DIR/iwslt14.de-en \
+    --destdir $BINARY_DATA_DIR \
     --thresholdtgt 0 --thresholdsrc 0
 
 # Train the model in parallel
 fairseq-train \
-    $BINARY_DATA_DIR/iwslt14.de-en --save-dir $MODEL_DIR \
+    $BINARY_DATA_DIR --save-dir $MODEL_DIR \
     --arch transformer_vaswani_wmt_en_de_big \
     --share-decoder-input-output-embed \
     --optimizer adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
