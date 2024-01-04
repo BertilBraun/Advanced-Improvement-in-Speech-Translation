@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=PST_eval_st             # job name
+#SBATCH --job-name=eval_st                 # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
 #SBATCH --time=01:15:00                    # wall-clock time limit  
 #SBATCH --mem=60000                        # memory per node

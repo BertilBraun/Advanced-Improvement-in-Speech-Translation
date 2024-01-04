@@ -107,7 +107,7 @@
     Make sure, to have set the correct `SBATCH` parameters in the script, such as `timeouts`, required cluster `cores` and `GPUs` and the `job-name`. Ensure, that the correct and required modules are being loaded by calling the `~/AI-ST/setup.sh` script.
 
     ```bash
-    #SBATCH --job-name=PST_process_audio            # job name
+    #SBATCH --job-name=process_audio                # job name
     #SBATCH --partition=gpu_4                       # single, gpu_4
     #SBATCH --time=02:00:00                         # wall-clock time limit  
     #SBATCH --mem=200000                            # in MB check limits per node

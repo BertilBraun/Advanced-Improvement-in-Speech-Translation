@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=PST_train_mt            # job name
+#SBATCH --job-name=train_mt                # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
 #SBATCH --time=24:00:00                    # wall-clock time limit  
 #SBATCH --mem=200000                       # memory per node
