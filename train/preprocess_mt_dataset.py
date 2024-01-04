@@ -81,6 +81,7 @@ if __name__ == "__main__":
                 f_de.write(de)
             else:
                 skipped_lines += 1
+                print(en, de)
             
         for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
             if translation_pair_check(en, de):
@@ -88,6 +89,7 @@ if __name__ == "__main__":
                 f_de.write(de)
             else:
                 skipped_lines += 1
+                print(en, de)
                 
     log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
 
@@ -101,8 +103,6 @@ if __name__ == "__main__":
     
     log("BPE model ready.")
     
-    datasets = data_generator()
-
     for data, spm in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), (SPM_OUTPUT_DE_FILE, SPM_OUTPUT_EN_FILE)):
         
         with open(data, "r", encoding="utf-8") as f_in, \
