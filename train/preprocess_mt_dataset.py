@@ -62,6 +62,14 @@ def data_generator():
 
 def translation_pair_check(en, de):
     # only keep sentences that are only ascii characters
+    for i, c in enumerate(en):
+        if ord(c) >= 256:
+            print(f"en: {en} at index {i} with character {c}")
+    
+    for i, c in enumerate(de):
+        if ord(c) >= 256:
+            print(f"de: {de} at index {i} with character {c}")
+    
     return all(ord(c) < 256 for c in en) and all(ord(c) < 256 for c in de)
 
 
