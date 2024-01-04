@@ -39,7 +39,7 @@ def data_generator():
     s = set()    
     total_sizes = 0
     
-    for i in range(14, 20):
+    for i in range(14, 15):
         log(f"Loading WMT{i} dataset...")
         dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
         log(f"Now processing WMT{i} dataset...")
@@ -53,7 +53,8 @@ def data_generator():
 
     # convert the set to a list
     s = list(s)
-    log(f"Total dataset length: {len(s)}")
+    log(f"The total size of the dataset is {total_sizes}.")
+    log(f"Filtered dataset length: {len(s)}")
     log(f"Removed {total_sizes - len(s)} duplicates.")
     
     return s
