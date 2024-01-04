@@ -82,15 +82,15 @@ if __name__ == "__main__":
         
         for en, de in tqdm(zip(f_paraphrased_en.readlines(), f_paraphrased_de.readlines()), desc="Merging datasets"):
             if translation_pair_check(en, de):
-                f_en.write(en)
-                f_de.write(de)
+                f_en.write(en + "\n")
+                f_de.write(de + "\n")
             else:
                 skipped_lines += 1
             
         for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
             if translation_pair_check(en, de):
-                f_en.write(en)
-                f_de.write(de)
+                f_en.write(en + "\n")
+                f_de.write(de + "\n")
             else:
                 skipped_lines += 1
                 
