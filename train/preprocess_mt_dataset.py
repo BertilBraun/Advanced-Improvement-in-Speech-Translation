@@ -9,29 +9,18 @@ from datasets import load_dataset
 def log(*args, **kwargs):
     print(*args, **kwargs, flush=True)
 
-HOME_FOLDER = Path(f"{os.environ['HOME']}")
-ROOT_FOLDER = HOME_FOLDER / "MT"
+ROOT_FOLDER = Path(f"{os.environ['HOME']}") / "MT"
 
-DATASET_FOLDER = ROOT_FOLDER / "dataset"
-DATASET_FOLDER.mkdir(parents=True, exist_ok=True)
+WORKSPACE_ROOT_FOLDER = Path("/pfs/work7/workspace/scratch/uxude-MT")
 
-OUTPUT_FOLDER = ROOT_FOLDER / "output"
-OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
+PARAPHRASED_EN_FILE = ROOT_FOLDER / "output" / "train_paraphrased.de-en.en"
+PARAPHRASED_DE_FILE = ROOT_FOLDER / "output" / "train_paraphrased.de-en.de"
 
-DATASET_EN = DATASET_FOLDER / "train.de-en.en"
-DATASET_DE = DATASET_FOLDER / "train.de-en.de"
+OUTPUT_EN_FILE = WORKSPACE_ROOT_FOLDER / "output" / "train_complete.de-en.en"
+OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "train_complete.de-en.de"
 
-PARAPHRASED_EN_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.en"
-PARAPHRASED_DE_FILE = OUTPUT_FOLDER / "train_paraphrased.de-en.de"
-
-OUTPUT_EN_FILE = OUTPUT_FOLDER / "train_complete.de-en.en"
-OUTPUT_DE_FILE = OUTPUT_FOLDER / "train_complete.de-en.de"
-
-SPM_OUTPUT_EN_FILE = OUTPUT_FOLDER / "spm.train_complete.de-en.en"
-SPM_OUTPUT_DE_FILE = OUTPUT_FOLDER / "spm.train_complete.de-en.de"
-
-LOG_FILE = OUTPUT_FOLDER / "paraphrases.log"
-SEPARATOR = "  SEPARATOR  "
+SPM_OUTPUT_EN_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-en.en"
+SPM_OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-en.de"
 
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—β"

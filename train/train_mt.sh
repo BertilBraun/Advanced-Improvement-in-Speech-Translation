@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=train_mt                # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=24:00:00                    # wall-clock time limit  
+#SBATCH --time=06:00:00                    # wall-clock time limit  
 #SBATCH --mem=200000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -16,7 +16,7 @@
 source ../setup.sh
 
 DATA_DIR=~/MT/dataset
-PARAPHRASED_DATA_DIR=~/MT/output
+PARAPHRASED_DATA_DIR=/pfs/work7/workspace/scratch/uxude-MT/output
 BINARY_DATA_DIR=/pfs/work7/workspace/scratch/uxude-MT/binarized_dataset
 MODEL_DIR=~/MT/models
 
