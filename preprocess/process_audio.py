@@ -1,15 +1,3 @@
-USE_MPI = False
-
-if USE_MPI:
-    from mpi4py import MPI
-
-    comm = MPI.COMM_WORLD
-    size = comm.Get_size()
-    rank = comm.Get_rank()
-else:
-    rank = 0
-    size = 1
-
 import os
 import torch
 import pandas as pd
@@ -33,6 +21,7 @@ from examples.speech_to_text.data_utils import (
 OVERWRITE_ZIP = True
 
 ROOT_LOCATION = Path(f"{os.environ['HOME']}/ASR")
+WORKSPACE_ROOT_LOCATION = Path("/pfs/work7/workspace/scratch/uxude-ASR")
 
 DATASET_LOCATION = ROOT_LOCATION / "data"
 DATASET_LOCATION.mkdir(parents=True, exist_ok=True)
@@ -40,16 +29,22 @@ DATASET_LOCATION.mkdir(parents=True, exist_ok=True)
 WAV2VEC_ROOT = ROOT_LOCATION / "wav2vec"
 WAV2VEC_ROOT.mkdir(parents=True, exist_ok=True)
 
+WAV2VEC_WORKSPACE_ROOT = WORKSPACE_ROOT_LOCATION / "wav2vec"
+WAV2VEC_WORKSPACE_ROOT.mkdir(parents=True, exist_ok=True)
+
 MEL_ROOT = ROOT_LOCATION / "mel"
 MEL_ROOT.mkdir(parents=True, exist_ok=True)
+
+MEL_WORKSPACE_ROOT = WORKSPACE_ROOT_LOCATION / "mel"
+MEL_WORKSPACE_ROOT.mkdir(parents=True, exist_ok=True)
 
 ENCODING_FOLDER_NAME = "encoded"
 ZIP_FILE_NAME = "encoded.zip"
 
-WAV2VEC_ENCODING_ROOT = WAV2VEC_ROOT / ENCODING_FOLDER_NAME
+WAV2VEC_ENCODING_ROOT = WAV2VEC_WORKSPACE_ROOT / ENCODING_FOLDER_NAME
 WAV2VEC_ENCODING_ROOT.mkdir(parents=True, exist_ok=True)
 
-MEL_ENCODING_ROOT = MEL_ROOT / ENCODING_FOLDER_NAME
+MEL_ENCODING_ROOT = MEL_WORKSPACE_ROOT / ENCODING_FOLDER_NAME
 MEL_ENCODING_ROOT.mkdir(parents=True, exist_ok=True)
 
 # TODO Define your batch size
@@ -75,22 +70,6 @@ def load_dataset():
         LIBRISPEECH(DATASET_LOCATION.as_posix(), url=dataset_name, download=True)
         for dataset_name in DATASET_NAMES
     ]  # train_data, dev_data, test_data
-
-
-def ensure_dataset_loaded():
-    if rank == 0:
-        # Only rank == 0 may download, otherwise conflicts will appear
-        datasets = load_dataset()
-
-        if USE_MPI:
-            comm.Barrier()
-
-        return datasets
-
-    if USE_MPI:
-        comm.Barrier()
-
-    return load_dataset()
 
 
 def for_in_dataset(dataset, desc="", start=0, end=None):
@@ -156,25 +135,15 @@ def extract_wav2vec_features_batch(
 
 
 def process_dataset_to_wav2vec_embeddings(dataset):
-    total_data = len(dataset)
-    data_per_node = total_data // size
-
-    start = rank * data_per_node
-    end = (rank + 1) * data_per_node if rank != size - 1 else total_data
-
     batch_waveforms = []
     batch_paths = []
 
-    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(
-        dataset, desc=f"Wav2vec {rank}", start=start, end=end
-    ):
+    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Wav2vec"):
         file = WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
         
         if not file.is_file():
             batch_waveforms.append(wav.to(device=device, dtype=torch.float))
-            batch_paths.append(
-                WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
-            )
+            batch_paths.append(file.as_posix())
 
         if len(batch_waveforms) == BATCH_SIZE:
             extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
@@ -184,9 +153,7 @@ def process_dataset_to_wav2vec_embeddings(dataset):
     if batch_waveforms:
         extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
 
-    print(
-        f"Node {rank} finished processing wav2vec embeddings for {end - start} samples"
-    )
+    print(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
 
 
 def process_dataset_to_mel_spectrogram(dataset):
@@ -208,12 +175,11 @@ def cleanup_utterance(utt: str):
     return modified
 
 
-def process_dataset_manifest(datasets, root_location):
+def process_dataset_manifest(datasets, root_location, zip_file):
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
     print("Fetching audio manifest...")
-    all_encodings_zip_file = root_location / ZIP_FILE_NAME
-    audio_paths, audio_lengths = get_zip_manifest(all_encodings_zip_file)
+    audio_paths, audio_lengths = get_zip_manifest(zip_file)
 
     # assert len(audio_paths) == len(audio_lengths)
     assert len(datasets) == len(DATASET_NAMES)
@@ -268,14 +234,13 @@ def process_dataset_config(root_location):
 
 # Main execution
 def main():
-    assert not USE_MPI, "MPI is not supported yet (no longer supported...)"
-    datasets = ensure_dataset_loaded()  # train_data, dev_data, test_data = datasets
+    datasets = load_dataset()  # train_data, dev_data, test_data = datasets
 
     # Pack audio features into ZIP
-    for root_location in (WAV2VEC_ROOT,): # (WAV2VEC_ROOT, MEL_ROOT):
+    for root_location, workspace_root_location in ((WAV2VEC_ROOT, WAV2VEC_WORKSPACE_ROOT),): # ((WAV2VEC_ROOT, WAV2VEC_WORKSPACE_ROOT), (MEL_ROOT, MEL_WORKSPACE_ROOT)):
         
-        encodings_folder = root_location / ENCODING_FOLDER_NAME
-        zip_file = root_location / ZIP_FILE_NAME
+        encodings_folder = workspace_root_location / ENCODING_FOLDER_NAME
+        zip_file = workspace_root_location / ZIP_FILE_NAME
         if not zip_file.is_file() or OVERWRITE_ZIP:
             
             for dataset in datasets:
@@ -292,7 +257,7 @@ def main():
             if file.is_file() and file.suffix in [".tsv", ".txt", ".model"]:
                 file.unlink()
 
-        process_dataset_manifest(datasets, root_location)
+        process_dataset_manifest(datasets, root_location, zip_file)
 
         process_dataset_vocab(root_location)
 
