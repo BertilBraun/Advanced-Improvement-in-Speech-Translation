@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=eval_mt                 # job name
-#SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
+#SBATCH --partition=dev_gpu_4              # mby GPU queue for the resource allocation.
 #SBATCH --time=00:30:00                    # wall-clock time limit  
 #SBATCH --mem=40000                        # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
