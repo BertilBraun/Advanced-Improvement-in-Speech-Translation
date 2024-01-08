@@ -32,7 +32,7 @@ if [ -z "$(ls -A $PARAPHRASED_DATA_DIR)" ]; then
   exit 1
 fi
 
-python preprocess_mt_dataset.py
+# Already processed, don't repeat work :) python preprocess_mt_dataset.py
 
 # Binarize the data for training
 fairseq-preprocess \
