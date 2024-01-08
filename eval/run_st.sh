@@ -27,16 +27,14 @@
 
 source ../setup.sh
 
-asr_model="wav2vec" # "wav2vec" or "mel"
-
-ASR_DATA_DIR=~/ST/data/ASR/$asr_model
-ASR_MODEL_DIR=~/ASR/models/$asr_model
+ASR_DATA_DIR=~/ASR/wav2vec
+ASR_MODEL_DIR=~/ASR/models/wav2vec
 
 PRED_OUTPUT_DIR=~/ST/predictions
 ASR_PRED_LOG=$PRED_OUTPUT_DIR/en_s2t.pred.log
 
 
-MT_DATA_DIR=~/ST/data/MT
+MT_DATA_DIR=~/ST/predictions/MT/eval.de-en
 MT_MODEL_DIR=~/MT/models
 
 MT_PRED_LOG=$PRED_OUTPUT_DIR/en-de.pred.log
@@ -44,7 +42,7 @@ MT_PRED_LOG=$PRED_OUTPUT_DIR/en-de.pred.log
 mkdir -p $PRED_OUTPUT_DIR
 mkdir -p $ASR_DATA_DIR
 
-echo "Starting ASR prediction for $asr_model"
+echo "Starting ASR prediction for wav2vec"
 
 fairseq-generate $ASR_DATA_DIR \
     --config-yaml config.yaml --gen-subset test-clean \
@@ -53,14 +51,14 @@ fairseq-generate $ASR_DATA_DIR \
     --max-tokens 50000 --beam 10 --scoring wer \
     --nbest 10 > $ASR_PRED_LOG
 
-echo "Prediction done for $asr_model"
+echo "Prediction done for wav2vec"
 
 grep ^H $ASR_PRED_LOG | sed 's/^H-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp_asr.txt
 grep ^T $ASR_PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/ref_asr.txt
 
 # TODO how is the output structured?
 
-echo "Prediction files written for $asr_model"
+echo "Prediction files written for wav2vec"
 echo "Sample predictions:"
 
 head -2 $PRED_OUTPUT_DIR/hyp_asr.txt
@@ -82,16 +80,17 @@ python process_asr_output_for_st.py \
 
 echo "Starting translation..."
 
+# TODO srcdict and tgtdict need to be set to the correct paths
 fairseq-preprocess \
     --source-lang en --target-lang de \
     --srcdict ~/MT/initial_binarized_dataset/iwslt14.de-en/dict.en.txt \
     --tgtdict ~/MT/initial_binarized_dataset/iwslt14.de-en/dict.de.txt \
     --testpref $PRED_OUTPUT_DIR/asr_out \
-    --destdir $MT_DATA_DIR/eval.de-en \
+    --destdir $MT_DATA_DIR \
     --thresholdtgt 0 --thresholdsrc 0 \
     --workers 8
 
-fairseq-generate $MT_DATA_DIR/eval.de-en \
+fairseq-generate $MT_DATA_DIR \
       --task translation \
       --source-lang en \
       --target-lang de \

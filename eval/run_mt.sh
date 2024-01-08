@@ -14,7 +14,7 @@
 
 source ../setup.sh
 
-BINARY_DATA_DIR=~/MT/binarized_dataset
+BINARY_DATA_DIR=/pfs/work7/workspace/scratch/uxude-MT/binarized_dataset
 MODEL_DIR=~/MT/models
 
 PRED_OUTPUT_DIR=~/MT/predictions

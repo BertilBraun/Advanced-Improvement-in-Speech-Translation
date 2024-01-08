@@ -28,14 +28,14 @@ ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—β"
 def data_generator():
     # WMT 14-19 datasets, but generate a set from these to avoid duplicates
     s = set()    
-    total_sizes = 0
+    total_sizes = 100_000_000 # approximate size of the dataset (100 million)
     
     for i in range(14, 20):
         log(f"Loading WMT{i} dataset...")
         dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
         log(f"Now processing WMT{i} dataset...")
-        log(f"Dataset length: {len(dataset['translation'])}")
-        total_sizes += len(dataset["translation"])
+        # log(f"Dataset length: {len(dataset['translation'])}")
+        # total_sizes += len(dataset["translation"])
         
         # extend the set with the new sentences
         s.update(
