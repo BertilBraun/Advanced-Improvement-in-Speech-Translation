@@ -23,6 +23,8 @@ SPM_OUTPUT_EN_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-e
 SPM_OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-en.de"
 
 
+WRITE_DATASET = False
+
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—β"
 
 def data_generator():
@@ -61,33 +63,36 @@ def translation_pair_check(en, de):
 
 if __name__ == "__main__":
     
-    skipped_lines = 0
-    log("Merging paraphrased and original datasets...")
+    if WRITE_DATASET:
+        skipped_lines = 0
+        log("Merging paraphrased and original datasets...")
     
-    with open(OUTPUT_DE_FILE, "w", encoding="utf-8") as f_de, \
-        open(OUTPUT_EN_FILE, "w", encoding="utf-8") as f_en, \
-        open(PARAPHRASED_EN_FILE, "r", encoding="utf-8") as f_paraphrased_en, \
-        open(PARAPHRASED_DE_FILE, "r", encoding="utf-8") as f_paraphrased_de:
-        
-        for en, de in tqdm(zip(f_paraphrased_en.readlines(), f_paraphrased_de.readlines()), desc="Merging datasets"):
-            if translation_pair_check(en, de):
-                f_en.write(en + "\n")
-                f_de.write(de + "\n")
-            else:
-                skipped_lines += 1
+        with open(OUTPUT_DE_FILE, "w", encoding="utf-8") as f_de, \
+            open(OUTPUT_EN_FILE, "w", encoding="utf-8") as f_en, \
+            open(PARAPHRASED_EN_FILE, "r", encoding="utf-8") as f_paraphrased_en, \
+            open(PARAPHRASED_DE_FILE, "r", encoding="utf-8") as f_paraphrased_de:
             
-        for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
-            if translation_pair_check(en, de):
-                f_en.write(en + "\n")
-                f_de.write(de + "\n")
-            else:
-                skipped_lines += 1
+            for en, de in tqdm(zip(f_paraphrased_en.readlines(), f_paraphrased_de.readlines()), desc="Merging datasets"):
+                if translation_pair_check(en, de):
+                    f_en.write(en + "\n")
+                    f_de.write(de + "\n")
+                else:
+                    skipped_lines += 1
                 
-    log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
+            for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
+                if translation_pair_check(en, de):
+                    f_en.write(en + "\n")
+                    f_de.write(de + "\n")
+                else:
+                    skipped_lines += 1
+                
+        log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
 
     spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
                                 model_prefix="bpe",
-                                vocab_size=5000)
+                                vocab_size=5000,
+                                input_sentence_size=1000000,
+                                shuffle_input_sentence=True)
 
     log('Finished training sentencepiece model.')
     
