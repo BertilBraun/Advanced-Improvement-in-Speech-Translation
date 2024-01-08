@@ -24,7 +24,7 @@ SPM_OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-e
 
 
 WRITE_DATASET = False
-RETRAIN_SPM = True
+RETRAIN_SPM = False
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
