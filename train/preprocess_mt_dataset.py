@@ -68,6 +68,34 @@ def cleanup(en, de):
     
     return clean(en), clean(de)    
     
+    
+def process_lines(file_path, encoding='utf-8'):
+    buffer_size = 4096  # Size of the chunk to read
+    partial_line = b''  # To store a partial line at the end of a buffer
+    processed_lines = []  # List to store processed lines
+
+    with open(file_path, 'rb') as file:
+        while True:
+            buf = partial_line + file.read(buffer_size)
+            if not buf:  # End of file
+                break
+
+            buffer_lines = buf.split(b'\n')
+            partial_line = buffer_lines.pop()  # Handle the last partial line
+
+            for line in buffer_lines:
+                decoded_line = line.decode(encoding, errors='ignore')
+                processed_line = decoded_line.replace('\n', '').replace('\r', '')
+                processed_lines.append(processed_line)
+
+    # Check if there is any remaining part after the last newline
+    if partial_line:
+        decoded_line = partial_line.decode(encoding, errors='ignore')
+        processed_line = decoded_line.replace('\n', '').replace('\r', '')
+        processed_lines.append(processed_line)
+
+    return processed_lines
+
 
 if __name__ == "__main__":
     
@@ -117,11 +145,9 @@ if __name__ == "__main__":
     log("BPE model ready.")
     
     for data_file, spm_file in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), (SPM_OUTPUT_DE_FILE, SPM_OUTPUT_EN_FILE)):
-        
-        with open(data_file, "r", encoding="utf-8") as f_in, \
-            open(spm_file, "w", encoding="utf-8") as f_out:
+        with open(spm_file, "w", encoding="utf-8") as f_out:
             file_name = data_file.as_posix().split("/")[-1]
-            for line in tqdm(f_in.readlines(), desc=f"Segmenting '{file_name}' Dataset"):
+            for line in tqdm(process_lines(data_file), desc=f"Segmenting '{file_name}' Dataset"):
                 # Segmented into subwords
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
                 f_out.write(" ".join(line_segmented) + "\n")
