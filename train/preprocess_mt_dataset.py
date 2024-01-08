@@ -23,9 +23,9 @@ SPM_OUTPUT_EN_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-e
 SPM_OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-en.de"
 
 
-WRITE_DATASET = False
+WRITE_DATASET = True
 
-ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—β"
+ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
 def data_generator():
     # WMT 14-19 datasets, but generate a set from these to avoid duplicates
@@ -61,6 +61,13 @@ def translation_pair_check(en, de):
     return ascii_check(en) and ascii_check(de)
 
 
+def cleanup(en, de):
+    def clean(s):
+        return s.replace("\n", " ").replace("\t", " ").strip()
+    
+    return clean(en), clean(de)    
+    
+
 if __name__ == "__main__":
     
     if WRITE_DATASET:
@@ -73,6 +80,7 @@ if __name__ == "__main__":
             open(PARAPHRASED_DE_FILE, "r", encoding="utf-8") as f_paraphrased_de:
             
             for en, de in tqdm(zip(f_paraphrased_en.readlines(), f_paraphrased_de.readlines()), desc="Merging datasets"):
+                en, de = cleanup(en, de)
                 if translation_pair_check(en, de):
                     f_en.write(en + "\n")
                     f_de.write(de + "\n")
@@ -80,6 +88,7 @@ if __name__ == "__main__":
                     skipped_lines += 1
                 
             for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
+                en, de = cleanup(en, de)
                 if translation_pair_check(en, de):
                     f_en.write(en + "\n")
                     f_de.write(de + "\n")
@@ -100,11 +109,12 @@ if __name__ == "__main__":
     
     log("BPE model ready.")
     
-    for data, spm in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), (SPM_OUTPUT_DE_FILE, SPM_OUTPUT_EN_FILE)):
+    for data_file, spm_file in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), (SPM_OUTPUT_DE_FILE, SPM_OUTPUT_EN_FILE)):
         
-        with open(data, "r", encoding="utf-8") as f_in, \
-            open(spm, "w", encoding="utf-8") as f_out:
-            for line in tqdm(f_in.readlines(), desc=f"Segmenting '{data}' Dataset"):
+        with open(data_file, "r", encoding="utf-8") as f_in, \
+            open(spm_file, "w", encoding="utf-8") as f_out:
+            file_name = data_file.split("/")[-1]
+            for line in tqdm(f_in.readlines(), desc=f"Segmenting '{file_name}' Dataset"):
                 # Segmented into subwords
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
                 f_out.write(" ".join(line_segmented) + "\n")
