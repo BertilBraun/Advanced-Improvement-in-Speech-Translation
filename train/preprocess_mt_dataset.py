@@ -24,7 +24,7 @@ SPM_OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-e
 
 
 WRITE_DATASET = False
-RETRAIN_SPM = False
+RETRAIN_SPM = True
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
@@ -101,11 +101,14 @@ if __name__ == "__main__":
     if RETRAIN_SPM:
         print("Retraining sentencepiece model...")
         
-        spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
-                                model_prefix="bpe",
-                                vocab_size=5000,
-                                input_sentence_size=1000000,
-                                shuffle_input_sentence=True)
+        spm.SentencePieceTrainer.train(
+            input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
+            model_prefix="bpe",
+            vocab_size=5000,
+            input_sentence_size=1000000,
+            shuffle_input_sentence=True,
+            max_sentence_length=10000,
+        )
 
         log('Finished training sentencepiece model.')
     
