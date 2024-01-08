@@ -35,15 +35,24 @@ fi
 # Already processed, don't repeat work :) python preprocess_mt_dataset.py
 
 # Binarize the data for training
-fairseq-preprocess \
+if [ -z "$(ls -A $BINARY_DATA_DIR)" ]; then
+  echo "Binarizing the data..."
+  fairseq-preprocess \
     --source-lang en --target-lang de \
     --trainpref $PARAPHRASED_DATA_DIR/spm.train_complete.de-en \
     --validpref $DATA_DIR/spm.dev.de-en \
     --testpref $DATA_DIR/spm.tst.de-en \
     --destdir $BINARY_DATA_DIR \
     --thresholdtgt 0 --thresholdsrc 0
+  echo "Binarization complete."
+else
+  echo "Binarized data already exists. Skipping binarization."
+fi
+
 
 # Train the model in parallel
+echo "Training the model..."
+
 fairseq-train \
     $BINARY_DATA_DIR --save-dir $MODEL_DIR \
     --arch transformer_vaswani_wmt_en_de_big \
@@ -56,3 +65,5 @@ fairseq-train \
     --max-tokens 2048 \
     --max-epoch 500 \
     --fp16
+
+echo "Training complete."
