@@ -23,7 +23,8 @@ SPM_OUTPUT_EN_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-e
 SPM_OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-en.de"
 
 
-WRITE_DATASET = True
+WRITE_DATASET = False
+RETRAIN_SPM = False
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
@@ -97,13 +98,16 @@ if __name__ == "__main__":
                 
         log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
 
-    spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
+    if RETRAIN_SPM:
+        print("Retraining sentencepiece model...")
+        
+        spm.SentencePieceTrainer.train(input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
                                 model_prefix="bpe",
                                 vocab_size=5000,
                                 input_sentence_size=1000000,
                                 shuffle_input_sentence=True)
 
-    log('Finished training sentencepiece model.')
+        log('Finished training sentencepiece model.')
     
     spm_model = spm.SentencePieceProcessor(model_file="bpe.model")
     
@@ -113,7 +117,7 @@ if __name__ == "__main__":
         
         with open(data_file, "r", encoding="utf-8") as f_in, \
             open(spm_file, "w", encoding="utf-8") as f_out:
-            file_name = data_file.split("/")[-1]
+            file_name = data_file.as_posix().split("/")[-1]
             for line in tqdm(f_in.readlines(), desc=f"Segmenting '{file_name}' Dataset"):
                 # Segmented into subwords
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
