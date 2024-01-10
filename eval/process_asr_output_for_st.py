@@ -109,6 +109,11 @@ def generate(prompts: list[str]) -> list[str]:
     decoded_outputs = TOKENIZER.batch_decode(generated_ids, skip_special_tokens=True)
     decoded_inputs = TOKENIZER.batch_decode(model_inputs.input_ids, skip_special_tokens=True)
     
+    with open("llama_outputs.txt", "a", encoding="utf-8") as f:
+        for output, prompt in zip(decoded_outputs, decoded_inputs):
+            f.write(f"{prompt}\n{output}\n\n")
+            f.write("-"*100 + "\n\n")
+    
     return [
         output.replace(prompt, "").strip()
         for output, prompt in zip(decoded_outputs, decoded_inputs)
@@ -123,56 +128,53 @@ def sample_print(data_list):
     log(DELIMITER)
 
 
+def encode_and_save(lines, output_file):
+    
+    spm_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE.as_posix())
+    
+    lines = [
+        " ".join(spm_model.encode(line.strip(), out_type=str))
+        for line in lines
+    ]
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+        
+    return lines
+
+
 def process_reference_file():
     with open(args.ref_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
     lines = process_reference_text(lines)
-        
-    spm_output_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE.as_posix())
     
-    lines = [
-        " ".join(spm_output_model.encode(line.strip(), out_type=str))
-        for line in lines
-    ]
-    
-    log("Encoded output file")
+    log("Processed reference file")
     sample_print(lines)
-
-    with open(args.ref_output_file, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    
+    encoded = encode_and_save(lines, args.ref_output_file)
+    
+    log("Encoded reference file")
+    sample_print(encoded)
+    
+    log("Done processing reference file!")
 
 
 def process_hypothesis_file():
     log("Processing hypothesis file...")
     with open(args.hyp_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
-        
-    spm_input_model = spm.SentencePieceProcessor(model_file=SPM_INPUT_FILE.as_posix())
-    spm_output_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE.as_posix())
-    
-    lines = [
-        spm_input_model.decode(line.split())
-        for line in lines
-    ]
-    
-    log("Decoded input file")
-    sample_print(lines)
-    
+                
     lines = process_hypothesis_text(lines)
-        
-    lines = [
-        " ".join(spm_output_model.encode(line.strip(), out_type=str))
-        for line in lines
-    ]
     
-    log("Encoded output file")
+    log("Processed hypothesis file")
     sample_print(lines)
-            
-    with open(args.hyp_output_file, "w", encoding="utf-8") as f:
-        for line in lines:
-            f.write(line + "\n")
-            
+    
+    encoded = encode_and_save(lines, args.hyp_output_file)
+    
+    log("Encoded hypothesis file")
+    sample_print(encoded)
+
     log("Done processing hypothesis file!")
 
 
@@ -221,12 +223,12 @@ def process_hypothesis_text(lines):
         batch.append(prompt)
         
         if len(batch) == batch_size:
-            log(f"Processing batch {i//batch_size}...")
+            log(f"Processing batch {i//batch_size//num_samples_per_prompt}...")
             processed_lines.extend(generate(batch))
             batch = []
             
     if len(batch) > 0:
-        log(f"Processing batch {i//batch_size}...")
+        log(f"Processing batch {i//batch_size//num_samples_per_prompt}...")
         processed_lines.extend(generate(batch))
     
     return processed_lines
@@ -251,8 +253,8 @@ def process_hypothesis_text(lines):
 if __name__ == "__main__":
     log("Starting processing...")
     
-    process_reference_file()
-    
     process_hypothesis_file()
+    
+    process_reference_file()
     
     log("Done processing!")

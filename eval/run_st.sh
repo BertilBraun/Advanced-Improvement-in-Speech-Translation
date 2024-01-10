@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=eval_st                 # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=01:15:00                    # wall-clock time limit  
-#SBATCH --mem=60000                        # memory per node
+#SBATCH --time=03:00:00                    # wall-clock time limit  
+#SBATCH --mem=100000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
@@ -49,19 +49,17 @@ mkdir -p $ASR_DATA_DIR
 
 echo "Starting ASR prediction for wav2vec"
 
-fairseq-generate $ASR_DATA_DIR \
-    --config-yaml config.yaml --gen-subset test-clean \
-    --task speech_to_text \
-    --path $ASR_MODEL_DIR/checkpoint_best.pt \
-    --max-tokens 50000 --beam 10 --scoring wer \
-    --nbest 10 > $ASR_PRED_LOG
+# fairseq-generate $ASR_DATA_DIR \
+#     --config-yaml config.yaml --gen-subset test-clean \
+#     --task speech_to_text \
+#     --path $ASR_MODEL_DIR/checkpoint_best.pt \
+#     --max-tokens 50000 --beam 10 --scoring wer \
+#     --nbest 10 > $ASR_PRED_LOG
 
 echo "Prediction done for wav2vec"
 
-grep ^H $ASR_PRED_LOG | sed 's/^H-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp_asr.txt
+grep ^D $ASR_PRED_LOG | sed 's/^D-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp_asr.txt
 grep ^T $ASR_PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/ref_asr.txt
-
-# TODO how is the output structured?
 
 echo "Prediction files written for wav2vec"
 echo "Sample predictions:"
