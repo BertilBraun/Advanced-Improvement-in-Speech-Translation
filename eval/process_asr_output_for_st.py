@@ -232,7 +232,13 @@ def process_hypothesis_text(lines):
     batch_size = 10
     batch = []
     for i in tqdm(range(0, len(lines), num_samples_per_prompt), desc="Processing batches"):
-        prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES="\n".join(lines[i:i+num_samples_per_prompt]))
+        samples = lines[i:i+num_samples_per_prompt]
+        
+        formatted_samples = ""
+        for i, sample in enumerate(samples):
+            formatted_samples += f"{i+1}. \"{sample}\"\n"
+        
+        prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES=formatted_samples)
         batch.append(prompt)
         
         if len(batch) == batch_size:
