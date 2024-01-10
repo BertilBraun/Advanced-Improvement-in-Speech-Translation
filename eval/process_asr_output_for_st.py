@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from deep_translator import GoogleTranslator
 import sentencepiece as spm
+from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig, BitsAndBytesConfig
 import torch
 
@@ -86,6 +87,16 @@ LLM.config.eos_token_id = 2  # eos
 log("LLaMA ready.")
 
 
+def cleanup_output(output: str) -> str:
+    output = output.split("\n")[0].strip()
+    output = output.replace("  ", " ")
+    output = output.replace(" ,", ", ")
+    
+    # the output should always be in 'Best Hypothesis: "..."' format so we can just extract the text in between the quotes
+    output = output.split('"')[1]
+    
+    return output    
+
 def generate(prompts: list[str]) -> list[str]:
     model_inputs = TOKENIZER(prompts, return_tensors="pt", padding=True).to(DEVICE)
      
@@ -109,15 +120,17 @@ def generate(prompts: list[str]) -> list[str]:
     decoded_outputs = TOKENIZER.batch_decode(generated_ids, skip_special_tokens=True)
     decoded_inputs = TOKENIZER.batch_decode(model_inputs.input_ids, skip_special_tokens=True)
     
+    cleaned_outputs = [
+        cleanup_output(output.replace(prompt, ""))
+        for output, prompt in zip(decoded_outputs, decoded_inputs)
+    ]
+    
     with open("llama_outputs.txt", "a", encoding="utf-8") as f:
-        for output, prompt in zip(decoded_outputs, decoded_inputs):
+        for output, prompt in zip(cleaned_outputs, decoded_inputs):
             f.write(f"{prompt}\n{output}\n\n")
             f.write("-"*100 + "\n\n")
     
-    return [
-        output.replace(prompt, "").strip()
-        for output, prompt in zip(decoded_outputs, decoded_inputs)
-    ]
+    return cleaned_outputs
 
 
 def sample_print(data_list):
@@ -218,17 +231,15 @@ def process_hypothesis_text(lines):
     num_samples_per_prompt = 10
     batch_size = 10
     batch = []
-    for i in range(0, len(lines), num_samples_per_prompt):
+    for i in tqdm(range(0, len(lines), num_samples_per_prompt), desc="Processing batches"):
         prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES="\n".join(lines[i:i+num_samples_per_prompt]))
         batch.append(prompt)
         
         if len(batch) == batch_size:
-            log(f"Processing batch {i//batch_size//num_samples_per_prompt}...")
             processed_lines.extend(generate(batch))
             batch = []
             
     if len(batch) > 0:
-        log(f"Processing batch {i//batch_size//num_samples_per_prompt}...")
         processed_lines.extend(generate(batch))
     
     return processed_lines
