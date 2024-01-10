@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=train_mt                # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=12:00:00                    # wall-clock time limit  
+#SBATCH --time=12:00:00                    # wall-clock time limit
 #SBATCH --mem=200000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -62,7 +62,7 @@ fairseq-train \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
     --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
-    --max-tokens 1024 \
+    --max-tokens 2048 \
     --max-epoch 500 \
     --fp16
 

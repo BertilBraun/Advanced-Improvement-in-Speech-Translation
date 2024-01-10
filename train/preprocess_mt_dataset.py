@@ -189,10 +189,9 @@ if __name__ == "__main__":
         spm.SentencePieceTrainer.train(
             input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
             model_prefix="bpe",
-            vocab_size=5000,
+            vocab_size=10000,
             input_sentence_size=1000000,
             shuffle_input_sentence=True,
-            max_sentence_length=50000,
         )
 
         log('Finished training sentencepiece model.')
