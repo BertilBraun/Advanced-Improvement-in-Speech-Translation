@@ -27,6 +27,9 @@
 
 source ../setup.sh
 
+WORKSPACE_ASR=/pfs/work7/workspace/scratch/uxude-ASR
+WORKSPACE_MT=/pfs/work7/workspace/scratch/uxude-MT
+
 ASR_DATA_DIR=~/ASR/wav2vec
 ASR_MODEL_DIR=~/ASR/models/wav2vec
 
@@ -36,6 +39,8 @@ ASR_PRED_LOG=$PRED_OUTPUT_DIR/en_s2t.pred.log
 
 MT_DATA_DIR=~/ST/predictions/MT/eval.de-en
 MT_MODEL_DIR=~/MT/models
+
+MT_BINARIZED_DATA_DIR=$WORKSPACE_MT/binarized_dataset
 
 MT_PRED_LOG=$PRED_OUTPUT_DIR/en-de.pred.log
 
@@ -83,8 +88,8 @@ echo "Starting translation..."
 # TODO srcdict and tgtdict need to be set to the correct paths
 fairseq-preprocess \
     --source-lang en --target-lang de \
-    --srcdict ~/MT/initial_binarized_dataset/iwslt14.de-en/dict.en.txt \
-    --tgtdict ~/MT/initial_binarized_dataset/iwslt14.de-en/dict.de.txt \
+    --srcdict $MT_BINARIZED_DATA_DIR/dict.en.txt \
+    --tgtdict $MT_BINARIZED_DATA_DIR/dict.de.txt \
     --testpref $PRED_OUTPUT_DIR/asr_out \
     --destdir $MT_DATA_DIR \
     --thresholdtgt 0 --thresholdsrc 0 \

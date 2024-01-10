@@ -24,7 +24,7 @@ mkdir -p $PRED_OUTPUT_DIR
 
 echo "Starting translation..."
 
-fairseq-generate $BINARY_DATA_DIR/iwslt14.de-en \
+fairseq-generate $BINARY_DATA_DIR \
       --task translation \
       --source-lang en \
       --target-lang de \
