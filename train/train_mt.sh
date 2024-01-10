@@ -32,7 +32,7 @@ if [ -z "$(ls -A $PARAPHRASED_DATA_DIR)" ]; then
   exit 1
 fi
 
-# Already processed, don't repeat work :) python preprocess_mt_dataset.py
+python preprocess_mt_dataset.py
 
 # Binarize the data for training
 if [ -z "$(ls -A $BINARY_DATA_DIR)" ]; then

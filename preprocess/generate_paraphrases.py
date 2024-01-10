@@ -289,11 +289,6 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
     return True
 
 
-def read_dataset_segment(file_path: str) -> list[str]:
-    with open(file_path, "r", encoding="utf-8") as file:
-        return [ line.strip() for line in file ]
-
-
 def our_data_generator():    
     def ensure_dataset_loaded() -> None:
         if not DATASET_EN.is_file() or not DATASET_DE.is_file():
@@ -309,6 +304,11 @@ def our_data_generator():
             log("Unzipping dataset...")
             os.system(unzip_command)
             log("Dataset ready.")
+    
+    def read_dataset_segment(file_path: str) -> list[str]:
+        with open(file_path, "r", encoding="utf-8") as file:
+            return [ line.strip() for line in file ]
+
 
     ensure_dataset_loaded()
     

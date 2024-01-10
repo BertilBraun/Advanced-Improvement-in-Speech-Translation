@@ -23,8 +23,19 @@ SPM_OUTPUT_EN_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-e
 SPM_OUTPUT_DE_FILE = WORKSPACE_ROOT_FOLDER / "output" / "spm.train_complete.de-en.de"
 
 
+
+DATASET_FOLDER = ROOT_FOLDER / "dataset"
+DATASET_FOLDER.mkdir(parents=True, exist_ok=True)
+
+DATASET_EN = DATASET_FOLDER / "train.de-en.en"
+DATASET_DE = DATASET_FOLDER / "train.de-en.de"
+
+DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
+
+
 WRITE_DATASET = False
-RETRAIN_SPM = False
+RETRAIN_SPM = True
+PREFIX_OUR_DATASET = True
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
@@ -97,6 +108,41 @@ def process_lines(file_path, encoding='utf-8'):
     return processed_lines
 
 
+def our_data_generator():    
+    def ensure_dataset_loaded() -> None:
+        if not DATASET_EN.is_file() or not DATASET_DE.is_file():
+
+            download_location = DATASET_FOLDER / "data.zip"
+            # Download and unzip command
+            download_command = f"wget -nc -O '{download_location}' '{DATASET_URL}'"
+            unzip_command = f"unzip -o '{download_location}' -d '{DATASET_FOLDER}'"
+
+            # Execute download and unzip commands
+            log("Checking and downloading dataset...")
+            os.system(download_command)
+            log("Unzipping dataset...")
+            os.system(unzip_command)
+            log("Dataset ready.")
+    
+    def read_dataset_segment(file_path: str) -> list[str]:
+        with open(file_path, "r", encoding="utf-8") as file:
+            return [ line.strip() for line in file ]
+
+
+    ensure_dataset_loaded()
+    
+    # Read the dataset segment for this process
+    english_sentences = read_dataset_segment(DATASET_EN)
+    german_sentences = read_dataset_segment(DATASET_DE)
+     
+    if len(english_sentences) != len(german_sentences):
+        log("Warning: English and German sentences are not the same length.")
+    
+    log(f"Original dataset length: {len(english_sentences)}")
+    
+    yield from zip(english_sentences, german_sentences)
+    
+
 if __name__ == "__main__":
     
     if WRITE_DATASET:
@@ -125,6 +171,17 @@ if __name__ == "__main__":
                     skipped_lines += 1
                 
         log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
+
+    if PREFIX_OUR_DATASET:
+        with open(OUTPUT_DE_FILE, "a", encoding="utf-8") as f_de, \
+            open(OUTPUT_EN_FILE, "a", encoding="utf-8") as f_en:
+            
+            for en, de in tqdm(our_data_generator(), desc="Adding our dataset"):
+                en, de = cleanup(en, de)
+                if translation_pair_check(en, de):
+                    f_en.write(en + "\n")
+                    f_de.write(de + "\n")
+        
 
     if RETRAIN_SPM:
         print("Retraining sentencepiece model...")
