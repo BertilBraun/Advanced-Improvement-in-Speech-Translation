@@ -129,7 +129,7 @@ def process_reference_file():
         
     lines = process_reference_text(lines)
         
-    spm_output_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE)
+    spm_output_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE.as_posix())
     
     lines = [
         " ".join(spm_output_model.encode(line.strip(), out_type=str))
@@ -148,8 +148,8 @@ def process_hypothesis_file():
     with open(args.hyp_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
         
-    spm_input_model = spm.SentencePieceProcessor(model_file=SPM_INPUT_FILE)
-    spm_output_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE)
+    spm_input_model = spm.SentencePieceProcessor(model_file=SPM_INPUT_FILE.as_posix())
+    spm_output_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE.as_posix())
     
     lines = [
         spm_input_model.decode(line.split())
