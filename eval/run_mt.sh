@@ -24,6 +24,14 @@ mkdir -p $PRED_OUTPUT_DIR
 
 echo "Starting translation..."
 
+fairseq-preprocess \
+      --source-lang en --target-lang de \
+      --srcdict $BINARY_DATA_DIR/dict.en.txt \
+      --tgtdict $BINARY_DATA_DIR/dict.de.txt \
+      --testpref $DATA_DIR/spm.tst.de-en \
+      --destdir $BINARY_DATA_DIR \
+      --thresholdtgt 0 --thresholdsrc 0
+
 fairseq-generate $BINARY_DATA_DIR \
       --task translation \
       --source-lang en \

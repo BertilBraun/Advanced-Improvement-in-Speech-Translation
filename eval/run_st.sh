@@ -83,15 +83,13 @@ python process_asr_output_for_st.py \
 
 echo "Starting translation..."
 
-# TODO srcdict and tgtdict need to be set to the correct paths
 fairseq-preprocess \
     --source-lang en --target-lang de \
     --srcdict $MT_BINARIZED_DATA_DIR/dict.en.txt \
     --tgtdict $MT_BINARIZED_DATA_DIR/dict.de.txt \
     --testpref $PRED_OUTPUT_DIR/asr_out \
     --destdir $MT_DATA_DIR \
-    --thresholdtgt 0 --thresholdsrc 0 \
-    --workers 8
+    --thresholdtgt 0 --thresholdsrc 0
 
 fairseq-generate $MT_DATA_DIR \
       --task translation \
