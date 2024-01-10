@@ -34,8 +34,8 @@ DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2
 
 
 WRITE_DATASET = False
-RETRAIN_SPM = True
-PREFIX_OUR_DATASET = True
+RETRAIN_SPM = False
+PREFIX_OUR_DATASET = False
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
@@ -104,6 +104,9 @@ def process_lines(file_path, encoding='utf-8'):
         decoded_line = partial_line.decode(encoding, errors='ignore')
         processed_line = decoded_line.replace('\n', '').replace('\r', '')
         processed_lines.append(processed_line)
+
+    # Return only the first 100 million lines
+    processed_lines = processed_lines[:100_000_000]
 
     return processed_lines
 
