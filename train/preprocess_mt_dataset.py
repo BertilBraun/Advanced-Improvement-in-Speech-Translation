@@ -33,9 +33,10 @@ DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
 
-WRITE_DATASET = False
+WRITE_DATASET = True
 RETRAIN_SPM = True
 PREFIX_OUR_DATASET = True
+DO_FILTER = False
 
 DATASET_SIZE = 10_000_000
 
@@ -72,7 +73,7 @@ def translation_pair_check(en, de):
     def ascii_check(s):
         return all(ord(c) < 256 or c in ALLOWED_NON_ASCII_CHARS for c in s)
     
-    return ascii_check(en) and ascii_check(de)
+    return not DO_FILTER or (ascii_check(en) and ascii_check(de))
 
 
 def cleanup(en, de):
@@ -166,13 +167,13 @@ if __name__ == "__main__":
                 else:
                     skipped_lines += 1
                 
-            for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
-                en, de = cleanup(en, de)
-                if translation_pair_check(en, de):
-                    f_en.write(en + "\n")
-                    f_de.write(de + "\n")
-                else:
-                    skipped_lines += 1
+            # for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
+            #     en, de = cleanup(en, de)
+            #     if translation_pair_check(en, de):
+            #         f_en.write(en + "\n")
+            #         f_de.write(de + "\n")
+            #     else:
+            #         skipped_lines += 1
                 
         log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
 
@@ -203,7 +204,7 @@ if __name__ == "__main__":
         spm.SentencePieceTrainer.train(
             input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
             model_prefix="bpe",
-            vocab_size=10000,
+            vocab_size=5000,
             # input_sentence_size=1000000,
             shuffle_input_sentence=True,
         )
