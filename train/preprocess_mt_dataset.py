@@ -34,8 +34,10 @@ DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2
 
 
 WRITE_DATASET = False
-RETRAIN_SPM = False
-PREFIX_OUR_DATASET = False
+RETRAIN_SPM = True
+PREFIX_OUR_DATASET = True
+
+DATASET_SIZE = 10_000_000
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
@@ -105,8 +107,8 @@ def process_lines(file_path, encoding='utf-8'):
         processed_line = decoded_line.replace('\n', '').replace('\r', '')
         processed_lines.append(processed_line)
 
-    # Return only the first 100 million lines
-    processed_lines = processed_lines[:100_000_000]
+    # Return only the first DATASET_SIZE lines
+    processed_lines = processed_lines[:DATASET_SIZE]
 
     return processed_lines
 
@@ -126,11 +128,10 @@ def our_data_generator():
             log("Unzipping dataset...")
             os.system(unzip_command)
             log("Dataset ready.")
-    
+
     def read_dataset_segment(file_path: str) -> list[str]:
         with open(file_path, "r", encoding="utf-8") as file:
             return [ line.strip() for line in file ]
-
 
     ensure_dataset_loaded()
     
@@ -176,14 +177,24 @@ if __name__ == "__main__":
         log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
 
     if PREFIX_OUR_DATASET:
-        with open(OUTPUT_DE_FILE, "a", encoding="utf-8") as f_de, \
-            open(OUTPUT_EN_FILE, "a", encoding="utf-8") as f_en:
+        # prefix our dataset to the original dataset
+        en_dataset = process_lines(OUTPUT_EN_FILE)
+        de_dataset = process_lines(OUTPUT_DE_FILE)
+        
+        with open(OUTPUT_DE_FILE, "w", encoding="utf-8") as f_de, \
+            open(OUTPUT_EN_FILE, "w", encoding="utf-8") as f_en:
             
             for en, de in tqdm(our_data_generator(), desc="Adding our dataset"):
                 en, de = cleanup(en, de)
                 if translation_pair_check(en, de):
                     f_en.write(en + "\n")
                     f_de.write(de + "\n")
+                else:
+                    print(f"Skipped a line because it contained non-ascii characters: '{en}' '{de}'")
+                    
+            for en, de in tqdm(zip(en_dataset, de_dataset), desc="Adding original dataset"):
+                f_en.write(en + "\n")
+                f_de.write(de + "\n")
         
 
     if RETRAIN_SPM:
@@ -193,7 +204,7 @@ if __name__ == "__main__":
             input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
             model_prefix="bpe",
             vocab_size=10000,
-            input_sentence_size=1000000,
+            # input_sentence_size=1000000,
             shuffle_input_sentence=True,
         )
 
@@ -203,10 +214,31 @@ if __name__ == "__main__":
     
     log("BPE model ready.")
     
-    for data_file, spm_file in zip((OUTPUT_DE_FILE, OUTPUT_EN_FILE), (SPM_OUTPUT_DE_FILE, SPM_OUTPUT_EN_FILE)):
+    data_files = [
+        OUTPUT_DE_FILE,
+        OUTPUT_EN_FILE,
+        DATASET_FOLDER / "dev.de-en.de",
+        DATASET_FOLDER / "dev.de-en.en",
+        DATASET_FOLDER / "tst.de-en.de",
+        DATASET_FOLDER / "tst.de-en.en",
+    ]
+    
+    spm_files = [
+        SPM_OUTPUT_DE_FILE,
+        SPM_OUTPUT_EN_FILE,
+        DATASET_FOLDER / "spm.dev.de-en.de",
+        DATASET_FOLDER / "spm.dev.de-en.en",
+        DATASET_FOLDER / "spm.tst.de-en.de",
+        DATASET_FOLDER / "spm.tst.de-en.en",
+    ]
+    
+    for data_file, spm_file in zip(data_files, spm_files):
         with open(spm_file, "w", encoding="utf-8") as f_out:
             file_name = data_file.as_posix().split("/")[-1]
             for line in tqdm(process_lines(data_file), desc=f"Segmenting '{file_name}' Dataset"):
                 # Segmented into subwords
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
                 f_out.write(" ".join(line_segmented) + "\n")
+                
+    # remove previous binarized dataset
+    os.system(f"rm -rf {WORKSPACE_ROOT_FOLDER / 'binarized_dataset'}")

@@ -55,7 +55,7 @@ echo "Training the model..."
 
 fairseq-train \
     $BINARY_DATA_DIR --save-dir $MODEL_DIR \
-    --arch transformer_vaswani_wmt_en_de_big \
+    --arch transformer \
     --share-decoder-input-output-embed \
     --optimizer adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
     --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
@@ -66,6 +66,7 @@ fairseq-train \
     --max-epoch 2 \
     --fp16
 # TODO set max-epoch to 500
+# TODO set arch to transformer_iwslt_de_en??
 
 echo "Training complete."
 
