@@ -225,13 +225,16 @@ if __name__ == "__main__":
         DATASET_FOLDER / "tst.de-en.en",
     ]
     
+    TST_SPM_OUTPUT_DE_FILE = DATASET_FOLDER / "spm.tst.de-en.de"
+    TST_SPM_OUTPUT_EN_FILE = DATASET_FOLDER / "spm.tst.de-en.en"
+    
     spm_files = [
         SPM_OUTPUT_DE_FILE,
         SPM_OUTPUT_EN_FILE,
         DATASET_FOLDER / "spm.dev.de-en.de",
         DATASET_FOLDER / "spm.dev.de-en.en",
-        DATASET_FOLDER / "spm.tst.de-en.de",
-        DATASET_FOLDER / "spm.tst.de-en.en",
+        TST_SPM_OUTPUT_DE_FILE,
+        TST_SPM_OUTPUT_EN_FILE,
     ]
         
     for data_file, spm_file in zip(data_files, spm_files):
@@ -243,10 +246,10 @@ if __name__ == "__main__":
                 f_out.write(" ".join(line_segmented) + "\n")
                 
     # reduce the tst to only the first TEST_SET_SIZE lines
-    os.system(f"head -n {TEST_SET_SIZE} {SPM_OUTPUT_DE_FILE} > {SPM_OUTPUT_DE_FILE}.tmp")
-    os.system(f"head -n {TEST_SET_SIZE} {SPM_OUTPUT_EN_FILE} > {SPM_OUTPUT_EN_FILE}.tmp")
-    os.system(f"mv {SPM_OUTPUT_DE_FILE}.tmp {SPM_OUTPUT_DE_FILE}")
-    os.system(f"mv {SPM_OUTPUT_EN_FILE}.tmp {SPM_OUTPUT_EN_FILE}")            
+    os.system(f"head -n {TEST_SET_SIZE} {TST_SPM_OUTPUT_DE_FILE} > {TST_SPM_OUTPUT_DE_FILE}.tmp")
+    os.system(f"head -n {TEST_SET_SIZE} {TST_SPM_OUTPUT_EN_FILE} > {TST_SPM_OUTPUT_EN_FILE}.tmp")
+    os.system(f"mv {TST_SPM_OUTPUT_DE_FILE}.tmp {TST_SPM_OUTPUT_DE_FILE}")
+    os.system(f"mv {TST_SPM_OUTPUT_EN_FILE}.tmp {TST_SPM_OUTPUT_EN_FILE}")            
     
     # remove previous binarized dataset
     os.system(f"rm -rf {WORKSPACE_ROOT_FOLDER / 'binarized_dataset'}")
