@@ -63,10 +63,8 @@ fairseq-train \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
     --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
     --max-tokens 2048 \
-    --max-epoch 2 \
+    --max-epoch 500 \
     --fp16
-# TODO set max-epoch to 500
-# TODO set arch to transformer_iwslt_de_en??
 
 echo "Training complete."
 

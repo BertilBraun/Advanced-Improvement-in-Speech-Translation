@@ -33,12 +33,13 @@ DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
 
-WRITE_DATASET = True
-RETRAIN_SPM = True
-PREFIX_OUR_DATASET = True
-DO_FILTER = False
+WRITE_DATASET = False
+RETRAIN_SPM = False
+PREFIX_OUR_DATASET = False
+DO_FILTER_NON_ASCII = False
 
 DATASET_SIZE = 10_000_000
+TEST_SET_SIZE = 500
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
@@ -73,7 +74,7 @@ def translation_pair_check(en, de):
     def ascii_check(s):
         return all(ord(c) < 256 or c in ALLOWED_NON_ASCII_CHARS for c in s)
     
-    return not DO_FILTER or (ascii_check(en) and ascii_check(de))
+    return not DO_FILTER_NON_ASCII or (ascii_check(en) and ascii_check(de))
 
 
 def cleanup(en, de):
@@ -232,7 +233,7 @@ if __name__ == "__main__":
         DATASET_FOLDER / "spm.tst.de-en.de",
         DATASET_FOLDER / "spm.tst.de-en.en",
     ]
-    
+        
     for data_file, spm_file in zip(data_files, spm_files):
         with open(spm_file, "w", encoding="utf-8") as f_out:
             file_name = data_file.as_posix().split("/")[-1]
@@ -241,5 +242,11 @@ if __name__ == "__main__":
                 line_segmented = spm_model.encode(line.strip(), out_type=str)
                 f_out.write(" ".join(line_segmented) + "\n")
                 
+    # reduce the tst to only the first TEST_SET_SIZE lines
+    os.system(f"head -n {TEST_SET_SIZE} {SPM_OUTPUT_DE_FILE} > {SPM_OUTPUT_DE_FILE}.tmp")
+    os.system(f"head -n {TEST_SET_SIZE} {SPM_OUTPUT_EN_FILE} > {SPM_OUTPUT_EN_FILE}.tmp")
+    os.system(f"mv {SPM_OUTPUT_DE_FILE}.tmp {SPM_OUTPUT_DE_FILE}")
+    os.system(f"mv {SPM_OUTPUT_EN_FILE}.tmp {SPM_OUTPUT_EN_FILE}")            
+    
     # remove previous binarized dataset
     os.system(f"rm -rf {WORKSPACE_ROOT_FOLDER / 'binarized_dataset'}")
