@@ -34,7 +34,7 @@ DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2
 
 
 WRITE_DATASET = False
-RETRAIN_SPM = False
+RETRAIN_SPM = True
 PREFIX_OUR_DATASET = False
 DO_FILTER_NON_ASCII = False
 
@@ -205,7 +205,7 @@ if __name__ == "__main__":
         spm.SentencePieceTrainer.train(
             input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
             model_prefix="bpe",
-            vocab_size=5000,
+            vocab_size=10000,
             # input_sentence_size=1000000,
             shuffle_input_sentence=True,
         )
