@@ -35,7 +35,7 @@ DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2
 
 WRITE_DATASET = False
 RETRAIN_SPM = True
-PREFIX_OUR_DATASET = False
+PREFIX_OUR_DATASET = True
 DO_FILTER_NON_ASCII = False
 
 DATASET_SIZE = 10_000_000
