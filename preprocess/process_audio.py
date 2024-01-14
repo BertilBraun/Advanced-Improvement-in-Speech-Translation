@@ -1,14 +1,9 @@
 import os
-import torch
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
 from pathlib import Path
-from torch.nn.utils.rnn import pad_sequence
-from torchaudio.datasets import LIBRISPEECH
-from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
-
+import numpy as np
+import pandas as pd
+import torch
 from examples.speech_to_text.data_utils import (
     create_zip,
     gen_config_yaml,
@@ -17,6 +12,10 @@ from examples.speech_to_text.data_utils import (
     save_df_to_tsv,
     extract_fbank_features,
 )
+from torch.nn.utils.rnn import pad_sequence
+from torchaudio.datasets import LIBRISPEECH
+from tqdm import tqdm
+from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
 OVERWRITE_ZIP = True
 
@@ -84,10 +83,10 @@ def for_in_dataset(dataset, desc="", start=0, end=None):
 
 
 def extract_wav2vec_features_batch(
-    waveforms,  #: List[torch.FloatTensor],
-    sample_rate,  #: int,
-    output_paths,  #: List[Path],
-    overwrite=False,  #: bool = False
+        waveforms,  #: List[torch.FloatTensor],
+        sample_rate,  #: int,
+        output_paths,  #: List[Path],
+        overwrite=False,  #: bool = False
 ):
     # Check if all output files exist and if overwrite is not allowed
     if all(path.is_file() for path in output_paths) and not overwrite:
@@ -116,7 +115,7 @@ def extract_wav2vec_features_batch(
 
         # Trim the features based on original lengths and save
         for feature, original_length, output_path in zip(
-            features, original_lengths, output_paths
+                features, original_lengths, output_paths
         ):
             # Calculate the length ratio and apply it to the feature length
             length_ratio = original_length / max_padded_length
@@ -140,7 +139,7 @@ def process_dataset_to_wav2vec_embeddings(dataset):
 
     for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(dataset, desc=f"Wav2vec"):
         file = WAV2VEC_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
-        
+
         if not file.is_file():
             batch_waveforms.append(wav.to(device=device, dtype=torch.float))
             batch_paths.append(file.as_posix())
@@ -158,7 +157,7 @@ def process_dataset_to_wav2vec_embeddings(dataset):
 
 def process_dataset_to_mel_spectrogram(dataset):
     for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in for_in_dataset(
-        dataset, desc=f"Mel"
+            dataset, desc=f"Mel"
     ):
         file = MEL_ENCODING_ROOT / f"{spk_id}-{chapter_no}-{utt_no}.npy"
         if not file.is_file():
@@ -168,10 +167,10 @@ def process_dataset_to_mel_spectrogram(dataset):
 def cleanup_utterance(utt: str):
     # cleanup the utterance to make it easier for the ASR model to learn
     modified = utt.lower()
-    
+
     # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
     modified = "".join([c for c in modified if c.isalpha() or c == " " or c.isdigit()])
-    
+
     return modified
 
 
@@ -183,7 +182,7 @@ def process_dataset_manifest(datasets, root_location, zip_file):
 
     # assert len(audio_paths) == len(audio_lengths)
     assert len(datasets) == len(DATASET_NAMES)
-    
+
     text_mapping = {"original": [], "target": []}
 
     for dataset, dataset_name in zip(datasets, DATASET_NAMES):
@@ -191,7 +190,7 @@ def process_dataset_manifest(datasets, root_location, zip_file):
         manifest = {c: [] for c in MANIFEST_COLUMNS}
 
         for (_, _, utt, spk_id, chapter_no, utt_no) in for_in_dataset(
-            dataset, desc=f"Manifest {dataset_name}"
+                dataset, desc=f"Manifest {dataset_name}"
         ):
             sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
             manifest["id"].append(sample_id)
@@ -199,14 +198,14 @@ def process_dataset_manifest(datasets, root_location, zip_file):
             manifest["n_frames"].append(audio_lengths[sample_id])
             manifest["tgt_text"].append(cleanup_utterance(utt))
             manifest["speaker"].append(spk_id)
-            
+
             text_mapping["original"].append(utt)
             text_mapping["target"].append(cleanup_utterance(utt))
 
         save_df_to_tsv(
             pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv"
         )
-        
+
     save_df_to_tsv(
         pd.DataFrame.from_dict(text_mapping), root_location / "text.tsv"
     )
@@ -237,12 +236,13 @@ def main():
     datasets = load_dataset()  # train_data, dev_data, test_data = datasets
 
     # Pack audio features into ZIP
-    for root_location, workspace_root_location in ((WAV2VEC_ROOT, WAV2VEC_WORKSPACE_ROOT),): # ((WAV2VEC_ROOT, WAV2VEC_WORKSPACE_ROOT), (MEL_ROOT, MEL_WORKSPACE_ROOT)):
-        
+    for root_location, workspace_root_location in ((WAV2VEC_ROOT,
+                                                    WAV2VEC_WORKSPACE_ROOT),):  # ((WAV2VEC_ROOT, WAV2VEC_WORKSPACE_ROOT), (MEL_ROOT, MEL_WORKSPACE_ROOT)):
+
         encodings_folder = workspace_root_location / ENCODING_FOLDER_NAME
         zip_file = workspace_root_location / ZIP_FILE_NAME
         if not zip_file.is_file() or OVERWRITE_ZIP:
-            
+
             for dataset in datasets:
                 if root_location == WAV2VEC_ROOT:
                     process_dataset_to_wav2vec_embeddings(dataset)

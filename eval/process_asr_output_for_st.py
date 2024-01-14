@@ -9,8 +9,10 @@ import torch
 
 from examples.speech_to_text.data_utils import load_df_from_tsv
 
+
 def log(*args, **kwargs):
     print(*args, **kwargs, flush=True)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--ref_input_file", type=str)
@@ -20,13 +22,11 @@ parser.add_argument("--hyp_output_file", type=str)
 parser.add_argument("--src_lng", type=str, default="en")
 parser.add_argument("--target_lng", type=str, default="de")
 args = parser.parse_args()
-     
-     
+
 HOME = Path(f"{os.environ['HOME']}")
 ASR_ROOT = HOME / "ASR/wav2vec"
 SPM_INPUT_FILE = ASR_ROOT / "spm_unigram1000.model"
 SPM_OUTPUT_FILE = HOME / "PST/train/bpe.model"
-
 
 LLM_POSTEDITING_PROMPT = """[INST] <<SYS>>
 You are a professional specialized in ASR (Automatic Speech Recognition) transcription enhancement.
@@ -62,13 +62,12 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 log(f"Using device: {DEVICE}")
 log("Loading Tokenizer")
 
-
 TOKENIZER = AutoTokenizer.from_pretrained(LLAMA_MODEL, padding_side="left")
 TOKENIZER.pad_token = TOKENIZER.eos_token
 
 log("Tokenizer ready.")
 log("Loading LLaMA model.")
- 
+
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_use_double_quant=True,
@@ -91,23 +90,24 @@ def cleanup_output(output: str) -> str:
     output = output.split("\n")[0].strip()
     output = output.replace("  ", " ")
     output = output.replace(" ,", ", ")
-    
+
     # the output should always be in 'Best Hypothesis: "..."' format so we can just extract the text in between the quotes
     output = output.split('"')[1]
-    
-    return output    
+
+    return output
+
 
 def generate(prompts: list[str]) -> list[str]:
     model_inputs = TOKENIZER(prompts, return_tensors="pt", padding=True).to(DEVICE)
-     
+
     generation_config = GenerationConfig(
-        temperature=0.2, # TODO really low temperature but still get hallucinations
+        temperature=0.2,  # TODO really low temperature but still get hallucinations
         top_p=0.75,
         repetition_penalty=1.1,
         do_sample=True,
         num_beams=1,
     )
-    
+
     max_new_tokens = model_inputs.input_ids.shape[-1] * 2
 
     with torch.inference_mode():
@@ -116,20 +116,20 @@ def generate(prompts: list[str]) -> list[str]:
             generation_config=generation_config,
             max_new_tokens=max_new_tokens,
         )
-    
+
     decoded_outputs = TOKENIZER.batch_decode(generated_ids, skip_special_tokens=True)
     decoded_inputs = TOKENIZER.batch_decode(model_inputs.input_ids, skip_special_tokens=True)
-    
+
     cleaned_outputs = [
         cleanup_output(output.replace(prompt, ""))
         for output, prompt in zip(decoded_outputs, decoded_inputs)
     ]
-    
+
     with open("llama_outputs.txt", "a", encoding="utf-8") as f:
         for output, prompt in zip(cleaned_outputs, decoded_inputs):
             f.write(f"{prompt}\n{output}\n\n")
-            f.write("-"*100 + "\n\n")
-    
+            f.write("-" * 100 + "\n\n")
+
     return cleaned_outputs
 
 
@@ -142,9 +142,8 @@ def sample_print(data_list):
 
 
 def encode_and_save(lines, output_file):
-    
     spm_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE.as_posix())
-    
+
     lines = [
         " ".join(spm_model.encode(line.strip(), out_type=str))
         for line in lines
@@ -152,24 +151,24 @@ def encode_and_save(lines, output_file):
 
     with open(output_file, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
-        
+
     return lines
 
 
 def process_reference_file():
     with open(args.ref_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
-        
+
     lines = process_reference_text(lines)
-    
+
     log("Processed reference file")
     sample_print(lines)
-    
+
     encoded = encode_and_save(lines, args.ref_output_file)
-    
+
     log("Encoded reference file")
     sample_print(encoded)
-    
+
     log("Done processing reference file!")
 
 
@@ -177,14 +176,14 @@ def process_hypothesis_file():
     log("Processing hypothesis file...")
     with open(args.hyp_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
-                
+
     lines = process_hypothesis_text(lines)
-    
+
     log("Processed hypothesis file")
     sample_print(lines)
-    
+
     encoded = encode_and_save(lines, args.hyp_output_file)
-    
+
     log("Encoded hypothesis file")
     sample_print(encoded)
 
@@ -197,81 +196,80 @@ def process_reference_text(lines):
 
     # text_mapping = {"original": [], "target": []}
     text_mapping = load_df_from_tsv(ASR_ROOT / "text.tsv")
-    
+
     text_mapping = {
         target: original
         for original, target in zip(text_mapping["original"], text_mapping["target"])
     }
-    
+
     # this should at least be the original reference text without any processing, which we do during ASR preprocessing
     lines = [
         text_mapping[line] if line in text_mapping else line
         for line in lines
     ]
-    
-    translator = GoogleTranslator(source=args.src_lng, target=args.target_lng) 
+
+    translator = GoogleTranslator(source=args.src_lng, target=args.target_lng)
 
     log(f"Translating... (target language: {args.target_lng})")
 
     translated = translator.translate_batch(lines)
-    
+
     log("Translated file")
     sample_print(translated)
-    
+
     return translated
 
 
 def process_hypothesis_text(lines):
     # process hypothesis text, for example, add punctuation, capitalization, etc.
     # use a LLM to post-process the hypothesis text
-    
+
     processed_lines = []
-    
+
     # process in batches of 10
     num_samples_per_prompt = 10
     batch_size = 10
     batch = []
     for i in tqdm(range(0, len(lines), num_samples_per_prompt), desc="Processing batches"):
-        samples = lines[i:i+num_samples_per_prompt]
-        
+        samples = lines[i:i + num_samples_per_prompt]
+
         formatted_samples = ""
         for i, sample in enumerate(samples):
-            formatted_samples += f"{i+1}. \"{sample}\"\n"
-        
+            formatted_samples += f"{i + 1}. \"{sample}\"\n"
+
         prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES=formatted_samples)
         batch.append(prompt)
-        
+
         if len(batch) == batch_size:
             processed_lines.extend(generate(batch))
             batch = []
-            
+
     if len(batch) > 0:
         processed_lines.extend(generate(batch))
-    
+
     return processed_lines
-    
-    for i in range(0, len(lines), 10):
-        log(f"Processing lines {i} to {i+10}...")
-        hypotheses = lines[i:i+10]
-        prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES="\n".join(hypotheses))
-        
-        max_hypothesis_length = max([len(hypothesis) for hypothesis in hypotheses])
-        max_length = (len(prompt) + max_hypothesis_length) * 1.5
-        
-        # LLaMA model inference
-        post_processed = generate([prompt])[0]
-        
-        processed_lines.append(post_processed)
-        
-    return processed_lines
-        
+
+    # for i in range(0, len(lines), 10):
+    #     log(f"Processing lines {i} to {i + 10}...")
+    #     hypotheses = lines[i:i + 10]
+    #     prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES="\n".join(hypotheses))
+    # 
+    #     max_hypothesis_length = max([len(hypothesis) for hypothesis in hypotheses])
+    #     max_length = (len(prompt) + max_hypothesis_length) * 1.5
+    # 
+    #     # LLaMA model inference
+    #     post_processed = generate([prompt])[0]
+    # 
+    #     processed_lines.append(post_processed)
+    # 
+    # return processed_lines
 
 
 if __name__ == "__main__":
     log("Starting processing...")
-    
+
     process_hypothesis_file()
-    
+
     process_reference_file()
-    
+
     log("Done processing!")
