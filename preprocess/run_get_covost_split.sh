@@ -4,7 +4,7 @@ source ../setup.sh
 
 ASR="/pfs/work7/workspace/scratch/ubppd-ASR/"
 COVOST="$ASR/covost"
-TRANSLATIONS="$COVOST/data/tt"
+TRANSLATIONS="$COVOST/data/tt/translations"
 VALIDATED="$COVOST/corpus-16.1/en/validated.tsv"
 
 cd "$COVOST" || exit
