@@ -55,15 +55,14 @@ echo "Training the model..."
 
 fairseq-train \
     $BINARY_DATA_DIR --save-dir $MODEL_DIR \
-    --arch transformer \
-    --share-decoder-input-output-embed \
+    --arch transformer --share-decoder-input-output-embed \
     --optimizer adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
     --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
     --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
-    --max-tokens 2048 \
-    --max-epoch 150 \
+    --max-tokens 4096 \
+    --max-epoch 100 \
     --fp16
 
 echo "Training complete."
