@@ -2,9 +2,10 @@
 
 source ../setup.sh
 
-COVOST="/pfs/work7/workspace/scratch/ubppd-ASR/covost"
-TRANSLATIONS="/pfs/work7/workspace/scratch/ubppd-ASR/covost/data/tt"
-VALIDATED="/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1/en"
+ASR="/pfs/work7/workspace/scratch/ubppd-ASR/"
+COVOST="$ASR/covost"
+TRANSLATIONS="$COVOST/data/tt"
+VALIDATED="$COVOST/corpus-16.1/en/validated.tsv"
 
 cd "$COVOST" || exit
 
