@@ -33,10 +33,12 @@ DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
 
-WRITE_DATASET = False
+WRITE_DATASET = True
+WRITE_PARAPHRASED_DATASET = False
+WRITE_WMT_DATASET = True
 RETRAIN_SPM = True
-PREFIX_OUR_DATASET = True
-DO_FILTER_NON_ASCII = False
+PREFIX_OUR_DATASET = False
+DO_FILTER_NON_ASCII = True
 
 DATASET_SIZE = 10_000_000
 TEST_SET_SIZE = 500
@@ -48,7 +50,7 @@ def data_generator():
     s = set()    
     total_sizes = 100_000_000 # approximate size of the dataset (100 million)
     
-    for i in range(14, 20):
+    for i in range(19, 14, -1):
         log(f"Loading WMT{i} dataset...")
         dataset = load_dataset(f"wmt{i}", "de-en", split="train", trust_remote_code=True)
         log(f"Now processing WMT{i} dataset...")
@@ -59,6 +61,8 @@ def data_generator():
         s.update(
             (sentence["en"], sentence["de"]) for sentence in dataset["translation"]
         )
+        if len(s) >= DATASET_SIZE:
+            break
 
     # convert the set to a list
     s = list(s)
@@ -160,21 +164,23 @@ if __name__ == "__main__":
             open(PARAPHRASED_EN_FILE, "r", encoding="utf-8") as f_paraphrased_en, \
             open(PARAPHRASED_DE_FILE, "r", encoding="utf-8") as f_paraphrased_de:
             
-            for en, de in tqdm(zip(f_paraphrased_en.readlines(), f_paraphrased_de.readlines()), desc="Merging datasets"):
-                en, de = cleanup(en, de)
-                if translation_pair_check(en, de):
-                    f_en.write(en + "\n")
-                    f_de.write(de + "\n")
-                else:
-                    skipped_lines += 1
+            if WRITE_PARAPHRASED_DATASET:
+                for en, de in tqdm(zip(f_paraphrased_en.readlines(), f_paraphrased_de.readlines()), desc="Merging datasets"):
+                    en, de = cleanup(en, de)
+                    if translation_pair_check(en, de):
+                        f_en.write(en + "\n")
+                        f_de.write(de + "\n")
+                    else:
+                        skipped_lines += 1
                 
-            # for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
-            #     en, de = cleanup(en, de)
-            #     if translation_pair_check(en, de):
-            #         f_en.write(en + "\n")
-            #         f_de.write(de + "\n")
-            #     else:
-            #         skipped_lines += 1
+            if WRITE_WMT_DATASET:
+                for en, de in tqdm(data_generator(), desc="Merging WMT datasets"):
+                    en, de = cleanup(en, de)
+                    if translation_pair_check(en, de):
+                        f_en.write(en + "\n")
+                        f_de.write(de + "\n")
+                    else:
+                        skipped_lines += 1
                 
         log(f"Skipped {skipped_lines} lines because they contained non-ascii characters.")
 
