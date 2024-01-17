@@ -149,7 +149,6 @@ def process_dataset_to_wav2vec_embeddings(
     batch_paths = []
 
     for _data in dataset.get(data_split):
-        logger.info(f"Processing {_data}")
         file_name = _data.get("file_name")
         logger.info(f"File name: {file_name}")
         input_mp3_file_path = COVOST_CORPUS_EN_CLIPS / file_name
@@ -176,11 +175,6 @@ def process_dataset_to_wav2vec_embeddings(
 
 def main():
     dataset = read_data_table()
-
-    for s, v in dataset.items():
-        logger.info(s)
-        for i in range(3):
-            logger.info(v[i])
 
     encodings_folder = WAV2VEC_ROOT / "encodings"
     zip_file = WAV2VEC_ROOT / "encodings.zip"
