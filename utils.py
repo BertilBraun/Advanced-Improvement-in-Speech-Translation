@@ -1,7 +1,8 @@
 import logging
+import os
 
 
-def get_logger(module_name: str, log_level: str = logging.INFO) -> logging.Logger:
+def get_logger(module_name: str) -> logging.Logger:
     logger = logging.getLogger(module_name)
     handler = logging.StreamHandler()
     formatter = logging.Formatter(
@@ -10,6 +11,6 @@ def get_logger(module_name: str, log_level: str = logging.INFO) -> logging.Logge
     )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    logger.setLevel(log_level)
+    logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
     logger.propagate = False
     return logger

@@ -12,6 +12,7 @@ from examples.speech_to_text.data_utils import (
 import numpy as np
 import torch
 import torchaudio
+import torchaudio.transforms as T
 from torch.nn.utils.rnn import pad_sequence
 from tqdm import tqdm
 
@@ -92,11 +93,15 @@ def extract_wav2vec_features_batch(
         sample_rates = []
         original_lengths = []
 
-        # Load waveforms and their respective sample rates
+        # Define a resampler to convert the sampling rate to 16000 Hz
+        resampler = T.Resample(orig_freq=48000, new_freq=16000)
+
+        # Load waveforms, resample (if necessary), and store their lengths
         for file_path in input_paths:
             waveform, sample_rate = torchaudio.load(file_path)
+            if sample_rate != 16000:
+                waveform = resampler(waveform)
             waveforms.append(waveform)
-            sample_rates.append(sample_rate)
             original_lengths.append(waveform.shape[1])
 
         # Remove the first dimension (channel dimension) if it's 1
