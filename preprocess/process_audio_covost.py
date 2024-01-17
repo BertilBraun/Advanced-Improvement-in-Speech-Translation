@@ -150,7 +150,7 @@ def process_dataset_to_wav2vec_embeddings(
         file = WAV2VEC_ROOT / file_name.replace(".mp3", ".npy")
 
         if not file.is_file():
-            file_paths.append(file_path_mp3)
+            file_paths.append(Path(file_path_mp3))
             batch_paths.append(file.as_posix())
 
         if len(file_paths) == BATCH_SIZE:
