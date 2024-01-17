@@ -31,10 +31,13 @@ from tqdm import tqdm
 print(7)
 import warnings
 print(8)
+import os
 
 warnings.filterwarnings("ignore")
 
 pd.set_option("display.max_colwidth", None)
+
+covost_data = Path(os.environ.get("COVOST_DATA"))
 
 COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1"
 SOURCE_LANG_ID = "en"
@@ -68,7 +71,8 @@ class CoVoST(Dataset):
     ) -> None:
         self.root = Path(root)
 
-        data = pd.read_csv(self.root / f"{split}.tsv", sep='\t').to_dict(orient="index").items()
+        #data = pd.read_csv(self.root / f"{split}.tsv", sep='\t').to_dict(orient="index").items()
+        data = pd.read_csv(covost_data/"translations" / f"covost_v2.en_de.{split}.tsv", sep='\t').to_dict(orient="index").items()
         data = [v for k, v in sorted(data, key=lambda x: x[0])]
 
         self.data = []
