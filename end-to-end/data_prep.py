@@ -27,7 +27,7 @@ warnings.filterwarnings("ignore")
 
 pd.set_option('display.max_colwidth', None)
 
-COVOST_ROOT = "content/fairseq/examples/speech_to_text/data/covost2-subset"
+COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1"
 SOURCE_LANG_ID = "en"
 TARGET_LANG_ID = "de"
 SAMPLE_RATE = 48000

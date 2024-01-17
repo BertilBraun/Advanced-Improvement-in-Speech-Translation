@@ -36,15 +36,15 @@ DATA_ROOT="content/fairseq/examples/speech_to_text/data"
 # Create folder if not yet exist
 mkdir -p $DATA_ROOT
 # Download the subset data
-wget -O $DATA_ROOT/covost2-subset.tar.gz https://bwsyncandshare.kit.edu/s/ePneqHCHKCgFT9N/download/covost2-subset.tar.gz
+#wget -O $DATA_ROOT/covost2-subset.tar.gz https://bwsyncandshare.kit.edu/s/ePneqHCHKCgFT9N/download/covost2-subset.tar.gz
 # Unzip it
-tar -xf $DATA_ROOT/covost2-subset.tar.gz -C $DATA_ROOT
+#tar -xf $DATA_ROOT/covost2-subset.tar.gz -C $DATA_ROOT
 
 #run data preparation
 python data_prep.py #>> data_prep_$SLURM_JOB_ID.txt 2>&1
 
 #Training
-export COVOST_ROOT=content/fairseq/examples/speech_to_text/data/covost2-subset
+export COVOST_ROOT=/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1
 export ST_SAVE_DIR=content/fairseq/examples/speech_to_text/model
 
 
