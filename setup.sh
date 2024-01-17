@@ -8,6 +8,9 @@ export OMP_NUM_THREADS=1 # ${SLURM_CPUS_PER_TASK}
 # module load mpi/openmpi/4.1
 # module load devel/cuda/11.8
 
+# Set log level -- used by custom logger in our code
+export LOGLEVEL="INFO"  # ["INFO", "DEBUG", ...]
+
 
 # Function to check if extension to the workspace is needed
 check_and_extend_workspace() {
@@ -27,7 +30,7 @@ check_and_extend_workspace() {
 }
 
 # Check and extend workspaces
-# check_and_extend_workspace ASR 30
+# check_and_extend_workspace ASR_U 30
 # check_and_extend_workspace MT 30
 
 
@@ -57,6 +60,11 @@ else
     pip install --editable ~/fairseq/
 fi
 
+echo "Exporting Covost related paths"
+export ASR_U="/pfs/work7/workspace/scratch/ubppd-ASR_U"
+export COVOST="$ASR_U/covost"
+export COVOST_CORPUS="$COVOST/corpus-16.1"
+export COVOST_DATA="$COVOST/data"
 
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH

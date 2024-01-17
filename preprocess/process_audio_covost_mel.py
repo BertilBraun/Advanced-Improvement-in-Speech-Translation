@@ -10,8 +10,8 @@ from preprocess.process_audio_covost_wav2vec import (
     iterate_over_dataset_range,
     covost_data,
     COVOST_CORPUS_EN_CLIPS,
-    read_data_table,
 )
+from preprocess.utils import read_data_table
 from utils import get_logger
 
 logger = get_logger("ProcessAudioCovostMel")
