@@ -86,14 +86,12 @@ def extract_wav2vec_features_batch(
     if all(path.is_file() for path in output_paths) and not overwrite:
         return
     require_sample_rate = 16000
+    waveforms = []
+    original_lengths = []
 
+    # Define a resampler to convert the sampling rate to 16000 Hz
+    resampler = T.Resample(orig_freq=48000, new_freq=require_sample_rate)
     try:
-        waveforms = []
-        original_lengths = []
-
-        # Define a resampler to convert the sampling rate to 16000 Hz
-        resampler = T.Resample(orig_freq=48000, new_freq=require_sample_rate)
-
         # Load waveforms, resample (if necessary), and store their lengths
         for file_path in input_paths:
             waveform, sample_rate = torchaudio.load(file_path)
@@ -114,9 +112,8 @@ def extract_wav2vec_features_batch(
 
         # Process the batch
         processed_values = processor(
-            batch_waveforms, sampling_rate=require_sample_rate, return_tensors="pt"
+            batch_waveforms, sampling_rate=16000, return_tensors="pt"
         ).input_values
-        processed_values = processed_values.squeeze(1)
         processed_values = processed_values.to(device)
 
         with torch.no_grad():
