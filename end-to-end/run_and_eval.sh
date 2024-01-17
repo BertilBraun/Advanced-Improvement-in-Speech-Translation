@@ -16,12 +16,18 @@ source ../setup.sh
 
 pip list -v                                #could be removed
 
-#import torch python
+#import torch python ....
+
 #git clone https://github.com/facebookresearch/fairseq.git  #should already be done in environment setup
+
+#cd fairseq
 #pip install --editable ./ #should already be done in environment setup
+
 #echo $PYTHONPATH
 #import os python  #should already be done in environment setup
+#os.environ['PYTHONPATH'] += ":/content/fairseq/"  #should already be done in environment setup
 #echo $PYTHONPATH
+
 #pip install pandas torchaudio sentencepiece  #should already be done in environment setup
 
 #Data Preparation
