@@ -7,7 +7,7 @@ if not covost_root:
     raise EnvironmentError("COVOST_ROOT environment variable is not set")
 
 # Construct the file path
-file_path = os.path.join(covost_root, 'your_file_name.tsv')
+file_path = os.path.join(covost_root, 'covost_v2.en_de.test.tsv')
 
 # Read and parse the TSV file
 data = []
