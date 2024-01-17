@@ -24,6 +24,9 @@ if not covost_data:
     raise EnvironmentError("COVOST_ROOT environment variable is not set")
 
 covost_corpus_clips = Path(os.environ.get("COVOST_CORPUS")) / "/en/clips"
+logger.info(
+    f"Loading corpus from {covost_corpus_clips}. File type is {type(covost_corpus_clips)}"
+)
 
 WAV2VEC_ROOT = covost_data / "wav2vec"
 WAV2VEC_ROOT.mkdir(parents=True, exist_ok=True)
@@ -143,6 +146,7 @@ def process_dataset_to_wav2vec_embeddings(
     for _data in dataset.get(data_split):
         logger.info(f"Processing {_data}")
         file_name = _data.get("file_name")
+        logger.info(f"File name: {file_name}")
         input_mp3_file_path = covost_corpus_clips / file_name
         logger.info(
             f"Processing {input_mp3_file_path}. Type: {type(input_mp3_file_path)}"
