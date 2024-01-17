@@ -21,7 +21,7 @@ if not COVOST_CORPUS:
 
 
 def calculate_number_of_frames(audio_file: str) -> int:
-    logger.info(f"Reading audio file {audio_file}")
+    logger.debug(f"Reading audio file {audio_file}")
     # Load the audio file
     audio = AudioSegment.from_mp3(audio_file)
 
