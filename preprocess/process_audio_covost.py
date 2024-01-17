@@ -154,12 +154,12 @@ def process_dataset_to_wav2vec_embeddings(
             batch_paths.append(file.as_posix())
 
         if len(file_paths) == BATCH_SIZE:
-            extract_wav2vec_features_batch(file_paths, sample_rate, batch_paths)
+            extract_wav2vec_features_batch(file_paths, batch_paths)
             file_paths = []
             batch_paths = []
 
     if file_paths:
-        extract_wav2vec_features_batch(file_paths, sample_rate, batch_paths)
+        extract_wav2vec_features_batch(file_paths, batch_paths)
 
     logger.info(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
 
