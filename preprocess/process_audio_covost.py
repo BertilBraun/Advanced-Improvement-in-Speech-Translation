@@ -137,7 +137,7 @@ def process_dataset_to_wav2vec_embeddings(
     data_split: Annotated[str, "['test', 'train', 'dev']"],
 ):
     logger.info(f"Start processing {data_split} data for wav2vec embeddings")
-    batch_waveforms = []
+    file_paths = []
     batch_paths = []
 
     for (
@@ -146,20 +146,20 @@ def process_dataset_to_wav2vec_embeddings(
         _,
         _,
     ) in dataset.get(data_split):
-        audio = covost_corpus_clips / file_name
+        file_path_mp3 = covost_corpus_clips / file_name
         file = WAV2VEC_ROOT / file_name.replace(".mp3", ".npy")
 
         if not file.is_file():
-            batch_waveforms.append(audio.to(device=device, dtype=torch.float))
+            file_paths.append(file_path_mp3)
             batch_paths.append(file.as_posix())
 
-        if len(batch_waveforms) == BATCH_SIZE:
-            extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
-            batch_waveforms = []
+        if len(file_paths) == BATCH_SIZE:
+            extract_wav2vec_features_batch(file_paths, sample_rate, batch_paths)
+            file_paths = []
             batch_paths = []
 
-    if batch_waveforms:
-        extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
+    if file_paths:
+        extract_wav2vec_features_batch(file_paths, sample_rate, batch_paths)
 
     logger.info(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
 
