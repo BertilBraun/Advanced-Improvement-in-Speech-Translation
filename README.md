@@ -16,6 +16,11 @@
     Add users to the workspace:
 
     ```bash
+    module load system/ws_addon
+    
+    # Example: ws_share -t dir-w -u uxude ASR
+    ws_share -t dir-w -u <user> <workspace>
+   
     setfacl -Rm u:USERNAME:rwX,d:u:USERNAME:rwX $(ws_find ASR)
     setfacl -Rm u:USERNAME:rwX,d:u:USERNAME:rwX $(ws_find MT)
     ```

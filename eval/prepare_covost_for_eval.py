@@ -76,7 +76,7 @@ if __name__ == "__main__":
                 "audio": file_path,
                 "n_frames": calculate_number_of_frames(file_path),
                 "tgt_text": entry["en"],
-                "speaker": entry["client_id"]
+                "speaker": entry["client_id"],
             }
             new_data.append(row)
             uid += 1
