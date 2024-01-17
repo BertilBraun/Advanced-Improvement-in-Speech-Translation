@@ -21,7 +21,7 @@ logger = get_logger("ProcessAudioCovost")
 # Access the COVOST_ROOT environment variable
 covost_data = Path(os.environ.get("COVOST_DATA"))
 if not covost_data:
-    raise EnvironmentError("COVOST_ROOT environment variable is not set")
+    raise EnvironmentError("COVOST_DATA environment variable is not set")
 
 # Access the COVOST_CORPUS environment variable
 COVOST_CORPUS = Path(os.environ.get("COVOST_CORPUS"))
@@ -150,20 +150,22 @@ def process_dataset_to_wav2vec_embeddings(
 
     for _data in dataset.get(data_split):
         file_name = _data.get("file_name")
-        logger.info(f"File name: {file_name}")
+        logger.debug(f"File name: {file_name}")
         input_mp3_file_path = COVOST_CORPUS_EN_CLIPS / file_name
-        logger.info(
+        logger.debug(
             f"Processing {input_mp3_file_path}. Type: {type(input_mp3_file_path)}"
         )
         output_file_path = WAV2VEC_ROOT / str(file_name).replace(".mp3", ".npy")
-        logger.info(f"Processing {output_file_path}. Type: {type(output_file_path)}")
+        logger.debug(f"Processing {output_file_path}. Type: {type(output_file_path)}")
 
         if not output_file_path.is_file():
             input_paths.append(input_mp3_file_path)
-            batch_paths.append(output_file_path.as_posix())
+            batch_paths.append(output_file_path)
 
         if len(input_paths) == BATCH_SIZE:
-            extract_wav2vec_features_batch(input_paths, batch_paths)
+            extract_wav2vec_features_batch(
+                input_paths=input_paths, output_paths=batch_paths
+            )
             input_paths = []
             batch_paths = []
 
