@@ -28,8 +28,9 @@ mkdir -p $PRED_OUTPUT_DIR
 
 echo "Starting prediction for $model"
 
-fairseq-generate "$DATA_DIR" \
-    --config-yaml config.yaml --gen-subset test-clean \
+fairseq-generate "$COVOST" \
+    --config-yaml /home/kit/stud/ubppd/fairseq/.circleci/config.yaml \
+    --gen-subset wav2vec \
     --task speech_to_text \
     --path "$MODEL_DIR/checkpoint_best_after_120h_train.pt" \
     --max-tokens 50000 --beam 5 --scoring wer > $PRED_LOG
