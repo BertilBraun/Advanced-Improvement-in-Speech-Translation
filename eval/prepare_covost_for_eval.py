@@ -67,19 +67,22 @@ if __name__ == "__main__":
 
     uid = 0
     for data_split, table in dataset_tables.items():
-        logger.info("Processing %s ..." % data_split)
+        logger.info(f"Processing {data_split} ...")
         new_data = []
         for entry in table:
-            new_data.append(uid)
+            file_path = COVOST_CORPUS / "en" / "clips" / entry["file_name"]
+            row = {
+                "id": uid,
+                "audio": file_path,
+                "n_frames": calculate_number_of_frames(file_path),
+                "tgt_text": entry["en"],
+                "speaker": entry["client_id"]
+            }
+            new_data.append(row)
             uid += 1
 
-            file_path = COVOST_CORPUS / "en" / "clips" / entry["file_name"]
-            new_data.append(file_path)
-            new_data.append(calculate_number_of_frames(file_path))
-            new_data.append(entry["en"])
-            new_data.append(entry["client_id"])
-            write_list_to_tsv(
-                data_list=new_data,
-                output_file_path=out_path / f"{data_split}.tsv",
-                headers=["id", "audio", "n_frames", "tgt_text", "speaker"],
-            )
+        write_list_to_tsv(
+            data_list=new_data,
+            output_file_path=out_path / f"{data_split}.tsv",
+            headers=["id", "audio", "n_frames", "tgt_text", "speaker"],
+        )
