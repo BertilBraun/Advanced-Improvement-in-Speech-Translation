@@ -21,6 +21,7 @@ if not COVOST_CORPUS:
 
 
 def calculate_number_of_frames(audio_file: str) -> int:
+    logger.info(f"Reading audio file {audio_file}")
     # Load the audio file
     audio = AudioSegment.from_mp3(audio_file)
 
@@ -66,6 +67,7 @@ if __name__ == "__main__":
 
     uid = 0
     for data_split, table in dataset_tables.items():
+        logger.info("Processing %s ..." % data_split)
         new_data = []
         for entry in table:
             new_data.append(uid)
