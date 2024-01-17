@@ -32,7 +32,7 @@ pip list -v                                #could be removed
 
 #Data Preparation
 # Define folder path to store the data
-DATA_ROOT="/content/fairseq/examples/speech_to_text/data"
+DATA_ROOT="content/fairseq/examples/speech_to_text/data"
 # Create folder if not yet exist
 mkdir -p $DATA_ROOT
 # Download the subset data
@@ -44,8 +44,8 @@ tar -xf $DATA_ROOT/covost2-subset.tar.gz -C $DATA_ROOT
 python data_prep.py >> data_prep_$SLURM_JOB_ID.txt 2>&1
 
 #Training
-export COVOST_ROOT=/content/fairseq/examples/speech_to_text/data/covost2-subset
-export ST_SAVE_DIR=/content/fairseq/examples/speech_to_text/model
+export COVOST_ROOT=content/fairseq/examples/speech_to_text/data/covost2-subset
+export ST_SAVE_DIR=content/fairseq/examples/speech_to_text/model
 
 
 mkdir -p $ST_SAVE_DIR
@@ -60,8 +60,8 @@ CUDA_VISIBLE_DEVICES=0 fairseq-train $COVOST_ROOT/en \
 
 
 # Inference & Evaluation
-export PRED_OUTPUT_DIR=/content/fairseq/examples/speech_to_text/pred_eval
-export PRED_LOG=/content/fairseq/examples/speech_to_text/pred_eval/st_en_de.pred.log
+export PRED_OUTPUT_DIR=content/fairseq/examples/speech_to_text/pred_eval
+export PRED_LOG=content/fairseq/examples/speech_to_text/pred_eval/st_en_de.pred.log
 mkdir -p $PRED_OUTPUT_DIR
 fairseq-generate $COVOST_ROOT/en \
   --config-yaml config_st_en_de.yaml --gen-subset test_st_en_de --task speech_to_text \
