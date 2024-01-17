@@ -11,17 +11,25 @@ from examples.speech_to_text.data_utils import (
 
 # from IPython.display import Audio
 from pathlib import Path
-import shutil
-from tempfile import NamedTemporaryFile
+print(1)
+#import shutil
+#from tempfile import NamedTemporaryFile
 from typing import Optional, Tuple
 #import librosa
+print(2)
 
 import pandas as pd
+print(3)
 import torchaudio
+print(4)
 from torch import Tensor
+print(5)
 from torch.utils.data import Dataset
+print(6)
 from tqdm import tqdm
+print(7)
 import warnings
+print(8)
 
 warnings.filterwarnings("ignore")
 
