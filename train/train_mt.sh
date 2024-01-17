@@ -62,7 +62,7 @@ fairseq-train \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
     --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
     --max-tokens 4096 \
-    --max-epoch 400 \
+    --max-epoch 200 \
     --fp16
 
 echo "Training complete."
