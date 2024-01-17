@@ -30,7 +30,7 @@ def calculate_number_of_frames(audio_file: str) -> int:
 
     # Sample rate (e.g., 44100 for 44.1 kHz)
     sample_rate = audio.frame_rate
-    logger.info("Sample rate %s" % sample_rate)
+    logger.debug("Sample rate %s" % sample_rate)
 
     # Calculate the total number of frames
     return duration_seconds * sample_rate
