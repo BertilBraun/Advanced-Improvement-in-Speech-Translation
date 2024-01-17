@@ -76,7 +76,7 @@ if __name__ == "__main__":
             file_path = COVOST_CORPUS / "en" / "clips" / entry["file_name"]
             new_data.append(file_path)
             new_data.append(calculate_number_of_frames(file_path))
-            new_data.append(entry["end"])
+            new_data.append(entry["en"])
             new_data.append(entry["client_id"])
             write_list_to_tsv(
                 data_list=new_data,
