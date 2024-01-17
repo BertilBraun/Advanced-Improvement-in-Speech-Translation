@@ -8,7 +8,7 @@ from examples.speech_to_text.data_utils import (
     load_df_from_tsv,
     save_df_to_tsv,
 )
-from IPython.display import Audio
+#from IPython.display import Audio
 from pathlib import Path
 import shutil
 from tempfile import NamedTemporaryFile
@@ -35,8 +35,8 @@ sample_idx = 10
 train_df = pd.read_csv(f"{COVOST_ROOT}/{SOURCE_LANG_ID}/train.tsv", index_col=0)
 print(train_df[['sentence', 'translation']].iloc[sample_idx])
 
-Audio(filename=f"{COVOST_ROOT}/{SOURCE_LANG_ID}/clips/{train_df.iloc[sample_idx]['path']}",
-      rate=SAMPLE_RATE)
+#Audio(filename=f"{COVOST_ROOT}/{SOURCE_LANG_ID}/clips/{train_df.iloc[sample_idx]['path']}",
+#      rate=SAMPLE_RATE)
 
 
 
@@ -116,7 +116,7 @@ zip_path = root / "fbank80.zip"
 print("ZIPing features...")
 create_zip(feature_root, zip_path)
 
-
+'''
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import cm
@@ -130,8 +130,8 @@ fig, ax = plt.subplots(figsize=(20, 4))
 cax = ax.imshow(np.transpose(feat), interpolation='nearest', cmap=cm.afmhot, origin='lower')
 ax.set_title('log mel filter bank features')
 
-plt.show()
-
+#plt.show()
+'''
 
 import pandas as pd
 
