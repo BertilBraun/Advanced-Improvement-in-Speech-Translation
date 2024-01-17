@@ -5,7 +5,7 @@ echo "Starting the script execution."
 source ../setup.sh
 echo "Setup script sourced successfully."
 
-ASR="/pfs/work7/workspace/scratch/ubppd-ASR/"
+ASR="/pfs/work7/workspace/scratch/ubppd-ASR"
 COVOST="$ASR/covost"
 VALIDATED="$COVOST/corpus-16.1/en/validated.tsv"
 
@@ -29,9 +29,13 @@ if [ ! -f "$FILE_TO_CHECK" ]; then
       --root "$COVOST_ROOT" \
       --cv-tsv "$VALIDATED"
 
-    echo "Python script completed. TSV files should be generated in the $COVOST_ROOT directory."
+    echo "Python script to get the covost splits are completed. TSV files should be generated in the $COVOST_ROOT directory."
 else
-    echo "File $FILE_TO_CHECK already exists. No need to run the Python script."
+    echo "File $FILE_TO_CHECK already exists."
 fi
+
+echo "Running python script: process_audio_covost.py"
+python process_audio_covost.py
+
 
 echo "Script execution finished."
