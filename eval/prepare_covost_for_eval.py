@@ -40,6 +40,7 @@ def write_list_to_tsv(data_list, output_file_path, headers=None):
     :param headers: Optional. List of headers for the TSV file. If not provided,
                     the keys of the first dictionary in the list will be used.
     """
+    logger.info("Writing to file %s" % output_file_path)
     if not data_list:
         raise ValueError("The data list is empty")
 
@@ -53,6 +54,7 @@ def write_list_to_tsv(data_list, output_file_path, headers=None):
 
 
 if __name__ == "__main__":
+    logger.info("Starting preparation")
     out_path = Path(COVOST_DATA) / "asr_input_data_tables"
     os.makedirs(out_path, exist_ok=True)
 
