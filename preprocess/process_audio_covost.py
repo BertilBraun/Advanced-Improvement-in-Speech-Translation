@@ -4,16 +4,19 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Annotated, Dict, List
 
+from examples.speech_to_text.data_utils import (
+    create_zip,
+)
+
 import numpy as np
 import torch
 import torchaudio
 from torch.nn.utils.rnn import pad_sequence
 
-from process_audio import model, device, BATCH_SIZE, processor
+from process_audio import model, device, BATCH_SIZE, processor, OVERWRITE_ZIP
 from utils import get_logger
 
 logger = get_logger()
-logger.info("Processing audio covost")
 
 # Access the COVOST_ROOT environment variable
 covost_data = Path(os.environ.get("COVOST_DATA"))
@@ -60,6 +63,7 @@ def read_data_table():
                     continue
                 data[split].append(row)
 
+    logger.info("Finished Reading Covost data tables ")
     return data
 
 
@@ -68,6 +72,7 @@ def extract_wav2vec_features_batch(
     output_paths,  #: List[Path],
     overwrite=False,  #: bool = False
 ):
+    logger.info("Extracting wav2vec")
     # Check if all output files exist and if overwrite is not allowed
     if all(path.is_file() for path in output_paths) and not overwrite:
         return
@@ -121,6 +126,7 @@ def extract_wav2vec_features_batch(
             trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
             np.save(output_path, trimmed_feature)
 
+            logger.info("Finished extracting wav2vec features")
     except Exception as e:
         logger.error(f"Error at embedding {output_paths}: {e}")
         return
@@ -130,6 +136,7 @@ def process_dataset_to_wav2vec_embeddings(
     dataset: Dict[str, List[dict]],
     data_split: Annotated[str, "['test', 'train', 'dev']"],
 ):
+    logger.info(f"Start processing {data_split} data for wav2vec embeddings")
     batch_waveforms = []
     batch_paths = []
 
@@ -154,12 +161,20 @@ def process_dataset_to_wav2vec_embeddings(
     if batch_waveforms:
         extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
 
-    print(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
+    logger.info(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
+
+
+def main():
+    dataset = read_data_table()
+
+    encodings_folder = WAV2VEC_ROOT / "encodings"
+    zip_file = WAV2VEC_ROOT / "encodings.zip"
+    if not zip_file.is_file() or OVERWRITE_ZIP:
+        process_dataset_to_wav2vec_embeddings(dataset, "train")
+        create_zip(encodings_folder, zip_file)
 
 
 if __name__ == "__main__":
-    counter = 3
-    for split, d in read_data_table().items():
-        print(split)
-        for i in range(counter):
-            print(d[i])
+    logger.info("Started Processing audio covost")
+    main()
+    logger.info("Finished Processing audio covost")
