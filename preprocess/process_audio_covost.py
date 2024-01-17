@@ -14,7 +14,14 @@ from examples.speech_to_text.data_utils import (
 from torch.nn.utils.rnn import pad_sequence
 from tqdm import tqdm
 
-from preprocess.process_audio import model, device, BATCH_SIZE, processor, OVERWRITE_ZIP
+from preprocess.process_audio import (
+    model,
+    device,
+    BATCH_SIZE,
+    processor,
+    OVERWRITE_ZIP,
+    extract_wav2vec_features_batch,
+)
 from utils import get_logger
 
 logger = get_logger("ProcessAudioCovost")
@@ -76,70 +83,70 @@ def read_data_table() -> Dict[str, List[dict]]:
     return data_table
 
 
-def extract_wav2vec_features_batch(
-    input_paths: List[Path],
-    output_paths: List[Path],
-    overwrite: bool = False,
-) -> None:
-    logger.info("Extracting wav2vec")
-    # Check if all output files exist and if overwrite is not allowed
-    if all(path.is_file() for path in output_paths) and not overwrite:
-        return
-    require_sample_rate = 16000
-    waveforms = []
-    original_lengths = []
-
-    # Define a resampler to convert the sampling rate to 16000 Hz
-    resampler = T.Resample(orig_freq=48000, new_freq=require_sample_rate)
-    try:
-        # Load waveforms, resample (if necessary), and store their lengths
-        for file_path in input_paths:
-            waveform, sample_rate = torchaudio.load(file_path)
-            if sample_rate != 16000:
-                waveform = resampler(waveform)
-            waveforms.append(waveform)
-            original_lengths.append(waveform.shape[1])
-
-        # Remove the first dimension (channel dimension) if it's 1
-        waveforms_squeezed = [
-            wav.squeeze(0) if wav.shape[0] == 1 else wav for wav in waveforms
-        ]
-        batch_waveforms = pad_sequence(waveforms_squeezed, batch_first=True)
-        max_padded_length = batch_waveforms.shape[1]
-
-        # Add a channel dimension (if your model expects it, otherwise skip this step)
-        batch_waveforms = batch_waveforms.unsqueeze(1)
-
-        # Process the batch
-        processed_values = processor(
-            batch_waveforms, sampling_rate=16000, return_tensors="pt"
-        ).input_values
-        processed_values = processed_values.to(device)
-
-        with torch.no_grad():
-            features = model(processed_values).last_hidden_state
-        feature_length = features.shape[1]
-
-        # Trim the features based on original lengths and save
-        for feature, original_length, output_path in zip(
-            features, original_lengths, output_paths
-        ):
-            # Calculate the length ratio and apply it to the feature length
-            length_ratio = original_length / max_padded_length
-            trimmed_length = int(length_ratio * feature_length)
-
-            # Optionally add a small buffer to avoid cutting off too much
-            buffer = 5  # You can adjust this buffer
-            trimmed_length = min(trimmed_length + buffer, feature_length)
-
-            # Trim the feature
-            trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
-            np.save(output_path, trimmed_feature)
-
-        logger.info("Finished extracting wav2vec features")
-    except Exception as e:
-        logger.error(f"Error at embedding {output_paths}: {e}")
-        return
+# def extract_wav2vec_features_batch(
+#     input_paths: List[Path],
+#     output_paths: List[Path],
+#     overwrite: bool = False,
+# ) -> None:
+#     logger.info("Extracting wav2vec")
+#     # Check if all output files exist and if overwrite is not allowed
+#     if all(path.is_file() for path in output_paths) and not overwrite:
+#         return
+#     require_sample_rate = 16000
+#     waveforms = []
+#     original_lengths = []
+#
+#     # Define a resampler to convert the sampling rate to 16000 Hz
+#     resampler = T.Resample(orig_freq=48000, new_freq=require_sample_rate)
+#     try:
+#         # Load waveforms, resample (if necessary), and store their lengths
+#         for file_path in input_paths:
+#             waveform, sample_rate = torchaudio.load(file_path)
+#             if sample_rate != 16000:
+#                 waveform = resampler(waveform)
+#             waveforms.append(waveform)
+#             original_lengths.append(waveform.shape[1])
+#
+#         # Remove the first dimension (channel dimension) if it's 1
+#         waveforms_squeezed = [
+#             wav.squeeze(0) if wav.shape[0] == 1 else wav for wav in waveforms
+#         ]
+#         batch_waveforms = pad_sequence(waveforms_squeezed, batch_first=True)
+#         max_padded_length = batch_waveforms.shape[1]
+#
+#         # Add a channel dimension (if your model expects it, otherwise skip this step)
+#         batch_waveforms = batch_waveforms.unsqueeze(1)
+#
+#         # Process the batch
+#         processed_values = processor(
+#             batch_waveforms, sampling_rate=16000, return_tensors="pt"
+#         ).input_values
+#         processed_values = processed_values.to(device)
+#
+#         with torch.no_grad():
+#             features = model(processed_values).last_hidden_state
+#         feature_length = features.shape[1]
+#
+#         # Trim the features based on original lengths and save
+#         for feature, original_length, output_path in zip(
+#             features, original_lengths, output_paths
+#         ):
+#             # Calculate the length ratio and apply it to the feature length
+#             length_ratio = original_length / max_padded_length
+#             trimmed_length = int(length_ratio * feature_length)
+#
+#             # Optionally add a small buffer to avoid cutting off too much
+#             buffer = 5  # You can adjust this buffer
+#             trimmed_length = min(trimmed_length + buffer, feature_length)
+#
+#             # Trim the feature
+#             trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
+#             np.save(output_path, trimmed_feature)
+#
+#         logger.info("Finished extracting wav2vec features")
+#     except Exception as e:
+#         logger.error(f"Error at embedding {output_paths}: {e}")
+#         return
 
 
 def iterate_over_dataset_range(dataset, desc="", start=0, end=None):
@@ -158,8 +165,11 @@ def process_dataset_to_wav2vec_embeddings(
     data_split: Annotated[str, "['test', 'train', 'dev']"],
 ) -> None:
     logger.info(f"Start processing {data_split} data for wav2vec embeddings")
-    input_paths = []
+    waveforms = []
     batch_paths = []
+    require_sample_rate = 16000
+    # Define a resampler to convert the sampling rate to 16000 Hz
+    resampler = T.Resample(orig_freq=48000, new_freq=require_sample_rate)
 
     for _data in dataset.get(data_split):
         file_name = _data.get("file_name")
@@ -172,18 +182,27 @@ def process_dataset_to_wav2vec_embeddings(
         logger.debug(f"Processing {output_file_path}. Type: {type(output_file_path)}")
 
         if not output_file_path.is_file():
-            input_paths.append(input_mp3_file_path)
+            waveform, sample_rate = torchaudio.load(input_mp3_file_path)
+            if sample_rate != require_sample_rate:
+                waveform = resampler(waveform)
+            waveforms.append(waveform)
             batch_paths.append(output_file_path)
 
-        if len(input_paths) == BATCH_SIZE:
+        if len(waveforms) == BATCH_SIZE:
             extract_wav2vec_features_batch(
-                input_paths=input_paths, output_paths=batch_paths
+                waveforms=waveforms,
+                sample_rate=require_sample_rate,
+                output_paths=batch_paths,
             )
-            input_paths = []
+            waveforms = []
             batch_paths = []
 
-    if input_paths:
-        extract_wav2vec_features_batch(input_paths, batch_paths)
+    if waveforms:
+        extract_wav2vec_features_batch(
+            waveforms=waveforms,
+            sample_rate=require_sample_rate,
+            output_paths=batch_paths,
+        )
 
     logger.info(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
 
