@@ -171,7 +171,7 @@ def process_dataset_to_wav2vec_embeddings(
     # Define a resampler to convert the sampling rate to 16000 Hz
     resampler = T.Resample(orig_freq=48000, new_freq=require_sample_rate)
 
-    for _data in dataset.get(data_split):
+    for _data in iterate_over_dataset_range(dataset.get(data_split)):
         file_name = _data.get("file_name")
         logger.debug(f"File name: {file_name}")
         input_mp3_file_path = COVOST_CORPUS_EN_CLIPS / file_name
