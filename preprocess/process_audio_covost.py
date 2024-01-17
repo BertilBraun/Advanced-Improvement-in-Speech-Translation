@@ -213,7 +213,7 @@ def main():
     encodings_folder = WAV2VEC_ROOT / "encodings"
     zip_file = WAV2VEC_ROOT / "encodings.zip"
     if not zip_file.is_file() or OVERWRITE_ZIP:
-        process_dataset_to_wav2vec_embeddings(dataset, "train")
+        process_dataset_to_wav2vec_embeddings(dataset, "test")
         create_zip(encodings_folder, zip_file)
 
 
