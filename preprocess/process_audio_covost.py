@@ -18,12 +18,6 @@ from tqdm import tqdm
 from preprocess.process_audio import model, device, BATCH_SIZE, processor, OVERWRITE_ZIP
 from utils import get_logger
 
-# Configure the logger
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
 logger = get_logger("ProcessAudioCovost")
 
 # Access the COVOST_ROOT environment variable
