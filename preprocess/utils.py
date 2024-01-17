@@ -4,6 +4,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List
 
+from tqdm import tqdm
+
 from utils import get_logger
 
 logger = get_logger("Preprocess::Utils")
@@ -50,3 +52,14 @@ def read_data_table() -> Dict[str, List[dict]]:
 
     logger.info("Finished Reading Covost data tables ")
     return data_table
+
+
+def iterate_over_dataset_range(dataset, desc="", start=0, end=None):
+    end = len(dataset) if end is None else end
+    for i in tqdm(range(start, end), desc=desc):
+        try:
+            data = dataset[i]
+        except Exception as e:
+            logger.error(f"Error loading dataset at {desc} {i}: {e}")
+            continue
+        yield data

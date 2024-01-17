@@ -1,19 +1,17 @@
-import csv
 import os
-from collections import defaultdict
 from pathlib import Path
 from typing import Annotated, Dict, List
 
 import torchaudio
 import torchaudio.transforms as T
 from examples.speech_to_text.data_utils import create_zip
-from tqdm import tqdm
 
 from preprocess.process_audio import (
     BATCH_SIZE,
     OVERWRITE_ZIP,
     extract_wav2vec_features_batch,
 )
+from preprocess.utils import iterate_over_dataset_range, read_data_table
 from utils import get_logger
 
 logger = get_logger("ProcessAudioCovost")
@@ -35,17 +33,6 @@ logger.info(
 
 WAV2VEC_ROOT = covost_data / "wav2vec"
 WAV2VEC_ROOT.mkdir(parents=True, exist_ok=True)
-
-
-def iterate_over_dataset_range(dataset, desc="", start=0, end=None):
-    end = len(dataset) if end is None else end
-    for i in tqdm(range(start, end), desc=desc):
-        try:
-            data = dataset[i]
-        except Exception as e:
-            logger.error(f"Error loading dataset at {desc} {i}: {e}")
-            continue
-        yield data
 
 
 def process_dataset_to_wav2vec_embeddings(

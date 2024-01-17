@@ -4,7 +4,7 @@ from pathlib import Path
 
 from pydub import AudioSegment
 
-from preprocess.utils import read_data_table
+from preprocess.utils import read_data_table, iterate_over_dataset_range
 from utils import get_logger
 
 logger = get_logger("EvalDataPrepareCovost")
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     for data_split, table in dataset_tables.items():
         logger.info(f"Processing {data_split} ...")
         new_data = []
-        for entry in table:
+        for entry in iterate_over_dataset_range(table):
             file_path = COVOST_CORPUS / "en" / "clips" / entry["file_name"]
             row = {
                 "id": uid,
