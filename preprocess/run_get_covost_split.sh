@@ -31,10 +31,10 @@ else
     echo "File $FILE_TO_CHECK already exists."
 fi
 
-
+cd "$HOME/Advanced-Improvement-in-Speech-Translation" || { echo "Could not change directory. Exiting script ..."; exit 1;}
 
 echo "Running python script: process_audio_covost.py"
-python process_audio_covost.py
+python preprocess.process_audio_covost.py
 
 
 echo "Script execution finished."
