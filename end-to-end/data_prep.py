@@ -15,7 +15,7 @@ print(1)
 #import shutil
 #from tempfile import NamedTemporaryFile
 from typing import Optional, Tuple
-#import librosa
+import librosa
 print(2)
 
 import pandas as pd
@@ -87,7 +87,7 @@ class CoVoST(Dataset):
         """
         data = self.data[n]
         path = self.root / "clips" / data["path"]
-        waveform, sample_rate = torchaudio.load(path, sr=None, mono=False)
+        waveform, sample_rate = librosa.load(path, sr=None, mono=False)
         #waveform, sample_rate = librosa.load(path, sr=None, mono=False)
         waveform = torch.tensor(waveform)[None, :]
         sentence = data["sentence"]
