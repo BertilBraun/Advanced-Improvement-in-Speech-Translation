@@ -13,7 +13,7 @@ import torch
 import torchaudio
 from torch.nn.utils.rnn import pad_sequence
 
-from process_audio import model, device, BATCH_SIZE, processor, OVERWRITE_ZIP
+from preprocess.process_audio import model, device, BATCH_SIZE, processor, OVERWRITE_ZIP
 from utils import get_logger
 
 logger = get_logger()
