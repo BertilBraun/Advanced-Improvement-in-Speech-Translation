@@ -18,14 +18,6 @@ echo "Starting the script execution."
 source ../setup.sh
 echo "Setup script sourced successfully."
 
-# Set log level
-export LOGLEVEL="INFO"  # ["INFO", "DEBUG", ...]
-
-export ASR="/pfs/work7/workspace/scratch/ubppd-ASR"
-export COVOST="$ASR/covost"
-export COVOST_CORPUS="$COVOST/corpus-16.1"
-export COVOST_DATA="$COVOST/data"
-echo "COVOST_DATA environment variable set to $COVOST_DATA."
 
 # Define the file you want to check
 FILE_TO_CHECK="$COVOST_DATA/translations/covost_v2.en_de.test.tsv"

@@ -1,14 +1,9 @@
 import csv
 import os
-from collections import defaultdict
 from pathlib import Path
 
 from pydub import AudioSegment
 
-from preprocess.process_audio_covost_wav2vec import (
-    COVOST_CORPUS_EN_CLIPS,
-    read_data_table,
-)
 from utils import get_logger
 
 logger = get_logger("EvalDataPrepareCovost")
