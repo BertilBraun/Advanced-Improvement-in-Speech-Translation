@@ -68,9 +68,9 @@ def read_data_table():
 
 
 def extract_wav2vec_features_batch(
-    file_paths,  #: List[Path],
-    output_paths,  #: List[Path],
-    overwrite=False,  #: bool = False
+    input_paths: List[Path],
+    output_paths: List[Path],
+    overwrite: bool = False,
 ):
     logger.info("Extracting wav2vec")
     # Check if all output files exist and if overwrite is not allowed
@@ -83,7 +83,7 @@ def extract_wav2vec_features_batch(
         original_lengths = []
 
         # Load waveforms and their respective sample rates
-        for file_path in file_paths:
+        for file_path in input_paths:
             waveform, sample_rate = torchaudio.load(file_path)
             waveforms.append(waveform)
             sample_rates.append(sample_rate)
@@ -137,7 +137,7 @@ def process_dataset_to_wav2vec_embeddings(
     data_split: Annotated[str, "['test', 'train', 'dev']"],
 ):
     logger.info(f"Start processing {data_split} data for wav2vec embeddings")
-    file_paths = []
+    input_paths = []
     batch_paths = []
 
     for (
@@ -146,20 +146,24 @@ def process_dataset_to_wav2vec_embeddings(
         _,
         _,
     ) in dataset.get(data_split):
-        file_path_mp3 = Path(covost_corpus_clips / file_name)
-        file = Path(WAV2VEC_ROOT / file_name.replace(".mp3", ".npy"))
+        input_mp3_file_path = Path(covost_corpus_clips / file_name)
+        logger.info(
+            f"Processing {input_mp3_file_path}. Type: {type(input_mp3_file_path)}"
+        )
+        output_file_path = Path(WAV2VEC_ROOT / file_name.replace(".mp3", ".npy"))
+        logger.info(f"Processing {output_file_path}. Type: {type(output_file_path)}")
 
-        if not file.is_file():
-            file_paths.append(file_path_mp3)
-            batch_paths.append(file.as_posix())
+        if not output_file_path.is_file():
+            input_paths.append(input_mp3_file_path)
+            batch_paths.append(output_file_path.as_posix())
 
-        if len(file_paths) == BATCH_SIZE:
-            extract_wav2vec_features_batch(file_paths, batch_paths)
-            file_paths = []
+        if len(input_paths) == BATCH_SIZE:
+            extract_wav2vec_features_batch(input_paths, batch_paths)
+            input_paths = []
             batch_paths = []
 
-    if file_paths:
-        extract_wav2vec_features_batch(file_paths, batch_paths)
+    if input_paths:
+        extract_wav2vec_features_batch(input_paths, batch_paths)
 
     logger.info(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
 
