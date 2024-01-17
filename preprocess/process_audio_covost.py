@@ -1,4 +1,5 @@
 import csv
+import logging
 import os
 from collections import defaultdict
 from pathlib import Path
@@ -12,10 +13,17 @@ import numpy as np
 import torch
 import torchaudio
 from torch.nn.utils.rnn import pad_sequence
+from tqdm import tqdm
 
 from preprocess.process_audio import model, device, BATCH_SIZE, processor, OVERWRITE_ZIP
 from utils import get_logger
 
+# Configure the logger
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 logger = get_logger("ProcessAudioCovost")
 
 # Access the COVOST_ROOT environment variable
@@ -134,10 +142,21 @@ def extract_wav2vec_features_batch(
             trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
             np.save(output_path, trimmed_feature)
 
-            logger.info("Finished extracting wav2vec features")
+        logger.info("Finished extracting wav2vec features")
     except Exception as e:
         logger.error(f"Error at embedding {output_paths}: {e}")
         return
+
+
+def iterate_over_dataset_range(dataset, desc="", start=0, end=None):
+    end = len(dataset) if end is None else end
+    for i in tqdm(range(start, end), desc=desc):
+        try:
+            data = dataset[i]
+        except Exception as e:
+            logger.error(f"Error loading dataset at {desc} {i}: {e}")
+            continue
+        yield data
 
 
 def process_dataset_to_wav2vec_embeddings(
