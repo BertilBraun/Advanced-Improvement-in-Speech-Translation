@@ -41,8 +41,8 @@ TARGET_LANG_ID = "de"
 SAMPLE_RATE = 48000
 sample_idx = 10
 
-train_df = pd.read_csv(f"{COVOST_ROOT}/{SOURCE_LANG_ID}/train.tsv", index_col=0)
-print(train_df[["sentence", "translation"]].iloc[sample_idx])
+#train_df = pd.read_csv(f"{COVOST_ROOT}/{SOURCE_LANG_ID}/train.tsv", index_col=0)
+#print(train_df[["sentence", "translation"]].iloc[sample_idx])
 
 # Audio(filename=f"{COVOST_ROOT}/{SOURCE_LANG_ID}/clips/{train_df.iloc[sample_idx]['path']}",
 #      rate=SAMPLE_RATE)
@@ -67,7 +67,7 @@ class CoVoST(Dataset):
     ) -> None:
         self.root = Path(root)
 
-        data = pd.read_csv(self.root / f"{split}.tsv").to_dict(orient="index").items()
+        data = pd.read_csv(self.root / f"{split}.tsv", sep='\t').to_dict(orient="index").items()
         data = [v for k, v in sorted(data, key=lambda x: x[0])]
 
         self.data = []
