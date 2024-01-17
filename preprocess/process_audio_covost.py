@@ -29,7 +29,7 @@ WAV2VEC_ROOT = covost_data / "wav2vec"
 WAV2VEC_ROOT.mkdir(parents=True, exist_ok=True)
 
 
-def read_data_table():
+def read_data_table() -> Dict[str, List[dict]]:
     logger.info("Reading Covost data table")
 
     # Construct the file path
@@ -71,7 +71,7 @@ def extract_wav2vec_features_batch(
     input_paths: List[Path],
     output_paths: List[Path],
     overwrite: bool = False,
-):
+) -> None:
     logger.info("Extracting wav2vec")
     # Check if all output files exist and if overwrite is not allowed
     if all(path.is_file() for path in output_paths) and not overwrite:
@@ -135,7 +135,7 @@ def extract_wav2vec_features_batch(
 def process_dataset_to_wav2vec_embeddings(
     dataset: Dict[str, List[dict]],
     data_split: Annotated[str, "['test', 'train', 'dev']"],
-):
+) -> None:
     logger.info(f"Start processing {data_split} data for wav2vec embeddings")
     input_paths = []
     batch_paths = []
@@ -170,6 +170,11 @@ def process_dataset_to_wav2vec_embeddings(
 
 def main():
     dataset = read_data_table()
+
+    for s, v in dataset.items():
+        logger.info(s)
+        for i in range(3):
+            logger.info(v[i])
 
     encodings_folder = WAV2VEC_ROOT / "encodings"
     zip_file = WAV2VEC_ROOT / "encodings.zip"
