@@ -41,7 +41,7 @@ def read_data_table() -> Dict[str, List[dict]]:
         "dev": os.path.join(covost_data / "translations", "covost_v2.en_de.dev.tsv"),
     }
 
-    data = defaultdict(list)
+    data_table = defaultdict(list)
 
     # Read and parse each TSV file
     for split, file_path in file_paths.items():
@@ -61,10 +61,10 @@ def read_data_table() -> Dict[str, List[dict]]:
                 if first_row:
                     first_row = False
                     continue
-                data[split].append(row)
+                data_table[split].append(row)
 
     logger.info("Finished Reading Covost data tables ")
-    return data
+    return data_table
 
 
 def extract_wav2vec_features_batch(
@@ -141,6 +141,7 @@ def process_dataset_to_wav2vec_embeddings(
     batch_paths = []
 
     for _data in dataset.get(data_split):
+        logger.info(f"Processing {_data}")
         file_name = _data.get("file_name")
         input_mp3_file_path = covost_corpus_clips / file_name
         logger.info(
