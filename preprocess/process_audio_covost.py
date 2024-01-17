@@ -1,19 +1,30 @@
 import csv
 import os
 from collections import defaultdict
+from pathlib import Path
+
+from utils import get_logger
+
+logger = get_logger()
+
+# Access the COVOST_ROOT environment variable
+covost_root = Path(os.environ.get("COVOST_ROOT"))
+if not covost_root:
+    raise EnvironmentError("COVOST_ROOT environment variable is not set")
+
+covost_corpus_clips = Path(os.environ.get("COVOST_CORPUS")) / "en/clips"
 
 
 def read_data_table():
-    # Access the COVOST_ROOT environment variable
-    covost_root = os.environ.get("COVOST_ROOT")
-    if not covost_root:
-        raise EnvironmentError("COVOST_ROOT environment variable is not set")
+    logger.info("Reading Covost data table")
 
     # Construct the file path
     file_paths = {
-        "train": os.path.join(covost_root, "covost_v2.en_de.train.tsv"),
-        "test": os.path.join(covost_root, "covost_v2.en_de.test.tsv"),
-        "dev": os.path.join(covost_root, "covost_v2.en_de.dev.tsv"),
+        "train": os.path.join(
+            covost_root / "translations", "covost_v2.en_de.train.tsv"
+        ),
+        "test": os.path.join(covost_root / "translations", "covost_v2.en_de.test.tsv"),
+        "dev": os.path.join(covost_root / "translations", "covost_v2.en_de.dev.tsv"),
     }
 
     data = defaultdict(list)
