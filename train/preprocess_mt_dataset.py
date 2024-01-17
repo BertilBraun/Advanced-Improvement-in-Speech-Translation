@@ -39,6 +39,7 @@ WRITE_WMT_DATASET = True
 RETRAIN_SPM = True
 PREFIX_OUR_DATASET = False
 DO_FILTER_NON_ASCII = True
+REMOVE_MODEL = True
 
 DATASET_SIZE = 10_000_000
 TEST_SET_SIZE = 500
@@ -65,7 +66,7 @@ def data_generator():
             break
 
     # convert the set to a list
-    s = list(s)
+    s = list(s)[:DATASET_SIZE]
     log(f"The total size of the dataset is {total_sizes}.")
     log(f"Filtered dataset length: {len(s)}")
     log(f"Removed {total_sizes - len(s)} duplicates.")
@@ -212,7 +213,7 @@ if __name__ == "__main__":
             input=f"{OUTPUT_DE_FILE},{OUTPUT_EN_FILE}",
             model_prefix="bpe",
             vocab_size=10000,
-            # input_sentence_size=1000000,
+            input_sentence_size=1000000,
             shuffle_input_sentence=True,
         )
 
@@ -259,3 +260,6 @@ if __name__ == "__main__":
     
     # remove previous binarized dataset
     os.system(f"rm -rf {WORKSPACE_ROOT_FOLDER / 'binarized_dataset'}")
+    
+    if REMOVE_MODEL:
+        os.system(f"mv {ROOT_FOLDER}/checkpoint* {ROOT_FOLDER}/old")  
