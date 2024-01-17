@@ -20,18 +20,22 @@ def read_data_table():
 
     # Read and parse each TSV file
     for split, file_path in file_paths.items():
+        first_row = True
         with open(file_path, "r", encoding="utf-8") as file:
             reader = csv.DictReader(
                 file,
                 delimiter="\t",
                 fieldnames=[
-                    "audio_path",
-                    "english_sentence",
-                    "german_translation",
+                    "file_name",
+                    "en",
+                    "de",
                     "client_id",
                 ],
             )
             for row in reader:
+                if first_row:
+                    first_row = False
+                    continue
                 data[split].append(row)
 
     return data
