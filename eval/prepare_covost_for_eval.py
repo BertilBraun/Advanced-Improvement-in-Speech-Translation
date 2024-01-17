@@ -14,18 +14,18 @@ from utils import get_logger
 logger = get_logger("EvalDataPrepareCovost")
 
 COVOST_DATA = Path("/pfs/work7/workspace/scratch/ubppd-ASR/covost/data")
-COVOST_CORPUS_EN_CLIPS
 
 
 def calculate_number_of_frames(audio_file: str) -> int:
     # Load the audio file
-    audio = AudioSegment.from_mp3("file.mp3")
+    audio = AudioSegment.from_mp3(audio_file)
 
     # Duration in milliseconds and converting it to seconds
     duration_seconds = len(audio) / 1000.0
 
     # Sample rate (e.g., 44100 for 44.1 kHz)
     sample_rate = audio.frame_rate
+    logger.info("Sample rate %s" % sample_rate)
 
     # Calculate the total number of frames
     return duration_seconds * sample_rate
@@ -63,16 +63,21 @@ if __name__ == "__main__":
         "de",
         "client_id",
     ]
-    id = 0
+    headers = ["id", "audio", "n_frames", "tgt_text", "speaker"]
+    uid = 0
     for data_split, table in dataset_tables.items():
-        new_data = defaultdict(list)
+        new_data = []
         for entry in table:
-            new_entry = {"id": id}
-            id += 1
+            new_data.append(uid)
+            uid += 1
 
-            file_path = COVOST_DATA / "wav2vec" / entry["file_name"]
-            new_entry["audio"] = file_path
-            new_entry["n_frames"] = calculate_number_of_frames(file_path)
-            new_entry["tgt_text"] = entry["en"]
-            new_entry["speaker"] = entry["client_id"]
-            new_data[data_split].append(new_entry)
+            file_path = COVOST_CORPUS_EN_CLIPS / entry["file_name"]
+            new_data.append(file_path)
+            new_data.append(calculate_number_of_frames(file_path))
+            new_data.append(entry["end"])
+            new_data.append(entry["client_id"])
+            write_list_to_tsv(
+                data_list=new_data,
+                output_file_path=out_path / f"{data_split}.tsv",
+                headers=headers,
+            )
