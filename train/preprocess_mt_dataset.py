@@ -33,16 +33,16 @@ DATASET_DE = DATASET_FOLDER / "train.de-en.de"
 DATASET_URL = "https://bwsyncandshare.kit.edu/s/7oo2AG8jRriLZKg/download?path=%2F&files=data.zip&downloadStartSecret=tk6qdncox5"
 
 
-WRITE_DATASET = True
+WRITE_DATASET = False
 WRITE_PARAPHRASED_DATASET = False
-WRITE_WMT_DATASET = True
-RETRAIN_SPM = True
+WRITE_WMT_DATASET = False
+RETRAIN_SPM = False
 PREFIX_OUR_DATASET = False
 DO_FILTER_NON_ASCII = True
 REMOVE_MODEL = True
 
 DATASET_SIZE = 10_000_000
-TEST_SET_SIZE = 500
+TEST_SET_SIZE = 5_000
 
 ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
 
@@ -262,4 +262,4 @@ if __name__ == "__main__":
     os.system(f"rm -rf {WORKSPACE_ROOT_FOLDER / 'binarized_dataset'}")
     
     if REMOVE_MODEL:
-        os.system(f"mv {ROOT_FOLDER}/checkpoint* {ROOT_FOLDER}/old")  
+        os.system(f"mv {ROOT_FOLDER}/models/checkpoint* {ROOT_FOLDER}/models/old")  
