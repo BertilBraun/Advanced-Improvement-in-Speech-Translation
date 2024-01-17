@@ -8,7 +8,8 @@ from examples.speech_to_text.data_utils import (
     load_df_from_tsv,
     save_df_to_tsv,
 )
-#from IPython.display import Audio
+
+# from IPython.display import Audio
 from pathlib import Path
 import shutil
 from tempfile import NamedTemporaryFile
@@ -17,7 +18,6 @@ from typing import Optional, Tuple
 
 import pandas as pd
 import torchaudio
-import torch
 from torch import Tensor
 from torch.utils.data import Dataset
 from tqdm import tqdm
@@ -25,7 +25,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-pd.set_option('display.max_colwidth', None)
+pd.set_option("display.max_colwidth", None)
 
 COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1"
 SOURCE_LANG_ID = "en"
@@ -34,12 +34,10 @@ SAMPLE_RATE = 48000
 sample_idx = 10
 
 train_df = pd.read_csv(f"{COVOST_ROOT}/{SOURCE_LANG_ID}/train.tsv", index_col=0)
-print(train_df[['sentence', 'translation']].iloc[sample_idx])
+print(train_df[["sentence", "translation"]].iloc[sample_idx])
 
-#Audio(filename=f"{COVOST_ROOT}/{SOURCE_LANG_ID}/clips/{train_df.iloc[sample_idx]['path']}",
+# Audio(filename=f"{COVOST_ROOT}/{SOURCE_LANG_ID}/clips/{train_df.iloc[sample_idx]['path']}",
 #      rate=SAMPLE_RATE)
-
-
 
 
 class CoVoST(Dataset):
@@ -59,7 +57,6 @@ class CoVoST(Dataset):
         source_language: str,
         target_language: str,
     ) -> None:
-
         self.root = Path(root)
 
         data = pd.read_csv(self.root / f"{split}.tsv").to_dict(orient="index").items()
@@ -95,7 +92,6 @@ class CoVoST(Dataset):
         return len(self.data)
 
 
-
 # Define file path to store the features
 root = Path(COVOST_ROOT).absolute() / SOURCE_LANG_ID
 feature_root = root / "fbank80"
@@ -108,9 +104,7 @@ for split in CoVoST.SPLITS:
 
     print(f"Extracting log mel filter bank features of audio")
     for waveform, sample_rate, _, _, _, utt_id in tqdm(dataset):
-        extract_fbank_features(
-            waveform, sample_rate, feature_root / f"{utt_id}.npy"
-        )
+        extract_fbank_features(waveform, sample_rate, feature_root / f"{utt_id}.npy")
 
 
 # Pack audio features into ZIP
@@ -118,7 +112,7 @@ zip_path = root / "fbank80.zip"
 print("ZIPing features...")
 create_zip(feature_root, zip_path)
 
-'''
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import cm
@@ -133,7 +127,7 @@ cax = ax.imshow(np.transpose(feat), interpolation='nearest', cmap=cm.afmhot, ori
 ax.set_title('log mel filter bank features')
 
 #plt.show()
-'''
+"""
 
 import pandas as pd
 
@@ -146,30 +140,26 @@ audio_paths, audio_lengths = get_zip_manifest(zip_path)
 task = f"st_{SOURCE_LANG_ID}_{TARGET_LANG_ID}"
 
 for split in CoVoST.SPLITS:
-  print(f"Fetching manifest from {split}...")
-  manifest = {c: [] for c in MANIFEST_COLUMNS}
-  dataset = CoVoST(root, split, SOURCE_LANG_ID, TARGET_LANG_ID)
+    print(f"Fetching manifest from {split}...")
+    manifest = {c: [] for c in MANIFEST_COLUMNS}
+    dataset = CoVoST(root, split, SOURCE_LANG_ID, TARGET_LANG_ID)
 
-  for _, _, src_utt, tgt_utt, speaker_id, utt_id in tqdm(dataset):
-      manifest["id"].append(utt_id)
-      manifest["audio"].append(audio_paths[utt_id])
-      manifest["n_frames"].append(audio_lengths[utt_id])
-      manifest["tgt_text"].append(tgt_utt)
-      manifest["speaker"].append(speaker_id)
-  save_df_to_tsv(
-      pd.DataFrame.from_dict(manifest), root / f"{split}_{task}.tsv"
-  )
-
+    for _, _, src_utt, tgt_utt, speaker_id, utt_id in tqdm(dataset):
+        manifest["id"].append(utt_id)
+        manifest["audio"].append(audio_paths[utt_id])
+        manifest["n_frames"].append(audio_lengths[utt_id])
+        manifest["tgt_text"].append(tgt_utt)
+        manifest["speaker"].append(speaker_id)
+    save_df_to_tsv(pd.DataFrame.from_dict(manifest), root / f"{split}_{task}.tsv")
 
 
 # Collect train text to generate sentencepiece model and vocabulary later on
-train_text = pd.read_csv(root / "train_st_en_de.tsv", sep='\t')["tgt_text"].tolist()
+train_text = pd.read_csv(root / "train_st_en_de.tsv", sep="\t")["tgt_text"].tolist()
 
 
-
-with open(root / 'train_text.txt', 'w') as f:
-  for t in train_text:
-      f.write(t + "\n")
+with open(root / "train_text.txt", "w") as f:
+    for t in train_text:
+        f.write(t + "\n")
 
 
 # Train sentencepiece model and generate subword vocabulary
@@ -181,7 +171,7 @@ VOCAB_TYPE = "unigram"
 spm_filename_prefix = f"spm_{VOCAB_TYPE}{VOCAB_SIZE}_{task}"
 
 gen_vocab(
-    Path(root / 'train_text.txt'),
+    Path(root / "train_text.txt"),
     root / spm_filename_prefix,
     VOCAB_TYPE,
     VOCAB_SIZE,
@@ -193,8 +183,3 @@ gen_config_yaml(
     spm_filename=spm_filename_prefix + ".model",
     yaml_filename=f"config_{task}.yaml",
 )
-
-
-
-
-
