@@ -16,7 +16,7 @@ from torch.nn.utils.rnn import pad_sequence
 from preprocess.process_audio import model, device, BATCH_SIZE, processor, OVERWRITE_ZIP
 from utils import get_logger
 
-logger = get_logger()
+logger = get_logger("ProcessAudioCovost")
 
 # Access the COVOST_ROOT environment variable
 covost_data = Path(os.environ.get("COVOST_DATA"))
@@ -140,17 +140,13 @@ def process_dataset_to_wav2vec_embeddings(
     input_paths = []
     batch_paths = []
 
-    for (
-        file_name,
-        _,
-        _,
-        _,
-    ) in dataset.get(data_split):
-        input_mp3_file_path = Path(covost_corpus_clips / file_name)
+    for _data in dataset.get(data_split):
+        file_name = _data.get("file_name")
+        input_mp3_file_path = covost_corpus_clips / file_name
         logger.info(
             f"Processing {input_mp3_file_path}. Type: {type(input_mp3_file_path)}"
         )
-        output_file_path = Path(WAV2VEC_ROOT / file_name.replace(".mp3", ".npy"))
+        output_file_path = WAV2VEC_ROOT / str(file_name).replace(".mp3", ".npy")
         logger.info(f"Processing {output_file_path}. Type: {type(output_file_path)}")
 
         if not output_file_path.is_file():
