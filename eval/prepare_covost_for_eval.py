@@ -4,11 +4,20 @@ from pathlib import Path
 
 from pydub import AudioSegment
 
+from preprocess.utils import read_data_table
 from utils import get_logger
 
 logger = get_logger("EvalDataPrepareCovost")
 
-COVOST_DATA = Path("/pfs/work7/workspace/scratch/ubppd-ASR/covost/data")
+# Access the COVOST_CORPUS environment variable
+COVOST_DATA = Path(os.environ.get("COVOST_CORPUS"))
+if not COVOST_DATA:
+    raise EnvironmentError("COVOST_CORPUS environment variable is not set")
+
+# Access the COVOST_CORPUS environment variable
+COVOST_CORPUS = Path(os.environ.get("COVOST_CORPUS"))
+if not COVOST_CORPUS:
+    raise EnvironmentError("COVOST_CORPUS environment variable is not set")
 
 
 def calculate_number_of_frames(audio_file: str) -> int:
@@ -50,17 +59,11 @@ def write_list_to_tsv(data_list, output_file_path, headers=None):
 
 if __name__ == "__main__":
     logger.info("Starting preparation")
-    out_path = Path(COVOST_DATA) / "asr_input_data_tables"
+    out_path = COVOST_DATA / "asr_input_data_tables"
     os.makedirs(out_path, exist_ok=True)
 
     dataset_tables = read_data_table()
-    fieldnames = [
-        "file_name",
-        "en",
-        "de",
-        "client_id",
-    ]
-    headers = ["id", "audio", "n_frames", "tgt_text", "speaker"]
+
     uid = 0
     for data_split, table in dataset_tables.items():
         new_data = []
@@ -68,7 +71,7 @@ if __name__ == "__main__":
             new_data.append(uid)
             uid += 1
 
-            file_path = COVOST_CORPUS_EN_CLIPS / entry["file_name"]
+            file_path = COVOST_CORPUS / "en" / "clips" / entry["file_name"]
             new_data.append(file_path)
             new_data.append(calculate_number_of_frames(file_path))
             new_data.append(entry["end"])
@@ -76,5 +79,5 @@ if __name__ == "__main__":
             write_list_to_tsv(
                 data_list=new_data,
                 output_file_path=out_path / f"{data_split}.tsv",
-                headers=headers,
+                headers=["id", "audio", "n_frames", "tgt_text", "speaker"],
             )
