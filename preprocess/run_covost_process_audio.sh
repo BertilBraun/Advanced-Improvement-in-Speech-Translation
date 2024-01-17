@@ -9,8 +9,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=train_output_sbatch_%j.txt
-#SBATCH --error=logs/train_error_sbatch_%j.txt
+#SBATCH --output=mel/train_output_sbatch_%j.txt
+#SBATCH --error=mel/train_error_sbatch_%j.txt
 
 
 echo "Starting the script execution."
@@ -24,7 +24,6 @@ export LOGLEVEL="INFO"  # ["INFO", "DEBUG", ...]
 export ASR="/pfs/work7/workspace/scratch/ubppd-ASR"
 export COVOST="$ASR/covost"
 export COVOST_CORPUS="$COVOST/corpus-16.1"
-
 export COVOST_DATA="$COVOST/data"
 echo "COVOST_DATA environment variable set to $COVOST_DATA."
 
@@ -50,7 +49,8 @@ fi
 cd "$HOME/Advanced-Improvement-in-Speech-Translation" || { echo "Could not change directory. Exiting script ..."; exit 1;}
 
 echo "Running python script: process_audio_covost.py"
-python -m preprocess.process_audio_covost
+#python -m preprocess.process_audio_covost_wav2vec
+python -m preprocess.process_audio_covost_mel
 
 
 echo "Script execution finished."
