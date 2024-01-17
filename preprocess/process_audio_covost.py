@@ -23,7 +23,7 @@ covost_data = Path(os.environ.get("COVOST_DATA"))
 if not covost_data:
     raise EnvironmentError("COVOST_ROOT environment variable is not set")
 
-covost_corpus_clips = Path(os.environ.get("COVOST_CORPUS")) / "en/clips"
+covost_corpus_clips = Path(os.environ.get("COVOST_CORPUS")) / "/en/clips"
 
 WAV2VEC_ROOT = covost_data / "wav2vec"
 WAV2VEC_ROOT.mkdir(parents=True, exist_ok=True)
