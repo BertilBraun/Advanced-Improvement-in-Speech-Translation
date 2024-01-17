@@ -29,6 +29,7 @@ pip list -v                                #could be removed
 #echo $PYTHONPATH
 
 #pip install pandas torchaudio sentencepiece  #should already be done in environment setup
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 #Data Preparation
 # Define folder path to store the data
