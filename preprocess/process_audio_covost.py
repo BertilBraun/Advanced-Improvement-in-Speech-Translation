@@ -1,18 +1,16 @@
 import csv
-import logging
 import os
 from collections import defaultdict
 from pathlib import Path
 from typing import Annotated, Dict, List
 
-from examples.speech_to_text.data_utils import (
-    create_zip,
-)
-
 import numpy as np
 import torch
 import torchaudio
 import torchaudio.transforms as T
+from examples.speech_to_text.data_utils import (
+    create_zip,
+)
 from torch.nn.utils.rnn import pad_sequence
 from tqdm import tqdm
 
@@ -87,14 +85,14 @@ def extract_wav2vec_features_batch(
     # Check if all output files exist and if overwrite is not allowed
     if all(path.is_file() for path in output_paths) and not overwrite:
         return
+    require_sample_rate = 16000
 
     try:
         waveforms = []
-        sample_rates = []
         original_lengths = []
 
         # Define a resampler to convert the sampling rate to 16000 Hz
-        resampler = T.Resample(orig_freq=48000, new_freq=16000)
+        resampler = T.Resample(orig_freq=48000, new_freq=require_sample_rate)
 
         # Load waveforms, resample (if necessary), and store their lengths
         for file_path in input_paths:
@@ -116,7 +114,7 @@ def extract_wav2vec_features_batch(
 
         # Process the batch
         processed_values = processor(
-            batch_waveforms, sampling_rate=sample_rates[0], return_tensors="pt"
+            batch_waveforms, sampling_rate=require_sample_rate, return_tensors="pt"
         ).input_values
         processed_values = processed_values.squeeze(1)
         processed_values = processed_values.to(device)
