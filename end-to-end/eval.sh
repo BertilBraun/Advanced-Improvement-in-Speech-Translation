@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=process_end_to_end      # job name
-#SBATCH --partition=dev_gpu_4	               # check gpu queue for the resource allocation.
+#SBATCH --partition=gpu_4	               # check gpu queue for the resource allocation.
 #SBATCH --time=00:30:00                    # wall-clock time limit  
 #SBATCH --mem=200000                        # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
