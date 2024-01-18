@@ -6,7 +6,7 @@
 
 1. Download the datasets. The dataset must implement the `Dataset` interface with a `__getitem__` method which returns a tuple of the form `(path, sample_rate, sentence, translation, speaker_id, sample_id)`.
 2. Process the datasets to wav2vec embeddings or mel spectrograms in a `encodings` folder using the `mel_encoding.py` or `wav2vec_encoding.py` script.
-3. Create the ASR configs in a `configs` folder.
+3. Create the ASR configs using the `create_asr_configs` function in a `configs` folder.
 4. Call `fairseq-train` with the created `configs` folder, set the `--save-dir` to a `checkpoints` folder and set `--train-subset` and `--valid-subset` to the appropriate dataset split names. These names are the same as the ones provided to the `create_asr_configs` function and are in the `configs` folder with a `.tsv` extension (e.g. `train.tsv`) as well.
 
 #### ASR inference
