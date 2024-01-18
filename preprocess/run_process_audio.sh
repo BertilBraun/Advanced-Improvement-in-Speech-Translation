@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=process_audio           # job name
-#SBATCH --partition=gpu_4	               # check gpu queue for the resource allocation.
+#SBATCH --partition=gpu_4               # check gpu queue for the resource allocation.
 #SBATCH --time=06:00:00                    # wall-clock time limit  
 #SBATCH --mem=150000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used

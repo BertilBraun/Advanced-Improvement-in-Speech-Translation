@@ -15,11 +15,11 @@
 source ../setup.sh
 
 model="wav2vec" # "wav2vec" or "mel"
-COVOST="/pfs/work7/workspace/scratch/ubppd-ASR/covost/data"
 
 DATA_DIR="$COVOST/$model"
 MODEL_DIR="/pfs/work7/workspace/scratch/ubppd-ASR/res/asr"
 
+TABLES="/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1/asr_input_data_tables"
 
 PRED_OUTPUT_DIR=~/ASR/predictions/covost/$model
 PRED_LOG=$PRED_OUTPUT_DIR/en_s2t.pred.log
