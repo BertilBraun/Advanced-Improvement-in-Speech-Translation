@@ -68,7 +68,9 @@ mkdir -p $PRED_OUTPUT_DIR
 fairseq-generate $COVOST_ROOT/en \
   --config-yaml config_st_en_de.yaml --gen-subset test_st_en_de --task speech_to_text \
   --path $ST_SAVE_DIR/checkpoint_best.pt \
+  --skip-invalid-size-inputs-valid-test \
   --max-tokens 50000 --beam 5 --scoring sacrebleu > $PRED_LOG
+
 
 grep ^H $PRED_LOG | sed 's/^H-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp.txt
 grep ^T $PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/ref.txt
