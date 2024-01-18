@@ -42,8 +42,8 @@ if [ -z "$(ls -A $BINARY_DATA_DIR)" ]; then
     --trainpref $PARAPHRASED_DATA_DIR/spm.train_complete.de-en \
     --validpref $DATA_DIR/spm.dev.de-en \
     --testpref $DATA_DIR/spm.tst.de-en \
-    --destdir $BINARY_DATA_DIR \
-    --thresholdtgt 0 --thresholdsrc 0
+    --destdir $BINARY_DATA_DIR
+    
   echo "Binarization complete."
 else
   echo "Binarized data already exists. Skipping binarization."
