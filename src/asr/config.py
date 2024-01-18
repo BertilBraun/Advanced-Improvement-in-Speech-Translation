@@ -21,6 +21,7 @@ def create_asr_configs(
     encodings_folder: Path,
     zip_file: Path, 
     vocab_size: int = 5000,
+    spm_filename: Path = None,
     overwrite_zip: bool = False,
     ) -> None:
     """Creates the ASR configs for the given datasets and saves them to the given root location.
@@ -36,9 +37,12 @@ def create_asr_configs(
     for dataset, dataset_name in zip(datasets, dataset_names):
         __process_dataset_manifest(dataset, dataset_name, root_location, zip_file)
 
-    __process_dataset_vocab(root_location, dataset_names[0], vocab_size)
+    if spm_filename is None or not (root_location / spm_filename).is_file():
+        spm_filename = spm_filename or f"spm_unigram{vocab_size}.model"
 
-    __process_dataset_config(root_location, vocab_size)
+        __process_dataset_vocab(root_location, dataset_names[0], vocab_size, spm_filename)
+
+    __process_dataset_config(root_location, spm_filename)
 
 
 def __cleanup_config_folder(root_location: Path) -> None:
@@ -81,7 +85,7 @@ def __process_dataset_manifest(dataset: Dataset, dataset_name: str, root_locatio
     )
 
 
-def __process_dataset_vocab(root_location, train_dataset_name: str, vocab_size: int = 5000) -> None:
+def __process_dataset_vocab(root_location, train_dataset_name: str, spm_filename: Path, vocab_size: int = 5000) -> None:
     # Collect train text to generate sentencepiece model and vocabulary later on
     train_text = pd.read_csv(root_location / f"{train_dataset_name}.tsv", sep="\t")["tgt_text"].tolist()
     with open(root_location / "train_text.txt", "w") as f:
@@ -89,11 +93,11 @@ def __process_dataset_vocab(root_location, train_dataset_name: str, vocab_size: 
 
     gen_vocab(
         root_location / "train_text.txt",
-        root_location / f"spm_unigram{vocab_size}",
+        root_location / spm_filename,
         model_type="unigram",
         vocab_size=vocab_size,
     )
 
 
-def __process_dataset_config(root_location, vocab_size: int = 5000) -> None:
-    gen_config_yaml(root_location, spm_filename=f"spm_unigram{vocab_size}.model")
+def __process_dataset_config(root_location, spm_filename: Path) -> None:
+    gen_config_yaml(root_location, spm_filename=spm_filename.as_posix())
