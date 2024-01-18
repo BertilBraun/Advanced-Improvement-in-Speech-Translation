@@ -32,7 +32,7 @@ class CoVoST(Dataset):
 
     def __getitem__(
         self, n: int
-    ) -> tuple[str, int, str, str, Optional[str], str, str]:
+    ) -> tuple[str, int, str, Optional[str], str, str]:
         """Load the n-th sample from the dataset.
         Args:
             n (int): The index of the sample to be loaded
