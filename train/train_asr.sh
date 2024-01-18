@@ -3,12 +3,12 @@
 #SBATCH --job-name=train_asr               # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
 #SBATCH --time=24:00:00                    # wall-clock time limit  
-#SBATCH --mem=70000                        # memory per node
+#SBATCH --mem=200000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:4
 #SBATCH --output=train_asr_logs_%j.txt
 #SBATCH --error=train_asr_logs_%j.txt
 
@@ -46,10 +46,7 @@ for model in "${MODEL_TYPES[@]}"; do
         --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
         --clip-norm 10.0 --seed 1 --update-freq 8 \
         --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
-        --model-parallel-size 1 --tensorboard-logdir $MODEL_DIR/tensorboard
-        # --label-smoothing 0.1 --report-accuracy \
-
-    # TODO somehow --model-parallel-size > 1 requires a module which is not properly installed with fairseq
+        --tensorboard-logdir $MODEL_DIR/tensorboard
 
     # Log the completion of training for the current model
     echo "Training completed for $model."

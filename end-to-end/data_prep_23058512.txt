@@ -1,6 +1,0 @@
-INFO:numexpr.utils:Note: detected 80 virtual cores but NumExpr set to maximum of 64, check "NUMEXPR_MAX_THREADS" environment variable.
-INFO:numexpr.utils:Note: NumExpr detected 80 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
-Traceback (most recent call last):
-  File "/pfs/data5/home/kit/stud/uguon/PST/end-to-end/data_prep.py", line 16, in <module>
-    import librosa
-ModuleNotFoundError: No module named 'librosa'
