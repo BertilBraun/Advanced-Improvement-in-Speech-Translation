@@ -4,6 +4,8 @@
 
 ### ASR structure
 
+#### ASR training
+
 1. Download the datasets. The dataset must implement the `Dataset` interface with a `__getitem__` method which returns a tuple of the form `(path, sample_rate, sentence, translation, speaker_id, sample_id)`.
 2. Process the datasets to wav2vec embeddings or mel spectrograms in a `encodings` folder using the `mel_encoding.py` or `wav2vec_encoding.py` script.
 3. Create the ASR configs using the `create_asr_configs` function in a `configs` folder.
@@ -17,7 +19,44 @@
     - `T`: target (reference truth)
   - The last line of the output is the achieved score (whatever metric was used via `--scoring`).
 
+#### Full ASR Example
+
+```python
+# download the datasets
+COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost"
+
+covost = {
+    split: CoVoST(COVOST_ROOT, split, "en", "de")
+    for split in CoVoST.SPLITS
+}
+
+# process the datasets to wav2vec embeddings
+for split, dataset in covost.items():
+    process_dataset_to_wav2vec_embeddings(ASRDataset(dataset), Path(f"encodings/covost/{split}"))
+
+# create the ASR configs
+create_asr_configs(
+    datasets=list(covost.values()),
+    dataset_names=list(covost.keys()),
+    root_location=Path("configs/covost"),
+    encodings_folder=Path("encodings/covost"),
+    zip_file=Path("configs/covost.zip"),
+    vocab_size=5000,
+    overwrite_zip=True,
+)
+```
+
+```bash
+# train the model
+fairseq-train configs/covost --save-dir checkpoints/covost --train-subset train --valid-subset dev
+
+# generate the output
+fairseq-generate configs/covost --gen-subset test --path checkpoints/covost/checkpoint_best.pt
+```
+
 ### MT structure
+
+#### MT training
 
 1. Download the datasets. The dataset must implement the `Dataset` interface with a `__getitem__` method which returns a tuple of the form `(sentence, translation)`.
 2. Write out the datasets to a `data` folder by instantiating a `MTDataset` with the dataset and calling `MTDataset::write_to_files` with the appropriate dataset split name (e.g. `train`).
@@ -34,6 +73,42 @@
     - `H`: hypothesis
     - `T`: target (reference truth)
   - The last line of the output is the achieved score (whatever metric was used via `--scoring`).
+
+#### Full MT Example
+
+```python
+# download the datasets
+WMTS = [14, 15, 16, 17, 18, 19] # list of all available wmt versions on huggingface
+
+wmt = {
+    split: WMT(WMTS, split, "en", "de")
+    for split in WMT.SPLITS
+}
+
+# write out the datasets
+for split, dataset in wmt.items():
+    MTDataset(dataset).write_to_files(Path(f"data/wmt/{split}.en"), Path(f"data/wmt/{split}.de"))
+
+# train the bpe model
+bpe = BPE(retrain_spm=True, train_files=["data/wmt/train.en", "data/wmt/train.de"], vocab_size=15000)
+
+# encode the datasets
+for split in wmt.keys():
+    bpe.encode_file(f"data/wmt/{split}.en", f"spm/{split}.en")
+    bpe.encode_file(f"data/wmt/{split}.de", f"spm/{split}.de")
+
+```
+
+```bash
+# binarize the datasets
+fairseq-preprocess --source-lang en --target-lang de --trainpref spm/train --validpref spm/dev --testpref spm/tst --destdir binarized --workers 8
+
+# train the model
+fairseq-train binarized --save-dir checkpoints/wmt
+
+# generate the output
+fairseq-generate binarized --gen-subset test --path checkpoints/wmt/checkpoint_best.pt
+```
 
 ## Functions
 
