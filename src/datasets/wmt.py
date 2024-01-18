@@ -1,6 +1,7 @@
-from tqdm import tqdm
 from torch.utils.data import Dataset
 from datasets import load_dataset
+
+from datasets.util import iterate_over_dataset
 
 class WMT(Dataset):
     """Create a Dataset for WMT.
@@ -79,5 +80,5 @@ if __name__ == "__main__":
         print(f"Fetching split {split}...")
         dataset = WMT(WMTS, split, SOURCE_LANG_ID, TARGET_LANG_ID, MAX_DATASET_SIZE)
 
-        for en, de in tqdm(dataset):
+        for en, de in iterate_over_dataset(dataset):
             pass

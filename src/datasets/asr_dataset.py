@@ -2,8 +2,9 @@ import librosa
 import torch
 
 from torch.utils.data import Dataset
-from tqdm import tqdm
 from typing import Optional
+
+from datasets.util import iterate_over_dataset
 
 
 class ASRDataset(Dataset):
@@ -35,5 +36,5 @@ if __name__ == "__main__":
     datasource = CoVoST(COVOST_ROOT, "train", "en", "de")
     dataset_with_audio = ASRDataset(datasource)
     
-    for waveform, sample_rate, sentence, translation, speaker_id, sample_id in tqdm(dataset_with_audio):
+    for waveform, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset_with_audio):
         pass

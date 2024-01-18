@@ -3,7 +3,8 @@ import pandas as pd
 from pathlib import Path
 from typing import Optional
 from torch.utils.data import Dataset
-from tqdm import tqdm
+
+from datasets.util import iterate_over_dataset
 
 
 
@@ -89,10 +90,10 @@ if __name__ == "__main__":
         print(f"Fetching split {split}...")
         dataset = CoVoST(COVOST_ROOT, split, SOURCE_LANG_ID, TARGET_LANG_ID)
 
-        for path, sample_rate, sentence, translation, speaker_id, sample_id in tqdm(dataset):
+        for path, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset):
             pass
 
         dataset_with_text = CoVoSTWithText(COVOST_ROOT, split, SOURCE_LANG_ID, TARGET_LANG_ID)
         
-        for sentence, translation in tqdm(dataset_with_text):
+        for sentence, translation in iterate_over_dataset(dataset_with_text):
             pass
