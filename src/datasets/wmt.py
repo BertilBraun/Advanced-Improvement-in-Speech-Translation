@@ -4,6 +4,9 @@ from datasets import load_dataset
 from datasets.util import iterate_over_dataset
 
 
+logger = get_logger("Dataset::WMT")
+
+
 class WMT(Dataset):
     """Create a Dataset for WMT.
     Args:
@@ -48,11 +51,11 @@ class WMT(Dataset):
         s = set()
 
         for wmt in self.wmts:
-            print(f"Loading WMT{wmt} dataset...")
+            logger.info(f"Loading WMT{wmt} dataset...")
             dataset = load_dataset(
                 f"wmt{wmt}", language, split=self.split, trust_remote_code=True
             )
-            print(f"Now processing WMT{wmt} dataset...")
+            logger.info(f"Now processing WMT{wmt} dataset...")
 
             # extend the set with the new sentences
             s.update(
@@ -76,7 +79,7 @@ if __name__ == "__main__":
     MAX_DATASET_SIZE = 10_000_000
 
     for split in WMT.SPLITS:
-        print(f"Fetching split {split}...")
+        logger.info(f"Fetching split {split}...")
         dataset = WMT(WMTS, split, SOURCE_LANG_ID, TARGET_LANG_ID, MAX_DATASET_SIZE)
 
         for en, de in iterate_over_dataset(dataset):

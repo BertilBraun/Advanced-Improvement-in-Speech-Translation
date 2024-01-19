@@ -2,6 +2,10 @@ import sentencepiece as spm
 
 from tqdm import tqdm
 
+from utils import get_logger
+
+logger = get_logger("MachineTranslation::BPE")
+
 
 def process_lines(file_path: str, encoding="utf-8") -> list[str]:
     buffer_size = 4096  # Size of the chunk to read
@@ -40,7 +44,7 @@ class BPE:
         model_prefix="bpe",
     ) -> None:
         if retrain_spm:
-            print("Retraining sentencepiece model...")
+            logger.info("Retraining sentencepiece model...")
 
             spm.SentencePieceTrainer.train(
                 input=", ".join(train_files),
@@ -50,7 +54,7 @@ class BPE:
                 shuffle_input_sentence=True,
             )
 
-            print("Finished training sentencepiece model.")
+            logger.info("Finished training sentencepiece model.")
 
         self.spm_model = spm.SentencePieceProcessor(model_file=f"{model_prefix}.model")
 

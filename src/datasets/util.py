@@ -2,6 +2,10 @@ import numpy as np
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
+from utils import get_logger
+
+logger = get_logger("Dataset::Utils")
+
 
 def iterate_over_dataset(dataset: Dataset, desc="", start=0, end=None):
     end = len(dataset) if end is None else end
@@ -9,7 +13,7 @@ def iterate_over_dataset(dataset: Dataset, desc="", start=0, end=None):
         try:
             data = dataset[i]
         except Exception as e:
-            print(f"Error loading dataset at {desc} {i}: {e}")
+            logger.error(f"Error loading dataset at {desc} {i}: {e}")
             continue
         yield data
 

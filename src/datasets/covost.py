@@ -1,9 +1,14 @@
+import logging
 from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 from datasets.util import iterate_over_dataset
 from torch.utils.data import Dataset
+
+from utils import get_logger
+
+logger = get_logger("Dataset::Covost2")
 
 
 class CoVoST(Dataset):
@@ -92,7 +97,7 @@ if __name__ == "__main__":
     TARGET_LANG_ID = "de"
 
     for split in CoVoST.SPLITS:
-        print(f"Fetching split {split}...")
+        logger.info(f"Fetching split {split}...")
         dataset = CoVoST(COVOST_ROOT, split, SOURCE_LANG_ID, TARGET_LANG_ID)
 
         for (
