@@ -1,9 +1,7 @@
-
-import torch
-import numpy as np
-
 from pathlib import Path
 
+import numpy as np
+import torch
 from torch.nn.utils.rnn import pad_sequence
 from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
@@ -16,12 +14,16 @@ __PROCESSOR = None
 __MODEL = None
 
 
-def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path, batch_size: int = 32) -> None:
+def process_dataset_to_wav2vec_embeddings(
+    dataset: ASRDataset, output_root: Path, batch_size: int = 32
+) -> None:
     """Extracts wav2vec embeddings for the given dataset and saves them to the given output root as .npy files."""
     batch_waveforms = []
     batch_paths = []
 
-    for (wav, sample_rate, _, spk_id, chapter_no, utt_no) in iterate_over_dataset(dataset, desc=f"Wav2vec"):
+    for wav, sample_rate, _, spk_id, chapter_no, utt_no in iterate_over_dataset(
+        dataset, desc=f"Wav2vec"
+    ):
         file = output_root / f"{spk_id}-{chapter_no}-{utt_no}.npy"
 
         if not file.is_file():
@@ -36,13 +38,13 @@ def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path
     if batch_waveforms:
         __extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
 
-    print(f"Finished processing wav2vec embeddings for {len(dataset)} samples.")
+    print(f"Finished  processing wav2vec embeddings for {len(dataset)} samples.")
 
 
 def __ensure_model_and_processor_loaded() -> None:
     global __PROCESSOR
     global __MODEL
-    
+
     if __PROCESSOR is None:
         print("Loading Wav2Vec processor...")
         __PROCESSOR = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
@@ -53,12 +55,12 @@ def __ensure_model_and_processor_loaded() -> None:
 
 
 def __extract_wav2vec_features_batch(
-        waveforms: list[torch.FloatTensor],
-        sample_rate: int,
-        output_paths: list[Path],
+    waveforms: list[torch.FloatTensor],
+    sample_rate: int,
+    output_paths: list[Path],
 ) -> None:
     __ensure_model_and_processor_loaded()
-    
+
     try:
         # Store original lengths and remove the first dimension
         original_lengths = [wav.shape[1] for wav in waveforms]
@@ -82,7 +84,7 @@ def __extract_wav2vec_features_batch(
 
         # Trim the features based on original lengths and save
         for feature, original_length, output_path in zip(
-                features, original_lengths, output_paths
+            features, original_lengths, output_paths
         ):
             # Calculate the length ratio and apply it to the feature length
             length_ratio = original_length / max_padded_length

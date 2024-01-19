@@ -1,10 +1,9 @@
-import librosa
-import torch
-
-from torch.utils.data import Dataset
 from typing import Optional
 
+import librosa
+import torch
 from datasets.util import iterate_over_dataset
+from torch.utils.data import Dataset
 
 
 class ASRDataset(Dataset):
@@ -23,10 +22,18 @@ class ASRDataset(Dataset):
             tuple: ``(waveform, sample_rate, sentence, translation, speaker_id,
             sample_id)``
         """
-        path, sample_rate, sentence, translation, speaker_id, sample_id = self.datasource[n]
+        (
+            path,
+            sample_rate,
+            sentence,
+            translation,
+            speaker_id,
+            sample_id,
+        ) = self.datasource[n]
         waveform, sample_rate = librosa.load(path, sr=None, mono=False)
         waveform = torch.tensor(waveform)[None, :]
         return waveform, sample_rate, sentence, translation, speaker_id, sample_id
+
 
 if __name__ == "__main__":
     from src.datasets.covost import CoVoST
@@ -35,6 +42,13 @@ if __name__ == "__main__":
 
     datasource = CoVoST(COVOST_ROOT, "train", "en", "de")
     dataset_with_audio = ASRDataset(datasource)
-    
-    for waveform, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset_with_audio):
+
+    for (
+        waveform,
+        sample_rate,
+        sentence,
+        translation,
+        speaker_id,
+        sample_id,
+    ) in iterate_over_dataset(dataset_with_audio):
         pass

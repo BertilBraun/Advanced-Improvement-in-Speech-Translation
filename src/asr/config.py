@@ -1,10 +1,6 @@
+from pathlib import Path
 
 import pandas as pd
-
-from pathlib import Path
-from torch.utils.data import Dataset
-from src.datasets.util import iterate_over_dataset
-
 from examples.speech_to_text.data_utils import (
     create_zip,
     gen_config_yaml,
@@ -12,6 +8,9 @@ from examples.speech_to_text.data_utils import (
     get_zip_manifest,
     save_df_to_tsv,
 )
+from torch.utils.data import Dataset
+
+from src.datasets.util import iterate_over_dataset
 
 
 def create_asr_configs(
@@ -19,16 +18,16 @@ def create_asr_configs(
     dataset_names: list[str],
     root_location: Path,
     encodings_folder: Path,
-    zip_file: Path, 
+    zip_file: Path,
     vocab_size: int = 5000,
     spm_filename: Path = None,
     overwrite_zip: bool = False,
-    ) -> None:
+) -> None:
     """Creates the ASR configs for the given datasets and saves them to the given root location.
     If the zip file does not exist or overwrite_zip is True, the zip file will be created as well.
     This function assumes that the datasets are already processed to wav2vec embeddings or mel spectrograms in the given encodings folder.
     Assumes that the first dataset is the training dataset."""
-    
+
     if not zip_file.is_file() or overwrite_zip:
         create_zip(encodings_folder, zip_file)
 
@@ -40,7 +39,9 @@ def create_asr_configs(
     if spm_filename is None or not (root_location / spm_filename).is_file():
         spm_filename = spm_filename or f"spm_unigram{vocab_size}.model"
 
-        __process_dataset_vocab(root_location, dataset_names[0], vocab_size, spm_filename)
+        __process_dataset_vocab(
+            root_location, dataset_names[0], vocab_size, spm_filename
+        )
 
     __process_dataset_config(root_location, spm_filename)
 
@@ -52,13 +53,17 @@ def __cleanup_config_folder(root_location: Path) -> None:
             file.unlink()
 
 
-def __process_dataset_manifest(dataset: Dataset, dataset_name: str, root_location: Path, zip_file: Path) -> None:
+def __process_dataset_manifest(
+    dataset: Dataset, dataset_name: str, root_location: Path, zip_file: Path
+) -> None:
     def _cleanup_utterance(utt: str) -> str:
         # cleanup the utterance to make it easier for the ASR model to learn
         modified = utt.lower()
 
         # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
-        modified = "".join([c for c in modified if c.isalpha() or c == " " or c.isdigit()])
+        modified = "".join(
+            [c for c in modified if c.isalpha() or c == " " or c.isdigit()]
+        )
 
         return modified
 
@@ -70,8 +75,8 @@ def __process_dataset_manifest(dataset: Dataset, dataset_name: str, root_locatio
     print(f"Fetching manifest from {dataset_name}...")
     manifest = {c: [] for c in MANIFEST_COLUMNS}
 
-    for (_, _, utt, spk_id, chapter_no, utt_no) in iterate_over_dataset(
-            dataset, desc=f"Manifest {dataset_name}"
+    for _, _, utt, spk_id, chapter_no, utt_no in iterate_over_dataset(
+        dataset, desc=f"Manifest {dataset_name}"
     ):
         sample_id = f"{spk_id}-{chapter_no}-{utt_no}"
         manifest["id"].append(sample_id)
@@ -85,9 +90,13 @@ def __process_dataset_manifest(dataset: Dataset, dataset_name: str, root_locatio
     )
 
 
-def __process_dataset_vocab(root_location, train_dataset_name: str, spm_filename: Path, vocab_size: int = 5000) -> None:
+def __process_dataset_vocab(
+    root_location, train_dataset_name: str, spm_filename: Path, vocab_size: int = 5000
+) -> None:
     # Collect train text to generate sentencepiece model and vocabulary later on
-    train_text = pd.read_csv(root_location / f"{train_dataset_name}.tsv", sep="\t")["tgt_text"].tolist()
+    train_text = pd.read_csv(root_location / f"{train_dataset_name}.tsv", sep="\t")[
+        "tgt_text"
+    ].tolist()
     with open(root_location / "train_text.txt", "w") as f:
         f.write("\n".join(train_text))
 

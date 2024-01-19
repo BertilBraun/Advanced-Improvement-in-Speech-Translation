@@ -1,11 +1,9 @@
-import pandas as pd
-
 from pathlib import Path
 from typing import Optional
-from torch.utils.data import Dataset
 
+import pandas as pd
 from datasets.util import iterate_over_dataset
-
+from torch.utils.data import Dataset
 
 
 class CoVoST(Dataset):
@@ -28,11 +26,17 @@ class CoVoST(Dataset):
         self.root = Path(root)
         self.source_language = source_language
         self.target_language = target_language
-        self.data = pd.read_csv(self.root / "translations" / f"covost_v2.en_de.{split}.tsv", sep='\t', on_bad_lines = 'warn').to_dict(orient="index").items()
+        self.data = (
+            pd.read_csv(
+                self.root / "translations" / f"covost_v2.en_de.{split}.tsv",
+                sep="\t",
+                on_bad_lines="warn",
+            )
+            .to_dict(orient="index")
+            .items()
+        )
 
-    def __getitem__(
-        self, n: int
-    ) -> tuple[str, int, str, Optional[str], str, str]:
+    def __getitem__(self, n: int) -> tuple[str, int, str, Optional[str], str, str]:
         """Load the n-th sample from the dataset.
         Args:
             n (int): The index of the sample to be loaded
@@ -51,14 +55,15 @@ class CoVoST(Dataset):
     def __len__(self) -> int:
         return len(self.data)
 
+
 class CoVoSTWithText(Dataset):
     """Create a Dataset for CoVoST (https://github.com/facebookresearch/covost).
-        Args:
-        root (str): root path to the dataset and generated manifests/features
-        source_language (str): source (audio) language
-        target_language (str): target (text) language
+    Args:
+    root (str): root path to the dataset and generated manifests/features
+    source_language (str): source (audio) language
+    target_language (str): target (text) language
     """
-    
+
     def __init__(
         self,
         root: str,
@@ -67,19 +72,19 @@ class CoVoSTWithText(Dataset):
         target_language: str,
     ) -> None:
         self.dataset = CoVoST(root, split, source_language, target_language)
-        
-    def __getitem__(
-        self, n: int
-    ) -> tuple[str, str]:
+
+    def __getitem__(self, n: int) -> tuple[str, str]:
         """Load the n-th sample from the dataset.
         Args:
             n (int): The index of the sample to be loaded
         Returns:
             tuple: ``(sentence, translation)``
         """
-        path, sample_rate, sentence, translation, speaker_id, sample_id = self.dataset[n]
+        path, sample_rate, sentence, translation, speaker_id, sample_id = self.dataset[
+            n
+        ]
         return sentence, translation
-    
+
 
 if __name__ == "__main__":
     COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost"
@@ -90,10 +95,19 @@ if __name__ == "__main__":
         print(f"Fetching split {split}...")
         dataset = CoVoST(COVOST_ROOT, split, SOURCE_LANG_ID, TARGET_LANG_ID)
 
-        for path, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset):
+        for (
+            path,
+            sample_rate,
+            sentence,
+            translation,
+            speaker_id,
+            sample_id,
+        ) in iterate_over_dataset(dataset):
             pass
 
-        dataset_with_text = CoVoSTWithText(COVOST_ROOT, split, SOURCE_LANG_ID, TARGET_LANG_ID)
-        
+        dataset_with_text = CoVoSTWithText(
+            COVOST_ROOT, split, SOURCE_LANG_ID, TARGET_LANG_ID
+        )
+
         for sentence, translation in iterate_over_dataset(dataset_with_text):
             pass

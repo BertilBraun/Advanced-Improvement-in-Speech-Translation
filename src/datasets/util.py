@@ -16,16 +16,16 @@ def iterate_over_dataset(dataset: Dataset, desc="", start=0, end=None):
 
 class ConcatenatedDatasets(Dataset):
     """Concatenate multiple datasets together."""
-    
+
     def __init__(self, datasets: list[Dataset]) -> None:
         self.datasets = datasets
         self.lengths = [len(d) for d in datasets]
         self.cum_lengths = np.cumsum(self.lengths)
         self.total_length = self.cum_lengths[-1]
-        
+
     def __len__(self) -> int:
         return self.total_length
-    
+
     def __getitem__(self, idx: int):
         dataset_idx = np.searchsorted(self.cum_lengths, idx, side="right")
         if dataset_idx == 0:
