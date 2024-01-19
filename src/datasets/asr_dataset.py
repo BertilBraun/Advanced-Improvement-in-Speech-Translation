@@ -2,7 +2,7 @@ from typing import Optional
 
 import librosa
 import torch
-from datasets.util import iterate_over_dataset
+from src.datasets.util import iterate_over_dataset
 from torch.utils.data import Dataset
 
 

@@ -1,12 +1,11 @@
-import logging
 from pathlib import Path
 from typing import Optional
 
 import pandas as pd
-from datasets.util import iterate_over_dataset
 from torch.utils.data import Dataset
 
-from utils import get_logger
+from src.datasets.util import iterate_over_dataset
+from src.logger_utils import get_logger
 
 logger = get_logger("Dataset::Covost2")
 

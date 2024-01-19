@@ -1,8 +1,8 @@
 from torch.utils.data import Dataset
 from datasets import load_dataset
 
-from datasets.util import iterate_over_dataset
-
+from src.datasets.util import iterate_over_dataset
+from src.logger_utils import get_logger
 
 logger = get_logger("Dataset::WMT")
 

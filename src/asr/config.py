@@ -1,16 +1,19 @@
 from pathlib import Path
 
 import pandas as pd
-from examples.speech_to_text.data_utils import (
-    create_zip,
-    gen_config_yaml,
-    gen_vocab,
-    get_zip_manifest,
-    save_df_to_tsv,
+from examples.speech_to_text.data_utils import (  # noqa
+    create_zip,  # noqa
+    gen_config_yaml,  # noqa
+    gen_vocab,  # noqa
+    get_zip_manifest,  # noqa
+    save_df_to_tsv,  # noqa
 )
 from torch.utils.data import Dataset
 
 from src.datasets.util import iterate_over_dataset
+from src.logger_utils import get_logger
+
+logger = get_logger("ASR::Config")
 
 
 def create_asr_configs(
@@ -69,10 +72,10 @@ def __process_dataset_manifest(
 
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
-    print("Fetching audio manifest...")
+    logger.info("Fetching audio manifest...")
     audio_paths, audio_lengths = get_zip_manifest(zip_file)
 
-    print(f"Fetching manifest from {dataset_name}...")
+    logger.info(f"Fetching manifest from {dataset_name}...")
     manifest = {c: [] for c in MANIFEST_COLUMNS}
 
     for _, _, utt, spk_id, chapter_no, utt_no in iterate_over_dataset(

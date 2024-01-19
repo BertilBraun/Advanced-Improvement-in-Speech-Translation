@@ -7,11 +7,14 @@ from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
 from src.datasets.asr_dataset import ASRDataset
 from src.datasets.util import iterate_over_dataset
+from src.logger_utils import get_logger
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 __PROCESSOR = None
 __MODEL = None
+
+logger = get_logger("ASR::Wav2vecEncoding")
 
 
 def process_dataset_to_wav2vec_embeddings(
@@ -22,7 +25,7 @@ def process_dataset_to_wav2vec_embeddings(
     batch_paths = []
 
     for wav, sample_rate, _, spk_id, chapter_no, utt_no in iterate_over_dataset(
-        dataset, desc=f"Wav2vec"
+        dataset, desc="Wav2vec"
     ):
         file = output_root / f"{spk_id}-{chapter_no}-{utt_no}.npy"
 
@@ -38,7 +41,7 @@ def process_dataset_to_wav2vec_embeddings(
     if batch_waveforms:
         __extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
 
-    print(f"Finished  processing wav2vec embeddings for {len(dataset)} samples.")
+    logger.info(f"Finished  processing wav2vec embeddings for {len(dataset)} samples.")
 
 
 def __ensure_model_and_processor_loaded() -> None:
@@ -46,10 +49,10 @@ def __ensure_model_and_processor_loaded() -> None:
     global __MODEL
 
     if __PROCESSOR is None:
-        print("Loading Wav2Vec processor...")
+        logger.info("Loading Wav2Vec processor...")
         __PROCESSOR = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
     if __MODEL is None:
-        print("Loading Wav2Vec model...")
+        logger.info("Loading Wav2Vec model...")
         __MODEL = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h")
         __MODEL = __MODEL.to(DEVICE)
 
@@ -98,5 +101,5 @@ def __extract_wav2vec_features_batch(
             trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
             np.save(output_path, trimmed_feature)
     except Exception as e:
-        print(f"Error at embedding {output_paths}: {e}")
+        logger.error(f"Error at embedding {output_paths}: {e}")
         return

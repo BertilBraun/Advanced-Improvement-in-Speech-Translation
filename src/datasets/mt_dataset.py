@@ -1,4 +1,4 @@
-from datasets.util import iterate_over_dataset
+from src.datasets.util import iterate_over_dataset
 from torch.utils.data import Dataset
 
 DO_FILTER_NON_ASCII = True

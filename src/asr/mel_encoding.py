@@ -1,9 +1,12 @@
 from pathlib import Path
 
-from examples.speech_to_text.data_utils import extract_fbank_features
+from examples.speech_to_text.data_utils import extract_fbank_features  # noqa
 
 from src.datasets.asr_dataset import ASRDataset
 from src.datasets.util import iterate_over_dataset
+from src.logger_utils import get_logger
+
+logger = get_logger("ASR::MelEncoding")
 
 
 def process_dataset_to_mel_spectrogram(dataset: ASRDataset, output_root: Path) -> None:
@@ -15,4 +18,4 @@ def process_dataset_to_mel_spectrogram(dataset: ASRDataset, output_root: Path) -
         if not file.is_file():
             extract_fbank_features(wav, sample_rate, file)
 
-    print(f"Finished processing mel spectrogram for {len(dataset)} samples.")
+    logger.info(f"Finished processing mel spectrogram for {len(dataset)} samples.")
