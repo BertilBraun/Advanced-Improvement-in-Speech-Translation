@@ -30,6 +30,7 @@ SPM_OUTPUT_FILE = HOME / "PST/train/bpe.model"
 
 
 NUM_SAMPLES_PER_PREDICTION = 10
+SAMPLES_TO_EVALUATE = 100
 
 LLM_POST_EDITING_PROMPT = """[INST] <<SYS>>
 You are a professional specialized in ASR (Automatic Speech Recognition) transcription enhancement.
@@ -162,7 +163,7 @@ def process_reference_file():
     with open(args.ref_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
 
-    lines = lines[:20]
+    lines = lines[:SAMPLES_TO_EVALUATE]
     lines = process_reference_text(lines)
 
     log("Processed reference file")
@@ -181,7 +182,7 @@ def process_hypothesis_file():
     with open(args.hyp_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
 
-    lines = lines[:20*NUM_SAMPLES_PER_PREDICTION]
+    lines = lines[:SAMPLES_TO_EVALUATE*NUM_SAMPLES_PER_PREDICTION]
     lines = process_hypothesis_text(lines)
 
     log("Processed hypothesis file")
