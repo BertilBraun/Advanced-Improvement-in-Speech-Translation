@@ -49,12 +49,12 @@ mkdir -p $ASR_DATA_DIR
 
 echo "Starting ASR prediction for wav2vec"
 
-# fairseq-generate $ASR_DATA_DIR \
-#     --config-yaml config.yaml --gen-subset test-clean \
-#     --task speech_to_text \
-#     --path $ASR_MODEL_DIR/checkpoint_best.pt \
-#     --max-tokens 50000 --beam 10 --scoring wer \
-#     --nbest 10 > $ASR_PRED_LOG
+fairseq-generate $ASR_DATA_DIR \
+    --config-yaml config.yaml --gen-subset test-clean \
+    --task speech_to_text \
+    --path $ASR_MODEL_DIR/checkpoint_best.pt \
+    --max-tokens 50000 --beam 10 --scoring wer \
+    --nbest 10 > $ASR_PRED_LOG
 
 echo "Prediction done for wav2vec"
 
