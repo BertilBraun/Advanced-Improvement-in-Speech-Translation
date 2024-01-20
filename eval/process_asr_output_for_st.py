@@ -28,7 +28,7 @@ ASR_ROOT = HOME / "ASR/wav2vec"
 SPM_INPUT_FILE = ASR_ROOT / "spm_unigram1000.model"
 SPM_OUTPUT_FILE = HOME / "PST/train/bpe.model"
 
-LLM_POSTEDITING_PROMPT = """[INST] <<SYS>>
+LLM_POST_EDITING_PROMPT = """[INST] <<SYS>>
 You are a professional specialized in ASR (Automatic Speech Recognition) transcription enhancement.
 <</SYS>>
 Task:
@@ -133,7 +133,7 @@ def generate(prompts: list[str]) -> list[str]:
     return cleaned_outputs
 
 
-def sample_print(data_list):
+def sample_print(data_list: list[str]) -> None:
     DELIMITER = "----------------------------------------"
     log(DELIMITER)
     for data in data_list[:2]:
@@ -141,7 +141,7 @@ def sample_print(data_list):
     log(DELIMITER)
 
 
-def encode_and_save(lines, output_file):
+def encode_and_save(lines: list[str], output_file: str) -> list[str]:
     spm_model = spm.SentencePieceProcessor(model_file=SPM_OUTPUT_FILE.as_posix())
 
     lines = [
@@ -159,6 +159,7 @@ def process_reference_file():
     with open(args.ref_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
 
+    lines = lines[:20]
     lines = process_reference_text(lines)
 
     log("Processed reference file")
@@ -177,6 +178,7 @@ def process_hypothesis_file():
     with open(args.hyp_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
 
+    lines = lines[:20]
     lines = process_hypothesis_text(lines)
 
     log("Processed hypothesis file")
@@ -198,13 +200,13 @@ def process_reference_text(lines):
     text_mapping = load_df_from_tsv(ASR_ROOT / "text.tsv")
 
     text_mapping = {
-        target: original
+        target: original.lower().strip()
         for original, target in zip(text_mapping["original"], text_mapping["target"])
     }
 
     # this should at least be the original reference text without any processing, which we do during ASR preprocessing
     lines = [
-        text_mapping[line] if line in text_mapping else line
+        text_mapping[line] if line in text_mapping else line.lower().strip()
         for line in lines
     ]
 
@@ -237,7 +239,7 @@ def process_hypothesis_text(lines):
         for i, sample in enumerate(samples):
             formatted_samples += f"{i + 1}. \"{sample}\"\n"
 
-        prompt = LLM_POSTEDITING_PROMPT.format(HYPOTHESES=formatted_samples)
+        prompt = LLM_POST_EDITING_PROMPT.format(HYPOTHESES=formatted_samples)
         batch.append(prompt)
 
         if len(batch) == batch_size:

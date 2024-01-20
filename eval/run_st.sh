@@ -58,21 +58,10 @@ echo "Starting ASR prediction for wav2vec"
 
 echo "Prediction done for wav2vec"
 
-grep ^D $ASR_PRED_LOG | sed 's/^D-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp_asr.txt
-grep ^T $ASR_PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/ref_asr.txt
-
-echo "Prediction files written for wav2vec"
-echo "Sample predictions:"
-
-head -2 $PRED_OUTPUT_DIR/hyp_asr.txt
-
-echo "Sample references:"
-
-head -2 $PRED_OUTPUT_DIR/ref_asr.txt
-
-echo "WER ASR:"
-tail -n 1 $ASR_PRED_LOG
-
+source ../src/bash/extract_from_prediction.sh \
+    $ASR_PRED_LOG \
+    $PRED_OUTPUT_DIR/hyp_asr.txt \
+    $PRED_OUTPUT_DIR/ref_asr.txt
 
 python process_asr_output_for_st.py \
     --ref_input_file $PRED_OUTPUT_DIR/ref_asr.txt \
@@ -102,20 +91,7 @@ fairseq-generate $MT_DATA_DIR \
 
 echo "Translations done"
 
-grep ^H $MT_PRED_LOG | sed 's/^H-//g' | cut -f 3 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/hyp_mt.txt
-grep ^T $MT_PRED_LOG | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $PRED_OUTPUT_DIR/ref_mt.txt
-
-echo "Translations files written"
-echo "Sample predictions:"
-
-head -2 $PRED_OUTPUT_DIR/hyp_mt.txt
-
-echo "Sample references:"
-
-head -2 $PRED_OUTPUT_DIR/ref_mt.txt
-
-echo "WER:"
-tail -n 1 $MT_PRED_LOG
-
-echo "BLEU:"
-cat $PRED_OUTPUT_DIR/hyp_mt.txt | sacrebleu $PRED_OUTPUT_DIR/ref_mt.txt
+source ../src/bash/extract_from_prediction.sh \
+    $MT_PRED_LOG \
+    $PRED_OUTPUT_DIR/hyp_mt.txt \
+    $PRED_OUTPUT_DIR/ref_mt.txt
