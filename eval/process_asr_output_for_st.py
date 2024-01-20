@@ -28,6 +28,9 @@ ASR_ROOT = HOME / "ASR/wav2vec"
 SPM_INPUT_FILE = ASR_ROOT / "spm_unigram1000.model"
 SPM_OUTPUT_FILE = HOME / "PST/train/bpe.model"
 
+
+NUM_SAMPLES_PER_PREDICTION = 10
+
 LLM_POST_EDITING_PROMPT = """[INST] <<SYS>>
 You are a professional specialized in ASR (Automatic Speech Recognition) transcription enhancement.
 <</SYS>>
@@ -178,7 +181,7 @@ def process_hypothesis_file():
     with open(args.hyp_input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
 
-    lines = lines[:20]
+    lines = lines[:20*NUM_SAMPLES_PER_PREDICTION]
     lines = process_hypothesis_text(lines)
 
     log("Processed hypothesis file")
@@ -229,11 +232,10 @@ def process_hypothesis_text(lines):
     processed_lines = []
 
     # process in batches of 10
-    num_samples_per_prompt = 10
     batch_size = 10
     batch = []
-    for i in tqdm(range(0, len(lines), num_samples_per_prompt), desc="Processing batches"):
-        samples = lines[i:i + num_samples_per_prompt]
+    for i in tqdm(range(0, len(lines), NUM_SAMPLES_PER_PREDICTION), desc="Processing batches"):
+        samples = lines[i:i + NUM_SAMPLES_PER_PREDICTION]
 
         formatted_samples = ""
         for i, sample in enumerate(samples):
