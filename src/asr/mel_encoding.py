@@ -11,11 +11,9 @@ logger = get_logger("ASR::MelEncoding")
 
 def process_dataset_to_mel_spectrogram(dataset: ASRDataset, output_root: Path) -> None:
     """Extracts mel spectrograms for the given dataset and saves them to the given output root as .npy files."""
-    for wav, sample_rate, _, spk_id, chapter_no, utt_no in iterate_over_dataset(
-        dataset, desc="Mel"
-    ):
-        file = output_root / f"{spk_id}-{chapter_no}-{utt_no}.npy"
+    for wav, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc="Mel"):
+        file = output_root / f"{speaker_id}-{sample_id}.npy"
         if not file.is_file():
             extract_fbank_features(wav, sample_rate, file)
 
-    logger.info(f"Finished processing mel spectrogram for {len(dataset)} samples.")
+    logger.info(f"Finished processing mel spectrogram for all samples.")

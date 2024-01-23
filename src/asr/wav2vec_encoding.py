@@ -11,8 +11,8 @@ from src.logger_utils import get_logger
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-__PROCESSOR = None
-__MODEL = None
+__PROCESSOR: Wav2Vec2Processor = None # type: ignore
+__MODEL: Wav2Vec2Model = None # type: ignore
 
 logger = get_logger("ASR::Wav2vecEncoding")
 
@@ -24,10 +24,8 @@ def process_dataset_to_wav2vec_embeddings(
     batch_waveforms = []
     batch_paths = []
 
-    for wav, sample_rate, _, spk_id, chapter_no, utt_no in iterate_over_dataset(
-        dataset, desc="Wav2vec"
-    ):
-        file = output_root / f"{spk_id}-{chapter_no}-{utt_no}.npy"
+    for wav, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc="Wav2vec"):
+        file = output_root / f"{speaker_id}-{sample_id}.npy"
 
         if not file.is_file():
             batch_waveforms.append(wav.to(device=DEVICE, dtype=torch.float))
@@ -39,9 +37,9 @@ def process_dataset_to_wav2vec_embeddings(
             batch_paths = []
 
     if batch_waveforms:
-        __extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
+        __extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths) # type: ignore
 
-    logger.info(f"Finished  processing wav2vec embeddings for {len(dataset)} samples.")
+    logger.info(f"Finished  processing wav2vec embeddings for all samples.")
 
 
 def __ensure_model_and_processor_loaded() -> None:
@@ -53,8 +51,8 @@ def __ensure_model_and_processor_loaded() -> None:
         __PROCESSOR = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
     if __MODEL is None:
         logger.info("Loading Wav2Vec model...")
-        __MODEL = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h")
-        __MODEL = __MODEL.to(DEVICE)
+        __MODEL = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h") # type: ignore
+        __MODEL = __MODEL.to(DEVICE) # type: ignore
 
 
 def __extract_wav2vec_features_batch(
@@ -86,9 +84,7 @@ def __extract_wav2vec_features_batch(
         feature_length = features.shape[1]
 
         # Trim the features based on original lengths and save
-        for feature, original_length, output_path in zip(
-            features, original_lengths, output_paths
-        ):
+        for feature, original_length, output_path in zip(features, original_lengths, output_paths):
             # Calculate the length ratio and apply it to the feature length
             length_ratio = original_length / max_padded_length
             trimmed_length = int(length_ratio * feature_length)
@@ -102,4 +98,3 @@ def __extract_wav2vec_features_batch(
             np.save(output_path, trimmed_feature)
     except Exception as e:
         logger.error(f"Error at embedding {output_paths}: {e}")
-        return

@@ -1,13 +1,13 @@
 from torch.utils.data import Dataset
 from datasets import load_dataset
+from src.datasets.mt_dataset import MTDataset, TextSample
 
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 
 logger = get_logger("Dataset::WMT")
 
-
-class WMT(Dataset):
+class WMT(MTDataset):
     """Create a Dataset for WMT.
     Args:
         wmts (list[int]): list of WMT versions to use
@@ -17,34 +17,14 @@ class WMT(Dataset):
 
     SPLITS = ["train", "dev", "test"]
 
-    def __init__(
-        self,
-        wmts: list[int],
-        split: str,
-        source_language: str,
-        target_language: str,
-        max_size: int = None,
-    ) -> None:
+    def __init__(self, wmts: list[int], split: str, source_language: str, target_language: str, max_size: int | None = None) -> None:
         self.wmts = wmts
         self.split = split
         self.source_language = source_language
         self.target_language = target_language
         self.max_size = max_size
-        self.data = self.load_datasets()
 
-    def __getitem__(self, n: int) -> tuple[str, str]:
-        """Load the n-th sample from the dataset.
-        Args:
-            n (int): The index of the sample to be loaded
-        Returns:
-            tuple: ``(sentence, translation)``
-        """
-        return self.data[n]
-
-    def __len__(self) -> int:
-        return len(self.data)
-
-    def load_datasets(self) -> list[tuple[str, str]]:
+    def _load_data(self) -> list[TextSample]:
         # WMT datasets, but generate a set from these to avoid duplicates
 
         language = f"{self.source_language}-{self.target_language}"
@@ -59,7 +39,9 @@ class WMT(Dataset):
 
             # extend the set with the new sentences
             s.update(
-                (sentence["en"], sentence["de"]) for sentence in dataset["translation"]
+                (sentence["en"], sentence["de"])                             # type: ignore
+                for sentence in dataset["translation"]                       # type: ignore
+                if sentence["en"] is not None and sentence["de"] is not None # type: ignore
             )
 
             if self.max_size is not None and len(s) >= self.max_size:

@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Iterator, TypeVar
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
@@ -7,21 +8,22 @@ from src.logger_utils import get_logger
 logger = get_logger("Dataset::Utils")
 
 
-def iterate_over_dataset(dataset: Dataset, desc="", start=0, end=None):
+# Create a generic type variable
+T = TypeVar('T')
+
+def iterate_over_dataset(dataset: Dataset[T], desc: str = "", start: int = 0, end: int | None = None) -> Iterator[T]:
     end = len(dataset) if end is None else end
     for i in tqdm(range(start, end), desc=desc):
         try:
-            data = dataset[i]
+            yield dataset[i]
         except Exception as e:
             logger.error(f"Error loading dataset at {desc} {i}: {e}")
-            continue
-        yield data
 
 
-class ConcatenatedDatasets(Dataset):
+class ConcatenatedDatasets(Dataset[T]):
     """Concatenate multiple datasets together."""
 
-    def __init__(self, datasets: list[Dataset]) -> None:
+    def __init__(self, datasets: list[Dataset[T]]) -> None:
         self.datasets = datasets
         self.lengths = [len(d) for d in datasets]
         self.cum_lengths = np.cumsum(self.lengths)
@@ -30,7 +32,7 @@ class ConcatenatedDatasets(Dataset):
     def __len__(self) -> int:
         return self.total_length
 
-    def __getitem__(self, idx: int):
+    def __getitem__(self, idx: int) -> T:
         dataset_idx = np.searchsorted(self.cum_lengths, idx, side="right")
         if dataset_idx == 0:
             sample_idx = idx

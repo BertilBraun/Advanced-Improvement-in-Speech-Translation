@@ -1,13 +1,14 @@
+from pathlib import Path
 import sentencepiece as spm
 
 from tqdm import tqdm
 
-from utils import get_logger
+from src.logger_utils import get_logger
 
 logger = get_logger("MachineTranslation::BPE")
 
 
-def process_lines(file_path: str, encoding="utf-8") -> list[str]:
+def process_lines(file_path: Path, encoding="utf-8") -> list[str]:
     buffer_size = 4096  # Size of the chunk to read
     partial_line = b""  # To store a partial line at the end of a buffer
     processed_lines = []  # List to store processed lines
@@ -36,17 +37,12 @@ def process_lines(file_path: str, encoding="utf-8") -> list[str]:
 
 
 class BPE:
-    def __init__(
-        self,
-        retrain_spm: bool,
-        train_files: list[str],
-        vocab_size=10000,
-        model_prefix="bpe",
-    ) -> None:
+    def __init__(self, retrain_spm: bool, train_files: list[str]|None=None, vocab_size=10000, model_prefix="bpe") -> None:
         if retrain_spm:
+            assert train_files is not None
             logger.info("Retraining sentencepiece model...")
 
-            spm.SentencePieceTrainer.train(
+            spm.SentencePieceTrainer.train( # type: ignore
                 input=", ".join(train_files),
                 model_prefix=model_prefix,
                 vocab_size=vocab_size,
@@ -56,42 +52,42 @@ class BPE:
 
             logger.info("Finished training sentencepiece model.")
 
-        self.spm_model = spm.SentencePieceProcessor(model_file=f"{model_prefix}.model")
+        self.spm_model = spm.SentencePieceProcessor(model_file=f"{model_prefix}.model") # type: ignore
 
-    def encode_file(self, input_file: str, output_file: str) -> None:
+    def encode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
+        self.__process(input_file, output_file, overwrite, process_fn=self.__encode, name="Encoding")
+
+    def decode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
+        self.__process(input_file, output_file, overwrite, process_fn=self.__decode, name="Decoding")
+                
+    def __process(self, input_file: Path, output_file: Path, overwrite: bool, process_fn, name) -> None:
+        if output_file.is_file() and not overwrite:
+            logger.info(f"Skipping {name} of {input_file} because {output_file} already exists.")
+            return
+        
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        
         with open(output_file, "w", encoding="utf-8") as f_out:
-            file_name = input_file.split("/")[-1]
-            for line in tqdm(
-                process_lines(input_file), desc=f"Segmenting '{file_name}' Dataset"
-            ):
-                # Segmented into subwords
-                line_segmented = self.__encode(line)
-                f_out.write(" ".join(line_segmented) + "\n")
+            for line in tqdm(process_lines(input_file), desc=f"{name} '{input_file.name}' Dataset"):
+                # Process line
+                line_processed = process_fn(line)
+                f_out.write(" ".join(line_processed) + "\n")
 
     def __encode(self, text: str) -> list[str]:
-        return self.spm_model.encode(text.strip(), out_type=str)
-
-    def decode_file(self, input_file: str, output_file: str) -> None:
-        with open(output_file, "w", encoding="utf-8") as f_out:
-            file_name = input_file.split("/")[-1]
-            for line in tqdm(
-                process_lines(input_file), desc=f"Desegmenting '{file_name}' Dataset"
-            ):
-                # Desegment into words
-                line_desegmented = self.__decode(line)
-                f_out.write(" ".join(line_desegmented) + "\n")
+        return self.spm_model.encode(text.strip(), out_type=str) # type: ignore
 
     def __decode(self, text: str) -> list[str]:
-        return self.spm_model.decode(text.strip(), out_type=str)
+        return self.spm_model.decode(text.strip(), out_type=str) # type: ignore
 
 
 if __name__ == "__main__":
+    data = Path("data")
+
     bpe = BPE(
         retrain_spm=True,
         train_files=["data/train.en", "data/train.de"],
         vocab_size=15000,
     )
 
-    bpe.encode_file("data/train.en", "data/spm.train.en")
-
-    bpe.decode_file("data/spm.train.en", "data/train.en")
+    bpe.encode_file(data / "train.en", data / "spm.train.en")
+    bpe.decode_file(data / "spm.train.en", data / "train.en")
