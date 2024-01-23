@@ -12,7 +12,8 @@
 #SBATCH --output=finetune_mt_covost_%j.txt
 #SBATCH --error=finetune_mt_covost_%j.txt
 
-source ../../setup.sh
+cd ../../
+source setup.sh
 
 MT_WORKSPACE=/pfs/work7/workspace/scratch/uxude-MT
 
@@ -25,19 +26,19 @@ MODEL_DIR=$TRAIN_WORKSPACE/models
 TRAIN_TIME_IN_HOURS=6
 
 
-python prepare_all_datasets.py
+python -m src.train.prepare_all_datasets
 
-source ../bash/train_mt.sh \
+source src/bash/train_mt.sh \
         $BINARY_DATA_DIR \
         $DATA_DIR/train \
         $DATA_DIR/dev \
         $MODEL_DIR \
         $TRAIN_TIME_IN_HOURS
 
-source ../bash/translate_mt.sh \
+source src/bash/translate_mt.sh \
         $BINARY_DATA_DIR/dict.en.txt \
         $BINARY_DATA_DIR/dict.de.txt \
         $DATA_DIR/test \
         $BINARY_DATA_DIR \
         $MODEL_DIR/checkpoint_best.pt \
-        predictions/finetune_mt_covost
+        ~/predictions/finetune_mt_covost

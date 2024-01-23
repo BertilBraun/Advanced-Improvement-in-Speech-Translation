@@ -12,7 +12,8 @@
 #SBATCH --output=finetune_asr_covost_%j.txt
 #SBATCH --error=finetune_asr_covost_%j.txt
 
-source ../../setup.sh
+cd ../../
+source setup.sh
 
 ASR_WORKSPACE=/pfs/work7/workspace/scratch/uxude-ASR
 
@@ -27,17 +28,17 @@ TEST_SUBSET=test
 
 TRAIN_TIME_IN_HOURS=6
 
-python prepare_all_datasets.py
+python -m src.train.prepare_all_datasets
 
-source ../bash/train_asr.sh \
+source src/bash/train_asr.sh \
         $TRAIN_SUBSET \
         $VAL_SUBSET \
         $DATA_DIR \
         $MODEL_DIR \
         $TRAIN_TIME_IN_HOURS
 
-source ../bash/transcribe_asr.sh \
+source src/bash/transcribe_asr.sh \
         $TEST_SUBSET \
         $DATA_DIR \
         $MODEL_DIR/checkpoint_best.pt \
-        predictions/finetune_asr_covost
+        ~/predictions/finetune_asr_covost
