@@ -1,10 +1,9 @@
-from pathlib import Path
-from typing import Optional
-
 import pandas as pd
-from src.datasets.mt_dataset import MTDataset, TextSample
 
-from src.datasets.st_dataset import DataSample, STDataset
+from pathlib import Path
+
+from src.datasets.mt_dataset import MTDataset, TextSample
+from src.datasets.st_dataset import STDataset, DataSample
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 from src.paths import COVOST_ROOT
@@ -26,21 +25,12 @@ class CoVoST(STDataset):
         self.split = split
         self.source_language = source_language
         self.target_language = target_language
-        self.data = (
-            pd.read_csv(
-                self.root / "translations" / f"covost_v2.en_de.{split}.tsv",
-                sep="\t",
-                on_bad_lines="warn",
-            )
-            .to_dict(orient="index")
-            .items()
-        )
         
     def _load_data(self) -> list[DataSample]:
         data = []
         
         for element in pd.read_csv(
-            self.root / "translations" / f"covost_v2.en_de.{split}.tsv",
+            self.root / "data" / "translations" / f"covost_v2.en_de.{split}.tsv",
             sep="\t",
             on_bad_lines="warn",
         ).to_dict(orient="index").values():
