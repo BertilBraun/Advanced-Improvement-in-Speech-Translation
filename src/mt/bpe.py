@@ -56,12 +56,12 @@ class BPE:
         self.spm_model = spm.SentencePieceProcessor(model_file=model_file.as_posix()) # type: ignore
 
     def encode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
-        self.__process(input_file, output_file, overwrite, process_fn=self.__encode, name="Encoding")
+        self._process(input_file, output_file, overwrite, process_fn=self._encode, name="Encoding")
 
     def decode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
-        self.__process(input_file, output_file, overwrite, process_fn=self.__decode, name="Decoding")
+        self._process(input_file, output_file, overwrite, process_fn=self._decode, name="Decoding")
                 
-    def __process(self, input_file: Path, output_file: Path, overwrite: bool, process_fn, name) -> None:
+    def _process(self, input_file: Path, output_file: Path, overwrite: bool, process_fn, name) -> None:
         if output_file.is_file() and not overwrite:
             logger.info(f"Skipping {name} of {input_file} because {output_file} already exists.")
             return
@@ -74,10 +74,10 @@ class BPE:
                 line_processed = process_fn(line)
                 f_out.write(" ".join(line_processed) + "\n")
 
-    def __encode(self, text: str) -> list[str]:
+    def _encode(self, text: str) -> list[str]:
         return self.spm_model.encode(text.strip(), out_type=str) # type: ignore
 
-    def __decode(self, text: str) -> list[str]:
+    def _decode(self, text: str) -> list[str]:
         return self.spm_model.decode(text.strip(), out_type=str) # type: ignore
 
 

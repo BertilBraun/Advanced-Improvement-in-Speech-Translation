@@ -10,7 +10,7 @@ DataSample = tuple[str, str, Optional[str], str, str] # waveform_path, sentence,
 
 class STDataset(Dataset[DataSample]):
     def __init__(self) -> None:
-        self.__data = self._load_data()
+        self._data = self._load_data()
 
     def _load_data(self) -> list[DataSample]:
         raise NotImplementedError
@@ -22,8 +22,8 @@ class STDataset(Dataset[DataSample]):
         Returns:
             tuple: ``(waveform_path, sentence, translation, speaker_id, sample_id)``
         """
-        return self.__data[n]
+        return self._data[n]
 
     def __len__(self) -> int:
-        return len(self.__data)
+        return len(self._data)
 

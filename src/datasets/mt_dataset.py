@@ -26,7 +26,7 @@ class MTDataset(Dataset[TextSample]):
     """Create a clean Dataset for MT."""
 
     def __init__(self) -> None:
-        self.data = self.__load_datasets()
+        self.data = self._load_datasets()
 
     def __getitem__(self, n: int) -> TextSample:
         """Load the n-th sample from the dataset.
@@ -51,7 +51,7 @@ class MTDataset(Dataset[TextSample]):
     def _load_data(self) -> list[TextSample]:
         raise NotImplementedError()
 
-    def __load_datasets(self) -> list[tuple[str, str]]:
+    def _load_datasets(self) -> list[tuple[str, str]]:
         return [
             cleanup(src, tgt)
             for src, tgt in tqdm(self._load_data(), desc="Processing dataset")
