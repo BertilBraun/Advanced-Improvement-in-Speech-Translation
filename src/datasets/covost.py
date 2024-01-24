@@ -25,6 +25,7 @@ class CoVoST(STDataset):
         self.split = split
         self.source_language = source_language
         self.target_language = target_language
+        super().__init__()
         
     def _load_data(self) -> list[DataSample]:
         data = []

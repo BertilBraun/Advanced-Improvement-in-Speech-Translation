@@ -26,7 +26,7 @@ class MTDataset(Dataset[TextSample]):
     """Create a clean Dataset for MT."""
 
     def __init__(self) -> None:
-        self.data = self._load_datasets()
+        self._data = self._load_datasets()
 
     def __getitem__(self, n: int) -> TextSample:
         """Load the n-th sample from the dataset.
@@ -35,14 +35,14 @@ class MTDataset(Dataset[TextSample]):
         Returns:
             tuple: ``(sentence, translation)``
         """
-        return self.data[n]
+        return self._data[n]
 
     def __len__(self) -> int:
-        return len(self.data)
+        return len(self._data)
 
     def write_to_files(self, src_path: Path, tgt_path: Path, max_lines_to_write: int | None = None) -> None:
         with open(src_path, "w") as src_file, open(tgt_path, "w") as tgt_file:
-            for i, (src, tgt) in tqdm(enumerate(self.data), desc="Writing to files"):
+            for i, (src, tgt) in tqdm(enumerate(self._data), desc="Writing to files"):
                 if max_lines_to_write is not None and i >= max_lines_to_write:
                     break
                 src_file.write(src + "\n")
