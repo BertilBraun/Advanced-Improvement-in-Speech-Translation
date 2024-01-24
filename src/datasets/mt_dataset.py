@@ -1,6 +1,5 @@
-from pathlib import Path
 from tqdm import tqdm
-from src.datasets.util import iterate_over_dataset
+from pathlib import Path
 from torch.utils.data import Dataset
 
 DO_FILTER_NON_ASCII = True

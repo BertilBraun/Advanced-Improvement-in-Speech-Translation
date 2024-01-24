@@ -39,5 +39,5 @@ for p in [
 ]:
     p.mkdir(parents=True, exist_ok=True)
     
-assert MT_SPM_MODEL.is_file(), f"Please copy the MT spm model to this location: {MT_SPM_MODEL}"
-assert ASR_SPM_MODEL.is_file(), f"Please copy the ASR spm model to this location: {ASR_SPM_MODEL}"
+# assert MT_SPM_MODEL.is_file(), f"Please copy the MT spm model to this location: {MT_SPM_MODEL}"
+# assert ASR_SPM_MODEL.is_file(), f"Please copy the ASR spm model to this location: {ASR_SPM_MODEL}"

@@ -29,9 +29,8 @@ class ASRDataset(Dataset[ASRSample]):
 
 
 if __name__ == "__main__":
+    from src.paths import COVOST_ROOT
     from src.datasets.covost import CoVoST
-
-    COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost"
 
     datasource = CoVoST(COVOST_ROOT, "train", "en", "de")
     dataset_with_audio = ASRDataset(datasource)

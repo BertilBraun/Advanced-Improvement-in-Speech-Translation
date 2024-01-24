@@ -1,16 +1,11 @@
+import pandas as pd
+
 from pathlib import Path
 from typing import Literal
 
-import pandas as pd
-from examples.speech_to_text.data_utils import (  # noqa
-    create_zip,  # noqa
-    gen_config_yaml,  # noqa
-    gen_vocab,  # noqa
-    get_zip_manifest,  # noqa
-    save_df_to_tsv,  # noqa
-)
-from src.datasets.st_dataset import STDataset
+from examples.speech_to_text.data_utils import create_zip, gen_config_yaml, gen_vocab, get_zip_manifest, save_df_to_tsv
 
+from src.datasets.st_dataset import STDataset
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 
@@ -43,9 +38,7 @@ def create_asr_configs(
     if spm_filename is None or not (root_location / spm_filename).is_file():
         spm_filename = spm_filename or f"spm_unigram{vocab_size}.model"
 
-        __process_dataset_vocab(
-            root_location, datasets[0], spm_filename, vocab_size
-        )
+        __process_dataset_vocab(root_location, datasets[0], spm_filename, vocab_size)
 
     __process_dataset_config(root_location, spm_filename)
 
@@ -63,9 +56,7 @@ def __process_dataset_manifest(dataset: STDataset, dataset_name: str, root_locat
         modified = utt.lower()
 
         # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
-        modified = "".join(
-            [c for c in modified if c.isalpha() or c == " " or c.isdigit()]
-        )
+        modified = "".join(c for c in modified if c.isalpha() or c == " " or c.isdigit())
 
         return modified
 
