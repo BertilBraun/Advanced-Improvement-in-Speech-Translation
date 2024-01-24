@@ -31,7 +31,7 @@ class CoVoST(STDataset):
         data = []
         
         for element in pd.read_csv(
-            self.root / "data" / "translations" / f"covost_v2.en_de.{split}.tsv",
+            self.root / "data" / "translations" / f"covost_v2.en_de.{self.split}.tsv",
             sep="\t",
             on_bad_lines="warn",
         ).to_dict(orient="index").values():
