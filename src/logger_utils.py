@@ -12,6 +12,6 @@ def get_logger(module_name: str) -> logging.Logger:
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     # You can change the log level globally using "LOGLEVEL" env variable
-    logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
+    logger.setLevel(os.environ.get("OUR_LOG_LEVEL", "INFO"))
     logger.propagate = False
     return logger
