@@ -56,7 +56,7 @@ if __name__ == "__main__":
     logger.info("Loading MT BPE...")        
     bpe = BPE(
         retrain_spm=False,
-        model_prefix=MT_SPM_MODEL.stem,
+        model_file=MT_SPM_MODEL,
     )
     
     logger.info("Encoding MT CoVoST with sentencepiece...")

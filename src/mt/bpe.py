@@ -37,14 +37,15 @@ def process_lines(file_path: Path, encoding="utf-8") -> list[str]:
 
 
 class BPE:
-    def __init__(self, retrain_spm: bool, train_files: list[str]|None=None, vocab_size=10000, model_prefix="bpe") -> None:
-        if retrain_spm:
+    def __init__(self, retrain_spm: bool, model_file: Path, train_files: list[str]|None=None, vocab_size=10000) -> None:
+        if retrain_spm or not model_file.is_file():
             assert train_files is not None
+            assert model_file.suffix == ".model"
             logger.info("Retraining sentencepiece model...")
 
             spm.SentencePieceTrainer.train( # type: ignore
                 input=", ".join(train_files),
-                model_prefix=model_prefix,
+                model_prefix=model_file.stem,
                 vocab_size=vocab_size,
                 input_sentence_size=1000000,
                 shuffle_input_sentence=True,
@@ -52,7 +53,7 @@ class BPE:
 
             logger.info("Finished training sentencepiece model.")
 
-        self.spm_model = spm.SentencePieceProcessor(model_file=f"{model_prefix}.model") # type: ignore
+        self.spm_model = spm.SentencePieceProcessor(model_file=model_file.as_posix()) # type: ignore
 
     def encode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
         self.__process(input_file, output_file, overwrite, process_fn=self.__encode, name="Encoding")
@@ -85,6 +86,7 @@ if __name__ == "__main__":
 
     bpe = BPE(
         retrain_spm=True,
+        model_file=data / "spm.model",
         train_files=["data/train.en", "data/train.de"],
         vocab_size=15000,
     )

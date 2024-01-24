@@ -1,16 +1,7 @@
 #!/bin/bash
 
-export OMP_NUM_THREADS=1 # ${SLURM_CPUS_PER_TASK}
-
-# module purge                                    # Unload all currently loaded modules.
-# module load compiler/gnu/10.2                   # Load required modules.  
-# module load devel/python/3.8.6_gnu_10.2
-# module load mpi/openmpi/4.1
-# module load devel/cuda/11.8
-
 # Set log level -- used by custom logger in our code
 export LOGLEVEL="INFO"  # ["INFO", "DEBUG", ...]
-
 
 # Function to check if extension to the workspace is needed
 check_and_extend_workspace() {
@@ -22,23 +13,20 @@ check_and_extend_workspace() {
 
     # Check if remaining time is less than specified days
     if [ "$remaining_time" != "" ] && [ "$remaining_time" -lt "$days" ]; then
-        echo "Extending workspace $workspace for $days days."
-        ws_extend "$workspace" "$days"
+        echo "Extending workspace $workspace for 60 days."
+        ws_extend "$workspace" 60
     else
         echo "No extension needed for workspace $workspace."
     fi
 }
 
 # Check and extend workspaces
-# check_and_extend_workspace ASR_U 30
-# check_and_extend_workspace MT 30
-
+check_and_extend_workspace ASR 30
+check_and_extend_workspace MT 30
 
 
 # conda initialize
 source ~/miniconda3/bin/activate nmt
-
-
 
 if [ -d ~/fairseq ]; then
     echo "Fairseq directory exists. Checking if installed..."
