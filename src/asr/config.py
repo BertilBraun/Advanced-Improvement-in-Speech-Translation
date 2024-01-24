@@ -1,7 +1,7 @@
 import pandas as pd
 
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Sequence
 
 from examples.speech_to_text.data_utils import create_zip, gen_config_yaml, gen_vocab, get_zip_manifest, save_df_to_tsv
 
@@ -13,7 +13,7 @@ logger = get_logger("ASR::Config")
 
 
 def create_asr_configs(
-    datasets: list[STDataset],
+    datasets: Sequence[STDataset],
     dataset_names: list[str],
     root_location: Path,
     encodings_folder: Path,

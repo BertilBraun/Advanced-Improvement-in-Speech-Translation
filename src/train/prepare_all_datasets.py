@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     logger.info("Creating ASR configs for CoVoST...")
     create_asr_configs(
-        covost_datasets, # type: ignore
+        covost_datasets,
         CoVoST.SPLITS,
         ASR_COVOST_ROOT,
         ASR_COVOST_MEL_ENCODING_ROOT,

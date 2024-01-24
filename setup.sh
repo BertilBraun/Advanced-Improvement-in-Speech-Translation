@@ -2,6 +2,7 @@
 
 # Set log level -- used by custom logger in our code
 export OUR_LOG_LEVEL="INFO"  # ["INFO", "DEBUG", ...]
+export VERBOSE=False
 
 # Function to check if extension to the workspace is needed
 check_and_extend_workspace() {
