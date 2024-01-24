@@ -1,17 +1,18 @@
-from typing import Optional
-
-import librosa
 import torch
-from src.datasets.util import iterate_over_dataset
+import librosa
+
+from typing import Optional
 from torch.utils.data import Dataset
 
-DataSample = tuple[str, str, Optional[str], str, str]
+from src.datasets.st_dataset import STDataset
+from src.datasets.util import iterate_over_dataset
+
 ASRSample = tuple[torch.Tensor, int, str, Optional[str], str, str] # waveform, sample_rate, sentence, translation, speaker_id, sample_id
 
 class ASRDataset(Dataset[ASRSample]):
     """Create a Dataset for ASR."""
 
-    def __init__(self, datasource: Dataset[DataSample]) -> None:
+    def __init__(self, datasource: STDataset) -> None:
         self.datasource = datasource
 
     def __getitem__(self, n: int) -> ASRSample:
@@ -27,6 +28,8 @@ class ASRDataset(Dataset[ASRSample]):
         sample_rate = int(round(sample_rate, ndigits=0))
         return waveform, sample_rate, sentence, translation, speaker_id, sample_id
 
+    def __len__(self) -> int:
+        return len(self.datasource)
 
 if __name__ == "__main__":
     from src.paths import COVOST_ROOT
