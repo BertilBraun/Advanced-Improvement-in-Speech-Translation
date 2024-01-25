@@ -20,10 +20,11 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 DATA_ROOT="content/fairseq/examples/speech_to_text/data"
 
 WORKSPACE_ROOT=/pfs/work7/workspace/scratch/uxude-ASR
+TRAIN_ROOT=$WORKSPACE_ROOT/train/st_end_to_end
 
 COVOST_ROOT=$WORKSPACE_ROOT/dataset/covost/en
-ST_SAVE_DIR=$WORKSPACE_ROOT/train/st_end_to_end/model
-PRED_OUTPUT_DIR=$WORKSPACE_ROOT/train/st_end_to_end/prediction
+ST_SAVE_DIR=$TRAIN_ROOT/model
+PRED_OUTPUT_DIR=$TRAIN_ROOT/prediction
 PRED_LOG=$PRED_OUTPUT_DIR/st_en_de.pred.log
 
 
