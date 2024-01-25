@@ -28,12 +28,12 @@ def create_asr_configs(
     Assumes that the first dataset is the training dataset."""
 
     if not zip_file.is_file() or overwrite_zip:
+        logger.info("Creating zip file...")
         create_zip(encodings_folder, zip_file)
 
     __cleanup_config_folder(root_location)
 
-    for dataset, dataset_name in zip(datasets, dataset_names):
-        __process_dataset_manifest(dataset, dataset_name, root_location, zip_file)
+    __process_dataset_manifests(datasets, dataset_names, root_location, zip_file)
 
     if spm_filename is None or not (root_location / spm_filename).is_file():
         spm_filename = spm_filename or f"spm_unigram{vocab_size}.model"
@@ -44,58 +44,73 @@ def create_asr_configs(
 
 
 def __cleanup_config_folder(root_location: Path) -> None:
+    logger.info("Cleaning up config folder...")
     # delete old tsv, txt, model files from root_location
     for file in root_location.glob("*"):
         if file.is_file() and file.suffix in [".tsv", ".txt", ".model"]:
             file.unlink()
+            logger.info(f"Deleted {file}")
 
 
-def __process_dataset_manifest(dataset: STDataset, dataset_name: str, root_location: Path, zip_file: Path) -> None:
-    def _cleanup_utterance(utt: str) -> str:
-        # cleanup the utterance to make it easier for the ASR model to learn
-        modified = utt.lower()
-
-        # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
-        modified = "".join(c for c in modified if c.isalpha() or c == " " or c.isdigit())
-
-        return modified
-
+def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: list[str], root_location: Path, zip_file: Path) -> None:
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
     logger.info("Fetching audio manifest...")
     audio_paths, audio_lengths = get_zip_manifest(zip_file)
 
-    logger.info(f"Fetching manifest from {dataset_name}...")
-    manifest = {c: [] for c in MANIFEST_COLUMNS}
+    for dataset, dataset_name in zip(datasets, dataset_names):
+        logger.info(f"Fetching manifest from {dataset_name}...")
+        manifest = {c: [] for c in MANIFEST_COLUMNS}
 
-    for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Manifest {dataset_name}"):
-        identifier = f"{speaker_id}-{sample_id}"
-        manifest["id"].append(identifier)
-        manifest["audio"].append(audio_paths[identifier])
-        manifest["n_frames"].append(audio_lengths[identifier])
-        manifest["tgt_text"].append(_cleanup_utterance(sentence))
-        manifest["speaker"].append(speaker_id)
+        for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Manifest {dataset_name}"):
+            try:
+                identifier = f"{speaker_id}-{sample_id}"
+                manifest["id"].append(identifier)
+                manifest["audio"].append(audio_paths[identifier])
+                manifest["n_frames"].append(audio_lengths[identifier])
+                manifest["tgt_text"].append(__cleanup_utterance(sentence))
+                manifest["speaker"].append(speaker_id)
+            except KeyError:
+                logger.warning(f"Missing audio file for '{speaker_id}-{sample_id}'")
 
-    save_df_to_tsv(pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv")
+        logger.info(f"Saving manifest for {dataset_name}...")
+        save_df_to_tsv(pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv")
 
 
 def __process_dataset_vocab(root_location: Path, dataset: STDataset, spm_filename: str, vocab_size: int = 5000) -> None:
     # Collect train text to generate sentencepiece model and vocabulary later on
+    logger.info("Collecting train text...")
     with open(root_location / "train_text.txt", "w") as f:
         for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Collections train text"):
-            f.write(sentence + "\n")
+            f.write(__cleanup_utterance(sentence) + "\n")
 
+    logger.info("Generating sentencepiece model and vocabulary...")
     gen_vocab(
         root_location / "train_text.txt",
         root_location / spm_filename,
         model_type="unigram",
         vocab_size=vocab_size,
     )
+    logger.info("Done generating sentencepiece model and vocabulary...")
+    
+    # remove train text file
+    (root_location / "train_text.txt").unlink()
 
 
 def __process_dataset_config(root_location: Path, spm_filename: str, type: Literal["wav2vec"] | Literal["mel"] = "mel") -> None:
+    logger.info("Generating config yaml...")
     gen_config_yaml(
         root_location, 
         spm_filename=spm_filename,
         input_feat_per_channel=80 if type == "mel" else 768,
     )
+    logger.info("Generated config yaml...")
+
+def __cleanup_utterance(utt: str) -> str:
+    # cleanup the utterance to make it easier for the ASR model to learn
+    modified = utt.lower()
+
+    # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
+    modified = "".join(c for c in modified if c.isalpha() or c == " " or c.isdigit())
+
+    return modified
