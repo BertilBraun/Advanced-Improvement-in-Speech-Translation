@@ -19,15 +19,19 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 # Define folder path to store the data
 DATA_ROOT="content/fairseq/examples/speech_to_text/data"
 
-#Training
-export COVOST_ROOT=/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1
-export ST_SAVE_DIR=/pfs/work7/workspace/scratch/ubppd-ASR/st_save_dir/model
+WORKSPACE_ROOT=/pfs/work7/workspace/scratch/uxude-ASR
 
-# Inference & Evaluation
-export PRED_OUTPUT_DIR=/pfs/work7/workspace/scratch/ubppd-ASR/st_save_dir/pred_eval
-export PRED_LOG=/pfs/work7/workspace/scratch/ubppd-ASR/st_save_dir/pred_eval/st_en_de.pred.log
+COVOST_ROOT=$WORKSPACE_ROOT/dataset/covost/en
+ST_SAVE_DIR=$WORKSPACE_ROOT/train/st_end_to_end/model
+PRED_OUTPUT_DIR=$WORKSPACE_ROOT/train/st_end_to_end/prediction
+PRED_LOG=$PRED_OUTPUT_DIR/st_en_de.pred.log
+
+
+mkdir -p $ST_SAVE_DIR
 mkdir -p $PRED_OUTPUT_DIR
-fairseq-generate $COVOST_ROOT/en \
+
+
+fairseq-generate $COVOST_ROOT \
   --config-yaml config_st_en_de.yaml --gen-subset test_st_en_de --task speech_to_text \
   --path $ST_SAVE_DIR/checkpoint_best.pt \
   --max-tokens 50000 --beam 5 --scoring sacrebleu > $PRED_LOG

@@ -25,12 +25,19 @@ mkdir -p $DATA_ROOT
 #python data_prep.py #>> data_prep_$SLURM_JOB_ID.txt 2>&1
 
 #Training
-export COVOST_ROOT=/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1
-export ST_SAVE_DIR=/pfs/work7/workspace/scratch/ubppd-ASR/st_save_dir/model
+WORKSPACE_ROOT=/pfs/work7/workspace/scratch/uxude-ASR
+
+COVOST_ROOT=$WORKSPACE_ROOT/dataset/covost/en
+ST_SAVE_DIR=$WORKSPACE_ROOT/train/st_end_to_end/model
+PRED_OUTPUT_DIR=$WORKSPACE_ROOT/train/st_end_to_end/prediction
+PRED_LOG=$PRED_OUTPUT_DIR/st_en_de.pred.log
 
 
 mkdir -p $ST_SAVE_DIR
-fairseq-train $COVOST_ROOT/en \
+mkdir -p $PRED_OUTPUT_DIR
+
+
+fairseq-train $COVOST_ROOT \
   --config-yaml config_st_en_de.yaml --train-subset train_st_en_de --valid-subset dev_st_en_de \
   --save-dir $ST_SAVE_DIR \
   --save-interval-updates 50000\
@@ -42,10 +49,7 @@ fairseq-train $COVOST_ROOT/en \
 
 
 # Inference & Evaluation
-export PRED_OUTPUT_DIR=/pfs/work7/workspace/scratch/ubppd-ASR/st_save_dir/pred_eval
-export PRED_LOG=/pfs/work7/workspace/scratch/ubppd-ASR/st_save_dir/pred_eval/st_en_de.pred.log
-mkdir -p $PRED_OUTPUT_DIR
-fairseq-generate $COVOST_ROOT/en \
+fairseq-generate $COVOST_ROOT \
   --config-yaml config_st_en_de.yaml --gen-subset test_st_en_de --task speech_to_text \
   --path $ST_SAVE_DIR/checkpoint_best.pt \
   --max-tokens 50000 --beam 5 --scoring sacrebleu > $PRED_LOG
