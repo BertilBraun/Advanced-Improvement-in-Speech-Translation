@@ -76,9 +76,7 @@ def __process_dataset_manifest(dataset: STDataset, dataset_name: str, root_locat
         manifest["tgt_text"].append(_cleanup_utterance(sentence))
         manifest["speaker"].append(speaker_id)
 
-    save_df_to_tsv(
-        pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv"
-    )
+    save_df_to_tsv(pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv")
 
 
 def __process_dataset_vocab(root_location: Path, dataset: STDataset, spm_filename: str, vocab_size: int = 5000) -> None:

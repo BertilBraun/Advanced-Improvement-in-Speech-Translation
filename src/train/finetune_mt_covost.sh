@@ -40,5 +40,5 @@ source src/bash/translate_mt.sh \
         $BINARY_DATA_DIR/dict.de.txt \
         $DATA_DIR/test \
         $BINARY_DATA_DIR \
-        $MODEL_DIR/checkpoint_best.pt \
+        $MODEL_DIR \
         ~/predictions/finetune_mt_covost

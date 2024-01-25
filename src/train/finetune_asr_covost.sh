@@ -40,5 +40,5 @@ source src/bash/train_asr.sh \
 source src/bash/transcribe_asr.sh \
         $TEST_SUBSET \
         $DATA_DIR \
-        $MODEL_DIR/checkpoint_best.pt \
+        $MODEL_DIR \
         ~/predictions/finetune_asr_covost

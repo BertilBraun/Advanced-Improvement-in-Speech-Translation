@@ -2,14 +2,24 @@
 
 TEST_SUBSET=$1
 DATA_DIR=$2
-CHECKPOINT_PATH=$3
+CHECKPOINT_FOLDER=$3
 PRED_OUTPUT_DIR=$4
 
 PRED_LOG=$PRED_OUTPUT_DIR/transcribe_asr_pred.log
 
+CHECKPOINT_PATH=$CHECKPOINT_FOLDER/avg_last_5_checkpoint.pt
+
 mkdir -p $PRED_OUTPUT_DIR
 
 echo "Starting transcription..."
+echo "Average checkpoints..."
+
+python ~/fairseq/scripts/average_checkpoints.py \
+  --inputs $CHECKPOINT_FOLDER --num-epoch-checkpoints 5 \
+  --output $CHECKPOINT_PATH
+
+echo "Checkpoints averaged"
+echo "Generating transcriptions..."
 
 fairseq-generate $DATA_DIR \
     --config-yaml config.yaml --gen-subset $TEST_SUBSET \

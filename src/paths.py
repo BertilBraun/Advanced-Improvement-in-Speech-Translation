@@ -1,10 +1,7 @@
 from pathlib import Path
 
-COVOST = Path("/pfs/work7/workspace/scratch/ubppd-ASR/covost")
-COVOST_ROOT = COVOST
-COVOST_CORPUS = COVOST / "corpus-16.1"
-COVOST_DATA = COVOST / "data"
-COVOST_CORPUS_EN_CLIPS = COVOST_CORPUS / "en" / "clips"
+COVOST_ROOT = Path("/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost/en")
+COVOST_CORPUS_EN_CLIPS = COVOST_ROOT / "clips"
 
 MT_ROOT = Path("/pfs/work7/workspace/scratch/uxude-MT")
 ASR_ROOT = Path("/pfs/work7/workspace/scratch/uxude-ASR")
@@ -25,14 +22,11 @@ MT_COVOST_SPM_ENCODING_ROOT = MT_COVOST_ROOT / "spm"
 
 for p in [
     COVOST_ROOT,
-    COVOST_CORPUS,
-    COVOST_DATA,
     COVOST_CORPUS_EN_CLIPS,
     MT_ROOT,
     ASR_ROOT,
     ASR_COVOST_ROOT,
     ASR_COVOST_MEL_ENCODING_ROOT,
-    ASR_COVOST_MEL_ENCODING_ZIP,
     MT_COVOST_ROOT,
     MT_COVOST_DATA_ROOT,
     MT_COVOST_SPM_ENCODING_ROOT,

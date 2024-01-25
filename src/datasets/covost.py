@@ -31,11 +31,11 @@ class CoVoST(STDataset):
         data = []
         
         for element in pd.read_csv(
-            self.root / "data" / "translations" / f"covost_v2.en_de.{self.split}.tsv",
+            self.root / f"covost_v2.en_de.{self.split}.tsv",
             sep="\t",
             on_bad_lines="warn",
         ).to_dict(orient="index").values():
-            path = self.root / "corpus-16.1" / self.source_language / "clips" / element["path"]
+            path = self.root / "clips" / element["path"]
             sentence = element["sentence"]
             translation = element["translation"]
             speaker_id = element["client_id"]

@@ -20,9 +20,10 @@ echo "Training the model..."
 
 fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
     --train-subset $TRAIN_SUBSET --valid-subset $VAL_SUBSET \
-    --num-workers 4 --max-tokens 40000 --max-epoch 100 \
-    --task speech_to_text --criterion label_smoothed_cross_entropy_with_ctc \
-    --arch s2t_transformer_m --share-decoder-input-output-embed \
+    --num-workers 4 --max-tokens 50000 --max-epoch 100 \
+    --task speech_to_text --criterion label_smoothed_cross_entropy \
+    --arch s2t_conformer --share-decoder-input-output-embed \
+    --pos-enc-type rel_pos --attn-type espnet \
     --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
     --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
     --stop-time-hours $TRAIN_TIME_IN_HOURS 
