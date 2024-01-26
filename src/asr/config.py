@@ -31,7 +31,8 @@ def create_asr_configs(
         logger.info("Creating zip file...")
         create_zip(encodings_folder, zip_file)
 
-    __cleanup_config_folder(root_location)
+    # assuming the folder will only ever be used for one dataset
+    # __cleanup_config_folder(root_location)
 
     __process_dataset_manifests(datasets, dataset_names, root_location, zip_file)
 
@@ -53,6 +54,10 @@ def __cleanup_config_folder(root_location: Path) -> None:
 
 
 def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: list[str], root_location: Path, zip_file: Path) -> None:
+    if all((root_location / f"{dataset_name}.tsv").is_file() for dataset_name in dataset_names):
+        logger.info("Manifest files already exist, skipping manifest creation...")
+        return
+    
     MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
 
     logger.info("Fetching audio manifest...")
@@ -80,6 +85,10 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
 
 
 def __process_dataset_vocab(root_location: Path, dataset: STDataset, spm_filename: str, vocab_size: int = 5000) -> None:
+    if (root_location / spm_filename).is_file():
+        logger.info("Sentencepiece model already exists, skipping sentencepiece model creation...")
+        return
+    
     # Collect train text to generate sentencepiece model and vocabulary later on
     logger.info("Collecting train text...")
     with open(root_location / "train_text.txt", "w") as f:
