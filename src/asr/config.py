@@ -63,15 +63,17 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
         manifest = {c: [] for c in MANIFEST_COLUMNS}
 
         for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Manifest {dataset_name}"):
-            try:
-                identifier = f"{speaker_id}-{sample_id}"
-                manifest["id"].append(identifier)
-                manifest["audio"].append(audio_paths[identifier])
-                manifest["n_frames"].append(audio_lengths[identifier])
-                manifest["tgt_text"].append(__cleanup_utterance(sentence))
-                manifest["speaker"].append(speaker_id)
-            except KeyError:
-                logger.warning(f"Missing audio file for '{speaker_id}-{sample_id}'")
+            identifier = f"{speaker_id}-{sample_id}"
+
+            if identifier not in audio_paths or identifier not in audio_lengths:
+                logger.warning(f"Missing audio file for {identifier}!")
+                continue
+            
+            manifest["id"].append(identifier)
+            manifest["audio"].append(audio_paths[identifier])
+            manifest["n_frames"].append(audio_lengths[identifier])
+            manifest["tgt_text"].append(__cleanup_utterance(sentence))
+            manifest["speaker"].append(speaker_id)
 
         logger.info(f"Saving manifest for {dataset_name}...")
         save_df_to_tsv(pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv")

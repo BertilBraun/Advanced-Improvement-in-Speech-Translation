@@ -16,6 +16,10 @@ mkdir -p $BINARY_DATA_DIR
 
 echo "Starting translation..."
 echo "Preprocessing data..."
+echo "Source dictionary: $SRC_DICT"
+echo "Target dictionary: $TGT_DICT"
+echo "Test prefix: $TEST_PREF"
+echo "Binary data directory: $BINARY_DATA_DIR"
 
 fairseq-preprocess \
       --source-lang en --target-lang de \
@@ -27,6 +31,8 @@ fairseq-preprocess \
 
 echo "Preprocessing done"
 echo "Average checkpoints..."
+echo "Checkpoints folder: $CHECKPOINT_FOLDER"
+echo "Checkpoint path: $CHECKPOINT_PATH"
 
 python ~/fairseq/scripts/average_checkpoints.py \
   --inputs $CHECKPOINT_FOLDER --num-epoch-checkpoints 5 \
@@ -34,6 +40,9 @@ python ~/fairseq/scripts/average_checkpoints.py \
 
 echo "Checkpoints averaged"
 echo "Generating translations..."
+echo "Binary data directory: $BINARY_DATA_DIR"
+echo "Prediction output directory: $PRED_OUTPUT_DIR"
+echo "Prediction folder: $PRED_OUTPUT_DIR"
 
 fairseq-generate $BINARY_DATA_DIR \
       --task translation \

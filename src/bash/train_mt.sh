@@ -12,6 +12,10 @@ mkdir -p $MODEL_DIR
 # Binarize the data for training
 if [ -z "$(ls -A $BINARY_DATA_DIR)" ]; then
   echo "Binarizing the data..."
+  echo "Binarized data will be stored in $BINARY_DATA_DIR"
+  echo "Training data: $TRAIN_SPM_PREF"
+  echo "Validation data: $VALID_SPM_PREF"
+
   fairseq-preprocess \
     --source-lang en --target-lang de \
     --trainpref $TRAIN_SPM_PREF \
@@ -26,6 +30,8 @@ fi
 
 # Train the model in parallel
 echo "Training the model..."
+echo "Model will be stored in $MODEL_DIR"
+echo "Training time: $TRAIN_TIME_IN_HOURS hours"
 
 fairseq-train \
     $BINARY_DATA_DIR --save-dir $MODEL_DIR \

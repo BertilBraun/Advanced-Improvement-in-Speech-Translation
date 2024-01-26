@@ -13,6 +13,8 @@ mkdir -p $PRED_OUTPUT_DIR
 
 echo "Starting transcription..."
 echo "Average checkpoints..."
+echo "Checkpoints folder: $CHECKPOINT_FOLDER"
+echo "Checkpoint path: $CHECKPOINT_PATH"
 
 python ~/fairseq/scripts/average_checkpoints.py \
   --inputs $CHECKPOINT_FOLDER --num-epoch-checkpoints 5 \
@@ -20,6 +22,9 @@ python ~/fairseq/scripts/average_checkpoints.py \
 
 echo "Checkpoints averaged"
 echo "Generating transcriptions..."
+echo "Test subset: $TEST_SUBSET"
+echo "Data directory: $DATA_DIR"
+echo "Prediction output directory: $PRED_OUTPUT_DIR"
 
 fairseq-generate $DATA_DIR \
     --config-yaml config.yaml --gen-subset $TEST_SUBSET \

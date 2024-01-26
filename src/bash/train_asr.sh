@@ -17,6 +17,11 @@ fi
 
 # Train the model
 echo "Training the model..."
+echo "Model will be stored in $MODEL_DIR"
+echo "Training time: $TRAIN_TIME_IN_HOURS hours"
+echo "Training subset: $TRAIN_SUBSET"
+echo "Validation subset: $VAL_SUBSET"
+echo "Data directory: $DATA_DIR"
 
 fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
     --train-subset $TRAIN_SUBSET --valid-subset $VAL_SUBSET \
