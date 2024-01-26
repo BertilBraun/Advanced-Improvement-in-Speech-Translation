@@ -102,7 +102,7 @@ def __process_dataset_vocab(root_location: Path, dataset: STDataset, spm_filenam
     logger.info("Generating sentencepiece model and vocabulary...")
     gen_vocab(
         root_location / "train_text.txt",
-        root_location / spm_filename,
+        root_location / Path(spm_filename).stem,
         model_type="unigram",
         vocab_size=vocab_size,
     )
