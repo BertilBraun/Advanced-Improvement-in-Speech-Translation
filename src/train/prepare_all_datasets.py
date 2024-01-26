@@ -17,7 +17,11 @@ def can_skip_dataset_prep() -> bool:
         (MT_COVOST_SPM_ENCODING_ROOT / f"{split}.en").is_file()
         for split in CoVoST.SPLITS
     )
-    return config_file_exists and mt_spm_data_exists
+    punctuation_spm_data_exists = all(
+        (PUNCTUATION_COVOST_SPM_ENCODING_ROOT / f"{split}.en").is_file()
+        for split in CoVoST.SPLITS
+    )
+    return config_file_exists and mt_spm_data_exists and punctuation_spm_data_exists
 
 if __name__ == "__main__":
     if can_skip_dataset_prep():
