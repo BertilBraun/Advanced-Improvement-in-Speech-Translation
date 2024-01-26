@@ -1,11 +1,11 @@
 import os
 
+from src.mt.config import process_mt_dataset_to_spm_encoding
 from src.asr.config import create_asr_configs
 from src.asr.mel_encoding import process_dataset_to_mel_spectrogram
-from src.datasets.asr_dataset import ASRDataset
-from src.datasets.covost import CoVoST, CoVoSTWithText
+from src.datasets.base.asr_dataset import ASRDataset
+from src.datasets.concrete.covost import CoVoST, CoVoSTPunctuationReconstructionDataset, CoVoSTWithText
 from src.logger_utils import get_logger
-from src.mt.bpe import BPE
 from src.paths import *
 
 logger = get_logger("Dataset::Prepare Datasets")
@@ -47,29 +47,14 @@ if __name__ == "__main__":
     logger.info("Preparing MT CoVoST...")
     mt_datasets = [CoVoSTWithText(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
     
-    logger.info("Writing MT CoVoST to disk...")
     for dataset in mt_datasets:
-        src_path = MT_COVOST_DATA_ROOT / f"{dataset.split}.en"
-        tgt_path = MT_COVOST_DATA_ROOT / f"{dataset.split}.de"
-        dataset.write_to_files(src_path, tgt_path, max_lines_to_write=20_000_000)
-
-    logger.info("Loading MT BPE...")        
-    bpe = BPE(
-        retrain_spm=False,
-        model_file=MT_SPM_MODEL,
-    )
+        process_mt_dataset_to_spm_encoding(dataset, MT_COVOST_ROOT, MT_SPM_MODEL)
     
-    logger.info("Encoding MT CoVoST with sentencepiece...")
-    for split in CoVoST.SPLITS:
-        logger.info(f"Encoding split {split}...")
+    logger.info("Preparing MT CoVoST with punctuation...")
+    punctuation_datasets = [CoVoSTPunctuationReconstructionDataset(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
+    
+    for dataset in punctuation_datasets:
+        process_mt_dataset_to_spm_encoding(dataset, PUNCTUATION_COVOST_ROOT, MT_SPM_MODEL)
         
-        bpe.encode_file(
-            MT_COVOST_DATA_ROOT / f"{split}.en",
-            MT_COVOST_SPM_ENCODING_ROOT / f"{split}.en",
-        )
-        
-        bpe.encode_file(
-            MT_COVOST_DATA_ROOT / f"{split}.de",
-            MT_COVOST_SPM_ENCODING_ROOT / f"{split}.de",
-        )
-        
+    logger.info("Done!")
+    

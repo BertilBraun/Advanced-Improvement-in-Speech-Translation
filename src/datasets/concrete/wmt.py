@@ -1,6 +1,6 @@
 from datasets import load_dataset
 
-from src.datasets.mt_dataset import MTDataset, TextSample
+from src.datasets.base.mt_dataset import MTDataset, TextSample
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 
@@ -22,7 +22,7 @@ class WMT(MTDataset):
         self.source_language = source_language
         self.target_language = target_language
         self.max_size = max_size
-        super().__init__()
+        super().__init__(split)
 
     def _load_data(self) -> list[TextSample]:
         # WMT datasets, but generate a set from these to avoid duplicates

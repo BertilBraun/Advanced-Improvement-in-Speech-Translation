@@ -1,9 +1,10 @@
+import string
 import pandas as pd
 
 from pathlib import Path
 
-from src.datasets.mt_dataset import MTDataset, TextSample
-from src.datasets.st_dataset import STDataset, DataSample
+from src.datasets.base.mt_dataset import MTDataset, TextSample
+from src.datasets.base.st_dataset import STDataset, DataSample
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 from src.paths import COVOST_ROOT
@@ -56,15 +57,36 @@ class CoVoSTWithText(MTDataset):
 
     def __init__(self, root: Path, split: str, source_language: str, target_language: str) -> None:
         self.dataset = CoVoST(root, split, source_language, target_language)
-        
-    @property
-    def split(self) -> str:
-        return self.dataset.split
+        super().__init__(split)
         
     def _load_data(self) -> list[TextSample]:
         data = []
         for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(self.dataset):
             data.append((sentence, translation))
+        return data
+
+
+class CoVoSTPunctuationReconstructionDataset(MTDataset):
+    """Create a Dataset for CoVoST (https://github.com/facebookresearch/covost).
+    Args:
+    root (Path): root path to the dataset and generated manifests/features
+    source_language (str): source (audio) language
+    target_language (str): target (text) language
+    """
+
+    def __init__(self, root: Path, split: str, source_language: str, target_language: str) -> None:
+        self.dataset = CoVoST(root, split, source_language, target_language)
+        super().__init__(split)
+    
+    def __remove_punctuation(self, text: str) -> str:
+        text = text.lower()
+        text = "".join(c for c in text if c not in string.punctuation)
+        return text
+        
+    def _load_data(self) -> list[TextSample]:
+        data = []
+        for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(self.dataset):
+            data.append((self.__remove_punctuation(sentence), sentence))
         return data
 
 
@@ -79,4 +101,9 @@ if __name__ == "__main__":
         dataset_with_text = CoVoSTWithText(COVOST_ROOT, split, "en", "de")
 
         for sentence, translation in iterate_over_dataset(dataset_with_text):
+            pass
+        
+        dataset_without_punctuation = CoVoSTPunctuationReconstructionDataset(COVOST_ROOT, split, "en", "de")
+        
+        for cleaned, original in iterate_over_dataset(dataset_without_punctuation):
             pass

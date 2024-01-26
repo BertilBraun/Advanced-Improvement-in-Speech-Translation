@@ -25,9 +25,10 @@ TextSample = tuple[str, str]
 class MTDataset(Dataset[TextSample]):
     """Create a clean Dataset for MT."""
 
-    def __init__(self) -> None:
+    def __init__(self, split) -> None:
+        self.split = split
         self._data = self._load_datasets()
-
+        
     def __getitem__(self, n: int) -> TextSample:
         """Load the n-th sample from the dataset.
         Args:

@@ -5,7 +5,7 @@ from typing import Literal, Sequence
 
 from examples.speech_to_text.data_utils import create_zip, gen_config_yaml, gen_vocab, get_zip_manifest, save_df_to_tsv
 
-from src.datasets.st_dataset import STDataset
+from src.datasets.base.st_dataset import STDataset
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 

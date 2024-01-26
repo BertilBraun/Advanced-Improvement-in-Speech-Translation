@@ -4,7 +4,7 @@ import librosa
 from typing import Optional
 from torch.utils.data import Dataset
 
-from src.datasets.st_dataset import STDataset
+from src.datasets.base.st_dataset import STDataset
 from src.datasets.util import iterate_over_dataset
 
 ASRSample = tuple[torch.Tensor, int, str, Optional[str], str, str] # waveform, sample_rate, sentence, translation, speaker_id, sample_id
@@ -33,7 +33,7 @@ class ASRDataset(Dataset[ASRSample]):
 
 if __name__ == "__main__":
     from src.paths import COVOST_ROOT
-    from src.datasets.covost import CoVoST
+    from src.datasets.concrete.covost import CoVoST
 
     datasource = CoVoST(COVOST_ROOT, "train", "en", "de")
     dataset_with_audio = ASRDataset(datasource)
