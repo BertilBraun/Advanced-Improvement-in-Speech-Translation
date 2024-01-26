@@ -64,6 +64,10 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
     audio_paths, audio_lengths = get_zip_manifest(zip_file)
 
     for dataset, dataset_name in zip(datasets, dataset_names):
+        if (root_location / f"{dataset_name}.tsv").is_file():
+            logger.info(f"Manifest file for {dataset_name} already exists, skipping manifest creation...")
+            continue
+        
         logger.info(f"Fetching manifest from {dataset_name}...")
         manifest = {c: [] for c in MANIFEST_COLUMNS}
 
