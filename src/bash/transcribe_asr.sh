@@ -34,7 +34,7 @@ fairseq-generate $DATA_DIR \
 
 echo "Transcription done"
 
-source extract_from_prediction.sh  \
+source src/bash/extract_from_prediction.sh  \
     $PRED_OUTPUT_DIR \
     $PRED_OUTPUT_DIR/hyp.txt \
     $PRED_OUTPUT_DIR/ref.txt
