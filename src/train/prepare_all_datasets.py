@@ -31,10 +31,6 @@ if __name__ == "__main__":
     logger.info("Preparing CoVoST...")
     covost_datasets = [CoVoST(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
     
-    logger.info("Processing CoVoST to mel spectrograms...")
-    for dataset in covost_datasets:
-        process_dataset_to_mel_spectrogram(ASRDataset(dataset), ASR_COVOST_MEL_ENCODING_ROOT)
-
     # copy spm model ASR_SPM_MODEL to ASR_COVOST_ROOT
     os.system(f"cp {ASR_SPM_MODEL} {ASR_COVOST_ROOT}")
 
@@ -45,6 +41,7 @@ if __name__ == "__main__":
         ASR_COVOST_ROOT,
         ASR_COVOST_MEL_ENCODING_ROOT,
         ASR_COVOST_MEL_ENCODING_ZIP,
+        encoding_function=process_dataset_to_mel_spectrogram,
         spm_filename=ASR_SPM_MODEL.name,
     )    
     

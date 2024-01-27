@@ -49,12 +49,6 @@ else
     pip install --editable ~/fairseq/
 fi
 
-echo "Exporting Covost related paths"
-export ASR_U="/pfs/work7/workspace/scratch/ubppd-ASR"
-export COVOST="$ASR_U/covost"
-export COVOST_CORPUS="$COVOST/corpus-16.1"
-export COVOST_DATA="$COVOST/data"
-
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
 

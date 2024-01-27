@@ -1,10 +1,11 @@
 import pandas as pd
 
 from pathlib import Path
-from typing import Literal, Sequence
+from typing import Callable, Literal, Sequence
 
 from examples.speech_to_text.data_utils import create_zip, gen_config_yaml, gen_vocab, get_zip_manifest, save_df_to_tsv
 
+from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.base.st_dataset import STDataset
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
@@ -18,6 +19,7 @@ def create_asr_configs(
     root_location: Path,
     encodings_folder: Path,
     zip_file: Path,
+    encoding_function: Callable[[ASRDataset, Path], None],
     vocab_size: int = 5000,
     spm_filename: str | None = None,
     overwrite_zip: bool = False,
@@ -28,6 +30,10 @@ def create_asr_configs(
     Assumes that the first dataset is the training dataset."""
 
     if not zip_file.is_file() or overwrite_zip:
+        for dataset in datasets:
+            logger.info(f"Processing dataset {dataset} to encoding...")
+            encoding_function(ASRDataset(dataset), encodings_folder)
+        
         logger.info("Creating zip file...")
         create_zip(encodings_folder, zip_file)
 
