@@ -48,14 +48,12 @@ if __name__ == "__main__":
     logger.info("Preparing MT CoVoST...")
     mt_datasets = [CoVoSTWithText(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
     
-    for dataset in mt_datasets:
-        process_mt_dataset_to_spm_encoding(dataset, MT_COVOST_ROOT, MT_SPM_MODEL)
+    process_mt_dataset_to_spm_encoding(mt_datasets, MT_COVOST_ROOT, MT_SPM_MODEL)
     
     logger.info("Preparing MT CoVoST with punctuation...")
     punctuation_datasets = [CoVoSTPunctuationReconstructionDataset(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
     
-    for dataset in punctuation_datasets:
-        process_mt_dataset_to_spm_encoding(dataset, PUNCTUATION_COVOST_ROOT, MT_SPM_MODEL)
+    process_mt_dataset_to_spm_encoding(punctuation_datasets, PUNCTUATION_COVOST_ROOT, MT_SPM_MODEL)
         
     logger.info("Done!")
     

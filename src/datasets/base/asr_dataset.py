@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 from src.datasets.base.st_dataset import STDataset
 from src.datasets.util import iterate_over_dataset
 
-ASRSample = tuple[torch.Tensor, int, str, Optional[str], str, str] # waveform, sample_rate, sentence, translation, speaker_id, sample_id
+ASRSample = tuple[torch.FloatTensor, int, str, Optional[str], str, str] # waveform, sample_rate, sentence, translation, speaker_id, sample_id
 
 class ASRDataset(Dataset[ASRSample]):
     """Create a Dataset for ASR."""
@@ -23,8 +23,8 @@ class ASRDataset(Dataset[ASRSample]):
             tuple: ``(waveform, sample_rate, sentence, translation, speaker_id, sample_id)``
         """
         path, sentence, translation, speaker_id, sample_id = self.datasource[n]
-        waveform, sample_rate = librosa.load(path, sr=None, mono=False)
-        waveform = torch.tensor(waveform)[None, :]
+        np_waveform, sample_rate = librosa.load(path, sr=None, mono=False)
+        waveform: torch.FloatTensor = torch.tensor(np_waveform, dtype=torch.float32)[None, :] # type: ignore
         sample_rate = int(round(sample_rate, ndigits=0))
         return waveform, sample_rate, sentence, translation, speaker_id, sample_id
 
