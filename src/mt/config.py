@@ -1,4 +1,4 @@
-from src.datasets.mt_dataset import MTDataset
+from src.datasets.base.mt_dataset import MTDataset
 from src.logger_utils import get_logger
 from src.mt.bpe import BPE
 from src.paths import *

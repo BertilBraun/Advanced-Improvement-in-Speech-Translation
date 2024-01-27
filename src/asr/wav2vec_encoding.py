@@ -5,7 +5,7 @@ import torch
 from torch.nn.utils.rnn import pad_sequence
 from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
-from src.datasets.asr_dataset import ASRDataset
+from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 

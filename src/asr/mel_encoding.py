@@ -2,7 +2,7 @@ from pathlib import Path
 
 from examples.speech_to_text.data_utils import extract_fbank_features  # noqa
 
-from src.datasets.asr_dataset import ASRDataset
+from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 
