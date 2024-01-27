@@ -29,6 +29,10 @@ TEST_SUBSET=test
 TRAIN_TIME_IN_HOURS=6
 
 python -m src.train.prepare_all_datasets
+# check exit code of python call, if crash, exit
+if [ $? -ne 0 ]; then
+    exit 1
+fi
 
 source src/bash/train_asr.sh \
         $TRAIN_SUBSET \
