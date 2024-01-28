@@ -38,11 +38,11 @@ echo "Training time: $TRAIN_TIME_IN_HOURS hours"
 fairseq-train \
     $BINARY_DATA_DIR --save-dir $MODEL_DIR \
     --arch transformer --share-decoder-input-output-embed \
-    --optimizer adam --adam-betas '(0.9, 0.98)' \
-    --lr 5e-3 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
+    --optimizer adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
+    --lr 1e-3 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
-    --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
+    --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 5 \
     --max-tokens 4096 --max-epoch 100 --stop-time-hours $TRAIN_TIME_IN_HOURS \
     --fp16
 

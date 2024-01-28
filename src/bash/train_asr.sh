@@ -30,7 +30,7 @@ fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
     --arch s2t_conformer --share-decoder-input-output-embed \
     --pos-enc-type rel_pos --attn-type espnet \
     --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
-    --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 1 \
+    --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 5 \
     --stop-time-hours $TRAIN_TIME_IN_HOURS 
 
 
