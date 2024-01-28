@@ -29,18 +29,18 @@ class CoVoST(STDataset):
         super().__init__()
         
     def _load_data(self) -> list[DataSample]:
-        data = []
+        data: list[DataSample] = []
         
         for element in pd.read_csv(
             self.root / f"covost_v2.en_de.{self.split}.tsv",
             sep="\t",
             on_bad_lines="warn",
         ).to_dict(orient="index").values():
-            path = self.root / "clips" / element["path"]
-            sentence = element["sentence"]
-            translation = element["translation"]
-            speaker_id = element["client_id"]
-            sample_id = element["path"].replace(".mp3", "")
+            path: Path = self.root / "clips" / element["path"]
+            sentence: str = element["sentence"]
+            translation: str = element["translation"]
+            speaker_id: str = element["client_id"]
+            sample_id: str = element["path"].replace(".mp3", "")
             
             data.append((path, sentence, translation, speaker_id, sample_id))
             

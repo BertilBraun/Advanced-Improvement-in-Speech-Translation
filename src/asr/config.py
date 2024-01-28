@@ -80,11 +80,6 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
         for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Manifest {dataset_name}"):
             identifier = f"{speaker_id}-{sample_id}"
             
-            # if sentence is not a string, skip this sample
-            if not isinstance(sentence, str):
-                logger.warning(f"Skipping {identifier} because sentence is not a string!")
-                continue
-
             if identifier not in audio_paths or identifier not in audio_lengths:
                 logger.warning(f"Missing audio file for {identifier}!")
                 continue
