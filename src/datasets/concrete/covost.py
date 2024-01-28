@@ -1,7 +1,7 @@
 import string
-import pandas as pd
 
 from pathlib import Path
+from examples.speech_to_text.data_utils import load_df_from_tsv
 
 from src.datasets.base.mt_dataset import MTDataset, TextSample
 from src.datasets.base.st_dataset import STDataset, DataSample
@@ -31,11 +31,7 @@ class CoVoST(STDataset):
     def _load_data(self) -> list[DataSample]:
         data: list[DataSample] = []
         
-        for element in pd.read_csv(
-            self.root / f"covost_v2.en_de.{self.split}.tsv",
-            sep="\t",
-            on_bad_lines="warn",
-        ).to_dict(orient="index").values():
+        for element in load_df_from_tsv(self.root / f"covost_v2.en_de.{self.split}.tsv").to_dict(orient="index").values():
             path: Path = self.root / "clips" / element["path"]
             sentence: str = element["sentence"]
             translation: str = element["translation"]

@@ -39,7 +39,7 @@ class STDataset(Dataset[DataSample]):
             
             # if sentence is not a string, skip this sample
             if not isinstance(sentence, str) or \
-                not isinstance(translation, str) or \
+                (not isinstance(translation, str) and translation is not None) or \
                 not isinstance(speaker_id, str) or \
                 not isinstance(sample_id, str):
                 logger.warning(f"Skipping {path} because data type is wrong! (sentence: {sentence}) (translation: {translation}) (speaker_id: {speaker_id}) (sample_id: {sample_id})")

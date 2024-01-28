@@ -3,7 +3,6 @@ import os
 from src.mt.config import process_mt_dataset_to_spm_encoding
 from src.asr.config import create_asr_configs
 from src.asr.mel_encoding import process_dataset_to_mel_spectrogram
-from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.concrete.covost import CoVoST, CoVoSTPunctuationReconstructionDataset, CoVoSTWithText
 from src.logger_utils import get_logger
 from src.paths import *

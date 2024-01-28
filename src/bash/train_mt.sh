@@ -9,6 +9,8 @@ TRAIN_TIME_IN_HOURS=$5
 mkdir -p $BINARY_DATA_DIR
 mkdir -p $MODEL_DIR
 
+rm $BINARY_DATA_DIR/preprocess.log
+
 # Binarize the data for training
 if [ -z "$(ls -A $BINARY_DATA_DIR)" ]; then
   echo "Binarizing the data..."
