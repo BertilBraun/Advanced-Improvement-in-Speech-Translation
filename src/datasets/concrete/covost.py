@@ -1,6 +1,8 @@
 import string
 
 from pathlib import Path
+from tqdm import tqdm
+
 from examples.speech_to_text.data_utils import load_df_from_tsv
 
 from src.datasets.base.mt_dataset import MTDataset, TextSample
@@ -31,7 +33,7 @@ class CoVoST(STDataset):
     def _load_data(self) -> list[DataSample]:
         data: list[DataSample] = []
         
-        for element in load_df_from_tsv(self.root / f"covost_v2.en_de.{self.split}.tsv").to_dict(orient="index").values():
+        for element in tqdm(load_df_from_tsv(self.root / f"covost_v2.en_de.{self.split}.tsv").to_dict(orient="index").values(), desc=f"Loading CoVoST {self.split}"):
             path: Path = self.root / "clips" / element["path"]
             sentence: str = element["sentence"]
             translation: str = element["translation"]
