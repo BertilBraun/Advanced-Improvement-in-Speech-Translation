@@ -32,12 +32,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo "Training the Punctuation model..."
+
 source src/bash/train_mt.sh \
         $BINARY_DATA_DIR \
         $DATA_DIR/train \
         $DATA_DIR/dev \
         $MODEL_DIR \
         $TRAIN_TIME_IN_HOURS
+
+echo "Training complete."
+echo "----------------------------------------------------------"
+echo "Translating the test set..."
 
 source src/bash/translate_mt.sh \
         $BINARY_DATA_DIR/dict.en.txt \
@@ -46,3 +52,5 @@ source src/bash/translate_mt.sh \
         $BINARY_DATA_DIR \
         $MODEL_DIR \
         ~/predictions/train_punctuation_covost
+
+echo "Translation complete."

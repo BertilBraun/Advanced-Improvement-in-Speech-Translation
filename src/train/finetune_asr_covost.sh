@@ -34,6 +34,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo "Finetuning the ASR model..."
+
 source src/bash/train_asr.sh \
         $TRAIN_SUBSET \
         $VAL_SUBSET \
@@ -41,8 +43,14 @@ source src/bash/train_asr.sh \
         $MODEL_DIR \
         $TRAIN_TIME_IN_HOURS
 
+echo "Finetuning complete."
+echo "----------------------------------------------------------"
+echo "Transcribing the test set..."
+
 source src/bash/transcribe_asr.sh \
         $TEST_SUBSET \
         $DATA_DIR \
         $MODEL_DIR \
         ~/predictions/finetune_asr_covost
+
+echo "Transcription complete."
