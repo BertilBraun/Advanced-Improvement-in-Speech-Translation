@@ -42,7 +42,6 @@ echo "Checkpoints averaged"
 echo "Generating translations..."
 echo "Binary data directory: $BINARY_DATA_DIR"
 echo "Prediction output directory: $PRED_OUTPUT_DIR"
-echo "Prediction folder: $PRED_OUTPUT_DIR"
 
 fairseq-generate $BINARY_DATA_DIR \
       --task translation \
@@ -56,6 +55,6 @@ fairseq-generate $BINARY_DATA_DIR \
 echo "Translations done"
 
 source src/bash/extract_from_prediction.sh  \
-    $PRED_OUTPUT_DIR \
+    $PRED_LOG \
     $PRED_OUTPUT_DIR/hyp.txt \
     $PRED_OUTPUT_DIR/ref.txt
