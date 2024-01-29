@@ -20,7 +20,7 @@ MT_WORKSPACE=/pfs/work7/workspace/scratch/uxude-MT
 TRAIN_WORKSPACE=$MT_WORKSPACE/train/train_punctuation_covost
 
 DATA_DIR=$MT_WORKSPACE/dataset/covost_punctuation/spm
-BINARIZED_DATA_DIR=$TRAIN_WORKSPACE/binarized_dataset
+BINARY_DATA_DIR=$TRAIN_WORKSPACE/binarized_dataset
 MODEL_DIR=$TRAIN_WORKSPACE/models
 
 TRAIN_TIME_IN_HOURS=6
