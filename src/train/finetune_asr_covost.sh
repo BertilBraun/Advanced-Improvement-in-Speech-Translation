@@ -52,5 +52,3 @@ source src/bash/transcribe_asr.sh \
         $DATA_DIR \
         $MODEL_DIR \
         ~/predictions/finetune_asr_covost
-
-echo "Transcription complete."

@@ -25,12 +25,12 @@ echo "Data directory: $DATA_DIR"
 
 fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
     --train-subset $TRAIN_SUBSET --valid-subset $VAL_SUBSET \
-    --num-workers 4 --max-tokens 50000 --max-epoch 100 \
+    --num-workers 4 --max-tokens 50000 --max-epoch 500 \
     --task speech_to_text --criterion label_smoothed_cross_entropy \
     --arch s2t_conformer --share-decoder-input-output-embed \
     --pos-enc-type rel_pos --attn-type espnet \
     --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
-    --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 5 \
+    --keep-last-epochs 5 --save-interval-updates 50000 --keep-best-checkpoints 5 \
     --stop-time-hours $TRAIN_TIME_IN_HOURS 
 
 

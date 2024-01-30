@@ -52,5 +52,3 @@ source src/bash/translate_mt.sh \
         $BINARY_DATA_DIR \
         $MODEL_DIR \
         ~/predictions/train_punctuation_covost
-
-echo "Translation complete."

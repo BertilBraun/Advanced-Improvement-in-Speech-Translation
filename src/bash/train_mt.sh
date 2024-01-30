@@ -42,8 +42,8 @@ fairseq-train \
     --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
-    --keep-last-epochs 1 --save-interval-updates 50000 --keep-best-checkpoints 5 \
-    --max-tokens 4096 --max-epoch 100 --stop-time-hours $TRAIN_TIME_IN_HOURS \
+    --keep-last-epochs 5 --save-interval-updates 50000 --keep-best-checkpoints 5 \
+    --max-tokens 4096 --max-epoch 500 --stop-time-hours $TRAIN_TIME_IN_HOURS \
     --fp16
 
 echo "Training complete."

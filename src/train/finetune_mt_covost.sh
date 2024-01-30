@@ -52,5 +52,3 @@ source src/bash/translate_mt.sh \
         $BINARY_DATA_DIR \
         $MODEL_DIR \
         ~/predictions/finetune_mt_covost
-
-echo "Translation complete."
