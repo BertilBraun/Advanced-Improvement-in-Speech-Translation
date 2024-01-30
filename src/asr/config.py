@@ -1,9 +1,10 @@
+import numpy as np
 import pandas as pd
 
 from pathlib import Path
 from typing import Callable, Literal, Sequence
 
-from examples.speech_to_text.data_utils import create_zip, gen_config_yaml, gen_vocab, get_zip_manifest, save_df_to_tsv
+from examples.speech_to_text.data_utils import gen_config_yaml, gen_vocab, save_df_to_tsv
 
 from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.base.st_dataset import STDataset
@@ -18,29 +19,30 @@ def create_asr_configs(
     dataset_names: list[str],
     root_location: Path,
     encodings_folder: Path,
-    zip_file: Path,
     encoding_function: Callable[[ASRDataset, Path], None],
     vocab_size: int = 5000,
     spm_filename: str | None = None,
-    overwrite_zip: bool = False,
+    overwrite_encodings: bool = False,
 ) -> None:
     """Creates the ASR configs for the given datasets and saves them to the given root location.
     If the zip file does not exist or overwrite_zip is True, the zip file will be created as well.
     This function assumes that the datasets are already processed to wav2vec embeddings or mel spectrograms in the given encodings folder.
     Assumes that the first dataset is the training dataset."""
 
-    if not zip_file.is_file() or overwrite_zip:
-        for dataset in datasets:
-            logger.info(f"Processing dataset {dataset} to encoding...")
-            encoding_function(ASRDataset(dataset), encodings_folder)
+    for dataset, dataset_name in zip(datasets, dataset_names):
+        if (root_location / f"{dataset_name}.processed_encodings").is_file() and not overwrite_encodings:
+            logger.info(f"Encodings for {dataset_name} already exist, skipping encoding creation...")
+            continue
         
-        logger.info("Creating zip file...")
-        create_zip(encodings_folder, zip_file)
-
+        logger.info(f"Processing dataset {dataset_name} to encoding...")
+        encoding_function(ASRDataset(dataset), encodings_folder)
+        
+        open(root_location / f"{dataset.split}.processed_encodings", "w").close()
+            
     # assuming the folder will only ever be used for one dataset
     # __cleanup_config_folder(root_location)
 
-    __process_dataset_manifests(datasets, dataset_names, root_location, zip_file)
+    __process_dataset_manifests(datasets, dataset_names, root_location, encodings_folder)
 
     if spm_filename is None or not (root_location / spm_filename).is_file():
         spm_filename = spm_filename or f"spm_unigram{vocab_size}.model"
@@ -59,34 +61,29 @@ def __cleanup_config_folder(root_location: Path) -> None:
             logger.info(f"Deleted {file}")
 
 
-def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: list[str], root_location: Path, zip_file: Path) -> None:
-    if all((root_location / f"{dataset_name}.tsv").is_file() for dataset_name in dataset_names):
-        logger.info("Manifest files already exist, skipping manifest creation...")
-        return
-    
-    MANIFEST_COLUMNS = ["id", "audio", "n_frames", "tgt_text", "speaker"]
-
-    logger.info("Fetching audio manifest...")
-    audio_paths, audio_lengths = get_zip_manifest(zip_file)
-
+def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: list[str], root_location: Path, encodings_folder: Path) -> None:
     for dataset, dataset_name in zip(datasets, dataset_names):
         if (root_location / f"{dataset_name}.tsv").is_file():
             logger.info(f"Manifest file for {dataset_name} already exists, skipping manifest creation...")
             continue
         
         logger.info(f"Fetching manifest from {dataset_name}...")
-        manifest = {c: [] for c in MANIFEST_COLUMNS}
+        manifest = {c: [] for c in ("id", "audio", "n_frames", "tgt_text", "speaker")}
 
         for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Manifest {dataset_name}"):
             identifier = f"{speaker_id}-{sample_id}"
             
-            if identifier not in audio_paths or identifier not in audio_lengths:
+            audio_path = encodings_folder / f"{identifier}.npy"
+            
+            if not audio_path.is_file():
                 logger.warning(f"Missing audio file for {identifier}!")
                 continue
             
+            audio_length = np.load(audio_path).shape[0]
+            
             manifest["id"].append(identifier)
-            manifest["audio"].append(audio_paths[identifier])
-            manifest["n_frames"].append(audio_lengths[identifier])
+            manifest["audio"].append(audio_path.as_posix())
+            manifest["n_frames"].append(audio_length)
             manifest["tgt_text"].append(__cleanup_utterance(sentence))
             manifest["speaker"].append(speaker_id)
 

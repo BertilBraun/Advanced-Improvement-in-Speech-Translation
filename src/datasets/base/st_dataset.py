@@ -10,7 +10,8 @@ logger = get_logger("Dataset::ST_Dataset")
 DataSample = tuple[Path, str, Optional[str], str, str] # waveform_path, sentence, translation, speaker_id, sample_id
 
 class STDataset(Dataset[DataSample]):
-    def __init__(self) -> None:
+    def __init__(self, split: str) -> None:
+        self.split = split
         self._data = self._load_data()
         self._data = self.__filter_data()
 

@@ -12,7 +12,6 @@ ASR_SPM_MODEL = ASR_ROOT / "spm.asr.model"
 
 ASR_COVOST_ROOT = ASR_ROOT / "dataset" / "covost"
 ASR_COVOST_MEL_ENCODING_ROOT = ASR_COVOST_ROOT / "mel" / "encoded"
-ASR_COVOST_MEL_ENCODING_ZIP = ASR_COVOST_ROOT / "mel" / "encoded.zip"
 
 MT_COVOST_ROOT = MT_ROOT / "dataset" / "covost"
 MT_COVOST_DATA_ROOT = MT_COVOST_ROOT / "data"

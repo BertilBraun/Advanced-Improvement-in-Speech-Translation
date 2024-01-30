@@ -39,7 +39,6 @@ if __name__ == "__main__":
         CoVoST.SPLITS,
         ASR_COVOST_ROOT,
         ASR_COVOST_MEL_ENCODING_ROOT,
-        ASR_COVOST_MEL_ENCODING_ZIP,
         encoding_function=process_dataset_to_mel_spectrogram,
         spm_filename=ASR_SPM_MODEL.name,
     )    
