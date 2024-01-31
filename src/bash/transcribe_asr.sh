@@ -43,6 +43,7 @@ fairseq-generate $DATA_DIR \
     --task speech_to_text \
     --path $CHECKPOINT_PATH \
     --max-tokens 50000 --beam $BEAM_SIZE --nbest $N_BEST \
+    --skip-invalid-size-inputs-valid-test \
     --scoring wer > $PRED_LOG
 
 echo "Transcription done"
