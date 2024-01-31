@@ -28,10 +28,10 @@ python data_prep.py #>> data_prep_$SLURM_JOB_ID.txt 2>&1
 WORKSPACE_ROOT=/pfs/work7/workspace/scratch/uxude-ASR
 TRAIN_ROOT=$WORKSPACE_ROOT/train/st_end_to_end
 
-COVOST_ROOT=$WORKSPACE_ROOT/dataset/covost/en
-ST_SAVE_DIR=$TRAIN_ROOT/model
-PRED_OUTPUT_DIR=$TRAIN_ROOT/prediction
-PRED_LOG=$PRED_OUTPUT_DIR/st_en_de.pred.log
+export COVOST_ROOT=$WORKSPACE_ROOT/dataset/covost/en
+export ST_SAVE_DIR=$TRAIN_ROOT/model
+export PRED_OUTPUT_DIR=$TRAIN_ROOT/prediction
+export PRED_LOG=$PRED_OUTPUT_DIR/st_en_de.pred.log
 
 
 mkdir -p $ST_SAVE_DIR
