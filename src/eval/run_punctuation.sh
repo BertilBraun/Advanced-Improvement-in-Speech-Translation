@@ -15,14 +15,6 @@
 cd ../../
 source setup.sh
 
-MT_WORKSPACE=/pfs/work7/workspace/scratch/uxude-MT
-
-TRAIN_WORKSPACE=$MT_WORKSPACE/train/train_punctuation_covost
-
-DATA_DIR=$MT_WORKSPACE/dataset/covost_punctuation/spm
-BINARY_DATA_DIR=$TRAIN_WORKSPACE/binarized_dataset
-MODEL_DIR=$TRAIN_WORKSPACE/models
-
 python -m src.train.prepare_all_datasets
 # check exit code of python call, if crash, exit
 if [ $? -ne 0 ]; then
@@ -32,9 +24,9 @@ fi
 echo "Translating the test set..."
 
 source src/bash/translate_mt.sh \
-        $BINARY_DATA_DIR/dict.en.txt \
-        $BINARY_DATA_DIR/dict.de.txt \
-        $DATA_DIR/test \
-        $BINARY_DATA_DIR \
-        $MODEL_DIR \
+        $PUNCTUATION_BINARY_DATA_DIR/dict.en.txt \
+        $PUNCTUATION_BINARY_DATA_DIR/dict.de.txt \
+        $PUNCTUATION_DATA_DIR/test \
+        $PUNCTUATION_BINARY_DATA_DIR \
+        $PUNCTUATION_MODEL_DIR \
         ~/predictions/finetune_mt_covost

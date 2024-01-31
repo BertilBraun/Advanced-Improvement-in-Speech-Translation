@@ -20,31 +20,10 @@ PREDICTION_DIR=~/predictions/eval_st
 TYPE_OF_POSTPROCESSING="llama" # one of "llama", "custom", "none"
 NUM_SAMPLES_TO_EVALUATE=100 # number of samples to evaluate (10 billion to evaluate all)
 
-# ----------------- ASR -----------------
-ASR_WORKSPACE=/pfs/work7/workspace/scratch/uxude-ASR
-
-ASR_TRAIN_WORKSPACE=$ASR_WORKSPACE/train/finetune_asr_covost
-
-ASR_DATA_DIR=$ASR_WORKSPACE/dataset/covost
-ASR_MODEL_DIR=$ASR_TRAIN_WORKSPACE/models
-
 ASR_TEST_SUBSET=test
 
 ASR_BEAM_SIZE=10
 ASR_N_BEST=10
-# --------------------------------------
-
-
-# ----------------- MT -----------------
-MT_WORKSPACE=/pfs/work7/workspace/scratch/uxude-MT
-
-MT_TRAIN_WORKSPACE=$MT_WORKSPACE/train/finetune_mt_covost
-
-MT_DATA_DIR=$MT_WORKSPACE/dataset/covost/spm
-MT_BINARY_DATA_DIR=$MT_TRAIN_WORKSPACE/binarized_dataset
-MT_MODEL_DIR=$MT_TRAIN_WORKSPACE/models
-# --------------------------------------
-
 
 
 python -m src.train.prepare_all_datasets

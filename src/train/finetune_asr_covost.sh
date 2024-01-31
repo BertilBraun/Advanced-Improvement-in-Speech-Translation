@@ -15,13 +15,6 @@
 cd ../../
 source setup.sh
 
-ASR_WORKSPACE=/pfs/work7/workspace/scratch/uxude-ASR
-
-TRAIN_WORKSPACE=$ASR_WORKSPACE/train/finetune_asr_covost
-
-DATA_DIR=$ASR_WORKSPACE/dataset/covost
-MODEL_DIR=$TRAIN_WORKSPACE/models
-
 TRAIN_SUBSET=train
 VAL_SUBSET=dev
 TEST_SUBSET=test
@@ -39,8 +32,8 @@ echo "Finetuning the ASR model..."
 source src/bash/train_asr.sh \
         $TRAIN_SUBSET \
         $VAL_SUBSET \
-        $DATA_DIR \
-        $MODEL_DIR \
+        $ASR_DATA_DIR \
+        $ASR_MODEL_DIR \
         $TRAIN_TIME_IN_HOURS
 
 echo "Finetuning complete."
@@ -49,6 +42,6 @@ echo "Transcribing the test set..."
 
 source src/bash/transcribe_asr.sh \
         $TEST_SUBSET \
-        $DATA_DIR \
-        $MODEL_DIR \
+        $ASR_DATA_DIR \
+        $ASR_MODEL_DIR \
         ~/predictions/finetune_asr_covost

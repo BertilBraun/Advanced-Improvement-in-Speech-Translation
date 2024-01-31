@@ -15,14 +15,6 @@
 cd ../../
 source setup.sh
 
-MT_WORKSPACE=/pfs/work7/workspace/scratch/uxude-MT
-
-TRAIN_WORKSPACE=$MT_WORKSPACE/train/finetune_mt_covost
-
-DATA_DIR=$MT_WORKSPACE/dataset/covost/spm
-BINARY_DATA_DIR=$TRAIN_WORKSPACE/binarized_dataset
-MODEL_DIR=$TRAIN_WORKSPACE/models
-
 TRAIN_TIME_IN_HOURS=6
 
 
@@ -35,10 +27,10 @@ fi
 echo "Finetuning the MT model..."
 
 source src/bash/train_mt.sh \
-        $BINARY_DATA_DIR \
-        $DATA_DIR/train \
-        $DATA_DIR/dev \
-        $MODEL_DIR \
+        $MT_BINARY_DATA_DIR \
+        $MT_DATA_DIR/train \
+        $MT_DATA_DIR/dev \
+        $MT_MODEL_DIR \
         $TRAIN_TIME_IN_HOURS
 
 echo "Finetuning complete."
@@ -46,9 +38,9 @@ echo "----------------------------------------------------------"
 echo "Translating the test set..."
 
 source src/bash/translate_mt.sh \
-        $BINARY_DATA_DIR/dict.en.txt \
-        $BINARY_DATA_DIR/dict.de.txt \
-        $DATA_DIR/test \
-        $BINARY_DATA_DIR \
-        $MODEL_DIR \
+        $MT_BINARY_DATA_DIR/dict.en.txt \
+        $MT_BINARY_DATA_DIR/dict.de.txt \
+        $MT_DATA_DIR/test \
+        $MT_BINARY_DATA_DIR \
+        $MT_MODEL_DIR \
         ~/predictions/finetune_mt_covost

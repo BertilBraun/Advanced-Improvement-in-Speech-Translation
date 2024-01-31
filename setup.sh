@@ -52,4 +52,36 @@ fi
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
 
+
+# ----------------- ASR -----------------
+export ASR_WORKSPACE=/pfs/work7/workspace/scratch/uxude-ASR
+
+export ASR_TRAIN_WORKSPACE=$ASR_WORKSPACE/train/finetune_asr_covost
+
+export ASR_DATA_DIR=$ASR_WORKSPACE/dataset/covost
+export ASR_MODEL_DIR=$ASR_TRAIN_WORKSPACE/models
+# --------------------------------------
+
+
+# ----------------- MT -----------------
+export MT_WORKSPACE=/pfs/work7/workspace/scratch/uxude-MT
+
+export MT_TRAIN_WORKSPACE=$MT_WORKSPACE/train/finetune_mt_covost
+
+export MT_DATA_DIR=$MT_WORKSPACE/dataset/covost/spm
+export MT_BINARY_DATA_DIR=$MT_TRAIN_WORKSPACE/binarized_dataset
+export MT_MODEL_DIR=$MT_TRAIN_WORKSPACE/models
+# --------------------------------------
+
+
+# ----------------- Punctuation---------
+export PUNCTUATION_TRAIN_WORKSPACE=$MT_WORKSPACE/train/train_punctuation_covost
+
+export PUNCTUATION_DATA_DIR=$MT_WORKSPACE/dataset/covost_punctuation/spm
+export PUNCTUATION_BINARY_DATA_DIR=$PUNCTUATION_TRAIN_WORKSPACE/binarized_dataset
+export PUNCTUATION_MODEL_DIR=$PUNCTUATION_TRAIN_WORKSPACE/models
+# --------------------------------------
+
+
+
 echo "Setup complete. Starting script execution..."

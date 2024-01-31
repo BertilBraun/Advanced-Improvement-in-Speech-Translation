@@ -15,13 +15,6 @@
 cd ../../
 source setup.sh
 
-ASR_WORKSPACE=/pfs/work7/workspace/scratch/uxude-ASR
-
-TRAIN_WORKSPACE=$ASR_WORKSPACE/train/finetune_asr_covost
-
-DATA_DIR=$ASR_WORKSPACE/dataset/covost
-MODEL_DIR=$TRAIN_WORKSPACE/models
-
 TEST_SUBSET=test
 
 python -m src.train.prepare_all_datasets
@@ -34,6 +27,6 @@ echo "Transcribing the test set..."
 
 source src/bash/transcribe_asr.sh \
         $TEST_SUBSET \
-        $DATA_DIR \
-        $MODEL_DIR \
+        $ASR_DATA_DIR \
+        $ASR_MODEL_DIR \
         ~/predictions/finetune_asr_covost
