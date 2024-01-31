@@ -22,7 +22,7 @@ DATA_ROOT="content/fairseq/examples/speech_to_text/data"
 mkdir -p $DATA_ROOT
 
 #run data preparation
-#python data_prep.py #>> data_prep_$SLURM_JOB_ID.txt 2>&1
+python data_prep.py #>> data_prep_$SLURM_JOB_ID.txt 2>&1
 
 #Training
 WORKSPACE_ROOT=/pfs/work7/workspace/scratch/uxude-ASR
