@@ -54,7 +54,7 @@ fairseq-generate $BINARY_DATA_DIR \
       --source-lang en \
       --target-lang de \
       --path $CHECKPOINT_PATH \
-      --batch-size 256 \
+      --batch-size 64 \
       --beam $BEAM_SIZE \
       --remove-bpe=sentencepiece > $PRED_LOG
 
