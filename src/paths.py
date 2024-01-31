@@ -9,6 +9,7 @@ ASR_ROOT = Path("/pfs/work7/workspace/scratch/uxude-ASR")
 
 MT_SPM_MODEL = MT_ROOT / "spm.mt.model"
 ASR_SPM_MODEL = ASR_ROOT / "spm.asr.model"
+PUNCTUATION_SPM_MODEL = MT_ROOT / "spm.punctuation.model"
 
 ASR_COVOST_ROOT = ASR_ROOT / "dataset" / "covost"
 ASR_COVOST_MEL_ENCODING_ROOT = ASR_COVOST_ROOT / "mel" / "encoded"

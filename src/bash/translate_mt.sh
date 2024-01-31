@@ -6,6 +6,12 @@ TEST_PREF=$3
 BINARY_DATA_DIR=$4
 CHECKPOINT_FOLDER=$5
 PRED_OUTPUT_DIR=$6
+BEAM_SIZE=$7
+
+# if BEAM_SIZE is not set, use 16
+if [ -z "$BEAM_SIZE" ]; then
+    BEAM_SIZE=16
+fi
 
 PRED_LOG=$PRED_OUTPUT_DIR/translate_mt_pred.log
 
@@ -49,12 +55,12 @@ fairseq-generate $BINARY_DATA_DIR \
       --target-lang de \
       --path $CHECKPOINT_PATH \
       --batch-size 256 \
-      --beam 4 \
+      --beam $BEAM_SIZE \
       --remove-bpe=sentencepiece > $PRED_LOG
 
 echo "Translations done"
 
 source src/bash/extract_from_prediction.sh  \
     $PRED_LOG \
-    $PRED_OUTPUT_DIR/hyp.txt \
-    $PRED_OUTPUT_DIR/ref.txt
+    $PRED_OUTPUT_DIR/hyp_mt.txt \
+    $PRED_OUTPUT_DIR/ref_mt.txt

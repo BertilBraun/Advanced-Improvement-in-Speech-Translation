@@ -52,6 +52,16 @@ def create_asr_configs(
     __process_dataset_config(root_location, spm_filename)
 
 
+def cleanup_utterance(utt: str) -> str:
+    # cleanup the utterance to make it easier for the ASR model to learn
+    modified = utt.lower()
+
+    # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
+    modified = "".join(c for c in modified if c.isalpha() or c == " " or c.isdigit())
+
+    return modified
+
+
 def __cleanup_config_folder(root_location: Path) -> None:
     logger.info("Cleaning up config folder...")
     # delete old tsv, txt, model files from root_location
@@ -85,7 +95,7 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
             manifest["id"].append(identifier)
             manifest["audio"].append(audio_path.as_posix())
             manifest["n_frames"].append(audio_length)
-            manifest["tgt_text"].append(__cleanup_utterance(sentence))
+            manifest["tgt_text"].append(cleanup_utterance(sentence))
             manifest["speaker"].append(speaker_id)
 
         process_dataset_in_parallel(dataset, process, desc=f"Processing {dataset_name} to manifest", max_workers=32)
@@ -103,7 +113,7 @@ def __process_dataset_vocab(root_location: Path, dataset: STDataset, spm_filenam
     logger.info("Collecting train text...")
     with open(root_location / "train_text.txt", "w") as f:
         for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Collections train text"):
-            f.write(__cleanup_utterance(sentence) + "\n")
+            f.write(cleanup_utterance(sentence) + "\n")
 
     logger.info("Generating sentencepiece model and vocabulary...")
     gen_vocab(
@@ -126,12 +136,3 @@ def __process_dataset_config(root_location: Path, spm_filename: str, type: Liter
         input_feat_per_channel=80 if type == "mel" else 768,
     )
     logger.info("Generated config yaml...")
-
-def __cleanup_utterance(utt: str) -> str:
-    # cleanup the utterance to make it easier for the ASR model to learn
-    modified = utt.lower()
-
-    # remove any characters that are not in the alphabet (a-z) or a space or number (0-9)
-    modified = "".join(c for c in modified if c.isalpha() or c == " " or c.isdigit())
-
-    return modified
