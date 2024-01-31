@@ -72,8 +72,8 @@ class CoVoST(Dataset):
     ) -> None:
         self.root = Path(root)
 
-        #data = pd.read_csv(self.root / f"{split}.tsv", sep='\t').to_dict(orient="index").items()
-        data = pd.read_csv(covost_data/"translations" / f"covost_v2.en_de.{split}.tsv", sep='\t', on_bad_lines = 'warn').to_dict(orient="index").items()
+        data = pd.read_csv(self.root / f"{split}.tsv", sep='\t').to_dict(orient="index").items()
+        #data = pd.read_csv(covost_data/"translations" / f"covost_v2.en_de.{split}.tsv", sep='\t', on_bad_lines = 'warn').to_dict(orient="index").items()
         data = [v for k, v in sorted(data, key=lambda x: x[0])]
 
         self.data = []
