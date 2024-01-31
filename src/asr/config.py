@@ -88,7 +88,7 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
             
             if not audio_path.is_file():
                 logger.warning(f"Missing audio file for {identifier}!")
-                continue
+                return
             
             audio_length = np.load(audio_path).shape[0]
             
