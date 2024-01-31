@@ -47,7 +47,7 @@ echo "--------------------------------------------------"
 echo "Starten processing of ASR output for MT input..."
 
 
-python -m src.eval.process_asr_output_for_st.py \
+python -m src.eval.process_asr_output_for_st \
     --ref_input_file $PREDICTION_DIR/ref_asr.txt \
     --ref_output_file $PREDICTION_DIR/asr_out.de \
     --hyp_input_file $PREDICTION_DIR/hyp_asr.txt \
@@ -65,7 +65,7 @@ echo "Starting translation..."
 source src/bash/translate_mt.sh \
         $MT_BINARY_DATA_DIR/dict.en.txt \
         $MT_BINARY_DATA_DIR/dict.de.txt \
-        $MT_DATA_DIR/test \
+        $PREDICTION_DIR/asr_out \
         $MT_BINARY_DATA_DIR \
         $MT_MODEL_DIR \
         $PREDICTION_DIR

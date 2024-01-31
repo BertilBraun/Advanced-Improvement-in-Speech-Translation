@@ -24,9 +24,9 @@ fi
 echo "Translating the test set..."
 
 source src/bash/translate_mt.sh \
-        $ASR_BINARY_DATA_DIR/dict.en.txt \
-        $ASR_BINARY_DATA_DIR/dict.de.txt \
-        $ASR_DATA_DIR/test \
-        $ASR_BINARY_DATA_DIR \
-        $ASR_MODEL_DIR \
+        $MT_BINARY_DATA_DIR/dict.en.txt \
+        $MT_BINARY_DATA_DIR/dict.de.txt \
+        $MT_DATA_DIR/test \
+        $MT_BINARY_DATA_DIR \
+        $MT_MODEL_DIR \
         ~/predictions/finetune_mt_covost
