@@ -39,7 +39,8 @@ pd.set_option("display.max_colwidth", None)
 
 covost_data = Path(os.environ.get("COVOST_DATA"))
 
-COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1"
+#COVOST_ROOT = "/pfs/work7/workspace/scratch/ubppd-ASR/covost/corpus-16.1"
+COVOST_ROOT="/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost/en" #updated to the new path
 SOURCE_LANG_ID = "en"
 TARGET_LANG_ID = "de"
 SAMPLE_RATE = 48000
