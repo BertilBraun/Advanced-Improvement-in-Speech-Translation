@@ -55,7 +55,7 @@ Best Hypothesis: "Mr. Jones said, 'Meet me at 10 a.m. in the conference room.'"
 </s><s>[INST]
 Input list of the 10 best ASR hypotheses:
 {HYPOTHESES}[/INST]
-Best Hypothesis:"""
+Best Hypothesis: \""""
     
     processed_lines = []
 
@@ -86,7 +86,7 @@ Best Hypothesis:"""
             output = output.replace(" ,", ", ") # remove spaces before commas
 
         # the output should always be in 'Best Hypothesis: "..."' format so we can just extract the text in between the quotes
-        output = output.split('"')[1]
+        output = output.split('"')[0]
 
         return output
 
