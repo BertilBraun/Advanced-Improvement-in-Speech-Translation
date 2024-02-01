@@ -1,4 +1,5 @@
 import argparse
+import os
 import subprocess
 from tqdm import tqdm
 
@@ -96,7 +97,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     TRAIN_WORKSPACE=MT_ROOT / "train" / "train_punctuation_covost"
     BINARY_DATA_DIR=TRAIN_WORKSPACE / "binarized_dataset"
     MODEL_DIR=TRAIN_WORKSPACE / "models"
-    PRECONDITIONS_DIR = "~/preconditions/eval_st/punctuation"
+    PRECONDITIONS_DIR = f"{os.environ['HOME']}/preconditions/eval_st/punctuation"
         
     bpe = BPE.from_pretrained(PUNCTUATION_SPM_MODEL)
     
