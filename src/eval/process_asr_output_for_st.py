@@ -108,15 +108,14 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
         
     # call generate on the file
     subprocess.run([
-        "source",
-        "src/bash/translate_mt.sh",
+        "./src/bash/translate_mt.sh",
         f"{BINARY_DATA_DIR}/dict.en.txt",
         f"{BINARY_DATA_DIR}/dict.de.txt",
         punctuation_spm_file.replace(".en", ""),
         BINARY_DATA_DIR.as_posix(),
         MODEL_DIR.as_posix(),
         PRECONDITIONS_DIR,
-    ])
+    ], shell=True)
     
     # read the predictions
     with open(PRECONDITIONS_DIR + "/hyp_mt.txt", "r", encoding="utf-8") as f:
