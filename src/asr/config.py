@@ -79,9 +79,7 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
         
         manifest = {c: [] for c in ("id", "audio", "n_frames", "tgt_text", "speaker")}
 
-        def process(sample):
-            path, sentence, translation, speaker_id, sample_id = sample
-
+        for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc=f"Processing {dataset_name} to manifest"):
             identifier = f"{speaker_id}-{sample_id}"
             
             audio_path = encodings_folder / f"{identifier}.npy"
@@ -97,8 +95,6 @@ def __process_dataset_manifests(datasets: Sequence[STDataset], dataset_names: li
             manifest["n_frames"].append(audio_length)
             manifest["tgt_text"].append(cleanup_utterance(sentence))
             manifest["speaker"].append(speaker_id)
-
-        process_dataset_in_parallel(dataset, process, desc=f"Processing {dataset_name} to manifest", max_workers=32)
 
         logger.info(f"Saving manifest for {dataset_name}...")
         save_df_to_tsv(pd.DataFrame.from_dict(manifest), root_location / f"{dataset_name}.tsv")

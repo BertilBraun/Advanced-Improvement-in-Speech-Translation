@@ -17,9 +17,7 @@ __MODEL: Wav2Vec2Model = None # type: ignore
 logger = get_logger("ASR::Wav2vecEncoding")
 
 
-def process_dataset_to_wav2vec_embeddings(
-    dataset: ASRDataset, output_root: Path, batch_size: int = 32
-) -> None:
+def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path, batch_size: int = 32) -> None:
     """Extracts wav2vec embeddings for the given dataset and saves them to the given output root as .npy files."""
     batch_waveforms = []
     batch_paths = []

@@ -1,4 +1,6 @@
 import os
+from examples import wav2vec
+from src.asr.wav2vec_encoding import process_dataset_to_wav2vec_embeddings
 
 from src.mt.config import process_mt_dataset_to_spm_encoding
 from src.asr.config import create_asr_configs
@@ -11,7 +13,8 @@ logger = get_logger("Dataset::Prepare Datasets")
 
 def can_skip_dataset_prep() -> bool:
     # if asr config file exists and mt spm data exists, we can skip
-    config_file_exists = (ASR_COVOST_ROOT / "config.yaml").is_file()
+    mel_config_file_exists = (ASR_COVOST_ROOT / "config.yaml").is_file()
+    wav2vec_config_file_exists = (ASR_COVOST_WAV2VEC_ROOT / "config.yaml").is_file()
     mt_spm_data_exists = all(
         (MT_COVOST_SPM_ENCODING_ROOT / f"{split}.en").is_file()
         for split in CoVoST.SPLITS
@@ -20,11 +23,11 @@ def can_skip_dataset_prep() -> bool:
         (PUNCTUATION_COVOST_SPM_ENCODING_ROOT / f"{split}.en").is_file()
         for split in CoVoST.SPLITS
     )
-    return config_file_exists and mt_spm_data_exists and punctuation_spm_data_exists
+    return mel_config_file_exists and wav2vec_config_file_exists and mt_spm_data_exists and punctuation_spm_data_exists
 
 if __name__ == "__main__":
     if can_skip_dataset_prep():
-        logger.info("Skipping dataset preparation, config file and MT spm data already exists")
+        logger.info("Skipping dataset preparation, all config data already exists")
         exit(0)
     
     logger.info("Preparing CoVoST...")
@@ -33,7 +36,7 @@ if __name__ == "__main__":
     # copy spm model ASR_SPM_MODEL to ASR_COVOST_ROOT
     os.system(f"cp {ASR_SPM_MODEL} {ASR_COVOST_ROOT}")
 
-    logger.info("Creating ASR configs for CoVoST...")
+    logger.info("Creating ASR configs for CoVoST (mel)...")
     create_asr_configs(
         covost_datasets,
         CoVoST.SPLITS,
@@ -42,6 +45,19 @@ if __name__ == "__main__":
         encoding_function=process_dataset_to_mel_spectrogram,
         spm_filename=ASR_SPM_MODEL.name,
     )    
+    
+    # copy spm model ASR_SPM_MODEL to ASR_COVOST_ROOT
+    os.system(f"cp {ASR_SPM_MODEL} {ASR_COVOST_WAV2VEC_ROOT}")
+    
+    logger.info("Creating ASR configs for CoVoST (wav2vec)...")
+    create_asr_configs(
+        covost_datasets,
+        CoVoST.SPLITS,
+        ASR_COVOST_WAV2VEC_ROOT,
+        ASR_COVOST_WAV2VEC_ENCODING_ROOT,
+        encoding_function=process_dataset_to_wav2vec_embeddings,
+        spm_filename=ASR_SPM_MODEL.name,
+    )  
     
     logger.info("Preparing MT CoVoST...")
     mt_datasets = [CoVoSTWithText(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
