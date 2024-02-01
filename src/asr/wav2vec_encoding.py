@@ -28,21 +28,23 @@ def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path
     for wav, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc="Wav2vec"):
         file = output_root / f"{speaker_id}-{sample_id}.npy"
 
-        if not file.is_file():
-            if sample_rate != REQUIRED_SAMPLE_RATE:
-                resampler = Resample(orig_freq=sample_rate, new_freq=REQUIRED_SAMPLE_RATE)
-                wav = resampler(wav)
-                
-            batch_waveforms.append(wav.to(device=DEVICE, dtype=torch.float))
-            batch_paths.append(file.as_posix())
+        if file.is_file():
+            continue
+        
+        if sample_rate != REQUIRED_SAMPLE_RATE:
+            resampler = Resample(orig_freq=sample_rate, new_freq=REQUIRED_SAMPLE_RATE)
+            wav = resampler(wav)
+            
+        batch_waveforms.append(wav.to(device=DEVICE, dtype=torch.float))
+        batch_paths.append(file.as_posix())
 
         if len(batch_waveforms) == batch_size:
-            __extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths)
+            __extract_wav2vec_features_batch(batch_waveforms, batch_paths)
             batch_waveforms = []
             batch_paths = []
 
     if batch_waveforms:
-        __extract_wav2vec_features_batch(batch_waveforms, sample_rate, batch_paths) # type: ignore
+        __extract_wav2vec_features_batch(batch_waveforms, batch_paths)
 
     logger.info(f"Finished  processing wav2vec embeddings for all samples.")
 
@@ -60,11 +62,7 @@ def __ensure_model_and_processor_loaded() -> None:
         __MODEL = __MODEL.to(DEVICE) # type: ignore
 
 
-def __extract_wav2vec_features_batch(
-    waveforms: list[torch.FloatTensor],
-    sample_rate: int,
-    output_paths: list[Path],
-) -> None:
+def __extract_wav2vec_features_batch(waveforms: list[torch.FloatTensor], output_paths: list[Path]) -> None:
     __ensure_model_and_processor_loaded()
 
     try:
@@ -78,9 +76,7 @@ def __extract_wav2vec_features_batch(
         batch_waveforms = batch_waveforms.unsqueeze(1)
 
         # Process the batch
-        processed_values = __PROCESSOR(
-            batch_waveforms, sampling_rate=sample_rate, return_tensors="pt"
-        ).input_values
+        processed_values = __PROCESSOR(batch_waveforms, sampling_rate=REQUIRED_SAMPLE_RATE, return_tensors="pt").input_values
         processed_values = processed_values.squeeze(0).squeeze(1)
         processed_values = processed_values.to(DEVICE)
 
