@@ -4,12 +4,15 @@ import numpy as np
 import torch
 from torch.nn.utils.rnn import pad_sequence
 from transformers import Wav2Vec2Model, Wav2Vec2Processor
+from torchaudio.transforms import Resample
+
 
 from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+REQUIRED_SAMPLE_RATE = 16000
 
 __PROCESSOR: Wav2Vec2Processor = None # type: ignore
 __MODEL: Wav2Vec2Model = None # type: ignore
@@ -26,6 +29,10 @@ def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path
         file = output_root / f"{speaker_id}-{sample_id}.npy"
 
         if not file.is_file():
+            if sample_rate != REQUIRED_SAMPLE_RATE:
+                resampler = Resample(orig_freq=sample_rate, new_freq=REQUIRED_SAMPLE_RATE)
+                wav = resampler(wav)
+                
             batch_waveforms.append(wav.to(device=DEVICE, dtype=torch.float))
             batch_paths.append(file.as_posix())
 
