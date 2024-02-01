@@ -23,7 +23,9 @@ def iterate_over_dataset_slow_sequential(dataset: Dataset[T], desc: str = "") ->
 
 
 def iterate_over_dataset(dataset: Dataset[T], desc: str="", max_workers=10, batch_size=100) -> Iterator[T]:
-    for el in process_dataset_in_parallel(dataset, lambda x: x, desc=desc, max_workers=max_workers, batch_size=batch_size):
+    def process_element(el: T) -> T:
+        return el
+    for el in process_dataset_in_parallel(dataset, process_element, desc=desc, max_workers=max_workers, batch_size=batch_size):
         if el is not None:
             yield el
                     
