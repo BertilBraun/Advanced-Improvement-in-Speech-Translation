@@ -27,6 +27,10 @@ echo "Target dictionary: $TGT_DICT"
 echo "Test prefix: $TEST_PREF"
 echo "Binary data directory: $BINARY_DATA_DIR"
 
+# copy the dictionaries to the binary data directory
+cp $SRC_DICT $BINARY_DATA_DIR/dict.en.txt
+cp $TGT_DICT $BINARY_DATA_DIR/dict.de.txt
+
 fairseq-preprocess \
       --source-lang en --target-lang de \
       --srcdict $SRC_DICT \
