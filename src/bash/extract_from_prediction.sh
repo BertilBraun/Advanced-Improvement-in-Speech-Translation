@@ -18,7 +18,15 @@ grep ^T $INPUT_FILE | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $REF_OUTPUT_F
 echo "Prediction files written for $HYP_OUTPUT_FILE and $REF_OUTPUT_FILE"
 
 # write the first, the num_samples_per_prediction-th, the 2*num_samples_per_prediction-th, etc. predictions to one file named HYP_OUTPUT_FILE + ".sampled"
-awk 'NR % '$NUM_SAMPLES_PER_PREDICTION' == 1' $HYP_OUTPUT_FILE > $SAMPLE_HYP_OUTPUT_FILE
+# Reset SAMPLE_HYP_OUTPUT_FILE
+> $SAMPLE_HYP_OUTPUT_FILE
+
+# Process in blocks of NUM_SAMPLES_PER_PREDICTION
+TOTAL_LINES=$(wc -l < $HYP_OUTPUT_FILE)
+for ((i=1; i<=TOTAL_LINES; i+=$NUM_SAMPLES_PER_PREDICTION)); do
+    # Assuming the first prediction in each block is the 'best'
+    head -n $i $HYP_OUTPUT_FILE | tail -1 >> $SAMPLE_HYP_OUTPUT_FILE
+done
 echo "Sampled predictions written to $SAMPLE_HYP_OUTPUT_FILE"
 
 echo "Sample predictions:"
