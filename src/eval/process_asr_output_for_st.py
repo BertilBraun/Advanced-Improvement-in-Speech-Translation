@@ -110,7 +110,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
         
     # call generate on the file
     TEST_PREF = punctuation_spm_file.replace(".en", "")
-    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {BINARY_DATA_DIR.as_posix()} {MODEL_DIR.as_posix()} {PRECONDITIONS_DIR}"
+    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PRECONDITIONS_DIR} {MODEL_DIR.as_posix()} {PRECONDITIONS_DIR}"
     subprocess.run([COMMAND], shell=True)
     
     # read the predictions
