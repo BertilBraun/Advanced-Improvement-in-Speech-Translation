@@ -53,6 +53,8 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
 
     POSTPROCESSING_PREDICTION_DIR=$PREDICTION_DIR/$TYPE_OF_POSTPROCESSING
 
+    mkdir -p $POSTPROCESSING_PREDICTION_DIR
+
     python -m src.eval.process_asr_output_for_st \
         --ref_input_file $PREDICTION_DIR/ref_asr.txt \
         --ref_output_file $POSTPROCESSING_PREDICTION_DIR/asr_out.de \

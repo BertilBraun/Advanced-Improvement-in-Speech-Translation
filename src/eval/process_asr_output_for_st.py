@@ -3,6 +3,7 @@ import os
 import subprocess
 from typing import Callable
 from tqdm import tqdm
+from src.datasets.util import iterate_over_dataset
 
 from src.mt.bpe import BPE
 from src.asr.config import cleanup_utterance
@@ -181,7 +182,7 @@ def process_reference_text(lines: list[str]) -> list[str]:
     
     translation_dict = {
         cleanup_utterance(original): target
-        for original, target in covost
+        for original, target in iterate_over_dataset(covost, desc="Creating translation dictionary")
     }
     
     logger.info("Translating file...")
