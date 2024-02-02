@@ -51,7 +51,7 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
 
     python -m src.eval.process_asr_output_for_st \
         --ref_input_file $PREDICTION_DIR/ref_asr.txt \
-        --ref_output_file $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.de \
+        --ref_output_file $PREDICTION_DIR/ref_mt.txt \
         --hyp_input_file $PREDICTION_DIR/hyp_asr.txt \
         --hyp_output_file $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en \
         --type_of_postprocessing $TYPE_OF_POSTPROCESSING \
@@ -71,4 +71,23 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
             $PREDICTION_DIR
 
     echo "Processing completed for postprocessing type: $TYPE_OF_POSTPROCESSING"
+done
+
+# output the results
+echo "--------------------------------------------------"
+echo "Results for the different postprocessing types"
+echo "--------------------------------------------------"
+
+for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
+    echo "Postprocessing type: $TYPE_OF_POSTPROCESSING"
+    echo "--------------------------------------------------"
+    echo "BLEU score:"
+    sacrebleu $PREDICTION_DIR/ref_mt.txt < $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en
+    echo "--------------------------------------------------"
+    echo "METEOR score:"
+    sacremoses -l de-en echo "METEOR" | java -Xmx2G -jar $METEOR_JAR $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en $PREDICTION_DIR/ref_mt.txt -l de -norm -r 10 -q
+    echo "--------------------------------------------------"
+    echo "TER score:"
+    java -jar $TERCOM_JAR -r $PREDICTION_DIR/ref_mt.txt -h $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en -n $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en.ter -N $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en.norm -o ter
+    echo "--------------------------------------------------"
 done
