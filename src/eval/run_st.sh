@@ -49,11 +49,13 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     echo "--------------------------------------------------"
     echo "Starting processing of ASR output for MT input..."
 
+    POSTPROCESSING_PREDICTION_DIR=$PREDICTION_DIR/$TYPE_OF_POSTPROCESSING
+
     python -m src.eval.process_asr_output_for_st \
         --ref_input_file $PREDICTION_DIR/ref_asr.txt \
-        --ref_output_file $PREDICTION_DIR/ref_mt.txt \
+        --ref_output_file $POSTPROCESSING_PREDICTION_DIR/asr_out.de \
         --hyp_input_file $PREDICTION_DIR/hyp_asr.txt \
-        --hyp_output_file $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en \
+        --hyp_output_file $POSTPROCESSING_PREDICTION_DIR/asr_out.en \
         --type_of_postprocessing $TYPE_OF_POSTPROCESSING \
         --num_samples_per_prediction $ASR_N_BEST \
         --num_samples_to_evaluate $NUM_SAMPLES_TO_EVALUATE
@@ -65,29 +67,30 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     source src/bash/translate_mt.sh \
             $MT_BINARY_DATA_DIR/dict.en.txt \
             $MT_BINARY_DATA_DIR/dict.de.txt \
-            $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING \
-            $PREDICTION_DIR \
+            $POSTPROCESSING_PREDICTION_DIR/asr_out \
+            $POSTPROCESSING_PREDICTION_DIR \
             $MT_MODEL_DIR \
-            $PREDICTION_DIR
+            $POSTPROCESSING_PREDICTION_DIR
 
     echo "Processing completed for postprocessing type: $TYPE_OF_POSTPROCESSING"
 done
 
-# output the results
 echo "--------------------------------------------------"
 echo "Results for the different postprocessing types"
 echo "--------------------------------------------------"
 
+# output the results of the different postprocessing types
+# translation result is in $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
+# reference translation is in $POSTPROCESSING_PREDICTION_DIR/asr_out.de
 for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
+    POSTPROCESSING_PREDICTION_DIR=$PREDICTION_DIR/$TYPE_OF_POSTPROCESSING
+
     echo "Postprocessing type: $TYPE_OF_POSTPROCESSING"
     echo "--------------------------------------------------"
     echo "BLEU score:"
-    sacrebleu $PREDICTION_DIR/ref_mt.txt < $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en
+    sacrebleu $POSTPROCESSING_PREDICTION_DIR/asr_out.de < $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
     echo "--------------------------------------------------"
     echo "METEOR score:"
-    sacremoses -l de-en echo "METEOR" | java -Xmx2G -jar $METEOR_JAR $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en $PREDICTION_DIR/ref_mt.txt -l de -norm -r 10 -q
-    echo "--------------------------------------------------"
-    echo "TER score:"
-    java -jar $TERCOM_JAR -r $PREDICTION_DIR/ref_mt.txt -h $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en -n $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en.ter -N $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en.norm -o ter
+    sacremoses -l de -j 4 -t wmt -i $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt -r $POSTPROCESSING_PREDICTION_DIR/asr_out.de
     echo "--------------------------------------------------"
 done
