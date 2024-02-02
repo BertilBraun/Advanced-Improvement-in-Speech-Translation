@@ -14,14 +14,12 @@
 
 cd ../../
 source setup.sh
-
 PREDICTION_DIR=~/predictions/eval_st
 
-TYPE_OF_POSTPROCESSING="llama" # one of "llama", "custom", "none"
+POSTPROCESSING_TYPES=("llama" "custom" "none") # postprocessing types
 NUM_SAMPLES_TO_EVALUATE=100 # number of samples to evaluate (10 billion to evaluate all)
 
 ASR_TEST_SUBSET=test
-
 ASR_BEAM_SIZE=10
 ASR_N_BEST=10
 
@@ -31,6 +29,7 @@ python -m src.train.prepare_all_datasets
 if [ $? -ne 0 ]; then
     exit 1
 fi
+
 
 echo "Transcribing the test set..."
 
@@ -43,29 +42,33 @@ source src/bash/transcribe_asr.sh \
         $ASR_N_BEST
 
 echo "Transcription done"
-echo "--------------------------------------------------"
-echo "Starten processing of ASR output for MT input..."
 
+for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
+    echo "--------------------------------------------------"
+    echo "Processing with postprocessing type: $TYPE_OF_POSTPROCESSING"
+    echo "--------------------------------------------------"
+    echo "Starting processing of ASR output for MT input..."
 
-python -m src.eval.process_asr_output_for_st \
-    --ref_input_file $PREDICTION_DIR/ref_asr.txt \
-    --ref_output_file $PREDICTION_DIR/asr_out.de \
-    --hyp_input_file $PREDICTION_DIR/hyp_asr.txt \
-    --hyp_output_file $PREDICTION_DIR/asr_out.en \
-    --type_of_postprocessing $TYPE_OF_POSTPROCESSING \
-    --num_samples_per_prediction $ASR_N_BEST \
-    --num_samples_to_evaluate $NUM_SAMPLES_TO_EVALUATE
+    python -m src.eval.process_asr_output_for_st \
+        --ref_input_file $PREDICTION_DIR/ref_asr.txt \
+        --ref_output_file $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.de \
+        --hyp_input_file $PREDICTION_DIR/hyp_asr.txt \
+        --hyp_output_file $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING.en \
+        --type_of_postprocessing $TYPE_OF_POSTPROCESSING \
+        --num_samples_per_prediction $ASR_N_BEST \
+        --num_samples_to_evaluate $NUM_SAMPLES_TO_EVALUATE
 
+    echo "Processing done"
+    echo "--------------------------------------------------"
+    echo "Starting translation..."
 
-echo "Processing done"
-echo "--------------------------------------------------"
-echo "Starting translation..."
+    source src/bash/translate_mt.sh \
+            $MT_BINARY_DATA_DIR/dict.en.txt \
+            $MT_BINARY_DATA_DIR/dict.de.txt \
+            $PREDICTION_DIR/asr_out_$TYPE_OF_POSTPROCESSING \
+            $PREDICTION_DIR \
+            $MT_MODEL_DIR \
+            $PREDICTION_DIR
 
-
-source src/bash/translate_mt.sh \
-        $MT_BINARY_DATA_DIR/dict.en.txt \
-        $MT_BINARY_DATA_DIR/dict.de.txt \
-        $PREDICTION_DIR/asr_out \
-        $PREDICTION_DIR \
-        $MT_MODEL_DIR \
-        $PREDICTION_DIR
+    echo "Processing completed for postprocessing type: $TYPE_OF_POSTPROCESSING"
+done
