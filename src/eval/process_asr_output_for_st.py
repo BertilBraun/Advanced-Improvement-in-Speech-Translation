@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+from typing import Callable
 from tqdm import tqdm
 
 from src.mt.bpe import BPE
@@ -27,7 +28,7 @@ args = parser.parse_args()
 
 
 def no_postprocessing(lines: list[str]) -> list[str]:
-    return lines
+    return __get_only_best_hypothesis(lines)
 
 def llama_postprocessing(lines: list[str]) -> list[str]:
     from src.llama.llama import generate
@@ -99,9 +100,8 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     MODEL_DIR=TRAIN_WORKSPACE / "models"
     PRECONDITIONS_DIR = f"{os.environ['HOME']}/preconditions/eval_st/punctuation"
         
-    bpe = BPE.from_pretrained(PUNCTUATION_SPM_MODEL)
-    
-    encoded_lines = bpe.encode_lines(lines)
+    only_best_hypothesis = __get_only_best_hypothesis(lines)
+    encoded_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).encode_lines(only_best_hypothesis)
     
     punctuation_spm_file = args.hyp_input_file + ".punctuation.spm.en"
     with open(punctuation_spm_file, "w", encoding="utf-8") as f:
@@ -115,11 +115,8 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     # read the predictions
     with open(PRECONDITIONS_DIR + "/hyp_mt.txt", "r", encoding="utf-8") as f:
         predictions = [line.strip() for line in f.readlines()]
-        
-    # decode the predictions with bpe
-    decoded_predictions = bpe.decode_lines(predictions)
-    
-    return decoded_predictions    
+            
+    return predictions    
 
 
 TYPES_OF_POSTPROCESSING = {
@@ -129,53 +126,54 @@ TYPES_OF_POSTPROCESSING = {
 }
 
 
-def __sample_print(data_list: list[str]) -> None:
-    logger.info("----------------------------------------")
-    for data in data_list[:2]:
-        logger.info(data)
-    logger.info("----------------------------------------")
+def __get_only_best_hypothesis(lines: list[str]) -> list[str]:
+    return [lines[i] for i in range(0, len(lines), args.num_samples_per_prediction)]
 
-
-def __encode_and_save(lines: list[str], output_file: str) -> list[str]:
-    bpe = BPE.from_pretrained(MT_SPM_MODEL)
+def __process_file(
+    input_file: str, 
+    output_file: str, 
+    num_samples:int, 
+    process_text_function: Callable[[list[str]], list[str]], 
+    log_message: str
+) -> None:
+    """
+    Generic function to process files.
     
-    encoded_lines = bpe.encode_lines(lines)
-    
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write("\n".join(encoded_lines))
-    
-    return encoded_lines
+    :param input_file: The path to the input file.
+    :param output_file: The path to the output file.
+    :param num_samples: The number of samples to process.
+    :param process_text_function: The function to process the text.
+    :param log_message: The message to log for processing.
+    """
+    def __sample_print(data_list: list[str]) -> None:
+        logger.info("----------------------------------------")
+        for data in data_list[:5]:
+            logger.info(data)
+        logger.info("----------------------------------------")
 
+    def __encode_and_save(lines: list[str], output_file: str) -> list[str]:
+        bpe = BPE.from_pretrained(MT_SPM_MODEL)
+        
+        encoded_lines = bpe.encode_lines(lines)
+        
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write("\n".join(encoded_lines))
+        
+        return encoded_lines
 
-def process_reference_file() -> None:
-    with open(args.ref_input_file, "r", encoding="utf-8") as f:
+    logger.info(f"Processing {log_message} file...")
+    with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
 
-    lines_subsample = lines[:args.num_samples_to_evaluate]
-    lines_processed = process_reference_text(lines_subsample)
+    lines_subsample = lines[:num_samples]
+    lines_processed = process_text_function(lines_subsample)
 
-    logger.info("Processed reference file")
+    logger.info(f"Processed {log_message} file")
     __sample_print(lines_processed)
 
-    __encode_and_save(lines_processed, args.ref_output_file)
+    __encode_and_save(lines_processed, output_file)
 
-    logger.info("Done processing reference file!")
-
-
-def process_hypothesis_file() -> None:
-    logger.info("Processing hypothesis file...")
-    with open(args.hyp_input_file, "r", encoding="utf-8") as f:
-        lines = [line.strip() for line in f.readlines()]
-
-    lines_subsample = lines[:args.num_samples_to_evaluate*args.num_samples_per_prediction]
-    lines_processed = process_hypothesis_text(lines_subsample)
-
-    logger.info("Processed hypothesis file")
-    __sample_print(lines_processed)
-
-    __encode_and_save(lines_processed, args.hyp_output_file)
-
-    logger.info("Done processing hypothesis file!")
+    logger.info(f"Done processing {log_message} file!")
 
 
 def process_reference_text(lines: list[str]) -> list[str]:
@@ -193,8 +191,6 @@ def process_reference_text(lines: list[str]) -> list[str]:
         for line in lines
     ]
 
-    __sample_print(translations)
-
     return translations
 
 
@@ -206,8 +202,23 @@ def process_hypothesis_text(lines: list[str]) -> list[str]:
 if __name__ == "__main__":
     logger.info("Starting processing...")
 
-    process_hypothesis_file()
+    # process the reference file
+    __process_file(
+        args.ref_input_file, 
+        args.ref_output_file, 
+        args.num_samples_to_evaluate, 
+        process_reference_text, 
+        "reference"
+    )
 
-    process_reference_file()
+    # process the hypothesis file
+    num_samples = args.num_samples_to_evaluate * args.num_samples_per_prediction
+    __process_file(
+        args.hyp_input_file, 
+        args.hyp_output_file, 
+        num_samples, 
+        process_hypothesis_text, 
+        "hypothesis"
+    )
 
     logger.info("Done processing!")

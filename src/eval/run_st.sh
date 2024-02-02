@@ -66,6 +66,6 @@ source src/bash/translate_mt.sh \
         $MT_BINARY_DATA_DIR/dict.en.txt \
         $MT_BINARY_DATA_DIR/dict.de.txt \
         $PREDICTION_DIR/asr_out \
-        $MT_BINARY_DATA_DIR \
+        $PREDICTION_DIR \
         $MT_MODEL_DIR \
         $PREDICTION_DIR

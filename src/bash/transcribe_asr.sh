@@ -51,4 +51,5 @@ echo "Transcription done"
 source src/bash/extract_from_prediction.sh  \
     $PRED_LOG \
     $PRED_OUTPUT_DIR/hyp_asr.txt \
-    $PRED_OUTPUT_DIR/ref_asr.txt
+    $PRED_OUTPUT_DIR/ref_asr.txt \
+    $N_BEST
