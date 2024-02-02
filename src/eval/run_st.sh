@@ -16,12 +16,14 @@ cd ../../
 source setup.sh
 PREDICTION_DIR=~/predictions/eval_st
 
-POSTPROCESSING_TYPES=("llama" "custom" "none") # postprocessing types
+POSTPROCESSING_TYPES=("none" "llama" "custom") # postprocessing types
 NUM_SAMPLES_TO_EVALUATE=100 # number of samples to evaluate (10 billion to evaluate all)
 
 ASR_TEST_SUBSET=test
 ASR_BEAM_SIZE=10
 ASR_N_BEST=10
+
+MT_BEAM_SIZE=16
 
 
 python -m src.train.prepare_all_datasets
@@ -70,7 +72,8 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
             $POSTPROCESSING_PREDICTION_DIR/asr_out \
             $POSTPROCESSING_PREDICTION_DIR \
             $MT_MODEL_DIR \
-            $POSTPROCESSING_PREDICTION_DIR
+            $POSTPROCESSING_PREDICTION_DIR \
+            $MT_BEAM_SIZE
 
     echo "Processing completed for postprocessing type: $TYPE_OF_POSTPROCESSING"
 done
