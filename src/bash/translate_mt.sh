@@ -7,10 +7,20 @@ BINARY_DATA_DIR=$4
 CHECKPOINT_FOLDER=$5
 PRED_OUTPUT_DIR=$6
 BEAM_SIZE=$7
+REMOVE_BPE=$8
 
 # if BEAM_SIZE is not set, use 16
 if [ -z "$BEAM_SIZE" ]; then
     BEAM_SIZE=16
+fi
+
+# if REMOVE_BPE is not set, use "sentencepiece"
+if [ -z "$REMOVE_BPE" ]; then
+    REMOVE_BPE=--remove-bpe=sentencepiece
+fi
+# if REMOVE_BPE is NONE set it to ""
+if [ "$REMOVE_BPE" = "NONE" ]; then
+    REMOVE_BPE=
 fi
 
 PRED_LOG=$PRED_OUTPUT_DIR/translate_mt_pred.log
@@ -34,8 +44,8 @@ cp $TGT_DICT $BINARY_DATA_DIR/dict.de.txt
 # TODO remove MKL_SERVICE_FORCE_INTEL
 MKL_SERVICE_FORCE_INTEL=1 fairseq-preprocess \
       --source-lang en --target-lang de \
-      --srcdict $SRC_DICT \
-      --tgtdict $TGT_DICT \
+      --srcdict $BINARY_DATA_DIR/dict.en.txt \
+      --tgtdict $BINARY_DATA_DIR/dict.de.txt \
       --testpref $TEST_PREF \
       --destdir $BINARY_DATA_DIR \
       --thresholdtgt 0 --thresholdsrc 0 \
@@ -64,7 +74,7 @@ MKL_SERVICE_FORCE_INTEL=1 fairseq-generate $BINARY_DATA_DIR \
       --path $CHECKPOINT_PATH \
       --batch-size 64 \
       --beam $BEAM_SIZE \
-      --remove-bpe=sentencepiece > $PRED_LOG
+      $REMOVE_BPE > $PRED_LOG
 
 echo "Translations done"
 
