@@ -4,7 +4,6 @@ import re
 import subprocess
 from typing import Callable
 from tqdm import tqdm
-from fuzzywuzzy import process
 
 from src.datasets.util import iterate_over_dataset
 
@@ -99,11 +98,11 @@ Best Hypothesis: \""""
     return [cleanup_output(line) for line in processed_lines]
 
 def custom_postprocessing(lines: list[str]) -> list[str]:
-    def remove_unk_tokens(line):
-        """ Remove <<unk>> tokens from a line """
-        return re.sub(r'<<unk>>', '', line).strip()
+    def match_lines_by_overlap(ref_lines: list[str], processed_lines: list[str]) -> list[str]:
+        def remove_unk_tokens(line: str) -> str:
+            """ Remove <<unk>> tokens from a line """
+            return re.sub(r'<<unk>>', '', line).strip()
 
-    def match_lines_by_overlap(ref_lines, processed_lines):
         matched_lines = []
 
         # Preprocess processed lines to remove <<unk>> tokens
@@ -111,14 +110,14 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
 
         for preprocessed_line in preprocessed_processed_lines:
             # Tokenize the preprocessed line
-            tokenized_preprocessed_line = set(preprocessed_line.split())
+            tokenized_preprocessed_line = set(preprocessed_line.split()) 
 
             best_match = ''
             best_match_score = -1
 
             for ref_line in ref_lines:
                 # Tokenize the reference line
-                tokenized_ref_line = set(ref_line.split())
+                tokenized_ref_line = set(ref_line.split()) 
 
                 # Calculate overlap score
                 overlap_score = len(tokenized_preprocessed_line.intersection(tokenized_ref_line))
@@ -138,17 +137,15 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     TEST_PREF = PREDICTIONS_DIR + "/test"
     BEAM_SIZE = 16
     DECODE_BPE = "NONE"
-    MT_BINARY_DATA_DIR= MT_ROOT / "train" / "finetune_mt_covost" / "binarized_dataset"
-    
     
     os.makedirs(PREDICTIONS_DIR, exist_ok=True)
                     
     only_best_hypothesis = __get_only_best_hypothesis(lines)
-    BPE.write_encoded_lines(PUNCTUATION_SPM_MODEL, only_best_hypothesis, TEST_PREF + ".en")
+    bpe = BPE.from_pretrained(MT_SPM_MODEL)
+    write_lines(bpe.encode_lines(only_best_hypothesis), TEST_PREF + ".en")
     
     ref_lines = PROCESSED_LINES[args.ref_output_file]
-    bpe_encoded_ref_lines = BPE.write_encoded_lines(PUNCTUATION_SPM_MODEL, ref_lines, TEST_PREF + ".de")
-    bpe_decoded_ref_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines(bpe_encoded_ref_lines)
+    write_lines(bpe.encode_lines(ref_lines), TEST_PREF + ".de")
     
     # copy PUNCTUATION_SPM_MODEL to PREDICTIONS_DIR
     os.system(f"cp {PUNCTUATION_SPM_MODEL.as_posix().replace('.model', '')}.* {PREDICTIONS_DIR}/")
@@ -159,28 +156,12 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     
     # read the predictions
     with open(PREDICTIONS_DIR + "/hyp_mt.txt", "r", encoding="utf-8") as f:
-        predictions = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines([line.strip() for line in f.readlines()])
+        predictions = bpe.decode_lines([line.strip() for line in f.readlines()])
             
     with open(PREDICTIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
         ref_lines_in_order_of_processed = [line.strip() for line in f.readlines()]
-        decoded_ref_lines_in_order_of_processed = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines(ref_lines_in_order_of_processed)
+        decoded_ref_lines_in_order_of_processed = bpe.decode_lines(ref_lines_in_order_of_processed)
         PROCESSED_LINES[args.ref_output_file] = match_lines_by_overlap(ref_lines, decoded_ref_lines_in_order_of_processed)
-        print("--------------------------------------------------------------")
-        print("ref_lines_in_order_of_processed", ref_lines_in_order_of_processed)
-        print("--------------------------------------------------------------")
-        print("bpe_encoded_ref_lines", bpe_encoded_ref_lines)
-        print("--------------------------------------------------------------")
-        print("bpe_decoded_ref_lines", bpe_decoded_ref_lines)
-        print("--------------------------------------------------------------")
-        print("ref_lines", ref_lines)
-        print("--------------------------------------------------------------")
-        print("decoded_ref_lines_in_order_of_processed", decoded_ref_lines_in_order_of_processed)
-        print("--------------------------------------------------------------")
-        print("PROCESSED_LINES[args.ref_output_file]", PROCESSED_LINES[args.ref_output_file])
-        print("--------------------------------------------------------------")
-        # for line in ref_lines_in_order_of_processed:
-        #     # find the best matching line in the original reference lines
-        #     PROCESSED_LINES[args.ref_output_file].append(ref_lines[bpe_decoded_ref_lines.index(line)])
             
     return predictions    
 
