@@ -100,10 +100,10 @@ class BPE:
             f.write("\n".join(lines))
 
     def _encode(self, text: str) -> list[str]:
-        return self.spm_model.encode(text.strip(), out_type=str) # type: ignore
+        return self.spm_model.Encode(text.strip(), out_type=str)
 
     def _decode(self, text: str) -> list[str]:
-        return self.spm_model.decode(text.strip(), out_type=str) # type: ignore
+        return self.spm_model.Decode(text.strip(), out_type=str)
 
 
 if __name__ == "__main__":
