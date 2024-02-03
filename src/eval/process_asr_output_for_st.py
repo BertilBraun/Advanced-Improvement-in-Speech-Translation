@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 import subprocess
 from typing import Callable
 from tqdm import tqdm
@@ -98,14 +99,36 @@ Best Hypothesis: \""""
     return [cleanup_output(line) for line in processed_lines]
 
 def custom_postprocessing(lines: list[str]) -> list[str]:
-    # Function to match and reorder lines
-    def match_and_reorder_lines(ref_lines: list[str], processed_lines: list[str]) -> list[str]:
+    def remove_unk_tokens(line):
+        """ Remove <<unk>> tokens from a line """
+        return re.sub(r'<<unk>>', '', line).strip()
+
+    def match_lines_by_overlap(ref_lines, processed_lines):
         matched_lines = []
-        for processed_line in processed_lines:
-            # Use fuzzy matching to find the best match for each processed line in ref_lines
-            best_match = process.extractOne(processed_line, ref_lines)
-            if best_match is not None:
-                matched_lines.append(best_match[0])  # Add the best matching line
+
+        # Preprocess processed lines to remove <<unk>> tokens
+        preprocessed_processed_lines = [remove_unk_tokens(line) for line in processed_lines]
+
+        for preprocessed_line in preprocessed_processed_lines:
+            # Tokenize the preprocessed line
+            tokenized_preprocessed_line = set(preprocessed_line.split())
+
+            best_match = ''
+            best_match_score = -1
+
+            for ref_line in ref_lines:
+                # Tokenize the reference line
+                tokenized_ref_line = set(ref_line.split())
+
+                # Calculate overlap score
+                overlap_score = len(tokenized_preprocessed_line.intersection(tokenized_ref_line))
+
+                if overlap_score > best_match_score:
+                    best_match_score = overlap_score
+                    best_match = ref_line
+
+            matched_lines.append(best_match)
+
         return matched_lines
     
     TRAIN_WORKSPACE=MT_ROOT / "train" / "train_punctuation_covost"
@@ -141,7 +164,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     with open(PREDICTIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
         ref_lines_in_order_of_processed = [line.strip() for line in f.readlines()]
         decoded_ref_lines_in_order_of_processed = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines(ref_lines_in_order_of_processed)
-        PROCESSED_LINES[args.ref_output_file] = match_and_reorder_lines(ref_lines, decoded_ref_lines_in_order_of_processed)
+        PROCESSED_LINES[args.ref_output_file] = match_lines_by_overlap(ref_lines, decoded_ref_lines_in_order_of_processed)
         print("--------------------------------------------------------------")
         print("ref_lines_in_order_of_processed", ref_lines_in_order_of_processed)
         print("--------------------------------------------------------------")
