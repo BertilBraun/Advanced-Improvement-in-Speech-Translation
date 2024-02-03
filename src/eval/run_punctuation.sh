@@ -29,4 +29,4 @@ source src/bash/translate_mt.sh \
         $PUNCTUATION_DATA_DIR/test \
         $PUNCTUATION_BINARY_DATA_DIR \
         $PUNCTUATION_MODEL_DIR \
-        ~/predictions/finetune_mt_covost
+        ~/predictions/eval_punctuation
