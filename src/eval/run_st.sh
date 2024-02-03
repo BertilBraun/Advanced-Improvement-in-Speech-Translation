@@ -87,16 +87,19 @@ echo "--------------------------------------------------"
 
 # output the results of the different postprocessing types
 # translation result is in $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
-# reference translation is in $POSTPROCESSING_PREDICTION_DIR/asr_out.de
+# reference translation is in $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt
 for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     POSTPROCESSING_PREDICTION_DIR=$PREDICTION_DIR/$TYPE_OF_POSTPROCESSING
 
     echo "Postprocessing type: $TYPE_OF_POSTPROCESSING"
     echo "--------------------------------------------------"
     echo "BLEU score:"
-    sacrebleu $POSTPROCESSING_PREDICTION_DIR/asr_out.de < $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
+    sacrebleu $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt < $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
     echo "--------------------------------------------------"
-    echo "METEOR score:"
-    sacremoses -l de -j 4 -t wmt -i $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt -r $POSTPROCESSING_PREDICTION_DIR/asr_out.de
+    echo "TER score:"
+    tercom -r $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt -h $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
+    echo "--------------------------------------------------"
+    echo "BERTScore:"
+    bert-score -r $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt -c $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt --lang de
     echo "--------------------------------------------------"
 done
