@@ -129,9 +129,20 @@ TYPES_OF_POSTPROCESSING = {
     "custom": custom_postprocessing,
 }
 
+PROCESSED_LINES: dict[str, list[str]] = {}
 
 def __get_only_best_hypothesis(lines: list[str]) -> list[str]:
     return [lines[i] for i in range(0, len(lines), args.num_samples_per_prediction)]
+
+def __encode_and_save(lines: list[str], output_file: str) -> list[str]:
+    bpe = BPE.from_pretrained(MT_SPM_MODEL)
+    
+    encoded_lines = bpe.encode_lines(lines)
+    
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("\n".join(encoded_lines))
+    
+    return encoded_lines
 
 def __process_file(
     input_file: str, 
@@ -155,16 +166,6 @@ def __process_file(
             logger.info(data)
         logger.info("----------------------------------------")
 
-    def __encode_and_save(lines: list[str], output_file: str) -> list[str]:
-        bpe = BPE.from_pretrained(MT_SPM_MODEL)
-        
-        encoded_lines = bpe.encode_lines(lines)
-        
-        with open(output_file, "w", encoding="utf-8") as f:
-            f.write("\n".join(encoded_lines))
-        
-        return encoded_lines
-
     logger.info(f"Processing {log_message} file...")
     with open(input_file, "r", encoding="utf-8") as f:
         lines = [line.strip() for line in f.readlines()]
@@ -174,8 +175,8 @@ def __process_file(
 
     logger.info(f"Processed {log_message} file")
     __sample_print(lines_processed)
-
-    __encode_and_save(lines_processed, output_file)
+    
+    PROCESSED_LINES[output_file] = lines_processed
 
     logger.info(f"Done processing {log_message} file!")
 
@@ -226,3 +227,16 @@ if __name__ == "__main__":
     )
 
     logger.info("Done processing!")
+    
+    logger.info("Writing processed lines to file...")
+    
+    min_length = min(len(v) for v in PROCESSED_LINES.values())
+
+    for output_file, lines_processed in PROCESSED_LINES.items():
+        if len(lines_processed) > min_length:
+            logger.warning("-------------------------------------------------")
+            logger.warning(f"Output file {output_file} has more lines than the minimum length of {min_length}.")
+            logger.warning("Truncating the file to the minimum length.")
+            logger.warning("-------------------------------------------------") 
+        
+        __encode_and_save(lines_processed[:min_length], output_file)
