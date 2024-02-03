@@ -100,21 +100,19 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     BINARY_DATA_DIR=TRAIN_WORKSPACE / "binarized_dataset"
     MODEL_DIR=TRAIN_WORKSPACE / "models"
     PRECONDITIONS_DIR = f"{os.environ['HOME']}/preconditions/eval_st/punctuation"
-        
+    TEST_PREF = PRECONDITIONS_DIR + "/test"
+                
     only_best_hypothesis = __get_only_best_hypothesis(lines)
     encoded_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).encode_lines(only_best_hypothesis)
     
-    punctuation_spm_file = PRECONDITIONS_DIR + "/test.en"
-    with open(punctuation_spm_file, "w", encoding="utf-8") as f:
+    with open(TEST_PREF + ".en", "w", encoding="utf-8") as f:
         f.write("\n".join(encoded_lines))
     
     # TODO test only
-    de_file = PRECONDITIONS_DIR + "/test.de"
-    with open(de_file, "w", encoding="utf-8") as f:
+    with open(TEST_PREF + ".de", "w", encoding="utf-8") as f:
         f.write("\n".join(encoded_lines))
         
     # call generate on the file
-    TEST_PREF = "test"
     COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PRECONDITIONS_DIR} {MODEL_DIR.as_posix()} {PRECONDITIONS_DIR}"
     subprocess.run([COMMAND], shell=True)
     
