@@ -103,14 +103,16 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     TEST_PREF = PRECONDITIONS_DIR + "/test"
                 
     only_best_hypothesis = __get_only_best_hypothesis(lines)
-    encoded_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).encode_lines(only_best_hypothesis)
+    bpe = BPE.from_pretrained(MT_SPM_MODEL)
+    encoded_lines = bpe.encode_lines(only_best_hypothesis)
     
     with open(TEST_PREF + ".en", "w", encoding="utf-8") as f:
         f.write("\n".join(encoded_lines))
     
-    # TODO test only
+    ref_lines = PROCESSED_LINES[args.ref_output_file]
+    ref_lines_encoded = bpe.encode_lines(ref_lines)    
     with open(TEST_PREF + ".de", "w", encoding="utf-8") as f:
-        f.write("\n".join(encoded_lines))
+        f.write("\n".join(ref_lines_encoded))
         
     # call generate on the file
     COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PRECONDITIONS_DIR} {MODEL_DIR.as_posix()} {PRECONDITIONS_DIR}"
@@ -119,6 +121,9 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     # read the predictions
     with open(PRECONDITIONS_DIR + "/hyp_mt.txt", "r", encoding="utf-8") as f:
         predictions = [line.strip() for line in f.readlines()]
+            
+    with open(PRECONDITIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
+        PROCESSED_LINES[args.ref_output_file] = [line.strip() for line in f.readlines()]
             
     return predictions    
 

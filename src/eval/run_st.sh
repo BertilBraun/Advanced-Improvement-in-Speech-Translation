@@ -17,7 +17,7 @@ source setup.sh
 PREDICTION_DIR=~/predictions/eval_st
 
 POSTPROCESSING_TYPES=("custom" "llama" "none") # postprocessing types
-NUM_SAMPLES_TO_EVALUATE=20 # number of samples to evaluate (10 billion to evaluate all)
+NUM_SAMPLES_TO_EVALUATE=32 # number of samples to evaluate (10 billion to evaluate all)
 
 ASR_TEST_SUBSET=test
 ASR_BEAM_SIZE=10
