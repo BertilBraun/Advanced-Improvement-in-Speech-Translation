@@ -99,8 +99,8 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     TRAIN_WORKSPACE=MT_ROOT / "train" / "train_punctuation_covost"
     BINARY_DATA_DIR=TRAIN_WORKSPACE / "binarized_dataset"
     MODEL_DIR=TRAIN_WORKSPACE / "models"
-    PRECONDITIONS_DIR = f"{os.environ['HOME']}/preconditions/eval_st/punctuation"
-    TEST_PREF = PRECONDITIONS_DIR + "/test"
+    PREDICTIONS_DIR = f"{os.environ['HOME']}/predictions/eval_st/punctuation"
+    TEST_PREF = PREDICTIONS_DIR + "/test"
     BEAM_SIZE = 16
     DECODE_BPE = "NONE"
                 
@@ -114,23 +114,31 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     
     bpe.write_lines(bpe_encoded_ref_lines, TEST_PREF + ".de")
     
-    # copy PUNCTUATION_SPM_MODEL to PRECONDITIONS_DIR
+    # copy PUNCTUATION_SPM_MODEL to PREDICTIONS_DIR
+    os.system(f"cp {PUNCTUATION_SPM_MODEL.stem} {PREDICTIONS_DIR}/")
     
     # call generate on the file
-    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PRECONDITIONS_DIR} {MODEL_DIR.as_posix()} {PRECONDITIONS_DIR} {BEAM_SIZE} {DECODE_BPE}"
+    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PREDICTIONS_DIR} {MODEL_DIR.as_posix()} {PREDICTIONS_DIR} {BEAM_SIZE} {DECODE_BPE}"
     subprocess.run([COMMAND], shell=True)
     
     # read the predictions
-    with open(PRECONDITIONS_DIR + "/hyp_mt.txt", "r", encoding="utf-8") as f:
+    with open(PREDICTIONS_DIR + "/hyp_mt.txt", "r", encoding="utf-8") as f:
         predictions = [line.strip() for line in f.readlines()]
             
-    with open(PRECONDITIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
+    with open(PREDICTIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
         ref_lines_in_order_of_processed = [line.strip() for line in f.readlines()]
         PROCESSED_LINES[args.ref_output_file] = bpe.decode_lines(ref_lines_in_order_of_processed)
+        print("--------------------------------------------------------------")
         print("ref_lines_in_order_of_processed", ref_lines_in_order_of_processed)
+        print("--------------------------------------------------------------")
         print("bpe_encoded_ref_lines", bpe_encoded_ref_lines)
+        print("--------------------------------------------------------------")
         print("bpe_decoded_ref_lines", bpe_decoded_ref_lines)
+        print("--------------------------------------------------------------")
         print("ref_lines", ref_lines)
+        print("--------------------------------------------------------------")
+        print("PROCESSED_LINES[args.ref_output_file]", PROCESSED_LINES[args.ref_output_file])
+        print("--------------------------------------------------------------")
         # for line in ref_lines_in_order_of_processed:
         #     # find the best matching line in the original reference lines
         #     PROCESSED_LINES[args.ref_output_file].append(ref_lines[bpe_decoded_ref_lines.index(line)])
