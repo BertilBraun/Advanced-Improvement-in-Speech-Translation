@@ -112,23 +112,23 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     BPE.write_encoded_lines(PUNCTUATION_SPM_MODEL, only_best_hypothesis, TEST_PREF + ".en")
     
     ref_lines = PROCESSED_LINES[args.ref_output_file]
-    bpe_encoded_ref_lines = BPE.write_encoded_lines(MT_SPM_MODEL, ref_lines, TEST_PREF + ".de")
-    bpe_decoded_ref_lines = BPE.from_pretrained(MT_SPM_MODEL).decode_lines(bpe_encoded_ref_lines)
+    bpe_encoded_ref_lines = BPE.write_encoded_lines(PUNCTUATION_SPM_MODEL, ref_lines, TEST_PREF + ".de")
+    bpe_decoded_ref_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines(bpe_encoded_ref_lines)
     
     # copy PUNCTUATION_SPM_MODEL to PREDICTIONS_DIR
-    os.system(f"cp {PUNCTUATION_SPM_MODEL.stem} {PREDICTIONS_DIR}/")
+    os.system(f"cp {PUNCTUATION_SPM_MODEL.as_posix().replace('.model', '')}.* {PREDICTIONS_DIR}/")
     
     # call generate on the file
-    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {MT_BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PREDICTIONS_DIR} {MODEL_DIR.as_posix()} {PREDICTIONS_DIR} {BEAM_SIZE} {DECODE_BPE}"
+    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PREDICTIONS_DIR} {MODEL_DIR.as_posix()} {PREDICTIONS_DIR} {BEAM_SIZE} {DECODE_BPE}"
     subprocess.run([COMMAND], shell=True)
     
     # read the predictions
     with open(PREDICTIONS_DIR + "/hyp_mt.txt", "r", encoding="utf-8") as f:
-        predictions = [line.strip() for line in f.readlines()]
+        predictions = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines([line.strip() for line in f.readlines()])
             
     with open(PREDICTIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
         ref_lines_in_order_of_processed = [line.strip() for line in f.readlines()]
-        PROCESSED_LINES[args.ref_output_file] = BPE.from_pretrained(MT_SPM_MODEL).decode_lines(ref_lines_in_order_of_processed)
+        PROCESSED_LINES[args.ref_output_file] = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines(ref_lines_in_order_of_processed)
         print("--------------------------------------------------------------")
         print("ref_lines_in_order_of_processed", ref_lines_in_order_of_processed)
         print("--------------------------------------------------------------")
