@@ -41,6 +41,13 @@ class BPE:
     def from_pretrained(model_file: Path) -> "BPE":
         return BPE(retrain_spm=False, model_file=model_file)
     
+    @staticmethod
+    def write_encoded_lines(model_file: Path, lines: list[str], output_file: Path | str) -> list[str]:
+        bpe = BPE.from_pretrained(model_file)
+        encoded_lines = bpe.encode_lines(lines)
+        bpe.write_lines(encoded_lines, output_file)
+        return encoded_lines
+    
     def __init__(self, retrain_spm: bool, model_file: Path, train_files: list[str]|None=None, vocab_size=10000) -> None:
         if retrain_spm or not model_file.is_file():
             assert train_files is not None
@@ -84,9 +91,13 @@ class BPE:
         
         output_file.parent.mkdir(parents=True, exist_ok=True)
         
-        with open(output_file, "w", encoding="utf-8") as f_out:
-            processed_lines = self._process_lines(read_in_lines(input_file), process_fn, name)
-            f_out.write("\n".join(processed_lines))
+        input_lines = read_in_lines(input_file)
+        processed_lines = self._process_lines(input_lines, process_fn, name)
+        self.write_lines(processed_lines, output_file)
+            
+    def write_lines(self, lines: list[str], output_file: Path | str) -> None:
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
 
     def _encode(self, text: str) -> list[str]:
         return self.spm_model.encode(text.strip(), out_type=str) # type: ignore

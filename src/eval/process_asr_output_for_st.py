@@ -103,16 +103,15 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     TEST_PREF = PRECONDITIONS_DIR + "/test"
                 
     only_best_hypothesis = __get_only_best_hypothesis(lines)
-    encoded_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).encode_lines(only_best_hypothesis)
-    
-    with open(TEST_PREF + ".en", "w", encoding="utf-8") as f:
-        f.write("\n".join(encoded_lines))
+    bpe = BPE.from_pretrained(PUNCTUATION_SPM_MODEL)
+    bpe.write_lines(bpe.encode_lines(only_best_hypothesis), TEST_PREF + ".en")
     
     ref_lines = PROCESSED_LINES[args.ref_output_file]
-    ref_lines_encoded = BPE.from_pretrained(MT_SPM_MODEL).encode_lines(ref_lines)    
-    with open(TEST_PREF + ".de", "w", encoding="utf-8") as f:
-        f.write("\n".join(ref_lines_encoded))
-        
+    bpe_encoded_ref_lines = bpe.encode_lines(ref_lines)
+    bpe_decoded_ref_lines = bpe.decode_lines(bpe_encoded_ref_lines)
+    
+    bpe.write_lines(bpe_encoded_ref_lines, TEST_PREF + ".de")
+    
     # call generate on the file
     COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PRECONDITIONS_DIR} {MODEL_DIR.as_posix()} {PRECONDITIONS_DIR}"
     subprocess.run([COMMAND], shell=True)
@@ -122,7 +121,11 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
         predictions = [line.strip() for line in f.readlines()]
             
     with open(PRECONDITIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
-        PROCESSED_LINES[args.ref_output_file] = [line.strip() for line in f.readlines()]
+        ref_lines_in_order_of_processed = [line.strip() for line in f.readlines()]
+        PROCESSED_LINES[args.ref_output_file] = []
+        for line in ref_lines_in_order_of_processed:
+            # find the best matching line in the original reference lines
+            PROCESSED_LINES[args.ref_output_file].append(ref_lines[bpe_decoded_ref_lines.index(line)])
             
     return predictions    
 
