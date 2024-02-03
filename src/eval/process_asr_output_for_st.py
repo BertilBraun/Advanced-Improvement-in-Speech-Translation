@@ -5,7 +5,7 @@ from typing import Callable
 from tqdm import tqdm
 from src.datasets.util import iterate_over_dataset
 
-from src.mt.bpe import BPE
+from src.mt.bpe import BPE, write_lines
 from src.asr.config import cleanup_utterance
 from src.logger_utils import get_logger
 from src.datasets.concrete.covost import CoVoST, CoVoSTWithText
@@ -103,24 +103,23 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     TEST_PREF = PREDICTIONS_DIR + "/test"
     BEAM_SIZE = 16
     DECODE_BPE = "NONE"
+    MT_BINARY_DATA_DIR= MT_ROOT / "train" / "finetune_mt_covost" / "binarized_dataset"
+    
     
     os.makedirs(PREDICTIONS_DIR, exist_ok=True)
                     
     only_best_hypothesis = __get_only_best_hypothesis(lines)
-    bpe = BPE.from_pretrained(PUNCTUATION_SPM_MODEL)
-    bpe.write_lines(bpe.encode_lines(only_best_hypothesis), TEST_PREF + ".en")
+    BPE.write_encoded_lines(PUNCTUATION_SPM_MODEL, only_best_hypothesis, TEST_PREF + ".en")
     
     ref_lines = PROCESSED_LINES[args.ref_output_file]
-    bpe_encoded_ref_lines = bpe.encode_lines(ref_lines)
-    bpe_decoded_ref_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines(bpe_encoded_ref_lines)
-    
-    bpe.write_lines(bpe_encoded_ref_lines, TEST_PREF + ".de")
+    bpe_encoded_ref_lines = BPE.write_encoded_lines(MT_SPM_MODEL, ref_lines, TEST_PREF + ".de")
+    bpe_decoded_ref_lines = BPE.from_pretrained(MT_SPM_MODEL).decode_lines(bpe_encoded_ref_lines)
     
     # copy PUNCTUATION_SPM_MODEL to PREDICTIONS_DIR
     os.system(f"cp {PUNCTUATION_SPM_MODEL.stem} {PREDICTIONS_DIR}/")
     
     # call generate on the file
-    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PREDICTIONS_DIR} {MODEL_DIR.as_posix()} {PREDICTIONS_DIR} {BEAM_SIZE} {DECODE_BPE}"
+    COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {MT_BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PREDICTIONS_DIR} {MODEL_DIR.as_posix()} {PREDICTIONS_DIR} {BEAM_SIZE} {DECODE_BPE}"
     subprocess.run([COMMAND], shell=True)
     
     # read the predictions
@@ -129,7 +128,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
             
     with open(PREDICTIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
         ref_lines_in_order_of_processed = [line.strip() for line in f.readlines()]
-        PROCESSED_LINES[args.ref_output_file] = bpe.decode_lines(ref_lines_in_order_of_processed)
+        PROCESSED_LINES[args.ref_output_file] = BPE.from_pretrained(MT_SPM_MODEL).decode_lines(ref_lines_in_order_of_processed)
         print("--------------------------------------------------------------")
         print("ref_lines_in_order_of_processed", ref_lines_in_order_of_processed)
         print("--------------------------------------------------------------")

@@ -36,6 +36,10 @@ def read_in_lines(file_path: Path, encoding="utf-8") -> list[str]:
 
     return processed_lines
 
+def write_lines(lines: list[str], output_file: Path | str) -> None:
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+
 
 class BPE:
     @staticmethod
@@ -46,7 +50,7 @@ class BPE:
     def write_encoded_lines(model_file: Path, lines: list[str], output_file: Path | str) -> list[str]:
         bpe = BPE.from_pretrained(model_file)
         encoded_lines = bpe.encode_lines(lines)
-        bpe.write_lines(encoded_lines, output_file)
+        write_lines(encoded_lines, output_file)
         return encoded_lines
     
     def __init__(self, retrain_spm: bool, model_file: Path, train_files: list[str]|None=None, vocab_size=10000) -> None:
@@ -95,12 +99,8 @@ class BPE:
         
         input_lines = read_in_lines(input_file)
         processed_lines = process_fn(input_lines)
-        self.write_lines(processed_lines, output_file)
+        write_lines(processed_lines, output_file)
             
-    def write_lines(self, lines: list[str], output_file: Path | str) -> None:
-        with open(output_file, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines))
-
     def _encode(self, text: str) -> list[str]:
         return self.spm_model.Encode(text.strip(), out_type=str)
 
