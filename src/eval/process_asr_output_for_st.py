@@ -104,12 +104,12 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     only_best_hypothesis = __get_only_best_hypothesis(lines)
     encoded_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).encode_lines(only_best_hypothesis)
     
-    punctuation_spm_file = args.hyp_input_file + ".punctuation.spm.en"
+    punctuation_spm_file = PRECONDITIONS_DIR + "/punctuation.spm.en"
     with open(punctuation_spm_file, "w", encoding="utf-8") as f:
         f.write("\n".join(encoded_lines))
         
     # call generate on the file
-    TEST_PREF = punctuation_spm_file.replace(".en", "")
+    TEST_PREF = "punctuation" # punctuation_spm_file.replace(".en", "")
     COMMAND = f"./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PRECONDITIONS_DIR} {MODEL_DIR.as_posix()} {PRECONDITIONS_DIR}"
     subprocess.run([COMMAND], shell=True)
     
