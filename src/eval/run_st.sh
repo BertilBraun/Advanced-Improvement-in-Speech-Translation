@@ -17,7 +17,7 @@ source setup.sh
 PREDICTION_DIR=~/predictions/eval_st
 
 POSTPROCESSING_TYPES=("none" "custom" "llama") # postprocessing types
-NUM_SAMPLES_TO_EVALUATE=100 # number of samples to evaluate (10 billion to evaluate all)
+NUM_SAMPLES_TO_EVALUATE=20 # number of samples to evaluate (10 billion to evaluate all)
 
 ASR_TEST_SUBSET=test
 ASR_BEAM_SIZE=10
@@ -35,13 +35,14 @@ fi
 
 echo "Transcribing the test set..."
 
-source src/bash/transcribe_asr.sh \
-        $ASR_TEST_SUBSET \
-        $ASR_DATA_DIR \
-        $ASR_MODEL_DIR \
-        $PREDICTION_DIR \
-        $ASR_BEAM_SIZE \
-        $ASR_N_BEST
+# TODO reenable ASR transcription
+# source src/bash/transcribe_asr.sh \
+#         $ASR_TEST_SUBSET \
+#         $ASR_DATA_DIR \
+#         $ASR_MODEL_DIR \
+#         $PREDICTION_DIR \
+#         $ASR_BEAM_SIZE \
+#         $ASR_N_BEST
 
 echo "Transcription done"
 
