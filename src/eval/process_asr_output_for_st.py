@@ -107,6 +107,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
             if best_match is not None:
                 matched_lines.append(best_match[0])  # Add the best matching line
         return matched_lines
+    
     TRAIN_WORKSPACE=MT_ROOT / "train" / "train_punctuation_covost"
     BINARY_DATA_DIR=TRAIN_WORKSPACE / "binarized_dataset"
     MODEL_DIR=TRAIN_WORKSPACE / "models"
@@ -149,6 +150,8 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
         print("bpe_decoded_ref_lines", bpe_decoded_ref_lines)
         print("--------------------------------------------------------------")
         print("ref_lines", ref_lines)
+        print("--------------------------------------------------------------")
+        print("decoded_ref_lines_in_order_of_processed", decoded_ref_lines_in_order_of_processed)
         print("--------------------------------------------------------------")
         print("PROCESSED_LINES[args.ref_output_file]", PROCESSED_LINES[args.ref_output_file])
         print("--------------------------------------------------------------")
