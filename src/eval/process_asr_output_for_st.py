@@ -103,7 +103,9 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     TEST_PREF = PREDICTIONS_DIR + "/test"
     BEAM_SIZE = 16
     DECODE_BPE = "NONE"
-                
+    
+    os.makedirs(PREDICTIONS_DIR, exist_ok=True)
+                    
     only_best_hypothesis = __get_only_best_hypothesis(lines)
     bpe = BPE.from_pretrained(PUNCTUATION_SPM_MODEL)
     bpe.write_lines(bpe.encode_lines(only_best_hypothesis), TEST_PREF + ".en")
