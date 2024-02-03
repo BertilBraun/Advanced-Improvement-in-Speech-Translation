@@ -16,8 +16,8 @@ cd ../../
 source setup.sh
 PREDICTION_DIR=~/predictions/eval_st
 
-NUM_SAMPLES_TO_EVALUATE=32 # number of samples to evaluate (10 billion to evaluate all)
-POSTPROCESSING_TYPES=("none") # postprocessing types
+POSTPROCESSING_TYPES=("custom" "llama" "none") # postprocessing types
+NUM_SAMPLES_TO_EVALUATE=1000000000 # number of samples to evaluate (sth like 10 billion to evaluate all)
 
 ASR_TEST_SUBSET=test
 ASR_BEAM_SIZE=10
@@ -35,14 +35,13 @@ fi
 
 echo "Transcribing the test set..."
 
-# TODO reenable ASR transcription
-# source src/bash/transcribe_asr.sh \
-#         $ASR_TEST_SUBSET \
-#         $ASR_DATA_DIR \
-#         $ASR_MODEL_DIR \
-#         $PREDICTION_DIR \
-#         $ASR_BEAM_SIZE \
-#         $ASR_N_BEST
+source src/bash/transcribe_asr.sh \
+        $ASR_TEST_SUBSET \
+        $ASR_DATA_DIR \
+        $ASR_MODEL_DIR \
+        $PREDICTION_DIR \
+        $ASR_BEAM_SIZE \
+        $ASR_N_BEST
 
 echo "Transcription done"
 
@@ -86,20 +85,21 @@ echo "Results for the different postprocessing types"
 echo "--------------------------------------------------"
 
 # output the results of the different postprocessing types
-# translation result is in $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
-# reference translation is in $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt
 for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     POSTPROCESSING_PREDICTION_DIR=$PREDICTION_DIR/$TYPE_OF_POSTPROCESSING
+
+    REF=$POSTPROCESSING_PREDICTION_DIR/ref_mt.txt
+    HYP=$POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
 
     echo "Postprocessing type: $TYPE_OF_POSTPROCESSING"
     echo "--------------------------------------------------"
     echo "BLEU score:"
-    sacrebleu $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt < $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
+    sacrebleu -tok none -s 'none' $REF < $HYP
     echo "--------------------------------------------------"
     echo "TER score:"
-    python -m src.eval.calculate_ter --hyp_file $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt --ref_file $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt
+    python -m src.eval.calculate_ter --hyp_file $HYP --ref_file $REF
     echo "--------------------------------------------------"
     echo "BERTScore:"
-    bert-score -r $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt -c $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt --lang de
+    bert-score -r $REF -c $HYP --lang de
     echo "--------------------------------------------------"
 done

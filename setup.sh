@@ -52,6 +52,8 @@ fi
 export PYTHONPATH=~/fairseq/:$PYTHONPATH
 export PATH=~/fairseq/:$PATH
 
+export NUMEXPR_MAX_THREADS=8
+
 
 # ----------------- ASR -----------------
 export ASR_WORKSPACE=/pfs/work7/workspace/scratch/uxude-ASR
