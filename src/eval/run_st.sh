@@ -97,7 +97,7 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     sacrebleu $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt < $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
     echo "--------------------------------------------------"
     echo "TER score:"
-    tercom -r $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt -h $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt
+    python -m src.eval.calculate_ter --hyp_file $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt --ref_file $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt
     echo "--------------------------------------------------"
     echo "BERTScore:"
     bert-score -r $POSTPROCESSING_PREDICTION_DIR/ref_mt.txt -c $POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt --lang de

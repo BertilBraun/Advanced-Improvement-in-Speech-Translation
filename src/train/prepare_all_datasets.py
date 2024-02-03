@@ -1,9 +1,5 @@
 import os
 
-from src.mt.config import process_mt_dataset_to_spm_encoding
-from src.asr.config import create_asr_configs
-from src.asr.mel_encoding import process_dataset_to_mel_spectrogram
-from src.asr.wav2vec_encoding import process_dataset_to_wav2vec_embeddings
 from src.datasets.concrete.covost import CoVoST, CoVoSTPunctuationReconstructionDataset, CoVoSTWithText
 from src.logger_utils import get_logger
 from src.paths import *
@@ -28,6 +24,11 @@ if __name__ == "__main__":
     if can_skip_dataset_prep():
         logger.info("Skipping dataset preparation, all config data already exists")
         exit(0)
+        
+    from src.mt.config import process_mt_dataset_to_spm_encoding
+    from src.asr.config import create_asr_configs
+    from src.asr.mel_encoding import process_dataset_to_mel_spectrogram
+    from src.asr.wav2vec_encoding import process_dataset_to_wav2vec_embeddings
     
     logger.info("Preparing CoVoST...")
     covost_datasets = [CoVoST(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
