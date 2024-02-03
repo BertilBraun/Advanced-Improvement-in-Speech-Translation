@@ -31,6 +31,7 @@ echo "Binary data directory: $BINARY_DATA_DIR"
 cp $SRC_DICT $BINARY_DATA_DIR/dict.en.txt
 cp $TGT_DICT $BINARY_DATA_DIR/dict.de.txt
 
+# TODO remove MKL_SERVICE_FORCE_INTEL
 MKL_SERVICE_FORCE_INTEL=1 fairseq-preprocess \
       --source-lang en --target-lang de \
       --srcdict $SRC_DICT \
@@ -45,6 +46,7 @@ echo "Average checkpoints..."
 echo "Checkpoints folder: $CHECKPOINT_FOLDER"
 echo "Checkpoint path: $CHECKPOINT_PATH"
 
+# TODO remove MKL_SERVICE_FORCE_INTEL
 MKL_SERVICE_FORCE_INTEL=1 python ~/fairseq/scripts/average_checkpoints.py \
   --inputs $CHECKPOINT_FOLDER --num-epoch-checkpoints 5 \
   --output $CHECKPOINT_PATH
@@ -54,6 +56,7 @@ echo "Generating translations..."
 echo "Binary data directory: $BINARY_DATA_DIR"
 echo "Prediction output directory: $PRED_OUTPUT_DIR"
 
+# TODO remove MKL_SERVICE_FORCE_INTEL
 MKL_SERVICE_FORCE_INTEL=1 fairseq-generate $BINARY_DATA_DIR \
       --task translation \
       --source-lang en \
