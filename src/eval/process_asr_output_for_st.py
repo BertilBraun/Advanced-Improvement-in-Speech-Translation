@@ -108,7 +108,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     
     ref_lines = PROCESSED_LINES[args.ref_output_file]
     bpe_encoded_ref_lines = bpe.encode_lines(ref_lines)
-    bpe_decoded_ref_lines = bpe.decode_lines(bpe_encoded_ref_lines)
+    bpe_decoded_ref_lines = BPE.from_pretrained(PUNCTUATION_SPM_MODEL).decode_lines(bpe_encoded_ref_lines)
     
     bpe.write_lines(bpe_encoded_ref_lines, TEST_PREF + ".de")
     

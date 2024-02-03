@@ -55,7 +55,7 @@ class BPE:
             assert model_file.suffix == ".model"
             logger.info("Retraining sentencepiece model...")
 
-            spm.SentencePieceTrainer.train( # type: ignore
+            spm.SentencePieceTrainer.Train( 
                 input=", ".join(train_files),
                 model_prefix=model_file.stem,
                 vocab_size=vocab_size,
@@ -65,7 +65,8 @@ class BPE:
 
             logger.info("Finished training sentencepiece model.")
 
-        self.spm_model = spm.SentencePieceProcessor(model_file=model_file.as_posix()) # type: ignore
+        self.spm_model = spm.SentencePieceProcessor()
+        self.spm_model.Init(model_file=model_file.as_posix()) 
 
     def encode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
         self._process(input_file, output_file, overwrite, process_fn=self.encode_lines, name="Encoding")
