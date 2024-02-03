@@ -123,6 +123,9 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     with open(PRECONDITIONS_DIR + "/ref_mt.txt", "r", encoding="utf-8") as f:
         ref_lines_in_order_of_processed = [line.strip() for line in f.readlines()]
         PROCESSED_LINES[args.ref_output_file] = []
+        print("ref_lines_in_order_of_processed", ref_lines_in_order_of_processed)
+        print("bpe_decoded_ref_lines", bpe_decoded_ref_lines)
+        print("ref_lines", ref_lines)
         for line in ref_lines_in_order_of_processed:
             # find the best matching line in the original reference lines
             PROCESSED_LINES[args.ref_output_file].append(ref_lines[bpe_decoded_ref_lines.index(line)])
