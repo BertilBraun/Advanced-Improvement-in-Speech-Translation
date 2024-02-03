@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Callable
 import sentencepiece as spm
 
 from tqdm import tqdm
@@ -67,24 +68,24 @@ class BPE:
         self.spm_model = spm.SentencePieceProcessor(model_file=model_file.as_posix()) # type: ignore
 
     def encode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
-        self._process(input_file, output_file, overwrite, process_fn=self._encode, name="Encoding")
+        self._process(input_file, output_file, overwrite, process_fn=self.encode_lines, name="Encoding")
 
     def decode_file(self, input_file: Path, output_file: Path, overwrite:bool=False) -> None:
-        self._process(input_file, output_file, overwrite, process_fn=self._decode, name="Decoding")
+        self._process(input_file, output_file, overwrite, process_fn=self.decode_lines, name="Decoding")
         
     def encode_lines(self, lines: list[str]) -> list[str]:
-        return self._process_lines(lines, process_fn=self._encode, name="Encoding")
+        return [
+            " ".join(self._encode(line.strip()))
+            for line in tqdm(lines, desc="Encoding Dataset")
+        ]
     
     def decode_lines(self, lines: list[str]) -> list[str]:
-        return self._process_lines(lines, process_fn=self._decode, name="Decoding")
-        
-    def _process_lines(self, lines: list[str], process_fn, name: str) -> list[str]:
         return [
-            " ".join(process_fn(line.strip()))
-            for line in tqdm(lines, desc=f"{name} Dataset")
+            self._decode(line.strip().split(" "))
+            for line in tqdm(lines, desc="Decoding Dataset")
         ]
-                
-    def _process(self, input_file: Path, output_file: Path, overwrite: bool, process_fn, name: str) -> None:
+                        
+    def _process(self, input_file: Path, output_file: Path, overwrite: bool, process_fn: Callable[[list[str]], list[str]], name: str) -> None:
         if output_file.is_file() and not overwrite:
             logger.info(f"Skipping {name} of {input_file} because {output_file} already exists.")
             return
@@ -92,7 +93,7 @@ class BPE:
         output_file.parent.mkdir(parents=True, exist_ok=True)
         
         input_lines = read_in_lines(input_file)
-        processed_lines = self._process_lines(input_lines, process_fn, name)
+        processed_lines = process_fn(input_lines)
         self.write_lines(processed_lines, output_file)
             
     def write_lines(self, lines: list[str], output_file: Path | str) -> None:
@@ -102,8 +103,8 @@ class BPE:
     def _encode(self, text: str) -> list[str]:
         return self.spm_model.Encode(text.strip(), out_type=str)
 
-    def _decode(self, text: str) -> list[str]:
-        return self.spm_model.Decode(text.strip(), out_type=str)
+    def _decode(self, text: list[str]) -> str:
+        return self.spm_model.Decode(text, out_type=str)
 
 
 if __name__ == "__main__":
