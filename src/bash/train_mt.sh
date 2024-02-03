@@ -22,7 +22,8 @@ if [ -z "$(ls -A $BINARY_DATA_DIR)" ]; then
     --source-lang en --target-lang de \
     --trainpref $TRAIN_SPM_PREF \
     --validpref $VALID_SPM_PREF \
-    --destdir $BINARY_DATA_DIR
+    --destdir $BINARY_DATA_DIR \
+    --num-workers 8
     
   echo "Binarization complete."
 else

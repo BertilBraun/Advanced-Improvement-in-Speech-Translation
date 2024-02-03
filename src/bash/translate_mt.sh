@@ -37,7 +37,8 @@ fairseq-preprocess \
       --tgtdict $TGT_DICT \
       --testpref $TEST_PREF \
       --destdir $BINARY_DATA_DIR \
-      --thresholdtgt 0 --thresholdsrc 0
+      --thresholdtgt 0 --thresholdsrc 0 \
+      --workers 8
 
 echo "Preprocessing done"
 echo "Average checkpoints..."
@@ -58,7 +59,7 @@ fairseq-generate $BINARY_DATA_DIR \
       --source-lang en \
       --target-lang de \
       --path $CHECKPOINT_PATH \
-      --batch-size 10 \
+      --batch-size 64 \
       --beam $BEAM_SIZE \
       --remove-bpe=sentencepiece > $PRED_LOG
 
