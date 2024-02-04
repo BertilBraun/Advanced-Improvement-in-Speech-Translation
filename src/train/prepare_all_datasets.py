@@ -64,7 +64,7 @@ if __name__ == "__main__":
     
     logger.info("Preparing MT CoVoST...")
     mt_datasets = [
-        CoVoSTWithText(COVOST_ROOT, CoVoST.TRAIN, "en", "de") + ParaphrasedDataset(),        
+        ParaphrasedDataset(CoVoSTWithText(COVOST_ROOT, CoVoST.TRAIN, "en", "de")),        
         CoVoSTWithText(COVOST_ROOT, CoVoST.VALID, "en", "de"),
         CoVoSTWithText(COVOST_ROOT, CoVoST.TEST, "en", "de"),
     ]
