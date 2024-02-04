@@ -234,8 +234,6 @@ if __name__ == "__main__":
                 for en_p, de_p in itertools.product(en_ps, de_ps):
                     en_file.write(f"{en_p}\n")
                     de_file.write(f"{de_p}\n")
-                    en_file.flush()
-                    de_file.flush()
                     total_written_paraphrases += 1
                 
                 # Json dump the paraphrases to the log file
@@ -244,7 +242,10 @@ if __name__ == "__main__":
                     "de_paraphrases": de_ps,
                 }, log_file)
                 log_file.write("\n")
-                log_file.flush()
+                
+            en_file.flush()
+            de_file.flush()
+            log_file.flush()
                 
             logger.info(f"Total paraphrases generated: {total_paraphrases}")
             logger.info(f"Total paraphrases written: {total_written_paraphrases}")
