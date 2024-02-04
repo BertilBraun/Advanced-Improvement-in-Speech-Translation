@@ -6,9 +6,8 @@ from src.paths import *
 
 logger = get_logger("MT::Config")
 
-def process_mt_dataset_to_spm_encoding(datasets: Sequence[MTDataset], output_root: Path, spm_model: Path | None = None) -> None:   
-    for dataset in datasets:
-        split = dataset.split
+def process_mt_dataset_to_spm_encoding(datasets: Sequence[MTDataset], split_names: list[str], output_root: Path, spm_model: Path | None = None) -> None:   
+    for dataset, split in zip(datasets, split_names):
         
         logger.info(f"Writing MT Dataset {split} to disk...")
         src_path = output_root / "data" / f"{split}.en"

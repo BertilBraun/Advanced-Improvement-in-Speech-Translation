@@ -1,4 +1,5 @@
 import os
+from src.datasets.concrete.covost import CoVoST
 from src.logger_utils import get_logger
 
 from src.datasets.base.mt_dataset import MTDataset, TextSample
@@ -8,7 +9,7 @@ logger = get_logger("Paraphrases::Paraphrased Dataset")
 
 class ParaphrasedDataset(MTDataset):
     def __init__(self) -> None:
-        super().__init__("train")
+        super().__init__(CoVoST.TRAIN)
         
     def _load_data(self) -> list[TextSample]:
         if not os.path.exists(COVOST_MT_PARAPHRASED_EN_FILE) or not os.path.exists(COVOST_MT_PARAPHRASED_DE_FILE):

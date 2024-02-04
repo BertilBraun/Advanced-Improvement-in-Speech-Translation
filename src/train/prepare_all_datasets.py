@@ -69,7 +69,7 @@ if __name__ == "__main__":
         CoVoSTWithText(COVOST_ROOT, CoVoST.TEST, "en", "de"),
     ]
     
-    process_mt_dataset_to_spm_encoding(mt_datasets, MT_COVOST_ROOT, MT_SPM_MODEL)
+    process_mt_dataset_to_spm_encoding(mt_datasets, CoVoST.SPLITS, MT_COVOST_ROOT, MT_SPM_MODEL)
     
     logger.info("Preparing MT CoVoST with punctuation...")
     punctuation_datasets = [
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         CoVoSTPunctuationReconstructionDataset(COVOST_ROOT, CoVoST.TEST, "en", "de"),
     ]
     
-    process_mt_dataset_to_spm_encoding(punctuation_datasets, PUNCTUATION_COVOST_ROOT, PUNCTUATION_SPM_MODEL)
+    process_mt_dataset_to_spm_encoding(punctuation_datasets, CoVoST.SPLITS, PUNCTUATION_COVOST_ROOT, PUNCTUATION_SPM_MODEL)
         
     logger.info("Done!")
     
