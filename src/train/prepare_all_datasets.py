@@ -3,8 +3,8 @@ import os
 from src.logger_utils import get_logger
 
 from src.datasets.concrete.covost import CoVoST, CoVoSTPunctuationReconstructionDataset, CoVoSTWithText
-from src.paraphrases.paraphrased_dataset import ParaphrasedDataset
-from src.paraphrases.punctuation_enhancement_dataset import PunctuationEnhancementDataset
+from src.preprocess.paraphrased_dataset import ParaphrasedDataset
+from src.preprocess.punctuation_enhancement_dataset import PunctuationEnhancementDataset
 from src.paths import *
 
 logger = get_logger("Dataset::Prepare Datasets")
