@@ -249,6 +249,8 @@ def process_hypothesis_text(lines: list[str]) -> list[str]:
 
 if __name__ == "__main__":
     logger.info("Starting processing...")
+    if args.type_of_postprocessing == "llama":
+        args.num_samples_to_evaluate = min(args.num_samples_to_evaluate, 256)
 
     # process the reference file
     __process_file(
