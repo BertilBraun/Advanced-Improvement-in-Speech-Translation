@@ -68,7 +68,7 @@ export ASR_MODEL_DIR=$ASR_TRAIN_WORKSPACE/models
 # ----------------- MT -----------------
 export MT_WORKSPACE=/pfs/work7/workspace/scratch/uxude-MT
 
-export MT_TRAIN_WORKSPACE=$MT_WORKSPACE/train/finetune_mt_covost
+export MT_TRAIN_WORKSPACE=$MT_WORKSPACE/train/finetune_mt_covost_paraphrased
 
 export MT_DATA_DIR=$MT_WORKSPACE/dataset/covost_paraphrased/spm
 export MT_BINARY_DATA_DIR=$MT_TRAIN_WORKSPACE/binarized_dataset
@@ -77,7 +77,7 @@ export MT_MODEL_DIR=$MT_TRAIN_WORKSPACE/models
 
 
 # ----------------- Punctuation---------
-export PUNCTUATION_TRAIN_WORKSPACE=$MT_WORKSPACE/train/train_punctuation_covost
+export PUNCTUATION_TRAIN_WORKSPACE=$MT_WORKSPACE/train/train_punctuation_covost_enhancement
 
 export PUNCTUATION_DATA_DIR=$MT_WORKSPACE/dataset/covost_punctuation_enhancement/spm
 export PUNCTUATION_BINARY_DATA_DIR=$PUNCTUATION_TRAIN_WORKSPACE/binarized_dataset
