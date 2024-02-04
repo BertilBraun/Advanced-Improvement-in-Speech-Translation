@@ -11,12 +11,9 @@ from src.datasets.concrete.covost import CoVoSTWithText
 
 from src.llama.llama import generate
 from src.logger_utils import get_logger
-from src.paths import COVOST_ROOT, MT_COVOST_DATA_ROOT
+from src.paths import COVOST_MT_PARAPHRASED_DE_FILE, COVOST_MT_PARAPHRASED_EN_FILE, COVOST_ROOT, MT_COVOST_DATA_ROOT
 
 logger = get_logger("Paraphrases::generate paraprhases")
-
-OUTPUT_EN_FILE = MT_COVOST_DATA_ROOT / "train_paraphrased.en"
-OUTPUT_DE_FILE = MT_COVOST_DATA_ROOT / "train_paraphrased.de"
 
 LOG_FILE = MT_COVOST_DATA_ROOT / "paraphrases.log"
 
@@ -199,8 +196,8 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
 if __name__ == "__main__":
     logger.info("Generating paraphrases for all sentence pairs...")
     
-    with open(OUTPUT_EN_FILE, "a", encoding="utf-8") as en_file,\
-        open(OUTPUT_DE_FILE, "a", encoding="utf-8") as de_file, \
+    with open(COVOST_MT_PARAPHRASED_EN_FILE, "a", encoding="utf-8") as en_file,\
+        open(COVOST_MT_PARAPHRASED_DE_FILE, "a", encoding="utf-8") as de_file, \
         open(LOG_FILE, "a", encoding="utf-8") as log_file:
             
         start_paraphrasing = time.time()
