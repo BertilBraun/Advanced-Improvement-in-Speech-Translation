@@ -36,7 +36,7 @@ LLM.config.pad_token_id = TOKENIZER.pad_token_id = 0  # unk
 LLM.config.bos_token_id = 1  # bos
 LLM.config.eos_token_id = 2  # eos
 
-LLM = LLM.to(DEVICE)
+# bnb config apparently already moves to the correct device LLM = LLM.to(DEVICE)
 
 logger.info("LLaMA ready.")
 
