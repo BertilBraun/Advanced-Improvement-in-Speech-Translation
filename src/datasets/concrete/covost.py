@@ -20,8 +20,12 @@ class CoVoST(STDataset):
         source_language (str): source (audio) language
         target_language (str): target (text) language
     """
+    
+    TRAIN = "train"
+    VALID = "dev"
+    TEST = "test"
 
-    SPLITS = ["train", "dev", "test"]
+    SPLITS = [TRAIN, VALID, TEST]
 
     def __init__(self, root: Path, split: str, source_language: str, target_language: str) -> None:
         self.root = root
