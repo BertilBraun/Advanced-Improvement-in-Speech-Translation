@@ -1,7 +1,7 @@
 from src.logger_utils import get_logger
 
 from src.datasets.base.mt_dataset import MTDataset, TextSample
-from src.paraphrases.generate_paraphrases import OUTPUT_DE_FILE, OUTPUT_EN_FILE
+from src.preprocess.generate_paraphrases import OUTPUT_DE_FILE, OUTPUT_EN_FILE
 
 logger = get_logger("Paraphrases::Paraphrased Dataset")
 
