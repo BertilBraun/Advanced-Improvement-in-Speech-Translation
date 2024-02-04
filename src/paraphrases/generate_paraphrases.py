@@ -199,8 +199,8 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
 if __name__ == "__main__":
     logger.info("Generating paraphrases for all sentence pairs...")
     
-    with open(OUTPUT_EN_FILE, "w", encoding="utf-8") as en_file,\
-        open(OUTPUT_DE_FILE, "w", encoding="utf-8") as de_file, \
+    with open(OUTPUT_EN_FILE, "a", encoding="utf-8") as en_file,\
+        open(OUTPUT_DE_FILE, "a", encoding="utf-8") as de_file, \
         open(LOG_FILE, "a", encoding="utf-8") as log_file:
             
         start_paraphrasing = time.time()
