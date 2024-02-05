@@ -30,9 +30,9 @@ COVOST_MT_PARAPHRASED_EN_FILE = MT_COVOST_DATA_ROOT / "train_paraphrased.en"
 COVOST_MT_PARAPHRASED_DE_FILE = MT_COVOST_DATA_ROOT / "train_paraphrased.de"
 
 
-ASR_TRAIN_WORKSPACE=ASR_ROOT/"train"/"finetune_asr_covost"
-MT_TRAIN_WORKSPACE=MT_ROOT/"train"/"finetune_mt_covost_paraphrased"
-PUNCTUATION_TRAIN_WORKSPACE=MT_ROOT/"train"/"train_punctuation_covost_enhancement"
+ASR_TRAIN_WORKSPACE=ASR_ROOT / "train" / "finetune_asr_covost"
+MT_TRAIN_WORKSPACE=MT_ROOT / "train" / "finetune_mt_covost_paraphrased"
+PUNCTUATION_TRAIN_WORKSPACE=MT_ROOT / "train" / "train_punctuation_covost_enhancement"
 
 
 for p in [
