@@ -17,6 +17,8 @@ logger = get_logger("Paraphrases::generate paraprhases")
 
 LOG_FILE = MT_COVOST_DATA_ROOT / "paraphrases.log"
 
+TOTAL_PROCESSING_TIME_IN_HOURS = int(os.getenv("TOTAL_PROCESSING_TIME_IN_HOURS", 24))
+
 LANGUAGE = Literal["en"] | Literal["de"]
 
 try:
@@ -247,5 +249,9 @@ if __name__ == "__main__":
             logger.info(f"Total paraphrases generated: {total_paraphrases}")
             logger.info(f"Total paraphrases written: {total_written_paraphrases}")
             logger.info(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
+            
+            if (time.time() - start_paraphrasing) / 3600 > TOTAL_PROCESSING_TIME_IN_HOURS:
+                logger.info(f"Total processing time exceeded {TOTAL_PROCESSING_TIME_IN_HOURS} hours. Exiting.")
+                break
 
     logger.info("Finished generating paraphrases.")

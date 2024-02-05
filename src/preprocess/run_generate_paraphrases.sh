@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=generate_paraphrases    # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=12:00:00                    # wall-clock time limit  
+#SBATCH --time=12:30:00                    # wall-clock time limit  
 #SBATCH --mem=100000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -15,6 +15,8 @@
 # call ../setup.sh
 cd ../..
 source setup.sh
+
+export TOTAL_PROCESSING_TIME_IN_HOURS=12
 
 python -m src.preprocess.generate_paraphrases
 
