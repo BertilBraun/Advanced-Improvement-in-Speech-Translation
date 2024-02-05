@@ -5,8 +5,8 @@ import regex
 import spacy
 import itertools
 
-from typing import Literal
-from torch.utils.data import DataLoader
+from typing import Iterable, Literal
+from src.datasets.base.mt_dataset import MTDataset
 from src.datasets.concrete.covost import CoVoSTWithText
 
 from src.llama.llama import generate
@@ -194,6 +194,20 @@ def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -
 
     return True
 
+
+def batch_iterate(dataset: MTDataset, batch_size: int = 20) -> Iterable[tuple[list[str], list[str]]]:
+    batch = ([], [])
+    for en, de in dataset:
+        batch[0].append(en)
+        batch[1].append(de)
+        
+        if len(batch[0]) == batch_size:
+            yield batch
+            batch = ([], [])
+            
+    if batch[0]:
+        yield batch
+            
                 
 if __name__ == "__main__":
     logger.info("Generating paraphrases for all sentence pairs...")
@@ -208,7 +222,7 @@ if __name__ == "__main__":
             
         dataset = CoVoSTWithText(COVOST_ROOT, "train", "en", "de")
         
-        for ens, des in DataLoader(dataset, batch_size=20): # TODO experiment, are larger batches better?
+        for ens, des in batch_iterate(dataset, batch_size=20): # TODO experiment, are larger batches better?
             logger.info(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
             try:
                 start = time.time()
