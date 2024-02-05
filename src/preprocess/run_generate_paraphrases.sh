@@ -9,9 +9,23 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
+#SBATCH --output=generate_paraphrases_%j.txt
+#SBATCH --error=generate_paraphrases_%j.txt
 
 # call ../setup.sh
 cd ../..
 source setup.sh
 
-python -m src.paraphrases.generate_paraphrases
+# remove MT_TRAIN_WORKSPACE and create a new one
+rm -rf $MT_TRAIN_WORKSPACE
+mkdir -p $MT_TRAIN_WORKSPACE
+
+python -m src.preprocess.generate_paraphrases
+
+# if python script fails, exit with error
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+
+cd src/train
+sbatch finetune_mt_covost.sh
