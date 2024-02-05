@@ -46,7 +46,7 @@ def generate(prompts: list[str]) -> list[str]:
     model_inputs = TOKENIZER(prompts, return_tensors="pt", padding=True).to(DEVICE)
 
     generation_config = GenerationConfig(
-        temperature=0.2,  # TODO really low temperature but still get hallucinations
+        temperature=0.5,  # TODO really low temperature but still get hallucinations
         top_p=0.75,
         repetition_penalty=1.1,
         do_sample=True,

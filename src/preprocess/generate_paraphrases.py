@@ -13,7 +13,7 @@ from src.llama.llama import generate
 from src.logger_utils import get_logger
 from src.paths import COVOST_MT_PARAPHRASED_DE_FILE, COVOST_MT_PARAPHRASED_EN_FILE, COVOST_ROOT, MT_COVOST_DATA_ROOT
 
-logger = get_logger("Paraphrases::generate paraprhases")
+logger = get_logger("Paraphrases")
 
 LOG_FILE = MT_COVOST_DATA_ROOT / "paraphrases.log"
 
@@ -83,7 +83,9 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
         if sentence_too_long[i]:
             continue
     
-        logger.info(f"\n\nParaphrases text for sentence '{sentence}':")
+        logger.info("")
+        logger.info("")
+        logger.info(f"Paraphrases text for sentence '{sentence}':")
         
         paraphrased_text = paraphrased_texts[paraphrased_texts_index]
         paraphrased_texts_index += 1
