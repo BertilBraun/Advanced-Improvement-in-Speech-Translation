@@ -40,10 +40,11 @@ fairseq-train \
     $BINARY_DATA_DIR --save-dir $MODEL_DIR \
     --arch transformer --share-decoder-input-output-embed \
     --optimizer adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
-    --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
+    --lr 2e-3 --lr-scheduler cosine --warmup-updates 10000 \
+    --total-num-update 750000 \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
     --max-tokens 4096 --max-epoch 500 --stop-time-hours $TRAIN_TIME_IN_HOURS \
-    --patience 5 --fp16 --update-freq 8
+    --patience 5 --fp16 --update-freq 4
 
 echo "Training complete."
