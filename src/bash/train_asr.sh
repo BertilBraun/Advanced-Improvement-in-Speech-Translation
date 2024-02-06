@@ -30,7 +30,7 @@ fairseq-train $DATA_DIR --save-dir $MODEL_DIR \
     --arch s2t_conformer --share-decoder-input-output-embed \
     --pos-enc-type rel_pos --attn-type espnet \
     --optimizer adam --lr 2e-3 --lr-scheduler inverse_sqrt --warmup-updates 10000 \
-    --stop-time-hours $TRAIN_TIME_IN_HOURS 
-
+    --stop-time-hours $TRAIN_TIME_IN_HOURS --update-freq 8 --clip-norm 10.0 \
+    --patience 5
 
 echo "Training complete."

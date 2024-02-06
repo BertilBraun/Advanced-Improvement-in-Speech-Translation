@@ -12,7 +12,6 @@
 #SBATCH --output=generate_paraphrases_%j.txt
 #SBATCH --error=generate_paraphrases_%j.txt
 
-# call ../setup.sh
 cd ../..
 source setup.sh
 
