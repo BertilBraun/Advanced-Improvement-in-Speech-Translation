@@ -45,6 +45,6 @@ fairseq-train \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
     --max-tokens 4096 --max-epoch 500 --stop-time-hours $TRAIN_TIME_IN_HOURS \
-    --patience 5 --fp16 --update-freq 4
+    --patience 25 --fp16 --update-freq 4
 
 echo "Training complete."
