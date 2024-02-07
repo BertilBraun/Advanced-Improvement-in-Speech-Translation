@@ -24,13 +24,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# remove MT_TRAIN_WORKSPACE and create a new one
-rm -rf $MT_TRAIN_WORKSPACE
-mkdir -p $MT_TRAIN_WORKSPACE
+# remove MT_PARAPHRASED_TRAIN_WORKSPACE and create a new one
+rm -rf $MT_PARAPHRASED_TRAIN_WORKSPACE
+mkdir -p $MT_PARAPHRASED_TRAIN_WORKSPACE
 
-# remove MT_DATA_DIR and create a new one
-rm -rf $MT_DATA_DIR
-mkdir -p $MT_DATA_DIR
+# remove MT_PARAPHRASED_DATA_DIR and create a new one
+rm -rf $MT_PARAPHRASED_DATA_DIR
+mkdir -p $MT_PARAPHRASED_DATA_DIR
 
 cd src/train
 sbatch finetune_mt_paraphrased_covost.sh
