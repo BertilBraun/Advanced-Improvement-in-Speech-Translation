@@ -9,8 +9,8 @@
 #SBATCH --ntasks-per-node=1                # maximum count of tasks per node
 #SBATCH --mail-type=ALL                    # Notify user by email when certain event types occur.
 #SBATCH --gres=gpu:1
-#SBATCH --output=finetune_mt_covost_%j.txt
-#SBATCH --error=finetune_mt_covost_%j.txt
+#SBATCH --output=finetune_mt_paraphrased_covost_%j.txt
+#SBATCH --error=finetune_mt_paraphrased_covost_%j.txt
 
 cd ../../
 source setup.sh
@@ -24,13 +24,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Finetuning the MT model..."
+echo "Finetuning the paraphrased MT model..."
 
 source src/bash/train_mt.sh \
-        $MT_BINARY_DATA_DIR \
-        $MT_DATA_DIR/train \
-        $MT_DATA_DIR/dev \
-        $MT_MODEL_DIR \
+        $MT_PARAPHRASED_BINARY_DATA_DIR \
+        $MT_PARAPHRASED_DATA_DIR/train \
+        $MT_PARAPHRASED_DATA_DIR/dev \
+        $MT_PARAPHRASED_MODEL_DIR \
         $TRAIN_TIME_IN_HOURS
 
 echo "Finetuning complete."
@@ -38,9 +38,9 @@ echo "----------------------------------------------------------"
 echo "Translating the test set..."
 
 source src/bash/translate_mt.sh \
-        $MT_BINARY_DATA_DIR/dict.en.txt \
-        $MT_BINARY_DATA_DIR/dict.de.txt \
-        $MT_DATA_DIR/test \
-        $MT_BINARY_DATA_DIR \
-        $MT_MODEL_DIR \
-        ~/predictions/finetune_mt_covost
+        $MT_PARAPHRASED_BINARY_DATA_DIR/dict.en.txt \
+        $MT_PARAPHRASED_BINARY_DATA_DIR/dict.de.txt \
+        $MT_PARAPHRASED_DATA_DIR/test \
+        $MT_PARAPHRASED_BINARY_DATA_DIR \
+        $MT_PARAPHRASED_MODEL_DIR \
+        ~/predictions/finetune_mt_paraphrased_covost

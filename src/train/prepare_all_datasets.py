@@ -63,13 +63,17 @@ if __name__ == "__main__":
     # )  
     
     logger.info("Preparing MT CoVoST...")
-    mt_datasets = [
-        ParaphrasedDataset(CoVoSTWithText(COVOST_ROOT, CoVoST.TRAIN, "en", "de")),        
-        CoVoSTWithText(COVOST_ROOT, CoVoST.VALID, "en", "de"),
-        CoVoSTWithText(COVOST_ROOT, CoVoST.TEST, "en", "de"),
-    ]
+    mt_datasets = [CoVoSTWithText(COVOST_ROOT, split, "en", "de") for split in CoVoST.SPLITS]
     
     process_mt_dataset_to_spm_encoding(mt_datasets, CoVoST.SPLITS, MT_COVOST_ROOT, MT_SPM_MODEL)
+    
+    mt_datasets = [
+        ParaphrasedDataset(mt_datasets[0]),
+        mt_datasets[1],
+        mt_datasets[2],        
+    ]
+    
+    process_mt_dataset_to_spm_encoding(mt_datasets, CoVoST.SPLITS, MT_PARAPHRASED_COVOST_ROOT, MT_SPM_MODEL)
     
     logger.info("Preparing MT CoVoST with punctuation...")
     punctuation_datasets = [

@@ -33,4 +33,4 @@ rm -rf $MT_DATA_DIR
 mkdir -p $MT_DATA_DIR
 
 cd src/train
-sbatch finetune_mt_covost.sh
+sbatch finetune_mt_paraphrased_covost.sh

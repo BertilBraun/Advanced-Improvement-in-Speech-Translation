@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=finetune_asr_covost     # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=12:30:00                    # wall-clock time limit
+#SBATCH --time=16:30:00                    # wall-clock time limit
 #SBATCH --mem=100000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -19,7 +19,7 @@ TRAIN_SUBSET=train
 VAL_SUBSET=dev
 TEST_SUBSET=test
 
-TRAIN_TIME_IN_HOURS=18
+TRAIN_TIME_IN_HOURS=46
 
 python -m src.train.prepare_all_datasets
 # check exit code of python call, if crash, exit
