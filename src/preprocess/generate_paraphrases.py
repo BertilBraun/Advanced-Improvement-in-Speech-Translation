@@ -119,6 +119,15 @@ def generate_batched_paraphrases(sentences: list[str], language: LANGUAGE) -> li
 
 
 def cleanup_paraphrase(sent: str) -> str:
+    def strip_quotes(sent: str) -> str:
+        last = sent
+        # Remove leading and trailing quotation marks
+        while last != (last := sent):
+            for quote in ['"', "'"]:
+                if sent.startswith(quote) and sent.endswith(quote):
+                    sent = sent[1:-1]
+        return sent   
+
     sent = sent.replace("<s>", "").replace("</s>", "").replace("<unk>", "").strip()
     
     # if it ends with a ')' then replace the last bracketed part with ''
@@ -136,10 +145,9 @@ def cleanup_paraphrase(sent: str) -> str:
                 sent = sent[:-i]
                 break            
     
-    # Remove leading and trailing quotation marks
-    for quote in ['"', "'"]:
-        if sent.startswith(quote) and sent.endswith(quote):
-            sent = sent[1:-1]
+    sent = sent.strip()
+    
+    sent = strip_quotes(sent)
             
     sent = sent.strip()
     
@@ -160,13 +168,11 @@ def cleanup_paraphrase(sent: str) -> str:
     sent = sent.strip()
     
     # Remove leading and trailing quotation marks again, as they might have only been around the text without the enumeration
-    for quote in ['"', "'"]:
-        if sent.startswith(quote) and sent.endswith(quote):
-            sent = sent[1:-1]
+    sent = strip_quotes(sent)
         
     sent = sent.strip()
     
-    return sent    
+    return sent 
 
 
 def heuristic_is_paraphrase(candidate: str, original: str, language: LANGUAGE) -> bool:
@@ -224,8 +230,10 @@ if __name__ == "__main__":
             
         dataset = CoVoSTWithText(COVOST_ROOT, "train", "en", "de")
         
-        for ens, des in batch_iterate(dataset, batch_size=20): # TODO experiment, are larger batches better?
+        for ens, des in batch_iterate(dataset, batch_size=64): # TODO experiment, are larger batches better?
             logger.info(f"\n\nGenerating paraphrases for '{ens}' and '{des}'...")
+            en_paraphrases = [[en] for en in ens]
+            de_paraphrases = [[de] for de in des]
             try:
                 start = time.time()
                 
@@ -240,34 +248,34 @@ if __name__ == "__main__":
                                     
                 logger.info(f"New paraphrases generated: {new_paraphrases}")
                 total_paraphrases += new_paraphrases
+                
+                # Generate all combinations of English and German paraphrases and write directly to files
+                for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
+                    for en_p, de_p in itertools.product(en_ps, de_ps):
+                        en_file.write(f"{en_p}\n")
+                        de_file.write(f"{de_p}\n")
+                        total_written_paraphrases += 1
+                    
+                # Json dump the paraphrases to the log file
+                json.dump({
+                    "en_paraphrases": en_paraphrases,
+                    "de_paraphrases": de_paraphrases,
+                }, log_file)
+                log_file.write("\n")
+                    
+                en_file.flush()
+                de_file.flush()
+                log_file.flush()
+                    
+                logger.info(f"Total paraphrases generated: {total_paraphrases}")
+                logger.info(f"Total paraphrases written: {total_written_paraphrases}")
+                logger.info(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
+                
+                if (time.time() - start_paraphrasing) / 3600 > TOTAL_PROCESSING_TIME_IN_HOURS:
+                    logger.info(f"Total processing time exceeded {TOTAL_PROCESSING_TIME_IN_HOURS} hours. Exiting.")
+                    break
             except Exception as e:
                 logger.info(f"Error generating paraphrases: {e}")
                 continue
-
-            # Generate all combinations of English and German paraphrases and write directly to files
-            for en_ps, de_ps in zip(en_paraphrases, de_paraphrases):
-                for en_p, de_p in itertools.product(en_ps, de_ps):
-                    en_file.write(f"{en_p}\n")
-                    de_file.write(f"{de_p}\n")
-                    total_written_paraphrases += 1
-                
-                # Json dump the paraphrases to the log file
-                json.dump({
-                    "en_paraphrases": en_ps,
-                    "de_paraphrases": de_ps,
-                }, log_file)
-                log_file.write("\n")
-                
-            en_file.flush()
-            de_file.flush()
-            log_file.flush()
-                
-            logger.info(f"Total paraphrases generated: {total_paraphrases}")
-            logger.info(f"Total paraphrases written: {total_written_paraphrases}")
-            logger.info(f"Total time taken: {round(time.time() - start_paraphrasing, 2)} seconds")
-            
-            if (time.time() - start_paraphrasing) / 3600 > TOTAL_PROCESSING_TIME_IN_HOURS:
-                logger.info(f"Total processing time exceeded {TOTAL_PROCESSING_TIME_IN_HOURS} hours. Exiting.")
-                break
 
     logger.info("Finished generating paraphrases.")
