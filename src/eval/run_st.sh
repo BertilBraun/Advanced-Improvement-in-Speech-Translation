@@ -69,11 +69,11 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     echo "Starting translation..."
 
     source src/bash/translate_mt.sh \
-            $MT_BINARY_DATA_DIR/dict.en.txt \
-            $MT_BINARY_DATA_DIR/dict.de.txt \
+            $MT_PARAPHRASED_BINARY_DATA_DIR/dict.en.txt \
+            $MT_PARAPHRASED_BINARY_DATA_DIR/dict.de.txt \
             $POSTPROCESSING_PREDICTION_DIR/asr_out \
             $POSTPROCESSING_PREDICTION_DIR \
-            $MT_MODEL_DIR \
+            $MT_PARAPHRASED_MODEL_DIR \
             $POSTPROCESSING_PREDICTION_DIR \
             $MT_BEAM_SIZE
 
