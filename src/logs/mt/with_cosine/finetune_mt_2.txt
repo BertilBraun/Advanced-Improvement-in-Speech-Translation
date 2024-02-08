@@ -1,0 +1,1097 @@
+(base) [uxude@uc2n995 train]$ cat finetune_mt_covost_23129905.txt
+No extension needed for workspace ASR.
+No extension needed for workspace MT.
+Fairseq directory exists. Checking if installed...
+fairseq                  0.12.2       /home/kit/stud/uxude/fairseq
+Fairseq is already installed. Skipping installation.
+Setup complete. Starting script execution...
+[INFO] 23:28:18 [Dataset::Prepare Datasets]: Skipping dataset preparation, all config data already exists
+Finetuning the MT model...
+Binarized data already exists. Skipping binarization.
+Training the model...
+Model will be stored in /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models
+Training time: 12 hours
+2024-02-07 23:28:36 | INFO | fairseq_cli.train | {'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': True, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': None, 'post_process': None, 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': True, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': 4096, 'batch_size': None, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': 4096, 'batch_size_valid': None, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 500, 'max_update': 750000, 'stop_time_hours': 12.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [4], 'lr': [0.002], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': 25, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 5, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=True, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='label_smoothed_cross_entropy', tokenizer=None, bpe=None, optimizer='adam', lr_scheduler='cosine', simul_type=None, scoring='bleu', task='translation', num_workers=1, skip_invalid_size_inputs_valid_test=False, max_tokens=4096, batch_size=None, required_batch_size_multiple=8, required_seq_len_multiple=1, dataset_impl=None, data_buffer_size=10, train_subset='train', valid_subset='valid', combine_valid_subsets=None, ignore_unused_valid_subsets=False, validate_interval=1, validate_interval_updates=0, validate_after_updates=0, fixed_validation_seed=None, disable_validation=False, max_tokens_valid=4096, batch_size_valid=None, max_valid_steps=None, curriculum=0, gen_subset='test', num_shards=1, shard_id=0, grouped_shuffling=False, update_epoch_batch_itr=False, update_ordered_indices_seed=False, distributed_world_size=1, distributed_num_procs=1, distributed_rank=0, distributed_backend='nccl', distributed_init_method=None, distributed_port=-1, device_id=0, distributed_no_spawn=False, ddp_backend='pytorch_ddp', ddp_comm_hook='none', bucket_cap_mb=25, fix_batches_to_gpus=False, find_unused_parameters=False, gradient_as_bucket_view=False, fast_stat_sync=False, heartbeat_timeout=-1, broadcast_buffers=False, slowmo_momentum=None, slowmo_base_algorithm='localsgd', localsgd_frequency=3, nprocs_per_node=1, pipeline_model_parallel=False, pipeline_balance=None, pipeline_devices=None, pipeline_chunks=0, pipeline_encoder_balance=None, pipeline_encoder_devices=None, pipeline_decoder_balance=None, pipeline_decoder_devices=None, pipeline_checkpoint='never', zero_sharding='none', no_reshard_after_forward=False, fp32_reduce_scatter=False, cpu_offload=False, use_sharded_state=False, not_fsdp_flatten_parameters=False, arch='transformer', max_epoch=500, max_update=750000, stop_time_hours=12.0, clip_norm=0.0, sentence_avg=False, update_freq=[4], lr=[0.002], stop_min_lr=-1.0, use_bmuf=False, skip_remainder_batch=False, debug_param_names=False, save_dir='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models', restore_file='checkpoint_last.pt', continue_once=None, finetune_from_model=None, reset_dataloader=False, reset_lr_scheduler=False, reset_meters=False, reset_optimizer=False, optimizer_overrides='{}', save_interval=1, save_interval_updates=0, keep_interval_updates=-1, keep_interval_updates_pattern=-1, keep_last_epochs=-1, keep_best_checkpoints=-1, no_save=False, no_epoch_checkpoints=False, no_last_checkpoints=False, no_save_optimizer_state=False, best_checkpoint_metric='loss', maximize_best_checkpoint_metric=False, patience=25, checkpoint_suffix='', checkpoint_shard_count=1, load_checkpoint_on_all_dp_ranks=False, write_checkpoints_asynchronously=False, store_ema=False, ema_decay=0.9999, ema_start_update=0, ema_seed_model=None, ema_update_freq=1, ema_fp32=False, data='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset', source_lang=None, target_lang=None, load_alignments=False, left_pad_source=True, left_pad_target=False, upsample_primary=-1, truncate_source=False, num_batch_buckets=0, eval_bleu=False, eval_bleu_args='{}', eval_bleu_detok='space', eval_bleu_detok_args='{}', eval_tokenized_bleu=False, eval_bleu_remove_bpe=None, eval_bleu_print_samples=False, label_smoothing=0.1, report_accuracy=False, ignore_prefix_size=0, adam_betas='(0.9, 0.98)', adam_eps=1e-08, weight_decay=0.0001, use_old_adam=False, fp16_adam_stats=False, warmup_updates=10000, warmup_init_lr=-1, min_lr=0.0, t_mult=1.0, lr_period_updates=-1, lr_shrink=0.1, pad=1, eos=2, unk=3, share_decoder_input_output_embed=True, dropout=0.3, no_seed_provided=False, encoder_embed_path=None, encoder_embed_dim=512, encoder_ffn_embed_dim=2048, encoder_layers=6, encoder_attention_heads=8, encoder_normalize_before=False, encoder_learned_pos=False, decoder_embed_path=None, decoder_embed_dim=512, decoder_ffn_embed_dim=2048, decoder_layers=6, decoder_attention_heads=8, decoder_normalize_before=False, decoder_learned_pos=False, attention_dropout=0.0, activation_dropout=0.0, activation_fn='relu', adaptive_softmax_cutoff=None, adaptive_softmax_dropout=0, share_all_embeddings=False, merge_src_tgt_embed=False, no_token_positional_embeddings=False, adaptive_input=False, no_cross_attention=False, cross_self_attention=False, decoder_output_dim=512, decoder_input_dim=512, no_scale_embedding=False, layernorm_embedding=False, tie_adaptive_weights=False, checkpoint_activations=False, offload_activations=False, encoder_layers_to_keep=None, decoder_layers_to_keep=None, encoder_layerdrop=0, decoder_layerdrop=0, quant_noise_pq=0, quant_noise_pq_block_size=8, quant_noise_scalar=0, _name='transformer'), 'task': {'_name': 'translation', 'data': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset', 'source_lang': None, 'target_lang': None, 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'label_smoothed_cross_entropy', 'label_smoothing': 0.1, 'report_accuracy': False, 'ignore_prefix_size': 0, 'sentence_avg': False}, 'optimizer': {'_name': 'adam', 'adam_betas': '(0.9, 0.98)', 'adam_eps': 1e-08, 'weight_decay': 0.0001, 'use_old_adam': False, 'fp16_adam_stats': False, 'tpu': False, 'lr': [0.002]}, 'lr_scheduler': {'_name': 'cosine', 'warmup_updates': 10000, 'warmup_init_lr': -1.0, 'lr': [0.002], 'min_lr': 0.0, 't_mult': 1.0, 'lr_period_updates': -1.0, 'lr_shrink': 0.1, 'max_update': 750000}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+2024-02-07 23:28:36 | INFO | fairseq.tasks.translation | [en] dictionary: 6520 types
+2024-02-07 23:28:36 | INFO | fairseq.tasks.translation | [de] dictionary: 7560 types
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | TransformerModel(
+  (encoder): TransformerEncoderBase(
+    (dropout_module): FairseqDropout()
+    (embed_tokens): Embedding(6520, 512, padding_idx=1)
+    (embed_positions): SinusoidalPositionalEmbedding()
+    (layers): ModuleList(
+      (0-5): 6 x TransformerEncoderLayerBase(
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=512, out_features=512, bias=True)
+          (v_proj): Linear(in_features=512, out_features=512, bias=True)
+          (q_proj): Linear(in_features=512, out_features=512, bias=True)
+          (out_proj): Linear(in_features=512, out_features=512, bias=True)
+        )
+        (self_attn_layer_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (dropout_module): FairseqDropout()
+        (activation_dropout_module): FairseqDropout()
+        (fc1): Linear(in_features=512, out_features=2048, bias=True)
+        (fc2): Linear(in_features=2048, out_features=512, bias=True)
+        (final_layer_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+    )
+  )
+  (decoder): TransformerDecoderBase(
+    (dropout_module): FairseqDropout()
+    (embed_tokens): Embedding(7560, 512, padding_idx=1)
+    (embed_positions): SinusoidalPositionalEmbedding()
+    (layers): ModuleList(
+      (0-5): 6 x TransformerDecoderLayerBase(
+        (dropout_module): FairseqDropout()
+        (self_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=512, out_features=512, bias=True)
+          (v_proj): Linear(in_features=512, out_features=512, bias=True)
+          (q_proj): Linear(in_features=512, out_features=512, bias=True)
+          (out_proj): Linear(in_features=512, out_features=512, bias=True)
+        )
+        (activation_dropout_module): FairseqDropout()
+        (self_attn_layer_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (encoder_attn): MultiheadAttention(
+          (dropout_module): FairseqDropout()
+          (k_proj): Linear(in_features=512, out_features=512, bias=True)
+          (v_proj): Linear(in_features=512, out_features=512, bias=True)
+          (q_proj): Linear(in_features=512, out_features=512, bias=True)
+          (out_proj): Linear(in_features=512, out_features=512, bias=True)
+        )
+        (encoder_attn_layer_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (fc1): Linear(in_features=512, out_features=2048, bias=True)
+        (fc2): Linear(in_features=2048, out_features=512, bias=True)
+        (final_layer_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+    )
+    (output_projection): Linear(in_features=512, out_features=7560, bias=False)
+  )
+)
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | task: TranslationTask
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | model: TransformerModel
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | criterion: LabelSmoothedCrossEntropyCriterion
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | num. shared model params: 51,347,456 (num. trained: 51,347,456)
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | num. expert model params: 0 (num. trained: 0)
+2024-02-07 23:28:40 | INFO | fairseq.data.data_utils | loaded 15,520 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/valid.en-de.en
+2024-02-07 23:28:40 | INFO | fairseq.data.data_utils | loaded 15,520 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/valid.en-de.de
+2024-02-07 23:28:40 | INFO | fairseq.tasks.translation | /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset valid en-de 15520 examples
+2024-02-07 23:28:40 | INFO | fairseq.trainer | detected shared parameter: decoder.embed_tokens.weight <- decoder.output_projection.weight
+2024-02-07 23:28:40 | INFO | fairseq.utils | ***********************CUDA enviroments for all 1 workers***********************
+2024-02-07 23:28:40 | INFO | fairseq.utils | rank   0: capabilities =  7.0  ; total memory = 31.739 GB ; name = Tesla V100-SXM2-32GB
+2024-02-07 23:28:40 | INFO | fairseq.utils | ***********************CUDA enviroments for all 1 workers***********************
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | training on 1 devices (GPUs/TPUs)
+2024-02-07 23:28:40 | INFO | fairseq_cli.train | max tokens per device = 4096 and max sentences per device = None
+2024-02-07 23:28:40 | INFO | fairseq.trainer | Preparing to load checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint_last.pt
+2024-02-07 23:28:44 | INFO | fairseq.trainer | Loaded checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint_last.pt (epoch 30 @ 10690 updates)
+2024-02-07 23:28:44 | INFO | fairseq.trainer | loading train data for epoch 30
+2024-02-07 23:28:44 | INFO | fairseq.data.data_utils | loaded 289,024 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/train.en-de.en
+2024-02-07 23:28:44 | INFO | fairseq.data.data_utils | loaded 289,024 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/train.en-de.de
+2024-02-07 23:28:44 | INFO | fairseq.tasks.translation | /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset train en-de 289024 examples
+2024-02-07 23:28:44 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:28:44 | INFO | fairseq.tasks.fairseq_task | reuse_dataloader = True
+2024-02-07 23:28:44 | INFO | fairseq.tasks.fairseq_task | rebuild_batches = False
+2024-02-07 23:28:44 | INFO | fairseq.tasks.fairseq_task | creating new batches for epoch 30
+2024-02-07 23:28:45 | INFO | fairseq_cli.train | begin dry-run validation on "valid" subset
+2024-02-07 23:28:45 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:28:45 | INFO | fairseq.tasks.fairseq_task | reuse_dataloader = True
+2024-02-07 23:28:45 | INFO | fairseq.tasks.fairseq_task | rebuild_batches = False
+2024-02-07 23:28:45 | INFO | fairseq.tasks.fairseq_task | creating new batches for epoch 1
+2024-02-07 23:28:47 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:28:47 | INFO | fairseq.trainer | begin training epoch 30
+2024-02-07 23:28:47 | INFO | fairseq_cli.train | Start iterating over samples
+/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torch/nn/functional.py:5076: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+2024-02-07 23:28:56 | INFO | train_inner | epoch 030:     10 / 369 loss=3.381, nll_loss=1.863, ppl=3.64, wps=67098.3, ups=4.29, wpb=15606.4, bsz=749.6, num_updates=10700, lr=0.002, gnorm=1.544, loss_scale=0.125, train_wall=9, gb_free=29.5, wall=16
+2024-02-07 23:29:16 | INFO | train_inner | epoch 030:    110 / 369 loss=3.348, nll_loss=1.825, ppl=3.54, wps=76120.1, ups=5.06, wpb=15055.7, bsz=793.2, num_updates=10800, lr=0.00199999, gnorm=2.001, loss_scale=0.125, train_wall=20, gb_free=29.6, wall=36
+2024-02-07 23:29:36 | INFO | train_inner | epoch 030:    210 / 369 loss=3.41, nll_loss=1.896, ppl=3.72, wps=75882.2, ups=5.07, wpb=14973, bsz=792.7, num_updates=10900, lr=0.00199999, gnorm=2.245, loss_scale=0.125, train_wall=20, gb_free=29.6, wall=56
+2024-02-07 23:29:56 | INFO | train_inner | epoch 030:    310 / 369 loss=3.39, nll_loss=1.874, ppl=3.67, wps=77128.5, ups=5.08, wpb=15170.4, bsz=777.7, num_updates=11000, lr=0.00199999, gnorm=1.155, loss_scale=0.125, train_wall=19, gb_free=29.5, wall=75
+2024-02-07 23:30:07 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:30:07 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:30:09 | INFO | valid | epoch 030 | valid on 'valid' subset | loss 3.613 | nll_loss 1.979 | ppl 3.94 | wps 158014 | wpb 3189.1 | bsz 163.4 | num_updates 11059 | best_loss 3.576
+2024-02-07 23:30:09 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 30 @ 11059 updates
+2024-02-07 23:30:09 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint30.pt
+2024-02-07 23:30:10 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint30.pt
+2024-02-07 23:30:12 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint30.pt (epoch 30 @ 11059 updates, score 3.613) (writing took 2.4331586349289864 seconds)
+2024-02-07 23:30:12 | INFO | fairseq_cli.train | end of epoch 30 (average epoch stats below)
+2024-02-07 23:30:12 | INFO | train | epoch 030 | loss 3.384 | nll_loss 1.867 | ppl 3.65 | wps 71850.9 | ups 4.77 | wpb 15076.1 | bsz 783.3 | num_updates 11059 | lr 0.00199999 | gnorm 1.695 | loss_scale 0.125 | train_wall 79 | gb_free 29.6 | wall 91
+2024-02-07 23:30:12 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:30:12 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:30:12 | INFO | fairseq.trainer | begin training epoch 31
+2024-02-07 23:30:12 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:30:20 | INFO | train_inner | epoch 031:     41 / 369 loss=3.379, nll_loss=1.862, ppl=3.63, wps=62464.2, ups=4.16, wpb=15011.5, bsz=748.6, num_updates=11100, lr=0.00199999, gnorm=1.523, loss_scale=0.125, train_wall=19, gb_free=29.5, wall=99
+2024-02-07 23:30:39 | INFO | train_inner | epoch 031:    141 / 369 loss=3.413, nll_loss=1.9, ppl=3.73, wps=75996.1, ups=5.07, wpb=14996.8, bsz=802.5, num_updates=11200, lr=0.00199999, gnorm=3.437, loss_scale=0.125, train_wall=20, gb_free=29.5, wall=119
+2024-02-07 23:30:59 | INFO | train_inner | epoch 031:    241 / 369 loss=3.338, nll_loss=1.816, ppl=3.52, wps=76339.7, ups=5.06, wpb=15087, bsz=785.8, num_updates=11300, lr=0.00199998, gnorm=1.494, loss_scale=0.125, train_wall=20, gb_free=29.6, wall=139
+2024-02-07 23:31:19 | INFO | train_inner | epoch 031:    341 / 369 loss=3.422, nll_loss=1.913, ppl=3.77, wps=76825.3, ups=5.07, wpb=15142.2, bsz=773, num_updates=11400, lr=0.00199998, gnorm=1.898, loss_scale=0.125, train_wall=19, gb_free=29.6, wall=158
+2024-02-07 23:31:24 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:31:24 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:31:26 | INFO | valid | epoch 031 | valid on 'valid' subset | loss 3.569 | nll_loss 1.941 | ppl 3.84 | wps 156294 | wpb 3189.1 | bsz 163.4 | num_updates 11428 | best_loss 3.569
+2024-02-07 23:31:26 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 31 @ 11428 updates
+2024-02-07 23:31:26 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint31.pt
+2024-02-07 23:31:27 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint31.pt
+2024-02-07 23:31:30 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint31.pt (epoch 31 @ 11428 updates, score 3.569) (writing took 3.7606099620461464 seconds)
+2024-02-07 23:31:30 | INFO | fairseq_cli.train | end of epoch 31 (average epoch stats below)
+2024-02-07 23:31:30 | INFO | train | epoch 031 | loss 3.382 | nll_loss 1.866 | ppl 3.65 | wps 70854.1 | ups 4.7 | wpb 15076.1 | bsz 783.3 | num_updates 11428 | lr 0.00199998 | gnorm 2.15 | loss_scale 0.125 | train_wall 72 | gb_free 29.6 | wall 170
+2024-02-07 23:31:30 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:31:30 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:31:30 | INFO | fairseq.trainer | begin training epoch 32
+2024-02-07 23:31:30 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:31:44 | INFO | train_inner | epoch 032:     72 / 369 loss=3.287, nll_loss=1.757, ppl=3.38, wps=59540.4, ups=3.92, wpb=15184.2, bsz=790.9, num_updates=11500, lr=0.00199998, gnorm=0.985, loss_scale=0.125, train_wall=19, gb_free=29.5, wall=184
+2024-02-07 23:32:04 | INFO | train_inner | epoch 032:    172 / 369 loss=3.298, nll_loss=1.77, ppl=3.41, wps=76802.6, ups=5.07, wpb=15146.6, bsz=766.7, num_updates=11600, lr=0.00199998, gnorm=1.247, loss_scale=0.125, train_wall=19, gb_free=29.5, wall=204
+2024-02-07 23:32:24 | INFO | train_inner | epoch 032:    272 / 369 loss=3.352, nll_loss=1.834, ppl=3.57, wps=76019.9, ups=5.07, wpb=15007, bsz=769.6, num_updates=11700, lr=0.00199997, gnorm=1.258, loss_scale=0.125, train_wall=20, gb_free=29.5, wall=223
+2024-02-07 23:32:43 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 0.0625
+2024-02-07 23:32:43 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:32:43 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:32:45 | INFO | valid | epoch 032 | valid on 'valid' subset | loss 5.075 | nll_loss 3.728 | ppl 13.25 | wps 156022 | wpb 3189.1 | bsz 163.4 | num_updates 11796 | best_loss 3.569
+2024-02-07 23:32:45 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 32 @ 11796 updates
+2024-02-07 23:32:45 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint32.pt
+2024-02-07 23:32:46 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint32.pt
+2024-02-07 23:32:47 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint32.pt (epoch 32 @ 11796 updates, score 5.075) (writing took 2.4379064640961587 seconds)
+2024-02-07 23:32:47 | INFO | fairseq_cli.train | end of epoch 32 (average epoch stats below)
+2024-02-07 23:32:47 | INFO | train | epoch 032 | loss 3.349 | nll_loss 1.83 | ppl 3.55 | wps 71787.6 | ups 4.76 | wpb 15074.8 | bsz 782.8 | num_updates 11796 | lr 0.00199997 | gnorm 2.384 | loss_scale 0.0625 | train_wall 72 | gb_free 29.5 | wall 247
+2024-02-07 23:32:47 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:32:47 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:32:47 | INFO | fairseq.trainer | begin training epoch 33
+2024-02-07 23:32:47 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:32:48 | INFO | train_inner | epoch 033:      4 / 369 loss=3.511, nll_loss=2.018, ppl=4.05, wps=61398.1, ups=4.1, wpb=14992.7, bsz=814.4, num_updates=11800, lr=0.00199997, gnorm=6.965, loss_scale=0.0625, train_wall=20, gb_free=29.6, wall=248
+2024-02-07 23:33:08 | INFO | train_inner | epoch 033:    104 / 369 loss=3.493, nll_loss=1.988, ppl=3.97, wps=76779.9, ups=5.05, wpb=15214.6, bsz=808.6, num_updates=11900, lr=0.00199997, gnorm=4.357, loss_scale=0.0625, train_wall=20, gb_free=29.6, wall=268
+2024-02-07 23:33:28 | INFO | train_inner | epoch 033:    204 / 369 loss=3.255, nll_loss=1.722, ppl=3.3, wps=76439.4, ups=5.06, wpb=15114.6, bsz=767.7, num_updates=12000, lr=0.00199996, gnorm=0.853, loss_scale=0.0625, train_wall=20, gb_free=29.6, wall=287
+2024-02-07 23:33:48 | INFO | train_inner | epoch 033:    304 / 369 loss=3.383, nll_loss=1.871, ppl=3.66, wps=76035.1, ups=5.08, wpb=14961.4, bsz=773.1, num_updates=12100, lr=0.00199996, gnorm=1.607, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=307
+2024-02-07 23:34:00 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:34:00 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:34:02 | INFO | valid | epoch 033 | valid on 'valid' subset | loss 3.677 | nll_loss 2.071 | ppl 4.2 | wps 159111 | wpb 3189.1 | bsz 163.4 | num_updates 12165 | best_loss 3.569
+2024-02-07 23:34:02 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 33 @ 12165 updates
+2024-02-07 23:34:02 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint33.pt
+2024-02-07 23:34:03 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint33.pt
+2024-02-07 23:34:05 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint33.pt (epoch 33 @ 12165 updates, score 3.677) (writing took 2.3935471249278635 seconds)
+2024-02-07 23:34:05 | INFO | fairseq_cli.train | end of epoch 33 (average epoch stats below)
+2024-02-07 23:34:05 | INFO | train | epoch 033 | loss 3.409 | nll_loss 1.898 | ppl 3.73 | wps 72056.2 | ups 4.78 | wpb 15076.1 | bsz 783.3 | num_updates 12165 | lr 0.00199996 | gnorm 2.585 | loss_scale 0.0625 | train_wall 72 | gb_free 29.6 | wall 324
+2024-02-07 23:34:05 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:34:05 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:34:05 | INFO | fairseq.trainer | begin training epoch 34
+2024-02-07 23:34:05 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:34:12 | INFO | train_inner | epoch 034:     35 / 369 loss=3.404, nll_loss=1.895, ppl=3.72, wps=62400.2, ups=4.16, wpb=15005.5, bsz=781.8, num_updates=12200, lr=0.00199996, gnorm=2.271, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=331
+2024-02-07 23:34:31 | INFO | train_inner | epoch 034:    135 / 369 loss=3.245, nll_loss=1.711, ppl=3.27, wps=77211.8, ups=5.07, wpb=15224.9, bsz=797.8, num_updates=12300, lr=0.00199995, gnorm=1.225, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=351
+2024-02-07 23:34:51 | INFO | train_inner | epoch 034:    235 / 369 loss=3.298, nll_loss=1.773, ppl=3.42, wps=76236.6, ups=5.08, wpb=14995.4, bsz=775.9, num_updates=12400, lr=0.00199995, gnorm=1.188, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=371
+2024-02-07 23:35:11 | INFO | train_inner | epoch 034:    335 / 369 loss=3.324, nll_loss=1.803, ppl=3.49, wps=76464.9, ups=5.07, wpb=15076.2, bsz=796.7, num_updates=12500, lr=0.00199994, gnorm=1.766, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=390
+2024-02-07 23:35:17 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:35:17 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:35:19 | INFO | valid | epoch 034 | valid on 'valid' subset | loss 3.553 | nll_loss 1.924 | ppl 3.8 | wps 158406 | wpb 3189.1 | bsz 163.4 | num_updates 12534 | best_loss 3.553
+2024-02-07 23:35:19 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 34 @ 12534 updates
+2024-02-07 23:35:19 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint34.pt
+2024-02-07 23:35:20 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint34.pt
+2024-02-07 23:35:23 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint34.pt (epoch 34 @ 12534 updates, score 3.553) (writing took 3.7975039510056376 seconds)
+2024-02-07 23:35:23 | INFO | fairseq_cli.train | end of epoch 34 (average epoch stats below)
+2024-02-07 23:35:23 | INFO | train | epoch 034 | loss 3.293 | nll_loss 1.767 | ppl 3.4 | wps 70900.9 | ups 4.7 | wpb 15076.1 | bsz 783.3 | num_updates 12534 | lr 0.00199994 | gnorm 1.489 | loss_scale 0.0625 | train_wall 72 | gb_free 29.6 | wall 403
+2024-02-07 23:35:23 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:35:23 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:35:23 | INFO | fairseq.trainer | begin training epoch 35
+2024-02-07 23:35:23 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:35:36 | INFO | train_inner | epoch 035:     66 / 369 loss=3.246, nll_loss=1.713, ppl=3.28, wps=59052.9, ups=3.92, wpb=15062.3, bsz=774, num_updates=12600, lr=0.00199994, gnorm=1.161, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=416
+2024-02-07 23:35:56 | INFO | train_inner | epoch 035:    166 / 369 loss=3.263, nll_loss=1.734, ppl=3.33, wps=76456.8, ups=5.06, wpb=15118.7, bsz=791.5, num_updates=12700, lr=0.00199993, gnorm=2.527, loss_scale=0.0625, train_wall=20, gb_free=29.6, wall=436
+2024-02-07 23:36:16 | INFO | train_inner | epoch 035:    266 / 369 loss=3.38, nll_loss=1.866, ppl=3.65, wps=76855, ups=5.09, wpb=15091.6, bsz=774.7, num_updates=12800, lr=0.00199993, gnorm=2.68, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=455
+2024-02-07 23:36:35 | INFO | train_inner | epoch 035:    366 / 369 loss=3.311, nll_loss=1.79, ppl=3.46, wps=76717, ups=5.1, wpb=15033, bsz=779.2, num_updates=12900, lr=0.00199992, gnorm=1.658, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=475
+2024-02-07 23:36:36 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:36:36 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:36:38 | INFO | valid | epoch 035 | valid on 'valid' subset | loss 3.556 | nll_loss 1.928 | ppl 3.8 | wps 159514 | wpb 3189.1 | bsz 163.4 | num_updates 12903 | best_loss 3.553
+2024-02-07 23:36:38 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 35 @ 12903 updates
+2024-02-07 23:36:38 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint35.pt
+2024-02-07 23:36:39 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint35.pt
+2024-02-07 23:36:40 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint35.pt (epoch 35 @ 12903 updates, score 3.556) (writing took 2.419537988025695 seconds)
+2024-02-07 23:36:40 | INFO | fairseq_cli.train | end of epoch 35 (average epoch stats below)
+2024-02-07 23:36:40 | INFO | train | epoch 035 | loss 3.296 | nll_loss 1.771 | ppl 3.41 | wps 72186.5 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 12903 | lr 0.00199992 | gnorm 2.083 | loss_scale 0.0625 | train_wall 72 | gb_free 29.6 | wall 480
+2024-02-07 23:36:40 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:36:40 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:36:40 | INFO | fairseq.trainer | begin training epoch 36
+2024-02-07 23:36:40 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:36:59 | INFO | train_inner | epoch 036:     97 / 369 loss=3.214, nll_loss=1.677, ppl=3.2, wps=62354.1, ups=4.15, wpb=15033.8, bsz=768.7, num_updates=13000, lr=0.00199992, gnorm=1.129, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=499
+2024-02-07 23:37:19 | INFO | train_inner | epoch 036:    197 / 369 loss=3.269, nll_loss=1.741, ppl=3.34, wps=76329.8, ups=5.07, wpb=15045.8, bsz=799.4, num_updates=13100, lr=0.00199991, gnorm=2.004, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=519
+2024-02-07 23:37:39 | INFO | train_inner | epoch 036:    297 / 369 loss=3.37, nll_loss=1.857, ppl=3.62, wps=76725.8, ups=5.09, wpb=15088.2, bsz=768, num_updates=13200, lr=0.00199991, gnorm=1.916, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=538
+2024-02-07 23:37:53 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:37:53 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:37:55 | INFO | valid | epoch 036 | valid on 'valid' subset | loss 3.574 | nll_loss 1.952 | ppl 3.87 | wps 158214 | wpb 3189.1 | bsz 163.4 | num_updates 13272 | best_loss 3.553
+2024-02-07 23:37:55 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 36 @ 13272 updates
+2024-02-07 23:37:55 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint36.pt
+2024-02-07 23:37:56 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint36.pt
+2024-02-07 23:37:57 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint36.pt (epoch 36 @ 13272 updates, score 3.574) (writing took 2.4901498490944505 seconds)
+2024-02-07 23:37:57 | INFO | fairseq_cli.train | end of epoch 36 (average epoch stats below)
+2024-02-07 23:37:57 | INFO | train | epoch 036 | loss 3.286 | nll_loss 1.761 | ppl 3.39 | wps 72074.7 | ups 4.78 | wpb 15076.1 | bsz 783.3 | num_updates 13272 | lr 0.0019999 | gnorm 1.687 | loss_scale 0.0625 | train_wall 72 | gb_free 29.6 | wall 557
+2024-02-07 23:37:57 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:37:57 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:37:57 | INFO | fairseq.trainer | begin training epoch 37
+2024-02-07 23:37:57 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:38:03 | INFO | train_inner | epoch 037:     28 / 369 loss=3.264, nll_loss=1.736, ppl=3.33, wps=62217, ups=4.13, wpb=15072.3, bsz=795.5, num_updates=13300, lr=0.0019999, gnorm=1.824, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=563
+2024-02-07 23:38:23 | INFO | train_inner | epoch 037:    128 / 369 loss=3.381, nll_loss=1.866, ppl=3.64, wps=77016, ups=5.1, wpb=15107.7, bsz=761.6, num_updates=13400, lr=0.0019999, gnorm=5.194, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=582
+2024-02-07 23:38:42 | INFO | train_inner | epoch 037:    228 / 369 loss=3.242, nll_loss=1.71, ppl=3.27, wps=76544.8, ups=5.08, wpb=15074.1, bsz=790.7, num_updates=13500, lr=0.00199989, gnorm=2.617, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=602
+2024-02-07 23:39:02 | INFO | train_inner | epoch 037:    328 / 369 loss=3.263, nll_loss=1.735, ppl=3.33, wps=76409, ups=5.07, wpb=15057, bsz=788.2, num_updates=13600, lr=0.00199988, gnorm=1.791, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=622
+2024-02-07 23:39:10 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:39:10 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:39:12 | INFO | valid | epoch 037 | valid on 'valid' subset | loss 3.577 | nll_loss 1.955 | ppl 3.88 | wps 160083 | wpb 3189.1 | bsz 163.4 | num_updates 13641 | best_loss 3.553
+2024-02-07 23:39:12 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 37 @ 13641 updates
+2024-02-07 23:39:12 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint37.pt
+2024-02-07 23:39:13 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint37.pt
+2024-02-07 23:39:14 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint37.pt (epoch 37 @ 13641 updates, score 3.577) (writing took 2.363250403897837 seconds)
+2024-02-07 23:39:14 | INFO | fairseq_cli.train | end of epoch 37 (average epoch stats below)
+2024-02-07 23:39:14 | INFO | train | epoch 037 | loss 3.284 | nll_loss 1.758 | ppl 3.38 | wps 72254.1 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 13641 | lr 0.00199988 | gnorm 3.14 | loss_scale 0.0625 | train_wall 72 | gb_free 29.5 | wall 634
+2024-02-07 23:39:14 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:39:14 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:39:14 | INFO | fairseq.trainer | begin training epoch 38
+2024-02-07 23:39:14 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:39:26 | INFO | train_inner | epoch 038:     59 / 369 loss=3.229, nll_loss=1.696, ppl=3.24, wps=62787.2, ups=4.16, wpb=15100, bsz=789.4, num_updates=13700, lr=0.00199988, gnorm=2.261, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=646
+2024-02-07 23:39:46 | INFO | train_inner | epoch 038:    159 / 369 loss=3.169, nll_loss=1.627, ppl=3.09, wps=76962.5, ups=5.07, wpb=15180.4, bsz=806.5, num_updates=13800, lr=0.00199987, gnorm=1.078, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=665
+2024-02-07 23:40:05 | INFO | train_inner | epoch 038:    259 / 369 loss=3.244, nll_loss=1.714, ppl=3.28, wps=76891.7, ups=5.08, wpb=15131.2, bsz=779.3, num_updates=13900, lr=0.00199986, gnorm=1.362, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=685
+2024-02-07 23:40:25 | INFO | train_inner | epoch 038:    359 / 369 loss=3.264, nll_loss=1.737, ppl=3.33, wps=76276.8, ups=5.1, wpb=14950, bsz=769.8, num_updates=14000, lr=0.00199986, gnorm=1.293, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=705
+2024-02-07 23:40:27 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:40:27 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:40:29 | INFO | valid | epoch 038 | valid on 'valid' subset | loss 3.532 | nll_loss 1.908 | ppl 3.75 | wps 160457 | wpb 3189.1 | bsz 163.4 | num_updates 14010 | best_loss 3.532
+2024-02-07 23:40:29 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 38 @ 14010 updates
+2024-02-07 23:40:29 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint38.pt
+2024-02-07 23:40:30 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint38.pt
+2024-02-07 23:40:33 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint38.pt (epoch 38 @ 14010 updates, score 3.532) (writing took 3.755738007836044 seconds)
+2024-02-07 23:40:33 | INFO | fairseq_cli.train | end of epoch 38 (average epoch stats below)
+2024-02-07 23:40:33 | INFO | train | epoch 038 | loss 3.224 | nll_loss 1.691 | ppl 3.23 | wps 71051.2 | ups 4.71 | wpb 15076.1 | bsz 783.3 | num_updates 14010 | lr 0.00199986 | gnorm 1.287 | loss_scale 0.0625 | train_wall 72 | gb_free 29.6 | wall 712
+2024-02-07 23:40:33 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:40:33 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:40:33 | INFO | fairseq.trainer | begin training epoch 39
+2024-02-07 23:40:33 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:40:50 | INFO | train_inner | epoch 039:     90 / 369 loss=3.195, nll_loss=1.657, ppl=3.15, wps=59441.1, ups=3.93, wpb=15129.5, bsz=781.6, num_updates=14100, lr=0.00199985, gnorm=1.776, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=730
+2024-02-07 23:41:10 | INFO | train_inner | epoch 039:    190 / 369 loss=3.234, nll_loss=1.701, ppl=3.25, wps=76333.1, ups=5.07, wpb=15052.8, bsz=795.4, num_updates=14200, lr=0.00199984, gnorm=2.573, loss_scale=0.0625, train_wall=20, gb_free=29.6, wall=750
+2024-02-07 23:41:29 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 0.03125
+2024-02-07 23:41:30 | INFO | train_inner | epoch 039:    291 / 369 loss=3.436, nll_loss=1.933, ppl=3.82, wps=75677.6, ups=5.03, wpb=15031.3, bsz=768.6, num_updates=14300, lr=0.00199983, gnorm=7.364, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=770
+2024-02-07 23:41:45 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:41:45 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:41:47 | INFO | valid | epoch 039 | valid on 'valid' subset | loss 3.537 | nll_loss 1.905 | ppl 3.75 | wps 160275 | wpb 3189.1 | bsz 163.4 | num_updates 14378 | best_loss 3.532
+2024-02-07 23:41:47 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 39 @ 14378 updates
+2024-02-07 23:41:47 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint39.pt
+2024-02-07 23:41:48 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint39.pt
+2024-02-07 23:41:50 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint39.pt (epoch 39 @ 14378 updates, score 3.537) (writing took 2.372287207050249 seconds)
+2024-02-07 23:41:50 | INFO | fairseq_cli.train | end of epoch 39 (average epoch stats below)
+2024-02-07 23:41:50 | INFO | train | epoch 039 | loss 3.299 | nll_loss 1.777 | ppl 3.43 | wps 71976.5 | ups 4.77 | wpb 15078.8 | bsz 783.2 | num_updates 14378 | lr 0.00199983 | gnorm 3.698 | loss_scale 0.0312 | train_wall 72 | gb_free 29.7 | wall 789
+2024-02-07 23:41:50 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:41:50 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:41:50 | INFO | fairseq.trainer | begin training epoch 40
+2024-02-07 23:41:50 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:41:54 | INFO | train_inner | epoch 040:     22 / 369 loss=3.303, nll_loss=1.781, ppl=3.44, wps=62651.3, ups=4.15, wpb=15081.4, bsz=780.2, num_updates=14400, lr=0.00199983, gnorm=2.647, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=794
+2024-02-07 23:42:14 | INFO | train_inner | epoch 040:    122 / 369 loss=3.197, nll_loss=1.659, ppl=3.16, wps=76924.5, ups=5.11, wpb=15064.6, bsz=761.6, num_updates=14500, lr=0.00199982, gnorm=1.822, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=813
+2024-02-07 23:42:34 | INFO | train_inner | epoch 040:    222 / 369 loss=3.393, nll_loss=1.886, ppl=3.7, wps=76319.9, ups=5.04, wpb=15150.5, bsz=795.7, num_updates=14600, lr=0.00199981, gnorm=12.754, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=833
+2024-02-07 23:42:53 | INFO | train_inner | epoch 040:    322 / 369 loss=3.47, nll_loss=1.971, ppl=3.92, wps=75618.6, ups=5.03, wpb=15018.9, bsz=799.8, num_updates=14700, lr=0.0019998, gnorm=4.55, loss_scale=0.0312, train_wall=20, gb_free=29.5, wall=853
+2024-02-07 23:43:03 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:43:03 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:43:05 | INFO | valid | epoch 040 | valid on 'valid' subset | loss 3.521 | nll_loss 1.899 | ppl 3.73 | wps 158951 | wpb 3189.1 | bsz 163.4 | num_updates 14747 | best_loss 3.521
+2024-02-07 23:43:05 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 40 @ 14747 updates
+2024-02-07 23:43:05 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint40.pt
+2024-02-07 23:43:06 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint40.pt
+2024-02-07 23:43:08 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint40.pt (epoch 40 @ 14747 updates, score 3.521) (writing took 3.7777968789450824 seconds)
+2024-02-07 23:43:08 | INFO | fairseq_cli.train | end of epoch 40 (average epoch stats below)
+2024-02-07 23:43:08 | INFO | train | epoch 040 | loss 3.331 | nll_loss 1.813 | ppl 3.51 | wps 70737.3 | ups 4.69 | wpb 15076.1 | bsz 783.3 | num_updates 14747 | lr 0.0019998 | gnorm 5.553 | loss_scale 0.0312 | train_wall 72 | gb_free 29.6 | wall 868
+2024-02-07 23:43:08 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:43:08 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:43:08 | INFO | fairseq.trainer | begin training epoch 41
+2024-02-07 23:43:08 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:43:19 | INFO | train_inner | epoch 041:     53 / 369 loss=3.335, nll_loss=1.816, ppl=3.52, wps=59205.2, ups=3.93, wpb=15048.1, bsz=783, num_updates=14800, lr=0.00199979, gnorm=5.203, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=878
+2024-02-07 23:43:39 | INFO | train_inner | epoch 041:    153 / 369 loss=3.279, nll_loss=1.751, ppl=3.37, wps=76492.4, ups=5.09, wpb=15027.6, bsz=760.2, num_updates=14900, lr=0.00199978, gnorm=2.034, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=898
+2024-02-07 23:43:58 | INFO | train_inner | epoch 041:    253 / 369 loss=3.14, nll_loss=1.595, ppl=3.02, wps=76205.1, ups=5.06, wpb=15045.5, bsz=826.6, num_updates=15000, lr=0.00199977, gnorm=1.172, loss_scale=0.0312, train_wall=20, gb_free=29.5, wall=918
+2024-02-07 23:44:18 | INFO | train_inner | epoch 041:    353 / 369 loss=3.246, nll_loss=1.718, ppl=3.29, wps=77293.7, ups=5.1, wpb=15170.2, bsz=764.3, num_updates=15100, lr=0.00199977, gnorm=2.355, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=937
+2024-02-07 23:44:21 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:44:21 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:44:23 | INFO | valid | epoch 041 | valid on 'valid' subset | loss 3.542 | nll_loss 1.923 | ppl 3.79 | wps 158919 | wpb 3189.1 | bsz 163.4 | num_updates 15116 | best_loss 3.521
+2024-02-07 23:44:23 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 41 @ 15116 updates
+2024-02-07 23:44:23 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint41.pt
+2024-02-07 23:44:24 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint41.pt
+2024-02-07 23:44:25 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint41.pt (epoch 41 @ 15116 updates, score 3.542) (writing took 2.422257084865123 seconds)
+2024-02-07 23:44:25 | INFO | fairseq_cli.train | end of epoch 41 (average epoch stats below)
+2024-02-07 23:44:25 | INFO | train | epoch 041 | loss 3.251 | nll_loss 1.721 | ppl 3.3 | wps 72260.3 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 15116 | lr 0.00199976 | gnorm 2.787 | loss_scale 0.0312 | train_wall 72 | gb_free 29.6 | wall 945
+2024-02-07 23:44:25 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:44:25 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:44:25 | INFO | fairseq.trainer | begin training epoch 42
+2024-02-07 23:44:25 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:44:42 | INFO | train_inner | epoch 042:     84 / 369 loss=3.168, nll_loss=1.627, ppl=3.09, wps=62539.5, ups=4.16, wpb=15047.2, bsz=773.9, num_updates=15200, lr=0.00199976, gnorm=1.374, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=962
+2024-02-07 23:45:02 | INFO | train_inner | epoch 042:    184 / 369 loss=3.174, nll_loss=1.633, ppl=3.1, wps=76738.5, ups=5.09, wpb=15070.1, bsz=781, num_updates=15300, lr=0.00199975, gnorm=1.246, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=981
+2024-02-07 23:45:21 | INFO | train_inner | epoch 042:    284 / 369 loss=3.169, nll_loss=1.63, ppl=3.1, wps=76950, ups=5.07, wpb=15184.5, bsz=800.7, num_updates=15400, lr=0.00199974, gnorm=1.173, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=1001
+2024-02-07 23:45:38 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:45:38 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:45:40 | INFO | valid | epoch 042 | valid on 'valid' subset | loss 3.534 | nll_loss 1.91 | ppl 3.76 | wps 159146 | wpb 3189.1 | bsz 163.4 | num_updates 15485 | best_loss 3.521
+2024-02-07 23:45:40 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 42 @ 15485 updates
+2024-02-07 23:45:40 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint42.pt
+2024-02-07 23:45:41 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint42.pt
+2024-02-07 23:45:42 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint42.pt (epoch 42 @ 15485 updates, score 3.534) (writing took 2.391808988992125 seconds)
+2024-02-07 23:45:42 | INFO | fairseq_cli.train | end of epoch 42 (average epoch stats below)
+2024-02-07 23:45:42 | INFO | train | epoch 042 | loss 3.178 | nll_loss 1.639 | ppl 3.11 | wps 72325.9 | ups 4.8 | wpb 15076.1 | bsz 783.3 | num_updates 15485 | lr 0.00199973 | gnorm 1.467 | loss_scale 0.0312 | train_wall 72 | gb_free 29.6 | wall 1022
+2024-02-07 23:45:42 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:45:42 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:45:42 | INFO | fairseq.trainer | begin training epoch 43
+2024-02-07 23:45:42 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:45:45 | INFO | train_inner | epoch 043:     15 / 369 loss=3.24, nll_loss=1.712, ppl=3.28, wps=62487.5, ups=4.17, wpb=14986.3, bsz=770.2, num_updates=15500, lr=0.00199973, gnorm=4.194, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=1025
+2024-02-07 23:46:05 | INFO | train_inner | epoch 043:    115 / 369 loss=3.378, nll_loss=1.866, ppl=3.65, wps=76758.4, ups=5.11, wpb=15018, bsz=775.3, num_updates=15600, lr=0.00199972, gnorm=4.609, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=1044
+2024-02-07 23:46:25 | INFO | train_inner | epoch 043:    215 / 369 loss=3.165, nll_loss=1.624, ppl=3.08, wps=76819.3, ups=5.08, wpb=15127.8, bsz=781.6, num_updates=15700, lr=0.00199971, gnorm=1.571, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=1064
+2024-02-07 23:46:44 | INFO | train_inner | epoch 043:    315 / 369 loss=3.223, nll_loss=1.692, ppl=3.23, wps=77056.4, ups=5.09, wpb=15141.6, bsz=783, num_updates=15800, lr=0.0019997, gnorm=2.031, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=1084
+2024-02-07 23:46:52 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 0.015625
+2024-02-07 23:46:55 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:46:55 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:46:57 | INFO | valid | epoch 043 | valid on 'valid' subset | loss 3.553 | nll_loss 1.931 | ppl 3.81 | wps 159794 | wpb 3189.1 | bsz 163.4 | num_updates 15853 | best_loss 3.521
+2024-02-07 23:46:57 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 43 @ 15853 updates
+2024-02-07 23:46:57 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint43.pt
+2024-02-07 23:46:58 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint43.pt
+2024-02-07 23:46:59 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint43.pt (epoch 43 @ 15853 updates, score 3.553) (writing took 2.383402829989791 seconds)
+2024-02-07 23:46:59 | INFO | fairseq_cli.train | end of epoch 43 (average epoch stats below)
+2024-02-07 23:46:59 | INFO | train | epoch 043 | loss 3.253 | nll_loss 1.725 | ppl 3.31 | wps 72149.9 | ups 4.79 | wpb 15073.9 | bsz 783.6 | num_updates 15853 | lr 0.00199969 | gnorm 3.22 | loss_scale 0.0156 | train_wall 72 | gb_free 29.5 | wall 1099
+2024-02-07 23:46:59 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:46:59 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:46:59 | INFO | fairseq.trainer | begin training epoch 44
+2024-02-07 23:46:59 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:47:08 | INFO | train_inner | epoch 044:     47 / 369 loss=3.204, nll_loss=1.669, ppl=3.18, wps=61972.2, ups=4.12, wpb=15028.4, bsz=795.2, num_updates=15900, lr=0.00199969, gnorm=2.22, loss_scale=0.0156, train_wall=20, gb_free=29.5, wall=1108
+2024-02-07 23:47:28 | INFO | train_inner | epoch 044:    147 / 369 loss=3.206, nll_loss=1.67, ppl=3.18, wps=75532.6, ups=5.04, wpb=14995.4, bsz=795.4, num_updates=16000, lr=0.00199968, gnorm=1.99, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=1128
+2024-02-07 23:47:48 | INFO | train_inner | epoch 044:    247 / 369 loss=3.189, nll_loss=1.651, ppl=3.14, wps=77102.9, ups=5.09, wpb=15136.4, bsz=788.2, num_updates=16100, lr=0.00199966, gnorm=1.83, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1148
+2024-02-07 23:48:08 | INFO | train_inner | epoch 044:    347 / 369 loss=3.379, nll_loss=1.87, ppl=3.65, wps=76743.5, ups=5.08, wpb=15116.5, bsz=769.6, num_updates=16200, lr=0.00199965, gnorm=4.351, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1167
+2024-02-07 23:48:12 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:48:12 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:48:14 | INFO | valid | epoch 044 | valid on 'valid' subset | loss 3.535 | nll_loss 1.919 | ppl 3.78 | wps 159949 | wpb 3189.1 | bsz 163.4 | num_updates 16222 | best_loss 3.521
+2024-02-07 23:48:14 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 44 @ 16222 updates
+2024-02-07 23:48:14 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint44.pt
+2024-02-07 23:48:15 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint44.pt
+2024-02-07 23:48:16 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint44.pt (epoch 44 @ 16222 updates, score 3.535) (writing took 2.3782842541113496 seconds)
+2024-02-07 23:48:16 | INFO | fairseq_cli.train | end of epoch 44 (average epoch stats below)
+2024-02-07 23:48:16 | INFO | train | epoch 044 | loss 3.249 | nll_loss 1.719 | ppl 3.29 | wps 72193.4 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 16222 | lr 0.00199965 | gnorm 2.707 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 1176
+2024-02-07 23:48:16 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:48:16 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:48:16 | INFO | fairseq.trainer | begin training epoch 45
+2024-02-07 23:48:16 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:48:32 | INFO | train_inner | epoch 045:     78 / 369 loss=3.298, nll_loss=1.773, ppl=3.42, wps=62263, ups=4.17, wpb=14944.4, bsz=778.6, num_updates=16300, lr=0.00199964, gnorm=4.302, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1191
+2024-02-07 23:48:51 | INFO | train_inner | epoch 045:    178 / 369 loss=3.151, nll_loss=1.606, ppl=3.04, wps=76993.6, ups=5.09, wpb=15128.5, bsz=781.5, num_updates=16400, lr=0.00199963, gnorm=1.57, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1211
+2024-02-07 23:49:11 | INFO | train_inner | epoch 045:    278 / 369 loss=3.192, nll_loss=1.654, ppl=3.15, wps=77015.7, ups=5.09, wpb=15120.7, bsz=790.7, num_updates=16500, lr=0.00199962, gnorm=3.058, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1231
+2024-02-07 23:49:29 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:49:29 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:49:31 | INFO | valid | epoch 045 | valid on 'valid' subset | loss 3.605 | nll_loss 1.999 | ppl 4 | wps 159300 | wpb 3189.1 | bsz 163.4 | num_updates 16591 | best_loss 3.521
+2024-02-07 23:49:31 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 45 @ 16591 updates
+2024-02-07 23:49:31 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint45.pt
+2024-02-07 23:49:32 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint45.pt
+2024-02-07 23:49:33 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint45.pt (epoch 45 @ 16591 updates, score 3.605) (writing took 2.4001012470107526 seconds)
+2024-02-07 23:49:33 | INFO | fairseq_cli.train | end of epoch 45 (average epoch stats below)
+2024-02-07 23:49:33 | INFO | train | epoch 045 | loss 3.221 | nll_loss 1.687 | ppl 3.22 | wps 72358.7 | ups 4.8 | wpb 15076.1 | bsz 783.3 | num_updates 16591 | lr 0.00199961 | gnorm 3.007 | loss_scale 0.0156 | train_wall 72 | gb_free 29.5 | wall 1253
+2024-02-07 23:49:33 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:49:33 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:49:33 | INFO | fairseq.trainer | begin training epoch 46
+2024-02-07 23:49:33 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:49:35 | INFO | train_inner | epoch 046:      9 / 369 loss=3.252, nll_loss=1.724, ppl=3.3, wps=62612.2, ups=4.16, wpb=15034, bsz=775.1, num_updates=16600, lr=0.00199961, gnorm=3.234, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1255
+2024-02-07 23:49:55 | INFO | train_inner | epoch 046:    109 / 369 loss=3.237, nll_loss=1.705, ppl=3.26, wps=75925.1, ups=5.05, wpb=15020.1, bsz=792.3, num_updates=16700, lr=0.0019996, gnorm=3.284, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=1274
+2024-02-07 23:50:14 | INFO | train_inner | epoch 046:    209 / 369 loss=3.207, nll_loss=1.671, ppl=3.18, wps=77008.5, ups=5.09, wpb=15141.8, bsz=772.6, num_updates=16800, lr=0.00199958, gnorm=2.119, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1294
+2024-02-07 23:50:34 | INFO | train_inner | epoch 046:    309 / 369 loss=3.27, nll_loss=1.745, ppl=3.35, wps=76619.4, ups=5.06, wpb=15140.6, bsz=792.5, num_updates=16900, lr=0.00199957, gnorm=3.532, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=1314
+2024-02-07 23:50:46 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:50:46 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:50:48 | INFO | valid | epoch 046 | valid on 'valid' subset | loss 3.537 | nll_loss 1.922 | ppl 3.79 | wps 159837 | wpb 3189.1 | bsz 163.4 | num_updates 16960 | best_loss 3.521
+2024-02-07 23:50:48 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 46 @ 16960 updates
+2024-02-07 23:50:48 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint46.pt
+2024-02-07 23:50:49 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint46.pt
+2024-02-07 23:50:50 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint46.pt (epoch 46 @ 16960 updates, score 3.537) (writing took 2.3778383969329298 seconds)
+2024-02-07 23:50:50 | INFO | fairseq_cli.train | end of epoch 46 (average epoch stats below)
+2024-02-07 23:50:50 | INFO | train | epoch 046 | loss 3.244 | nll_loss 1.714 | ppl 3.28 | wps 72088.9 | ups 4.78 | wpb 15076.1 | bsz 783.3 | num_updates 16960 | lr 0.00199956 | gnorm 2.945 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 1330
+2024-02-07 23:50:50 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:50:50 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:50:50 | INFO | fairseq.trainer | begin training epoch 47
+2024-02-07 23:50:50 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:50:58 | INFO | train_inner | epoch 047:     40 / 369 loss=3.231, nll_loss=1.699, ppl=3.25, wps=62321.1, ups=4.16, wpb=14998.5, bsz=777.9, num_updates=17000, lr=0.00199956, gnorm=10.993, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1338
+2024-02-07 23:51:18 | INFO | train_inner | epoch 047:    140 / 369 loss=3.186, nll_loss=1.646, ppl=3.13, wps=77417.6, ups=5.09, wpb=15201.8, bsz=770.8, num_updates=17100, lr=0.00199955, gnorm=3.682, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1357
+2024-02-07 23:51:38 | INFO | train_inner | epoch 047:    240 / 369 loss=3.289, nll_loss=1.765, ppl=3.4, wps=76900.8, ups=5.09, wpb=15110.5, bsz=790.4, num_updates=17200, lr=0.00199953, gnorm=5.621, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1377
+2024-02-07 23:51:57 | INFO | train_inner | epoch 047:    340 / 369 loss=3.166, nll_loss=1.626, ppl=3.09, wps=76393.1, ups=5.08, wpb=15032.6, bsz=795.8, num_updates=17300, lr=0.00199952, gnorm=1.644, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1397
+2024-02-07 23:52:03 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:52:03 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:52:05 | INFO | valid | epoch 047 | valid on 'valid' subset | loss 3.543 | nll_loss 1.92 | ppl 3.78 | wps 150069 | wpb 3189.1 | bsz 163.4 | num_updates 17329 | best_loss 3.521
+2024-02-07 23:52:05 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 47 @ 17329 updates
+2024-02-07 23:52:05 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint47.pt
+2024-02-07 23:52:06 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint47.pt
+2024-02-07 23:52:07 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint47.pt (epoch 47 @ 17329 updates, score 3.543) (writing took 2.3967989028897136 seconds)
+2024-02-07 23:52:07 | INFO | fairseq_cli.train | end of epoch 47 (average epoch stats below)
+2024-02-07 23:52:07 | INFO | train | epoch 047 | loss 3.214 | nll_loss 1.679 | ppl 3.2 | wps 72249.8 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 17329 | lr 0.00199952 | gnorm 5.882 | loss_scale 0.0156 | train_wall 72 | gb_free 29.5 | wall 1407
+2024-02-07 23:52:07 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:52:07 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:52:07 | INFO | fairseq.trainer | begin training epoch 48
+2024-02-07 23:52:07 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:52:21 | INFO | train_inner | epoch 048:     71 / 369 loss=3.248, nll_loss=1.717, ppl=3.29, wps=61831.5, ups=4.13, wpb=14968.4, bsz=780.2, num_updates=17400, lr=0.00199951, gnorm=6.858, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1421
+2024-02-07 23:52:41 | INFO | train_inner | epoch 048:    171 / 369 loss=3.494, nll_loss=1.999, ppl=4, wps=77050.8, ups=5.09, wpb=15148.2, bsz=790.5, num_updates=17500, lr=0.00199949, gnorm=9.047, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1441
+2024-02-07 23:53:01 | INFO | train_inner | epoch 048:    271 / 369 loss=3.193, nll_loss=1.655, ppl=3.15, wps=77496.1, ups=5.13, wpb=15092.3, bsz=776.3, num_updates=17600, lr=0.00199948, gnorm=2.034, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1460
+2024-02-07 23:53:20 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:53:20 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:53:22 | INFO | valid | epoch 048 | valid on 'valid' subset | loss 3.519 | nll_loss 1.899 | ppl 3.73 | wps 161002 | wpb 3189.1 | bsz 163.4 | num_updates 17698 | best_loss 3.519
+2024-02-07 23:53:22 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 48 @ 17698 updates
+2024-02-07 23:53:22 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint48.pt
+2024-02-07 23:53:23 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint48.pt
+2024-02-07 23:53:25 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint48.pt (epoch 48 @ 17698 updates, score 3.519) (writing took 3.7501489019487053 seconds)
+2024-02-07 23:53:25 | INFO | fairseq_cli.train | end of epoch 48 (average epoch stats below)
+2024-02-07 23:53:25 | INFO | train | epoch 048 | loss 3.274 | nll_loss 1.748 | ppl 3.36 | wps 71199.4 | ups 4.72 | wpb 15076.1 | bsz 783.3 | num_updates 17698 | lr 0.00199947 | gnorm 4.934 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 1485
+2024-02-07 23:53:25 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:53:25 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:53:25 | INFO | fairseq.trainer | begin training epoch 49
+2024-02-07 23:53:25 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:53:26 | INFO | train_inner | epoch 049:      2 / 369 loss=3.16, nll_loss=1.619, ppl=3.07, wps=59250.1, ups=3.95, wpb=15016.5, bsz=779.2, num_updates=17700, lr=0.00199947, gnorm=1.831, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1485
+2024-02-07 23:53:46 | INFO | train_inner | epoch 049:    102 / 369 loss=3.162, nll_loss=1.619, ppl=3.07, wps=76475.5, ups=5.06, wpb=15114.4, bsz=804.6, num_updates=17800, lr=0.00199945, gnorm=2.735, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=1505
+2024-02-07 23:54:05 | INFO | train_inner | epoch 049:    202 / 369 loss=3.287, nll_loss=1.762, ppl=3.39, wps=77288.1, ups=5.1, wpb=15154.9, bsz=775, num_updates=17900, lr=0.00199944, gnorm=7.28, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1525
+2024-02-07 23:54:25 | INFO | train_inner | epoch 049:    302 / 369 loss=3.244, nll_loss=1.713, ppl=3.28, wps=76426.7, ups=5.1, wpb=14997.2, bsz=768.9, num_updates=18000, lr=0.00199942, gnorm=8.263, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1544
+2024-02-07 23:54:38 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:54:38 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:54:40 | INFO | valid | epoch 049 | valid on 'valid' subset | loss 3.535 | nll_loss 1.91 | ppl 3.76 | wps 159522 | wpb 3189.1 | bsz 163.4 | num_updates 18067 | best_loss 3.519
+2024-02-07 23:54:40 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 49 @ 18067 updates
+2024-02-07 23:54:40 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint49.pt
+2024-02-07 23:54:41 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint49.pt
+2024-02-07 23:54:42 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint49.pt (epoch 49 @ 18067 updates, score 3.535) (writing took 2.3992232750169933 seconds)
+2024-02-07 23:54:42 | INFO | fairseq_cli.train | end of epoch 49 (average epoch stats below)
+2024-02-07 23:54:42 | INFO | train | epoch 049 | loss 3.224 | nll_loss 1.691 | ppl 3.23 | wps 72336.4 | ups 4.8 | wpb 15076.1 | bsz 783.3 | num_updates 18067 | lr 0.00199941 | gnorm 5.463 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 1562
+2024-02-07 23:54:42 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:54:42 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:54:42 | INFO | fairseq.trainer | begin training epoch 50
+2024-02-07 23:54:42 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:54:49 | INFO | train_inner | epoch 050:     33 / 369 loss=3.186, nll_loss=1.647, ppl=3.13, wps=62616, ups=4.16, wpb=15044, bsz=787.5, num_updates=18100, lr=0.00199941, gnorm=2.747, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1568
+2024-02-07 23:55:09 | INFO | train_inner | epoch 050:    133 / 369 loss=3.131, nll_loss=1.583, ppl=3, wps=76413.8, ups=5.09, wpb=15024.6, bsz=777.8, num_updates=18200, lr=0.00199939, gnorm=2.825, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1588
+2024-02-07 23:55:28 | INFO | train_inner | epoch 050:    233 / 369 loss=3.153, nll_loss=1.61, ppl=3.05, wps=76694.4, ups=5.1, wpb=15035.3, bsz=776.7, num_updates=18300, lr=0.00199938, gnorm=1.947, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1608
+2024-02-07 23:55:48 | INFO | train_inner | epoch 050:    333 / 369 loss=3.157, nll_loss=1.617, ppl=3.07, wps=77423.5, ups=5.09, wpb=15224.3, bsz=801, num_updates=18400, lr=0.00199936, gnorm=2.553, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1627
+2024-02-07 23:55:55 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:55:55 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:55:57 | INFO | valid | epoch 050 | valid on 'valid' subset | loss 3.527 | nll_loss 1.906 | ppl 3.75 | wps 159649 | wpb 3189.1 | bsz 163.4 | num_updates 18436 | best_loss 3.519
+2024-02-07 23:55:57 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 50 @ 18436 updates
+2024-02-07 23:55:57 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint50.pt
+2024-02-07 23:55:58 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint50.pt
+2024-02-07 23:55:59 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint50.pt (epoch 50 @ 18436 updates, score 3.527) (writing took 2.3641428630799055 seconds)
+2024-02-07 23:55:59 | INFO | fairseq_cli.train | end of epoch 50 (average epoch stats below)
+2024-02-07 23:55:59 | INFO | train | epoch 050 | loss 3.152 | nll_loss 1.609 | ppl 3.05 | wps 72353.4 | ups 4.8 | wpb 15076.1 | bsz 783.3 | num_updates 18436 | lr 0.00199936 | gnorm 2.772 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 1639
+2024-02-07 23:55:59 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:55:59 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:55:59 | INFO | fairseq.trainer | begin training epoch 51
+2024-02-07 23:55:59 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:56:12 | INFO | train_inner | epoch 051:     64 / 369 loss=3.133, nll_loss=1.588, ppl=3.01, wps=62012.7, ups=4.16, wpb=14924.1, bsz=794, num_updates=18500, lr=0.00199935, gnorm=3.72, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1651
+2024-02-07 23:56:32 | INFO | train_inner | epoch 051:    164 / 369 loss=3.246, nll_loss=1.715, ppl=3.28, wps=76951.4, ups=5.09, wpb=15128.8, bsz=782.3, num_updates=18600, lr=0.00199933, gnorm=5.13, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1671
+2024-02-07 23:56:51 | INFO | train_inner | epoch 051:    264 / 369 loss=3.155, nll_loss=1.612, ppl=3.06, wps=77127.8, ups=5.1, wpb=15134.5, bsz=766.1, num_updates=18700, lr=0.00199932, gnorm=2.06, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1691
+2024-02-07 23:57:11 | INFO | train_inner | epoch 051:    364 / 369 loss=3.152, nll_loss=1.611, ppl=3.05, wps=76465.6, ups=5.08, wpb=15056.1, bsz=783.4, num_updates=18800, lr=0.0019993, gnorm=2.374, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1710
+2024-02-07 23:57:12 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:57:12 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:57:14 | INFO | valid | epoch 051 | valid on 'valid' subset | loss 3.522 | nll_loss 1.909 | ppl 3.75 | wps 160378 | wpb 3189.1 | bsz 163.4 | num_updates 18805 | best_loss 3.519
+2024-02-07 23:57:14 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 51 @ 18805 updates
+2024-02-07 23:57:14 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint51.pt
+2024-02-07 23:57:15 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint51.pt
+2024-02-07 23:57:16 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint51.pt (epoch 51 @ 18805 updates, score 3.522) (writing took 2.3691549310460687 seconds)
+2024-02-07 23:57:16 | INFO | fairseq_cli.train | end of epoch 51 (average epoch stats below)
+2024-02-07 23:57:16 | INFO | train | epoch 051 | loss 3.17 | nll_loss 1.63 | ppl 3.1 | wps 72300.8 | ups 4.8 | wpb 15076.1 | bsz 783.3 | num_updates 18805 | lr 0.0019993 | gnorm 3.086 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 1716
+2024-02-07 23:57:16 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:57:16 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:57:16 | INFO | fairseq.trainer | begin training epoch 52
+2024-02-07 23:57:16 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:57:35 | INFO | train_inner | epoch 052:     95 / 369 loss=3.148, nll_loss=1.604, ppl=3.04, wps=62719.8, ups=4.17, wpb=15049.3, bsz=779.1, num_updates=18900, lr=0.00199929, gnorm=3.185, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1734
+2024-02-07 23:57:54 | INFO | train_inner | epoch 052:    195 / 369 loss=3.548, nll_loss=2.063, ppl=4.18, wps=77283.9, ups=5.11, wpb=15115.5, bsz=761.1, num_updates=19000, lr=0.00199927, gnorm=10.865, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=1754
+2024-02-07 23:58:14 | INFO | train_inner | epoch 052:    295 / 369 loss=3.294, nll_loss=1.771, ppl=3.41, wps=76555.2, ups=5.09, wpb=15052.8, bsz=790.3, num_updates=19100, lr=0.00199925, gnorm=4.427, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1774
+2024-02-07 23:58:29 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:58:29 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:58:31 | INFO | valid | epoch 052 | valid on 'valid' subset | loss 3.52 | nll_loss 1.893 | ppl 3.71 | wps 159820 | wpb 3189.1 | bsz 163.4 | num_updates 19174 | best_loss 3.519
+2024-02-07 23:58:31 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 52 @ 19174 updates
+2024-02-07 23:58:31 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint52.pt
+2024-02-07 23:58:32 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint52.pt
+2024-02-07 23:58:33 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint52.pt (epoch 52 @ 19174 updates, score 3.52) (writing took 2.3235595889855176 seconds)
+2024-02-07 23:58:33 | INFO | fairseq_cli.train | end of epoch 52 (average epoch stats below)
+2024-02-07 23:58:33 | INFO | train | epoch 052 | loss 3.297 | nll_loss 1.775 | ppl 3.42 | wps 72424.3 | ups 4.8 | wpb 15076.1 | bsz 783.3 | num_updates 19174 | lr 0.00199924 | gnorm 5.393 | loss_scale 0.0156 | train_wall 72 | gb_free 29.7 | wall 1792
+2024-02-07 23:58:33 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:58:33 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:58:33 | INFO | fairseq.trainer | begin training epoch 53
+2024-02-07 23:58:33 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-07 23:58:38 | INFO | train_inner | epoch 053:     26 / 369 loss=3.148, nll_loss=1.604, ppl=3.04, wps=62947.1, ups=4.15, wpb=15151.7, bsz=798.8, num_updates=19200, lr=0.00199924, gnorm=2.109, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1798
+2024-02-07 23:58:58 | INFO | train_inner | epoch 053:    126 / 369 loss=3.132, nll_loss=1.585, ppl=3, wps=76725.2, ups=5.11, wpb=15021, bsz=753.3, num_updates=19300, lr=0.00199922, gnorm=2.402, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1817
+2024-02-07 23:59:17 | INFO | train_inner | epoch 053:    226 / 369 loss=3.151, nll_loss=1.608, ppl=3.05, wps=76464.5, ups=5.08, wpb=15054.4, bsz=786, num_updates=19400, lr=0.0019992, gnorm=2.156, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1837
+2024-02-07 23:59:37 | INFO | train_inner | epoch 053:    326 / 369 loss=3.232, nll_loss=1.701, ppl=3.25, wps=76473.1, ups=5.06, wpb=15115.8, bsz=806.6, num_updates=19500, lr=0.00199919, gnorm=5.098, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=1857
+2024-02-07 23:59:46 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-07 23:59:46 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:59:48 | INFO | valid | epoch 053 | valid on 'valid' subset | loss 3.567 | nll_loss 1.959 | ppl 3.89 | wps 159377 | wpb 3189.1 | bsz 163.4 | num_updates 19543 | best_loss 3.519
+2024-02-07 23:59:48 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 53 @ 19543 updates
+2024-02-07 23:59:48 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint53.pt
+2024-02-07 23:59:49 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint53.pt
+2024-02-07 23:59:50 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint53.pt (epoch 53 @ 19543 updates, score 3.567) (writing took 2.345336261205375 seconds)
+2024-02-07 23:59:50 | INFO | fairseq_cli.train | end of epoch 53 (average epoch stats below)
+2024-02-07 23:59:50 | INFO | train | epoch 053 | loss 3.177 | nll_loss 1.637 | ppl 3.11 | wps 72265.2 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 19543 | lr 0.00199918 | gnorm 3.136 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 1869
+2024-02-07 23:59:50 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-07 23:59:50 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-07 23:59:50 | INFO | fairseq.trainer | begin training epoch 54
+2024-02-07 23:59:50 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:00:01 | INFO | train_inner | epoch 054:     57 / 369 loss=3.154, nll_loss=1.611, ppl=3.05, wps=62455.7, ups=4.16, wpb=15001.2, bsz=788.3, num_updates=19600, lr=0.00199917, gnorm=2.779, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=1881
+2024-02-08 00:00:21 | INFO | train_inner | epoch 054:    157 / 369 loss=3.095, nll_loss=1.544, ppl=2.92, wps=76813.4, ups=5.07, wpb=15158.4, bsz=774.3, num_updates=19700, lr=0.00199915, gnorm=2.015, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=1901
+2024-02-08 00:00:41 | INFO | train_inner | epoch 054:    257 / 369 loss=3.219, nll_loss=1.687, ppl=3.22, wps=73802.3, ups=4.88, wpb=15120.4, bsz=803, num_updates=19800, lr=0.00199913, gnorm=4.351, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=1921
+2024-02-08 00:01:03 | INFO | train_inner | epoch 054:    357 / 369 loss=3.148, nll_loss=1.605, ppl=3.04, wps=70797.3, ups=4.72, wpb=15003.7, bsz=773.8, num_updates=19900, lr=0.00199912, gnorm=8.623, loss_scale=0.0156, train_wall=21, gb_free=29.6, wall=1942
+2024-02-08 00:01:05 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:01:05 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:01:07 | INFO | valid | epoch 054 | valid on 'valid' subset | loss 3.507 | nll_loss 1.889 | ppl 3.7 | wps 163550 | wpb 3189.1 | bsz 163.4 | num_updates 19912 | best_loss 3.507
+2024-02-08 00:01:07 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 54 @ 19912 updates
+2024-02-08 00:01:07 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint54.pt
+2024-02-08 00:01:08 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint54.pt
+2024-02-08 00:01:11 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint54.pt (epoch 54 @ 19912 updates, score 3.507) (writing took 3.9446870549581945 seconds)
+2024-02-08 00:01:11 | INFO | fairseq_cli.train | end of epoch 54 (average epoch stats below)
+2024-02-08 00:01:11 | INFO | train | epoch 054 | loss 3.143 | nll_loss 1.599 | ppl 3.03 | wps 68793.2 | ups 4.56 | wpb 15076.1 | bsz 783.3 | num_updates 19912 | lr 0.00199911 | gnorm 4.532 | loss_scale 0.0156 | train_wall 74 | gb_free 29.5 | wall 1950
+2024-02-08 00:01:11 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:01:11 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:01:11 | INFO | fairseq.trainer | begin training epoch 55
+2024-02-08 00:01:11 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:01:28 | INFO | train_inner | epoch 055:     88 / 369 loss=3.1, nll_loss=1.55, ppl=2.93, wps=59236.1, ups=3.93, wpb=15073.4, bsz=821.9, num_updates=20000, lr=0.0019991, gnorm=5.077, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=1968
+2024-02-08 00:01:47 | INFO | train_inner | epoch 055:    188 / 369 loss=3.263, nll_loss=1.736, ppl=3.33, wps=77525.4, ups=5.18, wpb=14970.9, bsz=768.9, num_updates=20100, lr=0.00199908, gnorm=3.148, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=1987
+2024-02-08 00:02:07 | INFO | train_inner | epoch 055:    288 / 369 loss=3.187, nll_loss=1.651, ppl=3.14, wps=78276, ups=5.16, wpb=15157.2, bsz=768.6, num_updates=20200, lr=0.00199906, gnorm=4.642, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=2006
+2024-02-08 00:02:22 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:02:22 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:02:24 | INFO | valid | epoch 055 | valid on 'valid' subset | loss 3.553 | nll_loss 1.943 | ppl 3.84 | wps 164595 | wpb 3189.1 | bsz 163.4 | num_updates 20281 | best_loss 3.507
+2024-02-08 00:02:24 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 55 @ 20281 updates
+2024-02-08 00:02:24 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint55.pt
+2024-02-08 00:02:25 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint55.pt
+2024-02-08 00:02:27 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint55.pt (epoch 55 @ 20281 updates, score 3.553) (writing took 2.377419155789539 seconds)
+2024-02-08 00:02:27 | INFO | fairseq_cli.train | end of epoch 55 (average epoch stats below)
+2024-02-08 00:02:27 | INFO | train | epoch 055 | loss 3.217 | nll_loss 1.685 | ppl 3.22 | wps 73331.2 | ups 4.86 | wpb 15076.1 | bsz 783.3 | num_updates 20281 | lr 0.00199905 | gnorm 5.027 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 2026
+2024-02-08 00:02:27 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:02:27 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:02:27 | INFO | fairseq.trainer | begin training epoch 56
+2024-02-08 00:02:27 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:02:30 | INFO | train_inner | epoch 056:     19 / 369 loss=3.279, nll_loss=1.757, ppl=3.38, wps=63870.1, ups=4.22, wpb=15124.6, bsz=792.6, num_updates=20300, lr=0.00199904, gnorm=6.396, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=2030
+2024-02-08 00:02:50 | INFO | train_inner | epoch 056:    119 / 369 loss=3.317, nll_loss=1.799, ppl=3.48, wps=78130.4, ups=5.16, wpb=15155.2, bsz=797.6, num_updates=20400, lr=0.00199903, gnorm=6.169, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=2049
+2024-02-08 00:03:09 | INFO | train_inner | epoch 056:    219 / 369 loss=3.494, nll_loss=2.001, ppl=4, wps=77221.2, ups=5.16, wpb=14976.8, bsz=754, num_updates=20500, lr=0.00199901, gnorm=7.203, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=2069
+2024-02-08 00:03:29 | INFO | train_inner | epoch 056:    319 / 369 loss=3.182, nll_loss=1.645, ppl=3.13, wps=77876, ups=5.14, wpb=15140.3, bsz=793.1, num_updates=20600, lr=0.00199899, gnorm=2.672, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=2088
+2024-02-08 00:03:38 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:03:38 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:03:40 | INFO | valid | epoch 056 | valid on 'valid' subset | loss 3.526 | nll_loss 1.906 | ppl 3.75 | wps 165108 | wpb 3189.1 | bsz 163.4 | num_updates 20650 | best_loss 3.507
+2024-02-08 00:03:40 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 56 @ 20650 updates
+2024-02-08 00:03:40 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint56.pt
+2024-02-08 00:03:41 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint56.pt
+2024-02-08 00:03:43 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint56.pt (epoch 56 @ 20650 updates, score 3.526) (writing took 2.4212121597956866 seconds)
+2024-02-08 00:03:43 | INFO | fairseq_cli.train | end of epoch 56 (average epoch stats below)
+2024-02-08 00:03:43 | INFO | train | epoch 056 | loss 3.297 | nll_loss 1.777 | ppl 3.43 | wps 73255.5 | ups 4.86 | wpb 15076.1 | bsz 783.3 | num_updates 20650 | lr 0.00199898 | gnorm 4.774 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 2102
+2024-02-08 00:03:43 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:03:43 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:03:43 | INFO | fairseq.trainer | begin training epoch 57
+2024-02-08 00:03:43 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:03:53 | INFO | train_inner | epoch 057:     50 / 369 loss=3.172, nll_loss=1.633, ppl=3.1, wps=63112.5, ups=4.19, wpb=15055.3, bsz=773.9, num_updates=20700, lr=0.00199897, gnorm=3.3, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=2112
+2024-02-08 00:04:12 | INFO | train_inner | epoch 057:    150 / 369 loss=3.125, nll_loss=1.579, ppl=2.99, wps=78076.1, ups=5.16, wpb=15122, bsz=783.3, num_updates=20800, lr=0.00199895, gnorm=2.661, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=2131
+2024-02-08 00:04:31 | INFO | train_inner | epoch 057:    250 / 369 loss=3.225, nll_loss=1.695, ppl=3.24, wps=77055.9, ups=5.14, wpb=15001.5, bsz=789.4, num_updates=20900, lr=0.00199893, gnorm=5.357, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=2151
+2024-02-08 00:04:51 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 0.015625
+2024-02-08 00:04:51 | INFO | train_inner | epoch 057:    351 / 369 loss=3.302, nll_loss=1.783, ppl=3.44, wps=76425.1, ups=5.07, wpb=15085.3, bsz=777, num_updates=21000, lr=0.00199891, gnorm=11.122, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=2171
+2024-02-08 00:04:55 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:04:55 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:04:57 | INFO | valid | epoch 057 | valid on 'valid' subset | loss 3.494 | nll_loss 1.875 | ppl 3.67 | wps 157830 | wpb 3189.1 | bsz 163.4 | num_updates 21018 | best_loss 3.494
+2024-02-08 00:04:57 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 57 @ 21018 updates
+2024-02-08 00:04:57 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint57.pt
+2024-02-08 00:04:57 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint57.pt
+2024-02-08 00:05:00 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint57.pt (epoch 57 @ 21018 updates, score 3.494) (writing took 3.769354698015377 seconds)
+2024-02-08 00:05:00 | INFO | fairseq_cli.train | end of epoch 57 (average epoch stats below)
+2024-02-08 00:05:00 | INFO | train | epoch 057 | loss 3.211 | nll_loss 1.678 | ppl 3.2 | wps 71399.5 | ups 4.74 | wpb 15076.5 | bsz 783.4 | num_updates 21018 | lr 0.00199891 | gnorm 5.948 | loss_scale 0.0156 | train_wall 71 | gb_free 29.6 | wall 2180
+2024-02-08 00:05:00 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:05:00 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:05:00 | INFO | fairseq.trainer | begin training epoch 58
+2024-02-08 00:05:00 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:05:17 | INFO | train_inner | epoch 058:     82 / 369 loss=3.186, nll_loss=1.648, ppl=3.13, wps=59238, ups=3.93, wpb=15063.4, bsz=796.1, num_updates=21100, lr=0.00199889, gnorm=4.116, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2196
+2024-02-08 00:05:36 | INFO | train_inner | epoch 058:    182 / 369 loss=3.167, nll_loss=1.626, ppl=3.09, wps=76861.2, ups=5.1, wpb=15060.5, bsz=766, num_updates=21200, lr=0.00199887, gnorm=3.101, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2216
+2024-02-08 00:05:56 | INFO | train_inner | epoch 058:    282 / 369 loss=3.158, nll_loss=1.617, ppl=3.07, wps=76371.8, ups=5.08, wpb=15042.3, bsz=783.8, num_updates=21300, lr=0.00199885, gnorm=5.41, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2235
+2024-02-08 00:06:13 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:06:13 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:06:15 | INFO | valid | epoch 058 | valid on 'valid' subset | loss 3.521 | nll_loss 1.898 | ppl 3.73 | wps 158811 | wpb 3189.1 | bsz 163.4 | num_updates 21387 | best_loss 3.494
+2024-02-08 00:06:15 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 58 @ 21387 updates
+2024-02-08 00:06:15 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint58.pt
+2024-02-08 00:06:16 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint58.pt
+2024-02-08 00:06:17 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint58.pt (epoch 58 @ 21387 updates, score 3.521) (writing took 2.384297897107899 seconds)
+2024-02-08 00:06:17 | INFO | fairseq_cli.train | end of epoch 58 (average epoch stats below)
+2024-02-08 00:06:17 | INFO | train | epoch 058 | loss 3.17 | nll_loss 1.631 | ppl 3.1 | wps 72327.3 | ups 4.8 | wpb 15076.1 | bsz 783.3 | num_updates 21387 | lr 0.00199883 | gnorm 3.959 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 2257
+2024-02-08 00:06:17 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:06:17 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:06:17 | INFO | fairseq.trainer | begin training epoch 59
+2024-02-08 00:06:17 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:06:20 | INFO | train_inner | epoch 059:     13 / 369 loss=3.171, nll_loss=1.632, ppl=3.1, wps=62738, ups=4.16, wpb=15071.5, bsz=785.6, num_updates=21400, lr=0.00199883, gnorm=2.909, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2259
+2024-02-08 00:06:40 | INFO | train_inner | epoch 059:    113 / 369 loss=3.188, nll_loss=1.65, ppl=3.14, wps=77212.8, ups=5.08, wpb=15192.2, bsz=790.6, num_updates=21500, lr=0.00199881, gnorm=3.911, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2279
+2024-02-08 00:06:59 | INFO | train_inner | epoch 059:    213 / 369 loss=3.223, nll_loss=1.69, ppl=3.23, wps=76957.6, ups=5.11, wpb=15073, bsz=761.4, num_updates=21600, lr=0.00199879, gnorm=4.629, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2299
+2024-02-08 00:07:19 | INFO | train_inner | epoch 059:    313 / 369 loss=3.118, nll_loss=1.571, ppl=2.97, wps=76467.9, ups=5.08, wpb=15058.3, bsz=794.2, num_updates=21700, lr=0.00199877, gnorm=2.152, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2318
+2024-02-08 00:07:30 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:07:30 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:07:32 | INFO | valid | epoch 059 | valid on 'valid' subset | loss 3.517 | nll_loss 1.903 | ppl 3.74 | wps 160277 | wpb 3189.1 | bsz 163.4 | num_updates 21756 | best_loss 3.494
+2024-02-08 00:07:32 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 59 @ 21756 updates
+2024-02-08 00:07:32 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint59.pt
+2024-02-08 00:07:33 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint59.pt
+2024-02-08 00:07:34 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint59.pt (epoch 59 @ 21756 updates, score 3.517) (writing took 2.457210938911885 seconds)
+2024-02-08 00:07:34 | INFO | fairseq_cli.train | end of epoch 59 (average epoch stats below)
+2024-02-08 00:07:34 | INFO | train | epoch 059 | loss 3.165 | nll_loss 1.625 | ppl 3.08 | wps 72228.9 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 21756 | lr 0.00199875 | gnorm 3.348 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 2334
+2024-02-08 00:07:34 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:07:38 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:07:38 | INFO | fairseq.trainer | begin training epoch 60
+2024-02-08 00:07:38 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:07:47 | INFO | train_inner | epoch 060:     44 / 369 loss=3.138, nll_loss=1.594, ppl=3.02, wps=53747.9, ups=3.56, wpb=15111.7, bsz=793.4, num_updates=21800, lr=0.00199875, gnorm=3.426, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2347
+2024-02-08 00:08:07 | INFO | train_inner | epoch 060:    144 / 369 loss=3.145, nll_loss=1.601, ppl=3.03, wps=75726, ups=5.08, wpb=14917.7, bsz=792.1, num_updates=21900, lr=0.00199872, gnorm=3.476, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2366
+2024-02-08 00:08:27 | INFO | train_inner | epoch 060:    244 / 369 loss=3.493, nll_loss=2, ppl=4, wps=75039.1, ups=5, wpb=14994.3, bsz=762.5, num_updates=22000, lr=0.0019987, gnorm=14.003, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=2386
+2024-02-08 00:08:46 | INFO | train_inner | epoch 060:    344 / 369 loss=3.19, nll_loss=1.652, ppl=3.14, wps=77625.2, ups=5.1, wpb=15223.5, bsz=796.5, num_updates=22100, lr=0.00199868, gnorm=3.627, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2406
+2024-02-08 00:08:51 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:08:51 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:08:53 | INFO | valid | epoch 060 | valid on 'valid' subset | loss 3.528 | nll_loss 1.91 | ppl 3.76 | wps 159904 | wpb 3189.1 | bsz 163.4 | num_updates 22125 | best_loss 3.494
+2024-02-08 00:08:53 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 60 @ 22125 updates
+2024-02-08 00:08:53 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint60.pt
+2024-02-08 00:08:54 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint60.pt
+2024-02-08 00:08:55 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint60.pt (epoch 60 @ 22125 updates, score 3.528) (writing took 2.4302600810769945 seconds)
+2024-02-08 00:08:55 | INFO | fairseq_cli.train | end of epoch 60 (average epoch stats below)
+2024-02-08 00:08:55 | INFO | train | epoch 060 | loss 3.254 | nll_loss 1.726 | ppl 3.31 | wps 68488.7 | ups 4.54 | wpb 15076.1 | bsz 783.3 | num_updates 22125 | lr 0.00199868 | gnorm 6.446 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 2415
+2024-02-08 00:08:55 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:08:55 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:08:55 | INFO | fairseq.trainer | begin training epoch 61
+2024-02-08 00:08:55 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:09:10 | INFO | train_inner | epoch 061:     75 / 369 loss=3.061, nll_loss=1.505, ppl=2.84, wps=63102, ups=4.18, wpb=15096, bsz=797.6, num_updates=22200, lr=0.00199866, gnorm=2.19, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2430
+2024-02-08 00:09:30 | INFO | train_inner | epoch 061:    175 / 369 loss=3.155, nll_loss=1.614, ppl=3.06, wps=78289.6, ups=5.16, wpb=15159.3, bsz=783, num_updates=22300, lr=0.00199864, gnorm=18.812, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2449
+2024-02-08 00:09:49 | INFO | train_inner | epoch 061:    275 / 369 loss=3.222, nll_loss=1.689, ppl=3.23, wps=77955.4, ups=5.14, wpb=15158.9, bsz=769.6, num_updates=22400, lr=0.00199861, gnorm=3.548, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2469
+2024-02-08 00:10:07 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:10:07 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:10:09 | INFO | valid | epoch 061 | valid on 'valid' subset | loss 3.554 | nll_loss 1.945 | ppl 3.85 | wps 165172 | wpb 3189.1 | bsz 163.4 | num_updates 22494 | best_loss 3.494
+2024-02-08 00:10:09 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 61 @ 22494 updates
+2024-02-08 00:10:09 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint61.pt
+2024-02-08 00:10:10 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint61.pt
+2024-02-08 00:10:11 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint61.pt (epoch 61 @ 22494 updates, score 3.554) (writing took 2.4184644888155162 seconds)
+2024-02-08 00:10:11 | INFO | fairseq_cli.train | end of epoch 61 (average epoch stats below)
+2024-02-08 00:10:11 | INFO | train | epoch 061 | loss 3.153 | nll_loss 1.611 | ppl 3.05 | wps 73236.5 | ups 4.86 | wpb 15076.1 | bsz 783.3 | num_updates 22494 | lr 0.00199859 | gnorm 7.341 | loss_scale 0.0156 | train_wall 71 | gb_free 29.7 | wall 2491
+2024-02-08 00:10:11 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:10:11 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:10:11 | INFO | fairseq.trainer | begin training epoch 62
+2024-02-08 00:10:11 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:10:13 | INFO | train_inner | epoch 062:      6 / 369 loss=3.182, nll_loss=1.645, ppl=3.13, wps=62793.9, ups=4.22, wpb=14876.7, bsz=771.3, num_updates=22500, lr=0.00199859, gnorm=3.298, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2492
+2024-02-08 00:10:32 | INFO | train_inner | epoch 062:    106 / 369 loss=3.544, nll_loss=2.06, ppl=4.17, wps=77844.7, ups=5.14, wpb=15136.4, bsz=807.4, num_updates=22600, lr=0.00199857, gnorm=16.177, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2512
+2024-02-08 00:10:51 | INFO | train_inner | epoch 062:    206 / 369 loss=3.209, nll_loss=1.672, ppl=3.19, wps=78220.6, ups=5.17, wpb=15132.9, bsz=775.7, num_updates=22700, lr=0.00199855, gnorm=5.337, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2531
+2024-02-08 00:11:11 | INFO | train_inner | epoch 062:    306 / 369 loss=3.155, nll_loss=1.613, ppl=3.06, wps=77408.2, ups=5.15, wpb=15027.6, bsz=775.9, num_updates=22800, lr=0.00199852, gnorm=3.654, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2550
+2024-02-08 00:11:23 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:11:23 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:11:25 | INFO | valid | epoch 062 | valid on 'valid' subset | loss 3.551 | nll_loss 1.934 | ppl 3.82 | wps 162181 | wpb 3189.1 | bsz 163.4 | num_updates 22863 | best_loss 3.494
+2024-02-08 00:11:25 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 62 @ 22863 updates
+2024-02-08 00:11:25 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint62.pt
+2024-02-08 00:11:26 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint62.pt
+2024-02-08 00:11:28 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint62.pt (epoch 62 @ 22863 updates, score 3.551) (writing took 2.3312029528897256 seconds)
+2024-02-08 00:11:28 | INFO | fairseq_cli.train | end of epoch 62 (average epoch stats below)
+2024-02-08 00:11:28 | INFO | train | epoch 062 | loss 3.296 | nll_loss 1.775 | ppl 3.42 | wps 73029.4 | ups 4.84 | wpb 15076.1 | bsz 783.3 | num_updates 22863 | lr 0.00199851 | gnorm 7.968 | loss_scale 0.0156 | train_wall 71 | gb_free 29.6 | wall 2567
+2024-02-08 00:11:28 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:11:28 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:11:28 | INFO | fairseq.trainer | begin training epoch 63
+2024-02-08 00:11:28 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:11:35 | INFO | train_inner | epoch 063:     37 / 369 loss=3.215, nll_loss=1.681, ppl=3.21, wps=62750, ups=4.18, wpb=15023.2, bsz=766.9, num_updates=22900, lr=0.0019985, gnorm=5.168, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2574
+2024-02-08 00:11:54 | INFO | train_inner | epoch 063:    137 / 369 loss=3.226, nll_loss=1.694, ppl=3.23, wps=77413.1, ups=5.16, wpb=14995.4, bsz=763.4, num_updates=23000, lr=0.00199848, gnorm=7.098, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2594
+2024-02-08 00:12:14 | INFO | train_inner | epoch 063:    237 / 369 loss=3.167, nll_loss=1.626, ppl=3.09, wps=78495, ups=5.14, wpb=15277, bsz=791.5, num_updates=23100, lr=0.00199845, gnorm=3.694, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2613
+2024-02-08 00:12:33 | INFO | train_inner | epoch 063:    337 / 369 loss=3.129, nll_loss=1.584, ppl=3, wps=76955, ups=5.13, wpb=14993.6, bsz=818.9, num_updates=23200, lr=0.00199843, gnorm=2.983, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2633
+2024-02-08 00:12:39 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:12:39 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:12:41 | INFO | valid | epoch 063 | valid on 'valid' subset | loss 3.535 | nll_loss 1.914 | ppl 3.77 | wps 164868 | wpb 3189.1 | bsz 163.4 | num_updates 23232 | best_loss 3.494
+2024-02-08 00:12:41 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 63 @ 23232 updates
+2024-02-08 00:12:41 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint63.pt
+2024-02-08 00:12:42 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint63.pt
+2024-02-08 00:12:44 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint63.pt (epoch 63 @ 23232 updates, score 3.535) (writing took 2.428323345957324 seconds)
+2024-02-08 00:12:44 | INFO | fairseq_cli.train | end of epoch 63 (average epoch stats below)
+2024-02-08 00:12:44 | INFO | train | epoch 063 | loss 3.168 | nll_loss 1.628 | ppl 3.09 | wps 73166 | ups 4.85 | wpb 15076.1 | bsz 783.3 | num_updates 23232 | lr 0.00199842 | gnorm 4.209 | loss_scale 0.0156 | train_wall 71 | gb_free 29.5 | wall 2643
+2024-02-08 00:12:44 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:12:44 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:12:44 | INFO | fairseq.trainer | begin training epoch 64
+2024-02-08 00:12:44 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:12:57 | INFO | train_inner | epoch 064:     68 / 369 loss=3.126, nll_loss=1.579, ppl=2.99, wps=63597.1, ups=4.22, wpb=15085.6, bsz=763.3, num_updates=23300, lr=0.00199841, gnorm=8.332, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2656
+2024-02-08 00:13:16 | INFO | train_inner | epoch 064:    168 / 369 loss=3.297, nll_loss=1.774, ppl=3.42, wps=77737.9, ups=5.17, wpb=15044.9, bsz=792.4, num_updates=23400, lr=0.00199838, gnorm=8.83, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2676
+2024-02-08 00:13:36 | INFO | train_inner | epoch 064:    268 / 369 loss=3.181, nll_loss=1.642, ppl=3.12, wps=78185, ups=5.15, wpb=15170.5, bsz=778.7, num_updates=23500, lr=0.00199836, gnorm=4.59, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2695
+2024-02-08 00:13:55 | INFO | train_inner | epoch 064:    368 / 369 loss=3.12, nll_loss=1.574, ppl=2.98, wps=77369.2, ups=5.16, wpb=14999.2, bsz=785.3, num_updates=23600, lr=0.00199833, gnorm=3.493, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2715
+2024-02-08 00:13:55 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:13:55 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:13:57 | INFO | valid | epoch 064 | valid on 'valid' subset | loss 3.508 | nll_loss 1.898 | ppl 3.73 | wps 165224 | wpb 3189.1 | bsz 163.4 | num_updates 23601 | best_loss 3.494
+2024-02-08 00:13:57 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 64 @ 23601 updates
+2024-02-08 00:13:57 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint64.pt
+2024-02-08 00:13:58 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint64.pt
+2024-02-08 00:13:59 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint64.pt (epoch 64 @ 23601 updates, score 3.508) (writing took 2.4278008830733597 seconds)
+2024-02-08 00:13:59 | INFO | fairseq_cli.train | end of epoch 64 (average epoch stats below)
+2024-02-08 00:13:59 | INFO | train | epoch 064 | loss 3.181 | nll_loss 1.642 | ppl 3.12 | wps 73330.8 | ups 4.86 | wpb 15076.1 | bsz 783.3 | num_updates 23601 | lr 0.00199833 | gnorm 6.668 | loss_scale 0.0156 | train_wall 71 | gb_free 29.6 | wall 2719
+2024-02-08 00:13:59 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:14:00 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:14:00 | INFO | fairseq.trainer | begin training epoch 65
+2024-02-08 00:14:00 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:14:19 | INFO | train_inner | epoch 065:     99 / 369 loss=3.184, nll_loss=1.645, ppl=3.13, wps=64047.6, ups=4.21, wpb=15203.1, bsz=784.2, num_updates=23700, lr=0.00199831, gnorm=8.354, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2738
+2024-02-08 00:14:38 | INFO | train_inner | epoch 065:    199 / 369 loss=3.185, nll_loss=1.647, ppl=3.13, wps=77082.6, ups=5.12, wpb=15044, bsz=800.2, num_updates=23800, lr=0.00199828, gnorm=3.355, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2758
+2024-02-08 00:14:58 | INFO | train_inner | epoch 065:    299 / 369 loss=3.113, nll_loss=1.565, ppl=2.96, wps=78023.7, ups=5.19, wpb=15041.9, bsz=781.9, num_updates=23900, lr=0.00199826, gnorm=3.069, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2777
+2024-02-08 00:15:11 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:15:11 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:15:13 | INFO | valid | epoch 065 | valid on 'valid' subset | loss 3.525 | nll_loss 1.903 | ppl 3.74 | wps 165668 | wpb 3189.1 | bsz 163.4 | num_updates 23970 | best_loss 3.494
+2024-02-08 00:15:13 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 65 @ 23970 updates
+2024-02-08 00:15:13 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint65.pt
+2024-02-08 00:15:14 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint65.pt
+2024-02-08 00:15:15 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint65.pt (epoch 65 @ 23970 updates, score 3.525) (writing took 2.397137680090964 seconds)
+2024-02-08 00:15:15 | INFO | fairseq_cli.train | end of epoch 65 (average epoch stats below)
+2024-02-08 00:15:15 | INFO | train | epoch 065 | loss 3.164 | nll_loss 1.624 | ppl 3.08 | wps 73429.6 | ups 4.87 | wpb 15076.1 | bsz 783.3 | num_updates 23970 | lr 0.00199824 | gnorm 4.522 | loss_scale 0.0156 | train_wall 71 | gb_free 29.5 | wall 2795
+2024-02-08 00:15:15 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:15:15 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:15:15 | INFO | fairseq.trainer | begin training epoch 66
+2024-02-08 00:15:15 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:15:21 | INFO | train_inner | epoch 066:     30 / 369 loss=3.135, nll_loss=1.591, ppl=3.01, wps=63648.2, ups=4.24, wpb=15025.2, bsz=760.8, num_updates=24000, lr=0.00199823, gnorm=2.57, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2801
+2024-02-08 00:15:40 | INFO | train_inner | epoch 066:    130 / 369 loss=3.048, nll_loss=1.49, ppl=2.81, wps=77636.5, ups=5.17, wpb=15004.8, bsz=800.1, num_updates=24100, lr=0.00199821, gnorm=7.126, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2820
+2024-02-08 00:16:02 | INFO | train_inner | epoch 066:    230 / 369 loss=3.172, nll_loss=1.633, ppl=3.1, wps=71016.8, ups=4.72, wpb=15039.5, bsz=756.8, num_updates=24200, lr=0.00199818, gnorm=4.05, loss_scale=0.0156, train_wall=21, gb_free=29.6, wall=2841
+2024-02-08 00:16:22 | INFO | train_inner | epoch 066:    330 / 369 loss=3.093, nll_loss=1.544, ppl=2.92, wps=75072.3, ups=4.98, wpb=15079.1, bsz=790.7, num_updates=24300, lr=0.00199816, gnorm=6.239, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=2861
+2024-02-08 00:16:29 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:16:29 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:16:31 | INFO | valid | epoch 066 | valid on 'valid' subset | loss 3.523 | nll_loss 1.908 | ppl 3.75 | wps 159463 | wpb 3189.1 | bsz 163.4 | num_updates 24339 | best_loss 3.494
+2024-02-08 00:16:31 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 66 @ 24339 updates
+2024-02-08 00:16:31 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint66.pt
+2024-02-08 00:16:32 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint66.pt
+2024-02-08 00:16:34 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint66.pt (epoch 66 @ 24339 updates, score 3.523) (writing took 2.460752035025507 seconds)
+2024-02-08 00:16:34 | INFO | fairseq_cli.train | end of epoch 66 (average epoch stats below)
+2024-02-08 00:16:34 | INFO | train | epoch 066 | loss 3.096 | nll_loss 1.547 | ppl 2.92 | wps 70788.4 | ups 4.7 | wpb 15076.1 | bsz 783.3 | num_updates 24339 | lr 0.00199815 | gnorm 5.102 | loss_scale 0.0156 | train_wall 73 | gb_free 29.5 | wall 2873
+2024-02-08 00:16:34 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:16:38 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:16:38 | INFO | fairseq.trainer | begin training epoch 67
+2024-02-08 00:16:38 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:16:54 | INFO | train_inner | epoch 067:     61 / 369 loss=3.147, nll_loss=1.604, ppl=3.04, wps=47189.8, ups=3.12, wpb=15126.2, bsz=796.6, num_updates=24400, lr=0.00199813, gnorm=4.65, loss_scale=0.0156, train_wall=20, gb_free=29.5, wall=2893
+2024-02-08 00:17:14 | INFO | train_inner | epoch 067:    161 / 369 loss=3.224, nll_loss=1.692, ppl=3.23, wps=76359.1, ups=5.06, wpb=15094.5, bsz=785.8, num_updates=24500, lr=0.00199811, gnorm=4.79, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=2913
+2024-02-08 00:17:33 | INFO | train_inner | epoch 067:    261 / 369 loss=3.153, nll_loss=1.612, ppl=3.06, wps=76335.7, ups=5.08, wpb=15034.3, bsz=777.8, num_updates=24600, lr=0.00199808, gnorm=3.692, loss_scale=0.0156, train_wall=19, gb_free=29.5, wall=2933
+2024-02-08 00:17:53 | INFO | train_inner | epoch 067:    361 / 369 loss=3.161, nll_loss=1.621, ppl=3.08, wps=76907.9, ups=5.09, wpb=15101.8, bsz=783.6, num_updates=24700, lr=0.00199805, gnorm=2.773, loss_scale=0.0156, train_wall=19, gb_free=29.6, wall=2952
+2024-02-08 00:17:54 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:17:54 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:17:56 | INFO | valid | epoch 067 | valid on 'valid' subset | loss 3.532 | nll_loss 1.915 | ppl 3.77 | wps 164076 | wpb 3189.1 | bsz 163.4 | num_updates 24708 | best_loss 3.494
+2024-02-08 00:17:56 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 67 @ 24708 updates
+2024-02-08 00:17:56 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint67.pt
+2024-02-08 00:17:57 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint67.pt
+2024-02-08 00:17:59 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint67.pt (epoch 67 @ 24708 updates, score 3.532) (writing took 2.438343685120344 seconds)
+2024-02-08 00:17:59 | INFO | fairseq_cli.train | end of epoch 67 (average epoch stats below)
+2024-02-08 00:17:59 | INFO | train | epoch 067 | loss 3.18 | nll_loss 1.642 | ppl 3.12 | wps 65523.1 | ups 4.35 | wpb 15076.1 | bsz 783.3 | num_updates 24708 | lr 0.00199805 | gnorm 4.154 | loss_scale 0.0156 | train_wall 72 | gb_free 29.6 | wall 2958
+2024-02-08 00:17:59 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:17:59 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:17:59 | INFO | fairseq.trainer | begin training epoch 68
+2024-02-08 00:17:59 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:18:18 | INFO | train_inner | epoch 068:     92 / 369 loss=3.096, nll_loss=1.544, ppl=2.92, wps=59682.3, ups=3.96, wpb=15089.5, bsz=786.8, num_updates=24800, lr=0.00199803, gnorm=3.199, loss_scale=0.0156, train_wall=21, gb_free=29.5, wall=2978
+2024-02-08 00:18:39 | INFO | train_inner | epoch 068:    192 / 369 loss=3.142, nll_loss=1.597, ppl=3.03, wps=72009.4, ups=4.75, wpb=15156.5, bsz=800.7, num_updates=24900, lr=0.001998, gnorm=3.784, loss_scale=0.0156, train_wall=21, gb_free=29.6, wall=2999
+2024-02-08 00:19:00 | INFO | train_inner | epoch 068:    292 / 369 loss=3.155, nll_loss=1.616, ppl=3.06, wps=72519.8, ups=4.86, wpb=14934.2, bsz=770.6, num_updates=25000, lr=0.00199797, gnorm=5.435, loss_scale=0.0156, train_wall=20, gb_free=29.6, wall=3019
+2024-02-08 00:19:16 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:19:16 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:19:18 | INFO | valid | epoch 068 | valid on 'valid' subset | loss 3.566 | nll_loss 1.954 | ppl 3.87 | wps 147016 | wpb 3189.1 | bsz 163.4 | num_updates 25077 | best_loss 3.494
+2024-02-08 00:19:18 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 68 @ 25077 updates
+2024-02-08 00:19:18 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint68.pt
+2024-02-08 00:19:19 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint68.pt
+2024-02-08 00:19:20 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint68.pt (epoch 68 @ 25077 updates, score 3.566) (writing took 2.454817430116236 seconds)
+2024-02-08 00:19:20 | INFO | fairseq_cli.train | end of epoch 68 (average epoch stats below)
+2024-02-08 00:19:20 | INFO | train | epoch 068 | loss 3.14 | nll_loss 1.596 | ppl 3.02 | wps 68186 | ups 4.52 | wpb 15076.1 | bsz 783.3 | num_updates 25077 | lr 0.00199795 | gnorm 4.012 | loss_scale 0.0156 | train_wall 76 | gb_free 29.6 | wall 3040
+2024-02-08 00:19:20 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:19:20 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:19:20 | INFO | fairseq.trainer | begin training epoch 69
+2024-02-08 00:19:20 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:19:25 | INFO | train_inner | epoch 069:     23 / 369 loss=3.195, nll_loss=1.661, ppl=3.16, wps=59519.9, ups=3.94, wpb=15101, bsz=756.7, num_updates=25100, lr=0.00199795, gnorm=3.363, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=3045
+2024-02-08 00:19:46 | INFO | train_inner | epoch 069:    123 / 369 loss=3.07, nll_loss=1.517, ppl=2.86, wps=73394, ups=4.83, wpb=15193.1, bsz=798, num_updates=25200, lr=0.00199792, gnorm=2.306, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=3065
+2024-02-08 00:20:07 | INFO | train_inner | epoch 069:    223 / 369 loss=3.218, nll_loss=1.688, ppl=3.22, wps=72629.2, ups=4.81, wpb=15107.5, bsz=800.7, num_updates=25300, lr=0.00199789, gnorm=7.88, loss_scale=0.0312, train_wall=21, gb_free=29.6, wall=3086
+2024-02-08 00:20:27 | INFO | train_inner | epoch 069:    323 / 369 loss=3.176, nll_loss=1.64, ppl=3.12, wps=72719, ups=4.84, wpb=15018.6, bsz=765.3, num_updates=25400, lr=0.00199786, gnorm=3.82, loss_scale=0.0312, train_wall=20, gb_free=29.5, wall=3107
+2024-02-08 00:20:37 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:20:37 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:20:39 | INFO | valid | epoch 069 | valid on 'valid' subset | loss 3.521 | nll_loss 1.898 | ppl 3.73 | wps 146630 | wpb 3189.1 | bsz 163.4 | num_updates 25446 | best_loss 3.494
+2024-02-08 00:20:39 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 69 @ 25446 updates
+2024-02-08 00:20:39 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint69.pt
+2024-02-08 00:20:40 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint69.pt
+2024-02-08 00:20:41 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint69.pt (epoch 69 @ 25446 updates, score 3.521) (writing took 2.4419058931525797 seconds)
+2024-02-08 00:20:41 | INFO | fairseq_cli.train | end of epoch 69 (average epoch stats below)
+2024-02-08 00:20:41 | INFO | train | epoch 069 | loss 3.155 | nll_loss 1.615 | ppl 3.06 | wps 68637 | ups 4.55 | wpb 15076.1 | bsz 783.3 | num_updates 25446 | lr 0.00199785 | gnorm 4.295 | loss_scale 0.0312 | train_wall 75 | gb_free 29.6 | wall 3121
+2024-02-08 00:20:41 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:20:41 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:20:41 | INFO | fairseq.trainer | begin training epoch 70
+2024-02-08 00:20:41 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:20:53 | INFO | train_inner | epoch 070:     54 / 369 loss=3.13, nll_loss=1.587, ppl=3, wps=59871.9, ups=3.96, wpb=15105.3, bsz=796.2, num_updates=25500, lr=0.00199784, gnorm=3.47, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=3132
+2024-02-08 00:21:13 | INFO | train_inner | epoch 070:    154 / 369 loss=3.1, nll_loss=1.552, ppl=2.93, wps=72311.9, ups=4.87, wpb=14845.4, bsz=759.2, num_updates=25600, lr=0.00199781, gnorm=2.478, loss_scale=0.0312, train_wall=20, gb_free=29.5, wall=3153
+2024-02-08 00:21:34 | INFO | train_inner | epoch 070:    254 / 369 loss=3.071, nll_loss=1.52, ppl=2.87, wps=73048.4, ups=4.8, wpb=15211.9, bsz=792.2, num_updates=25700, lr=0.00199778, gnorm=3.32, loss_scale=0.0312, train_wall=21, gb_free=29.6, wall=3174
+2024-02-08 00:21:54 | INFO | train_inner | epoch 070:    354 / 369 loss=3.199, nll_loss=1.668, ppl=3.18, wps=73687.6, ups=4.88, wpb=15096.3, bsz=784.9, num_updates=25800, lr=0.00199775, gnorm=5.182, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=3194
+2024-02-08 00:21:57 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:21:57 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:22:00 | INFO | valid | epoch 070 | valid on 'valid' subset | loss 6.113 | nll_loss 4.98 | ppl 31.56 | wps 146663 | wpb 3189.1 | bsz 163.4 | num_updates 25815 | best_loss 3.494
+2024-02-08 00:22:00 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 70 @ 25815 updates
+2024-02-08 00:22:00 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint70.pt
+2024-02-08 00:22:01 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint70.pt
+2024-02-08 00:22:02 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint70.pt (epoch 70 @ 25815 updates, score 6.113) (writing took 2.4627016310114413 seconds)
+2024-02-08 00:22:02 | INFO | fairseq_cli.train | end of epoch 70 (average epoch stats below)
+2024-02-08 00:22:02 | INFO | train | epoch 070 | loss 3.317 | nll_loss 1.802 | ppl 3.49 | wps 68966.8 | ups 4.57 | wpb 15076.1 | bsz 783.3 | num_updates 25815 | lr 0.00199775 | gnorm 5.649 | loss_scale 0.0312 | train_wall 75 | gb_free 29.6 | wall 3202
+2024-02-08 00:22:02 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:22:02 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:22:02 | INFO | fairseq.trainer | begin training epoch 71
+2024-02-08 00:22:02 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:22:20 | INFO | train_inner | epoch 071:     85 / 369 loss=4.529, nll_loss=3.187, ppl=9.11, wps=59709.3, ups=3.94, wpb=15151.7, bsz=786.4, num_updates=25900, lr=0.00199772, gnorm=13.804, loss_scale=0.0312, train_wall=20, gb_free=29.5, wall=3219
+2024-02-08 00:22:40 | INFO | train_inner | epoch 071:    185 / 369 loss=3.066, nll_loss=1.512, ppl=2.85, wps=76307, ups=5.02, wpb=15192, bsz=789.2, num_updates=26000, lr=0.00199769, gnorm=3.273, loss_scale=0.0312, train_wall=20, gb_free=29.6, wall=3239
+2024-02-08 00:22:59 | INFO | train_inner | epoch 071:    285 / 369 loss=3.068, nll_loss=1.516, ppl=2.86, wps=77124.8, ups=5.11, wpb=15080.7, bsz=772.5, num_updates=26100, lr=0.00199766, gnorm=2.971, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3259
+2024-02-08 00:23:16 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:23:16 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:23:18 | INFO | valid | epoch 071 | valid on 'valid' subset | loss 3.522 | nll_loss 1.904 | ppl 3.74 | wps 161617 | wpb 3189.1 | bsz 163.4 | num_updates 26184 | best_loss 3.494
+2024-02-08 00:23:18 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 71 @ 26184 updates
+2024-02-08 00:23:18 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint71.pt
+2024-02-08 00:23:19 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint71.pt
+2024-02-08 00:23:20 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint71.pt (epoch 71 @ 26184 updates, score 3.522) (writing took 2.434378754114732 seconds)
+2024-02-08 00:23:20 | INFO | fairseq_cli.train | end of epoch 71 (average epoch stats below)
+2024-02-08 00:23:20 | INFO | train | epoch 071 | loss 3.276 | nll_loss 1.753 | ppl 3.37 | wps 71287.3 | ups 4.73 | wpb 15076.1 | bsz 783.3 | num_updates 26184 | lr 0.00199764 | gnorm 3.924 | loss_scale 0.0312 | train_wall 73 | gb_free 29.5 | wall 3280
+2024-02-08 00:23:20 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:23:22 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:23:22 | INFO | fairseq.trainer | begin training epoch 72
+2024-02-08 00:23:22 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:23:25 | INFO | train_inner | epoch 072:     16 / 369 loss=3.066, nll_loss=1.515, ppl=2.86, wps=56704, ups=3.81, wpb=14865, bsz=784, num_updates=26200, lr=0.00199764, gnorm=2.173, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3285
+2024-02-08 00:23:45 | INFO | train_inner | epoch 072:    116 / 369 loss=3.208, nll_loss=1.678, ppl=3.2, wps=78289.1, ups=5.18, wpb=15128.3, bsz=791.6, num_updates=26300, lr=0.00199761, gnorm=5.489, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3304
+2024-02-08 00:24:04 | INFO | train_inner | epoch 072:    216 / 369 loss=3.696, nll_loss=2.23, ppl=4.69, wps=78492.3, ups=5.2, wpb=15098.6, bsz=763, num_updates=26400, lr=0.00199758, gnorm=12.185, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3324
+2024-02-08 00:24:23 | INFO | train_inner | epoch 072:    316 / 369 loss=3.114, nll_loss=1.568, ppl=2.96, wps=77524.7, ups=5.15, wpb=15044.9, bsz=814.7, num_updates=26500, lr=0.00199755, gnorm=7.072, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3343
+2024-02-08 00:24:34 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:24:34 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:24:36 | INFO | valid | epoch 072 | valid on 'valid' subset | loss 3.505 | nll_loss 1.892 | ppl 3.71 | wps 164480 | wpb 3189.1 | bsz 163.4 | num_updates 26553 | best_loss 3.494
+2024-02-08 00:24:36 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 72 @ 26553 updates
+2024-02-08 00:24:36 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint72.pt
+2024-02-08 00:24:36 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint72.pt
+2024-02-08 00:24:38 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint72.pt (epoch 72 @ 26553 updates, score 3.505) (writing took 2.4065290468279272 seconds)
+2024-02-08 00:24:38 | INFO | fairseq_cli.train | end of epoch 72 (average epoch stats below)
+2024-02-08 00:24:38 | INFO | train | epoch 072 | loss 3.299 | nll_loss 1.78 | ppl 3.43 | wps 71458.5 | ups 4.74 | wpb 15076.1 | bsz 783.3 | num_updates 26553 | lr 0.00199753 | gnorm 7.405 | loss_scale 0.0312 | train_wall 71 | gb_free 29.5 | wall 3357
+2024-02-08 00:24:38 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:24:38 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:24:38 | INFO | fairseq.trainer | begin training epoch 73
+2024-02-08 00:24:38 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:24:47 | INFO | train_inner | epoch 073:     47 / 369 loss=3.115, nll_loss=1.57, ppl=2.97, wps=63816.5, ups=4.23, wpb=15090.8, bsz=769.4, num_updates=26600, lr=0.00199752, gnorm=4.799, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3367
+2024-02-08 00:25:06 | INFO | train_inner | epoch 073:    147 / 369 loss=3.365, nll_loss=1.854, ppl=3.62, wps=78269.4, ups=5.19, wpb=15070.9, bsz=778.4, num_updates=26700, lr=0.00199749, gnorm=8.004, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=3386
+2024-02-08 00:25:26 | INFO | train_inner | epoch 073:    247 / 369 loss=3.13, nll_loss=1.586, ppl=3, wps=77469.2, ups=5.15, wpb=15046, bsz=796.2, num_updates=26800, lr=0.00199746, gnorm=3.517, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3405
+2024-02-08 00:25:45 | INFO | train_inner | epoch 073:    347 / 369 loss=3.087, nll_loss=1.539, ppl=2.91, wps=77571.6, ups=5.16, wpb=15033.4, bsz=776, num_updates=26900, lr=0.00199743, gnorm=2.982, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3425
+2024-02-08 00:25:49 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:25:49 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:25:51 | INFO | valid | epoch 073 | valid on 'valid' subset | loss 3.516 | nll_loss 1.899 | ppl 3.73 | wps 165361 | wpb 3189.1 | bsz 163.4 | num_updates 26922 | best_loss 3.494
+2024-02-08 00:25:51 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 73 @ 26922 updates
+2024-02-08 00:25:51 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint73.pt
+2024-02-08 00:25:52 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint73.pt
+2024-02-08 00:25:54 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint73.pt (epoch 73 @ 26922 updates, score 3.516) (writing took 2.4816293329931796 seconds)
+2024-02-08 00:25:54 | INFO | fairseq_cli.train | end of epoch 73 (average epoch stats below)
+2024-02-08 00:25:54 | INFO | train | epoch 073 | loss 3.175 | nll_loss 1.638 | ppl 3.11 | wps 73431.9 | ups 4.87 | wpb 15076.1 | bsz 783.3 | num_updates 26922 | lr 0.00199742 | gnorm 4.79 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 3433
+2024-02-08 00:25:54 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:25:55 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:25:55 | INFO | fairseq.trainer | begin training epoch 74
+2024-02-08 00:25:55 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:26:10 | INFO | train_inner | epoch 074:     78 / 369 loss=3.076, nll_loss=1.526, ppl=2.88, wps=59485.7, ups=3.95, wpb=15045.9, bsz=774.6, num_updates=27000, lr=0.0019974, gnorm=3.818, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3450
+2024-02-08 00:26:30 | INFO | train_inner | epoch 074:    178 / 369 loss=3.144, nll_loss=1.602, ppl=3.04, wps=77809.5, ups=5.17, wpb=15050.2, bsz=770.9, num_updates=27100, lr=0.00199737, gnorm=4.137, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3469
+2024-02-08 00:26:49 | INFO | train_inner | epoch 074:    278 / 369 loss=5.882, nll_loss=4.754, ppl=26.98, wps=77747.6, ups=5.17, wpb=15050.6, bsz=789.7, num_updates=27200, lr=0.00199734, gnorm=4.535, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=3489
+2024-02-08 00:27:07 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:27:07 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:27:09 | INFO | valid | epoch 074 | valid on 'valid' subset | loss 6.834 | nll_loss 5.789 | ppl 55.3 | wps 162544 | wpb 3189.1 | bsz 163.4 | num_updates 27291 | best_loss 3.494
+2024-02-08 00:27:09 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 74 @ 27291 updates
+2024-02-08 00:27:09 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint74.pt
+2024-02-08 00:27:10 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint74.pt
+2024-02-08 00:27:11 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint74.pt (epoch 74 @ 27291 updates, score 6.834) (writing took 2.404181824065745 seconds)
+2024-02-08 00:27:11 | INFO | fairseq_cli.train | end of epoch 74 (average epoch stats below)
+2024-02-08 00:27:11 | INFO | train | epoch 074 | loss 4.767 | nll_loss 3.47 | ppl 11.08 | wps 71912.8 | ups 4.77 | wpb 15076.1 | bsz 783.3 | num_updates 27291 | lr 0.00199731 | gnorm 3.621 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 3511
+2024-02-08 00:27:11 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:27:11 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:27:11 | INFO | fairseq.trainer | begin training epoch 75
+2024-02-08 00:27:11 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:27:13 | INFO | train_inner | epoch 075:      9 / 369 loss=6.756, nll_loss=5.755, ppl=54, wps=63936.1, ups=4.21, wpb=15185, bsz=797.8, num_updates=27300, lr=0.0019973, gnorm=1.689, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3512
+2024-02-08 00:27:32 | INFO | train_inner | epoch 075:    109 / 369 loss=6.666, nll_loss=5.648, ppl=50.13, wps=77647.6, ups=5.16, wpb=15052.9, bsz=787.6, num_updates=27400, lr=0.00199727, gnorm=1.637, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3532
+2024-02-08 00:27:52 | INFO | train_inner | epoch 075:    209 / 369 loss=6.606, nll_loss=5.578, ppl=47.76, wps=78618.6, ups=5.2, wpb=15107.5, bsz=763.8, num_updates=27500, lr=0.00199724, gnorm=1.528, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3551
+2024-02-08 00:28:11 | INFO | train_inner | epoch 075:    309 / 369 loss=6.558, nll_loss=5.522, ppl=45.95, wps=77552.1, ups=5.19, wpb=14956.8, bsz=795.5, num_updates=27600, lr=0.00199721, gnorm=1.462, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3570
+2024-02-08 00:28:22 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:28:22 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:28:24 | INFO | valid | epoch 075 | valid on 'valid' subset | loss 6.678 | nll_loss 5.595 | ppl 48.34 | wps 162780 | wpb 3189.1 | bsz 163.4 | num_updates 27660 | best_loss 3.494
+2024-02-08 00:28:24 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 75 @ 27660 updates
+2024-02-08 00:28:24 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint75.pt
+2024-02-08 00:28:25 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint75.pt
+2024-02-08 00:28:27 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint75.pt (epoch 75 @ 27660 updates, score 6.678) (writing took 2.4120640829205513 seconds)
+2024-02-08 00:28:27 | INFO | fairseq_cli.train | end of epoch 75 (average epoch stats below)
+2024-02-08 00:28:27 | INFO | train | epoch 075 | loss 6.597 | nll_loss 5.568 | ppl 47.43 | wps 73530.3 | ups 4.88 | wpb 15076.1 | bsz 783.3 | num_updates 27660 | lr 0.00199719 | gnorm 1.504 | loss_scale 0.0312 | train_wall 70 | gb_free 29.6 | wall 3586
+2024-02-08 00:28:27 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:28:27 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:28:27 | INFO | fairseq.trainer | begin training epoch 76
+2024-02-08 00:28:27 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:28:35 | INFO | train_inner | epoch 076:     40 / 369 loss=6.486, nll_loss=5.438, ppl=43.36, wps=63859.2, ups=4.21, wpb=15180.4, bsz=804.2, num_updates=27700, lr=0.00199718, gnorm=1.344, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=3594
+2024-02-08 00:28:54 | INFO | train_inner | epoch 076:    140 / 369 loss=6.432, nll_loss=5.375, ppl=41.49, wps=77718.4, ups=5.18, wpb=15016.8, bsz=793.2, num_updates=27800, lr=0.00199715, gnorm=1.452, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3613
+2024-02-08 00:29:13 | INFO | train_inner | epoch 076:    240 / 369 loss=6.431, nll_loss=5.374, ppl=41.46, wps=78428.9, ups=5.17, wpb=15157, bsz=774.2, num_updates=27900, lr=0.00199711, gnorm=1.342, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3633
+2024-02-08 00:29:33 | INFO | train_inner | epoch 076:    340 / 369 loss=6.443, nll_loss=5.387, ppl=41.84, wps=78090.3, ups=5.16, wpb=15130.8, bsz=767, num_updates=28000, lr=0.00199708, gnorm=1.255, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3652
+2024-02-08 00:29:38 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:29:38 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:29:40 | INFO | valid | epoch 076 | valid on 'valid' subset | loss 6.643 | nll_loss 5.55 | ppl 46.84 | wps 155335 | wpb 3189.1 | bsz 163.4 | num_updates 28029 | best_loss 3.494
+2024-02-08 00:29:40 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 76 @ 28029 updates
+2024-02-08 00:29:40 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint76.pt
+2024-02-08 00:29:41 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint76.pt
+2024-02-08 00:29:43 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint76.pt (epoch 76 @ 28029 updates, score 6.643) (writing took 2.457821713993326 seconds)
+2024-02-08 00:29:43 | INFO | fairseq_cli.train | end of epoch 76 (average epoch stats below)
+2024-02-08 00:29:43 | INFO | train | epoch 076 | loss 6.433 | nll_loss 5.376 | ppl 41.52 | wps 73339.5 | ups 4.86 | wpb 15076.1 | bsz 783.3 | num_updates 28029 | lr 0.00199707 | gnorm 1.354 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 3662
+2024-02-08 00:29:43 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:29:43 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:29:43 | INFO | fairseq.trainer | begin training epoch 77
+2024-02-08 00:29:43 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:29:56 | INFO | train_inner | epoch 077:     71 / 369 loss=6.345, nll_loss=5.273, ppl=38.67, wps=62706.2, ups=4.19, wpb=14970.7, bsz=779.3, num_updates=28100, lr=0.00199705, gnorm=1.34, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3676
+2024-02-08 00:30:16 | INFO | train_inner | epoch 077:    171 / 369 loss=6.319, nll_loss=5.243, ppl=37.86, wps=78119.8, ups=5.13, wpb=15216.6, bsz=790.3, num_updates=28200, lr=0.00199702, gnorm=1.245, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=3696
+2024-02-08 00:30:35 | INFO | train_inner | epoch 077:    271 / 369 loss=6.396, nll_loss=5.331, ppl=40.24, wps=78129.1, ups=5.18, wpb=15095, bsz=760.6, num_updates=28300, lr=0.00199698, gnorm=1.799, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3715
+2024-02-08 00:30:54 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:30:54 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:30:56 | INFO | valid | epoch 077 | valid on 'valid' subset | loss 6.639 | nll_loss 5.541 | ppl 46.57 | wps 160646 | wpb 3189.1 | bsz 163.4 | num_updates 28398 | best_loss 3.494
+2024-02-08 00:30:56 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 77 @ 28398 updates
+2024-02-08 00:30:56 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint77.pt
+2024-02-08 00:30:57 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint77.pt
+2024-02-08 00:30:59 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint77.pt (epoch 77 @ 28398 updates, score 6.639) (writing took 2.4084451941307634 seconds)
+2024-02-08 00:30:59 | INFO | fairseq_cli.train | end of epoch 77 (average epoch stats below)
+2024-02-08 00:30:59 | INFO | train | epoch 077 | loss 6.346 | nll_loss 5.273 | ppl 38.67 | wps 72936.6 | ups 4.84 | wpb 15076.1 | bsz 783.3 | num_updates 28398 | lr 0.00199695 | gnorm 1.407 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 3738
+2024-02-08 00:30:59 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:30:59 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:30:59 | INFO | fairseq.trainer | begin training epoch 78
+2024-02-08 00:30:59 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:30:59 | INFO | train_inner | epoch 078:      2 / 369 loss=6.343, nll_loss=5.271, ppl=38.6, wps=62042.5, ups=4.15, wpb=14944.3, bsz=801.5, num_updates=28400, lr=0.00199695, gnorm=1.205, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=3739
+2024-02-08 00:31:19 | INFO | train_inner | epoch 078:    102 / 369 loss=6.24, nll_loss=5.15, ppl=35.5, wps=78399.4, ups=5.18, wpb=15142, bsz=774.8, num_updates=28500, lr=0.00199692, gnorm=1.259, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3758
+2024-02-08 00:31:38 | INFO | train_inner | epoch 078:    202 / 369 loss=6.298, nll_loss=5.216, ppl=37.17, wps=77621.7, ups=5.14, wpb=15099.6, bsz=776.6, num_updates=28600, lr=0.00199688, gnorm=1.25, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3778
+2024-02-08 00:31:58 | INFO | train_inner | epoch 078:    302 / 369 loss=6.282, nll_loss=5.198, ppl=36.71, wps=77372.4, ups=5.15, wpb=15010.9, bsz=785.7, num_updates=28700, lr=0.00199685, gnorm=1.287, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3797
+2024-02-08 00:32:10 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:32:10 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:32:12 | INFO | valid | epoch 078 | valid on 'valid' subset | loss 6.594 | nll_loss 5.483 | ppl 44.71 | wps 163573 | wpb 3189.1 | bsz 163.4 | num_updates 28767 | best_loss 3.494
+2024-02-08 00:32:12 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 78 @ 28767 updates
+2024-02-08 00:32:12 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint78.pt
+2024-02-08 00:32:13 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint78.pt
+2024-02-08 00:32:15 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint78.pt (epoch 78 @ 28767 updates, score 6.594) (writing took 2.393577338894829 seconds)
+2024-02-08 00:32:15 | INFO | fairseq_cli.train | end of epoch 78 (average epoch stats below)
+2024-02-08 00:32:15 | INFO | train | epoch 078 | loss 6.273 | nll_loss 5.188 | ppl 36.45 | wps 73211.9 | ups 4.86 | wpb 15076.1 | bsz 783.3 | num_updates 28767 | lr 0.00199683 | gnorm 1.256 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 3814
+2024-02-08 00:32:15 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:32:15 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:32:15 | INFO | fairseq.trainer | begin training epoch 79
+2024-02-08 00:32:15 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:32:21 | INFO | train_inner | epoch 079:     33 / 369 loss=6.253, nll_loss=5.164, ppl=35.86, wps=63005.5, ups=4.21, wpb=14970.9, bsz=778.6, num_updates=28800, lr=0.00199682, gnorm=1.222, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3821
+2024-02-08 00:32:41 | INFO | train_inner | epoch 079:    133 / 369 loss=6.199, nll_loss=5.101, ppl=34.32, wps=78742.4, ups=5.16, wpb=15270.6, bsz=779.1, num_updates=28900, lr=0.00199678, gnorm=1.382, loss_scale=0.0312, train_wall=19, gb_free=29.5, wall=3840
+2024-02-08 00:33:00 | INFO | train_inner | epoch 079:    233 / 369 loss=6.239, nll_loss=5.147, ppl=35.44, wps=77159, ups=5.14, wpb=15020.3, bsz=783, num_updates=29000, lr=0.00199675, gnorm=1.26, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3860
+2024-02-08 00:33:20 | INFO | train_inner | epoch 079:    333 / 369 loss=6.231, nll_loss=5.138, ppl=35.22, wps=77342.1, ups=5.14, wpb=15054.3, bsz=799.2, num_updates=29100, lr=0.00199671, gnorm=1.16, loss_scale=0.0312, train_wall=19, gb_free=29.6, wall=3879
+2024-02-08 00:33:27 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:33:27 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:33:28 | INFO | valid | epoch 079 | valid on 'valid' subset | loss 6.562 | nll_loss 5.456 | ppl 43.9 | wps 163708 | wpb 3189.1 | bsz 163.4 | num_updates 29136 | best_loss 3.494
+2024-02-08 00:33:28 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 79 @ 29136 updates
+2024-02-08 00:33:28 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint79.pt
+2024-02-08 00:33:30 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint79.pt
+2024-02-08 00:33:31 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint79.pt (epoch 79 @ 29136 updates, score 6.562) (writing took 2.464775992091745 seconds)
+2024-02-08 00:33:31 | INFO | fairseq_cli.train | end of epoch 79 (average epoch stats below)
+2024-02-08 00:33:31 | INFO | train | epoch 079 | loss 6.219 | nll_loss 5.124 | ppl 34.87 | wps 73065.5 | ups 4.85 | wpb 15076.1 | bsz 783.3 | num_updates 29136 | lr 0.0019967 | gnorm 1.257 | loss_scale 0.0312 | train_wall 71 | gb_free 29.6 | wall 3891
+2024-02-08 00:33:31 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:33:31 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:33:31 | INFO | fairseq.trainer | begin training epoch 80
+2024-02-08 00:33:31 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:33:44 | INFO | train_inner | epoch 080:     64 / 369 loss=6.165, nll_loss=5.061, ppl=33.38, wps=61350.8, ups=4.1, wpb=14976.7, bsz=782.1, num_updates=29200, lr=0.00199668, gnorm=1.253, loss_scale=0.0625, train_wall=20, gb_free=29.6, wall=3904
+2024-02-08 00:34:05 | INFO | train_inner | epoch 080:    164 / 369 loss=6.176, nll_loss=5.073, ppl=33.65, wps=73538.7, ups=4.84, wpb=15200.1, bsz=794.3, num_updates=29300, lr=0.00199665, gnorm=2.495, loss_scale=0.0625, train_wall=20, gb_free=29.5, wall=3924
+2024-02-08 00:34:24 | INFO | train_inner | epoch 080:    264 / 369 loss=6.193, nll_loss=5.093, ppl=34.14, wps=77915.3, ups=5.18, wpb=15041.4, bsz=781.2, num_updates=29400, lr=0.00199661, gnorm=1.164, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=3944
+2024-02-08 00:34:43 | INFO | train_inner | epoch 080:    364 / 369 loss=6.235, nll_loss=5.142, ppl=35.31, wps=77875.3, ups=5.17, wpb=15058.9, bsz=780.9, num_updates=29500, lr=0.00199658, gnorm=3.766, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=3963
+2024-02-08 00:34:44 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:34:44 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:34:46 | INFO | valid | epoch 080 | valid on 'valid' subset | loss 6.565 | nll_loss 5.454 | ppl 43.84 | wps 163294 | wpb 3189.1 | bsz 163.4 | num_updates 29505 | best_loss 3.494
+2024-02-08 00:34:46 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 80 @ 29505 updates
+2024-02-08 00:34:46 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint80.pt
+2024-02-08 00:34:47 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint80.pt
+2024-02-08 00:34:49 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint80.pt (epoch 80 @ 29505 updates, score 6.565) (writing took 2.4323088601231575 seconds)
+2024-02-08 00:34:49 | INFO | fairseq_cli.train | end of epoch 80 (average epoch stats below)
+2024-02-08 00:34:49 | INFO | train | epoch 080 | loss 6.193 | nll_loss 5.093 | ppl 34.12 | wps 71693.8 | ups 4.76 | wpb 15076.1 | bsz 783.3 | num_updates 29505 | lr 0.00199657 | gnorm 2.251 | loss_scale 0.0625 | train_wall 72 | gb_free 29.6 | wall 3968
+2024-02-08 00:34:49 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:34:49 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:34:49 | INFO | fairseq.trainer | begin training epoch 81
+2024-02-08 00:34:49 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:35:08 | INFO | train_inner | epoch 081:     95 / 369 loss=6.113, nll_loss=4.999, ppl=31.97, wps=60985.7, ups=4.04, wpb=15100.1, bsz=778.9, num_updates=29600, lr=0.00199654, gnorm=1.107, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=3988
+2024-02-08 00:35:27 | INFO | train_inner | epoch 081:    195 / 369 loss=6.134, nll_loss=5.024, ppl=32.54, wps=77406.8, ups=5.18, wpb=14956.5, bsz=785.8, num_updates=29700, lr=0.0019965, gnorm=1.163, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=4007
+2024-02-08 00:35:47 | INFO | train_inner | epoch 081:    295 / 369 loss=6.15, nll_loss=5.042, ppl=32.93, wps=77473.1, ups=5.15, wpb=15045.7, bsz=792.4, num_updates=29800, lr=0.00199647, gnorm=1.215, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=4026
+2024-02-08 00:36:01 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:36:01 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:36:03 | INFO | valid | epoch 081 | valid on 'valid' subset | loss 6.579 | nll_loss 5.455 | ppl 43.87 | wps 162770 | wpb 3189.1 | bsz 163.4 | num_updates 29874 | best_loss 3.494
+2024-02-08 00:36:03 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 81 @ 29874 updates
+2024-02-08 00:36:03 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint81.pt
+2024-02-08 00:36:04 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint81.pt
+2024-02-08 00:36:06 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint81.pt (epoch 81 @ 29874 updates, score 6.579) (writing took 2.432740345131606 seconds)
+2024-02-08 00:36:06 | INFO | fairseq_cli.train | end of epoch 81 (average epoch stats below)
+2024-02-08 00:36:06 | INFO | train | epoch 081 | loss 6.137 | nll_loss 5.027 | ppl 32.6 | wps 72256.7 | ups 4.79 | wpb 15076.1 | bsz 783.3 | num_updates 29874 | lr 0.00199644 | gnorm 1.159 | loss_scale 0.0625 | train_wall 71 | gb_free 29.6 | wall 4045
+2024-02-08 00:36:06 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:36:06 | INFO | fairseq.data.iterators | grouped total_num_itrs = 369
+2024-02-08 00:36:06 | INFO | fairseq.trainer | begin training epoch 82
+2024-02-08 00:36:06 | INFO | fairseq_cli.train | Start iterating over samples
+2024-02-08 00:36:11 | INFO | train_inner | epoch 082:     26 / 369 loss=6.147, nll_loss=5.038, ppl=32.86, wps=63849.4, ups=4.19, wpb=15227, bsz=768, num_updates=29900, lr=0.00199643, gnorm=1.17, loss_scale=0.0625, train_wall=19, gb_free=29.5, wall=4050
+2024-02-08 00:36:30 | INFO | train_inner | epoch 082:    126 / 369 loss=6.101, nll_loss=4.984, ppl=31.66, wps=77139.6, ups=5.14, wpb=15017, bsz=778.6, num_updates=30000, lr=0.0019964, gnorm=1.245, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=4070
+2024-02-08 00:36:50 | INFO | train_inner | epoch 082:    226 / 369 loss=6.115, nll_loss=5, ppl=32, wps=77749.8, ups=5.16, wpb=15065.7, bsz=765.9, num_updates=30100, lr=0.00199636, gnorm=1.307, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=4089
+2024-02-08 00:37:09 | INFO | train_inner | epoch 082:    326 / 369 loss=6.106, nll_loss=4.991, ppl=31.8, wps=77525.6, ups=5.14, wpb=15073.9, bsz=809.4, num_updates=30200, lr=0.00199633, gnorm=1.207, loss_scale=0.0625, train_wall=19, gb_free=29.6, wall=4109
+2024-02-08 00:37:17 | INFO | fairseq_cli.train | begin validation on "valid" subset
+2024-02-08 00:37:17 | INFO | fairseq.tasks.fairseq_task | can_reuse_epoch_itr = True
+2024-02-08 00:37:19 | INFO | valid | epoch 082 | valid on 'valid' subset | loss 6.522 | nll_loss 5.407 | ppl 42.44 | wps 161759 | wpb 3189.1 | bsz 163.4 | num_updates 30243 | best_loss 3.494
+2024-02-08 00:37:19 | INFO | fairseq_cli.train | early stop since valid performance hasn't improved for last 25 runs
+2024-02-08 00:37:19 | INFO | fairseq.checkpoint_utils | Preparing to save checkpoint for epoch 82 @ 30243 updates
+2024-02-08 00:37:19 | INFO | fairseq.trainer | Saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint82.pt
+2024-02-08 00:37:20 | INFO | fairseq.trainer | Finished saving checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint82.pt
+2024-02-08 00:37:22 | INFO | fairseq.checkpoint_utils | Saved checkpoint /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint82.pt (epoch 82 @ 30243 updates, score 6.522) (writing took 2.393531932029873 seconds)
+2024-02-08 00:37:22 | INFO | fairseq_cli.train | end of epoch 82 (average epoch stats below)
+2024-02-08 00:37:22 | INFO | train | epoch 082 | loss 6.108 | nll_loss 4.993 | ppl 31.84 | wps 73163.9 | ups 4.85 | wpb 15076.1 | bsz 783.3 | num_updates 30243 | lr 0.00199631 | gnorm 1.235 | loss_scale 0.0625 | train_wall 71 | gb_free 29.5 | wall 4121
+2024-02-08 00:37:22 | INFO | fairseq_cli.train | done training in 4114.7 seconds
+Training complete.
+Finetuning complete.
+----------------------------------------------------------
+Translating the test set...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt
+Test prefix: /pfs/work7/workspace/scratch/uxude-MT/dataset/covost/spm/test
+Binary data directory: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset
+cp: '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt' and '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt' are the same file
+cp: '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt' and '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt' are the same file
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/pfs/work7/workspace/scratch/uxude-MT/dataset/covost/spm/test', align_suffix=None, destdir='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset', thresholdtgt=0, thresholdsrc=0, tgtdict='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt', srcdict='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=8, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6520 types
+INFO:fairseq_cli.preprocess:[en] /pfs/work7/workspace/scratch/uxude-MT/dataset/covost/spm/test.en: 15516 sents, 256102 tokens, 0.0215% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 7560 types
+INFO:fairseq_cli.preprocess:[de] /pfs/work7/workspace/scratch/uxude-MT/dataset/covost/spm/test.de: 15516 sents, 269168 tokens, 0.0241% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint82.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint81.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint80.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint79.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint78.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset
+Prediction output directory: /home/kit/stud/uxude/predictions/finetune_mt_covost
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6520 types
+INFO:fairseq.tasks.translation:[de] dictionary: 7560 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 15,516 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 15,516 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/test.en-de.de
+INFO:fairseq.tasks.translation:/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset test en-de 15516 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq.logging.progress_bar::    101 / 243 wps=2659
+INFO:fairseq.logging.progress_bar::    201 / 243 wps=2578
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 15,512 sentences (434,336 tokens) in 118.5s (130.93 sentences/s, 3665.91 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/finetune_mt_covost/hyp_mt.txt and /home/kit/stud/uxude/predictions/finetune_mt_covost/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/finetune_mt_covost/hyp_mt.txt.sampled
+Sample predictions:
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Ich weiß nicht.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Zeig mal!
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Aber nicht lange.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Wie war er?
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Und zuletzt?
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Mit allem?
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Reichstag
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Arbeitswelt
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Das mache ich weiterhin.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Die Zeit rast.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Du machst es.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Sie ist gerecht.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Eine Sinfonie
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Das Leben ist schön.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Das goldene Land
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Gebackene Erde
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Die Union ist stark.
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Sehen uns Dienstag!
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Ein Akt des Glaubens
+Sample: Ein Mann in einem blauen Hemd sitzt in einem blauen Hemd und hält ein Mikrofon.
+Reference: Das ist nicht möglich.
+WER:
+Generate test with beam=16: BLEU4 = 0.13, 3.3/0.2/0.0/0.0 (BP=1.000, ratio=1.658, syslen=232680, reflen=140351)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 0.1,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "3.3/0.2/0.0/0.0 (BP = 1.000 ratio = 1.658 hyp_len = 232680 ref_len = 140350)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
