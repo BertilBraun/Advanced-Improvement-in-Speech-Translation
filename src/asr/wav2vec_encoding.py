@@ -11,13 +11,13 @@ from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 REQUIRED_SAMPLE_RATE = 16000
 
-__PROCESSOR: Wav2Vec2Processor = None # type: ignore
-__MODEL: Wav2Vec2Model = None # type: ignore
+__PROCESSOR: Wav2Vec2Processor = None  # type: ignore
+__MODEL: Wav2Vec2Model = None  # type: ignore
 
-logger = get_logger("ASR::Wav2vecEncoding")
+logger = get_logger('ASR::Wav2vecEncoding')
 
 
 def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path, batch_size: int = 32) -> None:
@@ -25,16 +25,16 @@ def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path
     batch_waveforms = []
     batch_paths = []
 
-    for wav, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc="Wav2vec"):
-        file = output_root / f"{speaker_id}-{sample_id}.npy"
+    for wav, sample_rate, sentence, translation, speaker_id, sample_id in iterate_over_dataset(dataset, desc='Wav2vec'):
+        file = output_root / f'{speaker_id}-{sample_id}.npy'
 
         if file.is_file():
             continue
-        
+
         if sample_rate != REQUIRED_SAMPLE_RATE:
             resampler = Resample(orig_freq=sample_rate, new_freq=REQUIRED_SAMPLE_RATE)
             wav = resampler(wav)
-            
+
         batch_waveforms.append(wav.to(device=DEVICE, dtype=torch.float))
         batch_paths.append(file.as_posix())
 
@@ -46,7 +46,7 @@ def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path
     if batch_waveforms:
         __extract_wav2vec_features_batch(batch_waveforms, batch_paths)
 
-    logger.info(f"Finished  processing wav2vec embeddings for all samples.")
+    logger.info(f'Finished  processing wav2vec embeddings for all samples.')
 
 
 def __ensure_model_and_processor_loaded() -> None:
@@ -54,12 +54,12 @@ def __ensure_model_and_processor_loaded() -> None:
     global __MODEL
 
     if __PROCESSOR is None:
-        logger.info("Loading Wav2Vec processor...")
-        __PROCESSOR = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+        logger.info('Loading Wav2Vec processor...')
+        __PROCESSOR = Wav2Vec2Processor.from_pretrained('facebook/wav2vec2-base-960h')
     if __MODEL is None:
-        logger.info("Loading Wav2Vec model...")
-        __MODEL = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h") # type: ignore
-        __MODEL = __MODEL.to(DEVICE) # type: ignore
+        logger.info('Loading Wav2Vec model...')
+        __MODEL = Wav2Vec2Model.from_pretrained('facebook/wav2vec2-base-960h')  # type: ignore
+        __MODEL = __MODEL.to(DEVICE)  # type: ignore
 
 
 def __extract_wav2vec_features_batch(waveforms: list[torch.FloatTensor], output_paths: list[Path]) -> None:
@@ -76,7 +76,9 @@ def __extract_wav2vec_features_batch(waveforms: list[torch.FloatTensor], output_
         batch_waveforms = batch_waveforms.unsqueeze(1)
 
         # Process the batch
-        processed_values = __PROCESSOR(batch_waveforms, sampling_rate=REQUIRED_SAMPLE_RATE, return_tensors="pt").input_values
+        processed_values = __PROCESSOR(
+            batch_waveforms, sampling_rate=REQUIRED_SAMPLE_RATE, return_tensors='pt'
+        ).input_values
         processed_values = processed_values.squeeze(0).squeeze(1)
         processed_values = processed_values.to(DEVICE)
 
@@ -98,4 +100,4 @@ def __extract_wav2vec_features_batch(waveforms: list[torch.FloatTensor], output_
             trimmed_feature = feature.cpu().numpy()[:trimmed_length, :]
             np.save(output_path, trimmed_feature)
     except Exception as e:
-        logger.error(f"Error at embedding {output_paths}: {e}")
+        logger.error(f'Error at embedding {output_paths}: {e}')

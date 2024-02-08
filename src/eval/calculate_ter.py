@@ -8,7 +8,7 @@ def calculate_ter(hyp_file: str, ref_file: str) -> float:
         ref_lines = rf.readlines()
 
     if len(hyp_lines) != len(ref_lines):
-        raise ValueError("The number of lines in hypothesis and reference files must be the same")
+        raise ValueError('The number of lines in hypothesis and reference files must be the same')
 
     total_ter = 0.0
     for hyp_line, ref_line in zip(hyp_lines, ref_lines):
@@ -21,8 +21,8 @@ def calculate_ter(hyp_file: str, ref_file: str) -> float:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--hyp_file", type=str, required=True)
-parser.add_argument("--ref_file", type=str, required=True)
+parser.add_argument('--hyp_file', type=str, required=True)
+parser.add_argument('--ref_file', type=str, required=True)
 args = parser.parse_args()
 
-print("Average TER Score:", calculate_ter(args.hyp_file, args.ref_file))
+print('Average TER Score:', calculate_ter(args.hyp_file, args.ref_file))

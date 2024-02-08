@@ -3,7 +3,7 @@ from pathlib import Path
 from torch.utils.data import Dataset
 
 DO_FILTER_NON_ASCII = True
-ALLOWED_NON_ASCII_CHARS = "–“’‘„”�…€—βüöäÜÖÄ"
+ALLOWED_NON_ASCII_CHARS = '–“’‘„”�…€—βüöäÜÖÄ'
 
 
 def translation_pair_check(en: str, de: str) -> bool:
@@ -16,19 +16,21 @@ def translation_pair_check(en: str, de: str) -> bool:
 
 def cleanup(src: str, tgt: str) -> tuple[str, str]:
     def clean(s: str) -> str:
-        return s.replace("\n", " ").replace("\t", " ").strip()
+        return s.replace('\n', ' ').replace('\t', ' ').strip()
 
     return clean(src), clean(tgt)
 
 
 TextSample = tuple[str, str]
+
+
 class MTDataset(Dataset[TextSample]):
     """Create a clean Dataset for MT."""
 
     def __init__(self, split) -> None:
         self.split = split
         self._data = self._load_datasets()
-        
+
     def __getitem__(self, n: int) -> TextSample:
         """Load the n-th sample from the dataset.
         Args:
@@ -42,19 +44,19 @@ class MTDataset(Dataset[TextSample]):
         return len(self._data)
 
     def write_to_files(self, src_path: Path, tgt_path: Path, max_lines_to_write: int | None = None) -> None:
-        with open(src_path, "w") as src_file, open(tgt_path, "w") as tgt_file:
-            for i, (src, tgt) in tqdm(enumerate(self._data), desc="Writing to files"):
+        with open(src_path, 'w') as src_file, open(tgt_path, 'w') as tgt_file:
+            for i, (src, tgt) in tqdm(enumerate(self._data), desc='Writing to files'):
                 if max_lines_to_write is not None and i >= max_lines_to_write:
                     break
-                src_file.write(src + "\n")
-                tgt_file.write(tgt + "\n")
-                
+                src_file.write(src + '\n')
+                tgt_file.write(tgt + '\n')
+
     def _load_data(self) -> list[TextSample]:
         raise NotImplementedError()
 
     def _load_datasets(self) -> list[tuple[str, str]]:
         return [
             cleanup(src, tgt)
-            for src, tgt in tqdm(self._load_data(), desc="Processing dataset")
+            for src, tgt in tqdm(self._load_data(), desc='Processing dataset')
             if translation_pair_check(src, tgt)
         ]

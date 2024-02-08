@@ -9,3 +9,5 @@ gen
 
 res/
 examples/**
+
+**/.ruff_cache/**

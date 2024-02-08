@@ -4,33 +4,34 @@ from src.logger_utils import get_logger
 from src.mt.bpe import BPE
 from src.paths import *
 
-logger = get_logger("MT::Config")
+logger = get_logger('MT::Config')
 
-def process_mt_dataset_to_spm_encoding(datasets: Sequence[MTDataset], split_names: list[str], output_root: Path, spm_model: Path | None = None) -> None:   
+
+def process_mt_dataset_to_spm_encoding(
+    datasets: Sequence[MTDataset], split_names: list[str], output_root: Path, spm_model: Path | None = None
+) -> None:
     for dataset, split in zip(datasets, split_names):
-        
-        logger.info(f"Writing MT Dataset {split} to disk...")
-        src_path = output_root / "data" / f"{split}.en"
-        tgt_path = output_root / "data" / f"{split}.de"
+        logger.info(f'Writing MT Dataset {split} to disk...')
+        src_path = output_root / 'data' / f'{split}.en'
+        tgt_path = output_root / 'data' / f'{split}.de'
         dataset.write_to_files(src_path, tgt_path, max_lines_to_write=20_000_000)
 
-        logger.info("Loading MT BPE...")        
+        logger.info('Loading MT BPE...')
         bpe = BPE(
             retrain_spm=False,
-            model_file=spm_model or output_root / "spm_unigram10000.model",
+            model_file=spm_model or output_root / 'spm_unigram10000.model',
             train_files=[src_path.as_posix(), tgt_path.as_posix()],
         )
-        
-        logger.info("Encoding MT Dataset with sentencepiece...")
-        logger.info(f"Encoding split {split}...")
-        
+
+        logger.info('Encoding MT Dataset with sentencepiece...')
+        logger.info(f'Encoding split {split}...')
+
         bpe.encode_file(
-            output_root / "data" / f"{split}.en",
-            output_root / "spm" / f"{split}.en",
+            output_root / 'data' / f'{split}.en',
+            output_root / 'spm' / f'{split}.en',
         )
-        
+
         bpe.encode_file(
-            output_root / "data" / f"{split}.de",
-            output_root / "spm" / f"{split}.de",
+            output_root / 'data' / f'{split}.de',
+            output_root / 'spm' / f'{split}.de',
         )
-        

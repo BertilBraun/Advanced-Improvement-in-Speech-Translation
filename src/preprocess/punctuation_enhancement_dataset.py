@@ -4,7 +4,8 @@ from src.datasets.util import iterate_over_dataset
 
 from src.datasets.base.mt_dataset import MTDataset, TextSample
 
-logger = get_logger("Paraphrases::Punctuation Enhancement Dataset")
+logger = get_logger('Paraphrases::Punctuation Enhancement Dataset')
+
 
 class PunctuationEnhancementDataset(MTDataset):
     def __init__(self, datasource: MTDataset) -> None:
@@ -167,7 +168,7 @@ class PunctuationEnhancementDataset(MTDataset):
         }
 
         super().__init__(datasource.split)
-        
+
     def _generate_noisy_samples(self, sentence: str, samples_to_generate: int = 10) -> list[str]:
         noisy_samples = []
         words = sentence.split()
@@ -182,15 +183,15 @@ class PunctuationEnhancementDataset(MTDataset):
             noisy_samples.append(' '.join(new_sentence))
 
         noisy_samples = [noisy_sample for noisy_sample in noisy_samples if noisy_sample != sentence]
-        logger.debug(f"Generated {len(noisy_samples)} noisy samples for sentence: {sentence}")
+        logger.debug(f'Generated {len(noisy_samples)} noisy samples for sentence: {sentence}')
         return noisy_samples
 
     def _load_data(self) -> list[TextSample]:
         data = []
-        
-        for cleaned, with_punctuation in iterate_over_dataset(self.datasource, desc="Loading punctuation dataset"):
+
+        for cleaned, with_punctuation in iterate_over_dataset(self.datasource, desc='Loading punctuation dataset'):
             data.append((cleaned, with_punctuation))
-            
+
             for noisy_version in self._generate_noisy_samples(cleaned):
                 data.append((noisy_version, with_punctuation))
 
