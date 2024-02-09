@@ -80,8 +80,8 @@ export MT_MODEL_DIR=$MT_TRAIN_WORKSPACE/models
 export MT_PARAPHRASED_TRAIN_WORKSPACE=$MT_WORKSPACE/train/finetune_mt_covost_paraphrased
 
 export MT_PARAPHRASED_DATA_DIR=$MT_WORKSPACE/dataset/covost_paraphrased/spm
-export MT_PARAPHRASED_BINARY_DATA_DIR=$MT_TRAIN_WORKSPACE/binarized_dataset
-export MT_PARAPHRASED_MODEL_DIR=$MT_TRAIN_WORKSPACE/models
+export MT_PARAPHRASED_BINARY_DATA_DIR=$MT_PARAPHRASED_TRAIN_WORKSPACE/binarized_dataset
+export MT_PARAPHRASED_MODEL_DIR=$MT_PARAPHRASED_TRAIN_WORKSPACE/models
 # --------------------------------------
 
 
