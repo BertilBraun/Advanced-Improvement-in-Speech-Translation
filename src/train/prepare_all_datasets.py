@@ -15,10 +15,19 @@ def can_skip_dataset_prep() -> bool:
     mel_config_file_exists = (ASR_COVOST_ROOT / 'config.yaml').is_file()
     wav2vec_config_file_exists = (ASR_COVOST_WAV2VEC_ROOT / 'config.yaml').is_file() or True
     mt_spm_data_exists = all((MT_COVOST_SPM_ENCODING_ROOT / f'{split}.en').is_file() for split in CoVoST.SPLITS)
+    mt_paraphrased_spm_data_exists = all(
+        (MT_PARAPHRASED_COVOST_SPM_ENCODING_ROOT / f'{split}.en').is_file() for split in CoVoST.SPLITS
+    )
     punctuation_spm_data_exists = all(
         (PUNCTUATION_COVOST_SPM_ENCODING_ROOT / f'{split}.en').is_file() for split in CoVoST.SPLITS
     )
-    return mel_config_file_exists and wav2vec_config_file_exists and mt_spm_data_exists and punctuation_spm_data_exists
+    return (
+        mel_config_file_exists
+        and wav2vec_config_file_exists
+        and mt_spm_data_exists
+        and punctuation_spm_data_exists
+        and mt_paraphrased_spm_data_exists
+    )
 
 
 if __name__ == '__main__':
