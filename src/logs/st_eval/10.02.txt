@@ -1,0 +1,725 @@
+(base) [uxude@uc2n996 eval]$ cat eval_st_log_23138680.txt
+No extension needed for workspace ASR.
+No extension needed for workspace MT.
+Fairseq directory exists. Checking if installed...
+
+[notice] A new release of pip is available: 23.3.2 -> 24.0
+[notice] To update, run: pip install --upgrade pip
+fairseq                  0.12.2       /pfs/data5/home/kit/stud/uxude/fairseq
+Fairseq is already installed. Skipping installation.
+Setup complete. Starting script execution...
+[INFO] 18:00:43 [Dataset::Prepare Datasets]: Skipping dataset preparation, all config data already exists
+Transcribing the test set...
+Starting transcription...
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models'], output='/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint58.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint57.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint56.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint55.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint54.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating transcriptions...
+Test subset: test
+Data directory: /pfs/work7/workspace/scratch/uxude-ASR/dataset/covost
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt', 'post_process': None, 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': True, 'max_tokens': 50000, 'batch_size': None, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': 50000, 'batch_size_valid': None, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 10, 'beam_mt': 0, 'nbest': 10, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='wer', task='speech_to_text', num_workers=1, skip_invalid_size_inputs_valid_test=True, max_tokens=50000, batch_size=None, required_batch_size_multiple=8, required_seq_len_multiple=1, dataset_impl=None, data_buffer_size=10, train_subset='train', valid_subset='valid', combine_valid_subsets=None, ignore_unused_valid_subsets=False, validate_interval=1, validate_interval_updates=0, validate_after_updates=0, fixed_validation_seed=None, disable_validation=False, max_tokens_valid=50000, batch_size_valid=None, max_valid_steps=None, curriculum=0, gen_subset='test', num_shards=1, shard_id=0, grouped_shuffling=False, update_epoch_batch_itr=False, update_ordered_indices_seed=False, distributed_world_size=1, distributed_num_procs=1, distributed_rank=0, distributed_backend='nccl', distributed_init_method=None, distributed_port=-1, device_id=0, distributed_no_spawn=False, ddp_backend='pytorch_ddp', ddp_comm_hook='none', bucket_cap_mb=25, fix_batches_to_gpus=False, find_unused_parameters=False, gradient_as_bucket_view=False, fast_stat_sync=False, heartbeat_timeout=-1, broadcast_buffers=False, slowmo_momentum=None, slowmo_base_algorithm='localsgd', localsgd_frequency=3, nprocs_per_node=1, pipeline_model_parallel=False, pipeline_balance=None, pipeline_devices=None, pipeline_chunks=0, pipeline_encoder_balance=None, pipeline_encoder_devices=None, pipeline_decoder_balance=None, pipeline_decoder_devices=None, pipeline_checkpoint='never', zero_sharding='none', no_reshard_after_forward=False, fp32_reduce_scatter=False, cpu_offload=False, use_sharded_state=False, not_fsdp_flatten_parameters=False, path='/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt', post_process=None, quiet=False, model_overrides='{}', results_path=None, beam=10, beam_mt=0, nbest=10, max_len_a=0, max_len_b=200, max_len_a_mt=0, max_len_b_mt=200, min_len=1, match_source_len=False, unnormalized=False, no_early_stop=False, no_beamable_mm=False, lenpen=1, lenpen_mt=1, unkpen=0, replace_unk=None, sacrebleu=False, score_reference=False, prefix_size=0, no_repeat_ngram_size=0, sampling=False, sampling_topk=-1, sampling_topp=-1.0, constraints=None, temperature=1.0, diverse_beam_groups=-1, diverse_beam_strength=0.5, diversity_rate=-1.0, print_alignment=None, print_step=False, lm_path=None, lm_weight=0.0, iter_decode_eos_penalty=0.0, iter_decode_max_iter=10, iter_decode_force_max_iter=False, iter_decode_with_beam=1, iter_decode_with_external_reranker=False, retain_iter_history=False, retain_dropout=False, retain_dropout_modules=None, decoding_format=None, no_seed_provided=False, eos_token=None, save_dir='checkpoints', restore_file='checkpoint_last.pt', continue_once=None, finetune_from_model=None, reset_dataloader=False, reset_lr_scheduler=False, reset_meters=False, reset_optimizer=False, optimizer_overrides='{}', save_interval=1, save_interval_updates=0, keep_interval_updates=-1, keep_interval_updates_pattern=-1, keep_last_epochs=-1, keep_best_checkpoints=-1, no_save=False, no_epoch_checkpoints=False, no_last_checkpoints=False, no_save_optimizer_state=False, best_checkpoint_metric='loss', maximize_best_checkpoint_metric=False, patience=-1, checkpoint_suffix='', checkpoint_shard_count=1, load_checkpoint_on_all_dp_ranks=False, write_checkpoints_asynchronously=False, arch='wav2vec2', data='/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost', config_yaml='config.yaml', multitask_config_yaml=None, max_source_positions=6000, max_target_positions=1024, force_anneal=None, lr_shrink=0.1, warmup_updates=0, wer_tokenizer='none', wer_remove_punct=False, wer_char_level=False, wer_lowercase=False, _name='speech_to_text'), 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'wer', 'wer_tokenizer': 'none', 'wer_remove_punct': False, 'wer_char_level': False, 'wer_lowercase': False}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.speech_to_text:dictionary size (spm.asr.txt): 5,000
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.tasks.speech_to_text:pre-tokenizer: {'tokenizer': None}
+INFO:fairseq.tasks.speech_to_text:tokenizer: {'bpe': 'sentencepiece', 'sentencepiece_model': '/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost/spm.asr.model'}
+WARNING:fairseq.data.audio.data_cfg:Auto converting transforms into feature_transforms, but transforms will be deprecated in the future. Please update this in the config.
+INFO:fairseq.data.audio.speech_to_text_dataset:'test' has 0.00% OOV
+INFO:fairseq.data.audio.speech_to_text_dataset:SpeechToTextDataset(split="test", n_samples=15_531, prepend_tgt_lang_tag=False, n_frames_per_step=1, shuffle=False, feature_transforms=CompositeAudioFeatureTransform(
+    UtteranceCMVN(norm_means=True, norm_vars=True)
+), waveform_transforms=None, dataset_transforms=CompositeAudioDatasetTransform(
+))
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+WARNING:fairseq.tasks.fairseq_task:5 samples have invalid sizes and will be skipped, max_positions=(6000, 1024), first few sample ids=[11198, 697, 6107, 3431, 14638]
+INFO:fairseq.tasks.speech_to_text:pre-tokenizer: {'tokenizer': None}
+INFO:fairseq.tasks.speech_to_text:tokenizer: {'bpe': 'sentencepiece', 'sentencepiece_model': '/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost/spm.asr.model'}
+INFO:fairseq.logging.progress_bar::    101 / 188 wps=509
+DEBUG:fairseq.data.iterators:Data loading buffer is empty or nearly empty. This may indicate a data loading bottleneck, and increasing the number of workers (--num-workers) may help.
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 15,520 sentences (205,009 tokens) in 95.0s (163.42 sentences/s, 2158.66 tokens/s)
+Transcription done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/hyp_asr.txt and /home/kit/stud/uxude/predictions/eval_st/ref_asr.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/hyp_asr.txt.sampled
+Sample predictions:
+Sample: for some reasons we were dropped from enduring
+Reference: for some reason we were blocked from entering
+Sample: as they sat down at the only table in the place the crystal much of the earth
+Reference: as they sat down at the only table in the place the crystal merchant laughed
+Sample: a never more way of a word between six more or five
+Reference: im never more aware of a rooms acoustics than when im trying to enjoy a snack i have no intention of sharing
+Sample: how am i to get started on
+Reference: aw man thats terrible
+Sample: its a dream in the language of the world she said
+Reference: its a dream in the language of the world she said
+Sample: this looks amazing
+Reference: this looks amazing
+Sample: the army climbed up the rebuilding and rafted itself around the chimney
+Reference: the ivy climbed up the building and wrapped itself around the chimney
+Sample: nonverbal communication is sometimes more meaningful than the spoken words
+Reference: nonverbal communication is sometimes more meaningful than the spoken words
+Sample: the whole the sheep cried
+Reference: the hull of the ship collapsed
+Sample: the cam driver understood while the boy was saying
+Reference: the camel driver understood what the boy was saying
+Sample: a fair plague doesnt aback
+Reference: her hair flowed down her back
+Sample: advancing slowly absorbs the mountain with snow drifting and water
+Reference: advancing slowly they searched among the stones
+Sample: maybe the church with a sycamore groan from it then had been haunted
+Reference: maybe the church with the sycamore growing from within had been haunted
+Sample: the boy knew a lot of people in the city
+Reference: the boy knew a lot of people in the city
+Sample: if everything works youll see a window pop up the story
+Reference: if everything works youll see a window pop up after starting
+Sample: then you taught me something of the universe of language and the soul of the world
+Reference: then you taught me something of the universal language and the soul of the world
+Sample: the term just my two sense is about a bone
+Reference: the term just my two cents is about opinion not about money
+Sample: the floor was dubbed
+Reference: the drawer was stuck closed
+Sample: the woman was saving for some time
+Reference: the woman was silent for some time
+Sample: they were rarely sighting or prehanded people elbling one another
+Reference: there were really i think two or three hundred people elbowing one another
+WER:
+Generate test with beam=10: WER: 30.32
+BLEU:
+{
+ "name": "BLEU",
+ "score": 55.7,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "73.3/60.4/50.8/42.9 (BP = 1.000 ratio = 1.010 hyp_len = 142610 ref_len = 141203)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Transcription done
+--------------------------------------------------
+Processing with postprocessing type: custom
+--------------------------------------------------
+Starting processing of ASR output for MT input...
+[INFO] 18:11:35 [Eval::process_asr_output_for_st]: Starting processing...
+[INFO] 18:11:35 [Eval::process_asr_output_for_st]: Processing reference file...
+Loading CoVoST test: 100%|██████████| 15531/15531 [00:00<00:00, 68592.49it/s]
+Filtering test data: 100%|██████████| 15531/15531 [00:00<00:00, 1411185.53it/s]
+100%|██████████| 156/156 [00:00<00:00, 533.75it/s]
+Processing dataset: 100%|██████████| 15531/15531 [00:00<00:00, 123694.04it/s]
+Creating translation dictionary: 100%|██████████| 156/156 [00:00<00:00, 601.57it/s]
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Translating file...
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Processed reference file
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Die Akustik eines Raumes nehme ich am bewusstesten war, wenn ich versuche, einen Snack zu genießen, den ich nicht beabsichtige zu teilen.
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Oh Mann, das ist schrecklich!
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Done processing reference file!
+[INFO] 18:11:37 [Eval::process_asr_output_for_st]: Processing hypothesis file...
+Encoding Dataset: 100%|██████████| 15520/15520 [00:00<00:00, 96201.34it/s]
+Encoding Dataset: 100%|██████████| 15520/15520 [00:00<00:00, 78880.33it/s]
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost_enhancement/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost_enhancement/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/punctuation/test
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/punctuation
+Error: mkl-service + Intel(R) MKL: MKL_THREADING_LAYER=INTEL is incompatible with libgomp.so.1 library.
+        Try to import numpy first or set the threading layer accordingly. Set MKL_SERVICE_FORCE_INTEL to force it.
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost_enhancement/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost_enhancement/models/avg_last_5_checkpoint.pt
+Error: mkl-service + Intel(R) MKL: MKL_THREADING_LAYER=INTEL is incompatible with libgomp.so.1 library.
+        Try to import numpy first or set the threading layer accordingly. Set MKL_SERVICE_FORCE_INTEL to force it.
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/punctuation
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/punctuation
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost_enhancement/models/avg_last_5_checkpoint.pt', 'post_process': None, 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/punctuation', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 4504 types
+INFO:fairseq.tasks.translation:[de] dictionary: 6520 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost_enhancement/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/punctuation/test.en-de.enINFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/punctuation/test.en-de.deINFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/punctuation test en-de 32 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 32 sentences (525 tokens) in 1.4s (22.58 sentences/s, 370.39 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/punctuation/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/punctuation/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/punctuation/hyp_mt.txt.sampled
+Sample predictions:
+Sample: ▁The ▁but ▁Un vo ▁been ▁wo rist id ▁members ed ▁ ▁threat ▁area ▁be age ▁of ▁Dr . ▁The ▁C ic hi ▁Bas e .
+Reference: flo ▁E ▁going ▁its schneid ▁spiritual <<unk>> <<unk>> la ▁Iraq ▁cross ▁by rad ▁word ▁Tags ▁disappear ▁less ▁month ▁not ▁for ▁agricultural phi <<unk>> ▁by .
+Sample: ent ▁end , ▁the ▁Aus ▁by ▁in don , ▁referred bin ▁attribut ▁That y ▁the ▁two - ch ▁new ▁go ▁kill ▁of .
+Reference: <<unk>> ▁ba ▁went fonds ▁in ▁of pper pper ▁components ▁you ▁Wi ▁Weise ▁to ▁Sensor ▁girl ▁artist s ▁in ▁edit ▁least ▁Doch .
+Sample: ▁I ll ▁to ▁photograph ▁up ▁Discover o ▁received n ▁the ▁appropriate n ze ed ▁the ▁k de n ▁the ▁ri .
+Reference: ▁our ▁that ▁by ▁heaven ▁Mensch <<unk>> ▁Weise pper ▁Orchestra <<unk>> rad pper ür pper ▁Blatt ▁disposal <<unk>> .
+Sample: ▁The ▁war ▁at ▁language ▁position ▁three ally ▁cut s ▁fi o il ▁couple ia ▁different ▁very rank y .
+Reference: <<unk>> ▁la ly ▁month ▁for ordinat ▁min ▁offering ▁See <<unk>> ▁Einsatz stell ▁Weise ▁heaven <<unk>> lichen ▁in <<unk>> ▁went ▁mar ön rain .
+Sample: ▁The ▁No , ▁he ▁is ▁for ▁what ing ▁because ▁of ▁His vent , ▁is ▁a ▁reg n ▁His vis ▁was .
+Reference: flo ▁Marina ▁The ▁ba <<unk>> ▁Nor ▁my ▁city ▁early ▁interracial ▁Luxemburg <<unk>> ▁The ▁interracial ▁month ous s ▁at .
+Sample: ▁Ar e w ▁Ne ed ▁Bar er , ▁the ▁Car ah ▁A , ▁the ▁station ▁The ua , ▁or ▁It uit ing ▁Island .
+Reference: flo Sch word <<unk>> ▁band ▁Meer ▁in ▁Jugend boot ▁Tags ▁an ▁less <<unk>> ▁for ▁Framework <<unk>> en .
+Sample: ▁" O n ▁the ▁itself n ▁" " The mar und k " " ▁change ▁the ▁ s tiv termin ▁and ▁" " H is vent " " ."
+Reference: <<unk>> ▁Da q ▁less pixel one <<unk>> ly ▁in ▁penetration <<unk>> ▁spiritual ▁month ▁wurde ▁brutal s ▁hook ▁in lichen <<unk>> ▁honor ▁Zug <<unk>> ▁Luxemburg .
+Sample: y ball ▁for ▁we ▁area - tru s ▁there , ▁the ▁multi - n ult ▁ru ly ▁from ly ▁version .
+Reference: ▁Cam ▁serve en ▁Dresden ▁Zug <<unk>> ▁d ▁in <<unk>> pper ▁agriculture ly ▁Room ▁Mü w netz <<unk>> .
+Sample: ▁" W ith ▁the tro n , ▁the ▁called ▁Of ne ' s ▁" " The res ▁I s ge ▁Wo rist id ▁Be " " ."
+Reference: ▁qualified ight ally <<unk>> ▁less ▁convenient en rad <<unk>> en ▁Tags ▁dann ▁Equipment .
+Sample: ▁The ▁element ▁judge ▁military tern ▁good ▁of , ▁and ▁this ▁both ▁patent ▁by ▁his ▁old n ▁fish .
+Reference: flo ification Pa <<unk>> rack Tech ▁Tags <<unk>> <<unk>> <<unk>> <<unk>> ▁for ▁disappear ▁went ▁Richter s la <<unk>> ▁Zug <<unk>> .
+Sample: t ▁around ▁of ▁ ▁continue s ▁to ▁serious ▁and ▁she ▁girl ▁of er ▁his ▁indeed .
+Reference: flo ▁Per ▁book ▁use <<unk>> ▁reception ▁str ▁Stelle <<unk>> s ist ▁create w ▁environmental ▁wurde with <<unk>> ▁Kamera <<unk>> ▁autumn ▁Award ▁to aging <<unk>> ▁Fahr ▁use .
+Sample: ▁Pri cur ▁these el ▁Fe ar e ock ▁W . ▁Pri or ▁Green ▁Wo man , ▁the ▁mini ▁two ▁living .
+Reference: ▁Alb ▁An ▁oil ▁The <<unk>> schneid <<unk>> with s el ▁She <<unk>> <<unk>> ly ▁Jugend ▁went <<unk>> en ▁Gabriel ▁The .
+Sample: w ▁they ▁bright ▁for ▁as lu - ▁and ly f aries te side ▁by ac .
+Reference: ▁Cam <<unk>> ▁somit ▁in ▁Tasche ▁Liebe ▁in <<unk>> er <<unk>> ▁Salz ▁Punkt <<unk>> ▁in ▁went ▁Tags <<unk>> <<unk>> ▁less ▁E ent ▁similar ▁Bor ▁of ▁went ▁keep ▁contrary ▁to na ▁color ally .
+Sample: ▁The ▁No , ▁he ▁a ▁the ▁Jan we ▁A . ▁The ica .
+Reference: ▁had pper ▁Netz ▁auf hi pper ▁Marina ▁The <<unk>> <<unk>> .
+Sample: ▁The ▁produced ak il ▁we ▁throughout e ▁use ▁in ▁cut ▁use ▁mill .
+Reference: flo <<unk>> <<unk>> ▁for ▁my <<unk>> <<unk>> ch ion lichen es <<unk>> ▁by ▁Tags ▁Kamera <<unk>> en ▁in ▁glaube ▁Kamera ▁Quality .
+Sample: ▁The ▁him ▁the ▁fa ▁by ▁ Austin land , ▁the ▁No ▁He ▁is ▁Mon u ment .
+Reference: flo ification Pa <<unk>> ▁edit ▁alle ▁in e pper ▁There ▁attend <<unk>> .
+Sample: ▁Can ▁in rad ▁a ▁the ze n ▁the ▁ri ar ▁lo ?
+Reference: ▁qualified <<unk>> ▁in ▁Moodle ▁network <<unk>> Lo ▁T ▁qualitativ ▁of pper <<unk>> pper ▁Blatt lichen ▁seminar .
+Sample: ▁R ▁sale ▁camp al , ▁pe avi ▁used ▁used ▁used - on ▁starting .
+Reference: PS <<unk>> ▁Koch ▁to <<unk>> ▁in ▁to ▁dis ▁Doch <<unk>> ▁Gi ▁Kom ▁Stelle ▁Ehe ▁Kamera .
+Sample: ed scribe cess ▁and ▁this ami ▁by ▁buy s ▁no ▁indicate .
+Reference: ▁Jan ▁network schneid ▁hatte <<unk>> <<unk>> ▁Zug ▁interracial ▁authentic <<unk>> ▁as <<unk>> ▁for .
+Sample: ▁" T ett e , ▁in ▁call , ▁vote ▁to ▁" " ri ver s ▁assume a " " ▁members ."
+Reference: Ab schneid <<unk>> <<unk>> ▁Basel ▁The <<unk>> ▁Hoch ▁Roleplay ▁mund ▁as motor ▁Leder .
+WER:
+Generate test with beam=16: BLEU4 = 0.00, 7.3/0.0/0.0/0.0 (BP=0.882, ratio=0.888, syslen=493, reflen=555)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 0.0,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "7.3/0.0/0.0/0.0 (BP = 0.882 ratio = 0.888 hyp_len = 493 ref_len = 555)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Decoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 58330.17it/s]
+Decoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 63370.03it/s]
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: Processed hypothesis file
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: The but Unvo been woristid membersed  threat area beage of Dr. The Cichi Base.
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: ent end, the Aus by indon, referredbin attribut Thaty the two-ch new go kill of.
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: Ill to photograph up Discovero receivedn the appropriatenzeed the kden the ri.
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: The war at language position threeally cuts fioil coupleia different veryranky.
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: The No, he is for whating because of Hisvent, is a regn Hisvis was.
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: Done processing hypothesis file!
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: Done processing!
+[INFO] 18:11:56 [Eval::process_asr_output_for_st]: Writing processed lines to file...
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 42771.74it/s]
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 62022.98it/s]
+Processing done
+--------------------------------------------------
+Starting translation...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/custom/asr_out
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/custom
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/home/kit/stud/uxude/predictions/eval_st/custom/asr_out', align_suffix=None, destdir='/home/kit/stud/uxude/predictions/eval_st/custom', thresholdtgt=0, thresholdsrc=0, tgtdict='/home/kit/stud/uxude/predictions/eval_st/custom/dict.de.txt', srcdict='/home/kit/stud/uxude/predictions/eval_st/custom/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=8, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6616 types
+INFO:fairseq_cli.preprocess:[en] /home/kit/stud/uxude/predictions/eval_st/custom/asr_out.en: 32 sents, 518 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 8648 types
+INFO:fairseq_cli.preprocess:[de] /home/kit/stud/uxude/predictions/eval_st/custom/asr_out.de: 32 sents, 783 tokens, 0.639% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /home/kit/stud/uxude/predictions/eval_st/custom
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint106.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint105.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint104.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint103.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint102.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/custom
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/custom
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/custom', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6616 types
+INFO:fairseq.tasks.translation:[de] dictionary: 8648 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/custom/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/custom/test.en-de.de
+INFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/custom test en-de 32 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 32 sentences (521 tokens) in 0.7s (46.95 sentences/s, 764.39 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/custom/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/custom/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/custom/hyp_mt.txt.sampled
+Sample predictions:
+Sample: An der Stelle selbst ändert „Themarundk“ den Stivtermin und das „Hisvent“.
+Reference: Mit 17 Jahren trat er in die Armee ein und wurde schon bald Offizier.
+Sample: Zusammen mit der Einführung nannte man Ofnes „Theres Isge Woristid Be“.
+Reference: Du hast mir dann etwas von der Universalsprache und der Seele der Welt beigebracht.
+Sample: Arew Need Barer, die Carah A, Theua oder Ituiting Island.
+Reference: Die Römer glaubten, das Faune Männern, die alleine und an entlegenen Orten oder in der Wildnis reisten, Angst einflößten.
+Sample: Die Entschlossenheit, die Aus per Indon, bezeichnete Thaty das neue Zwei-Ch-Mörder-Töten.
+Reference: Hinweise auf ihn sind in „Prelude to Foundation“ und „Foundation and Earth“ zu finden.
+Sample: Der, aber Unvo war bedrohliche Bedrohung für das Dr. The Cichi Base.
+Reference: when people cry for job<<unk>> theyre not black or white theyre unemployed
+Sample: Dort ragt der Multinult in der Gegend umher.
+Reference: Sogar, zusammen zum Zug gehend, schrieb sie mir.
+Sample: Pricur diese beiden, Prior Green Woman von Feareock.
+Reference: An dem Strand mit hellblauem Meer befinden sich etliche Menschen. Sie sind im Wasser und stehen am Ufer. Im Hintergrund sind die Häuser zu sehen, die in die Berge gebaut wurden.
+Sample: Die Neine, er ist wegen seines Erfinders, ein Bedauernshaben.
+Reference: Bitte spielen Sie With Echoes In The Movement Of Stone von Faith Evans.
+Sample: Ich muss den Kden zum Fotografieren von Discovero fotografieren.
+Reference: theres one that says everything that happens once can never happen again
+Sample: Der Krieg in der Sprachenposition dreimal fioilistisches Paar unterscheidet sich sehr stark.
+Reference: Auf diese Weise können Benutzer beispielsweise jeden Hyperlink auf jeder von ihnen besuchten Seite in Fettdruck formatieren.
+Sample: Tette stimmte den Mitgliedern von „Rrivers nahm an“ teil.
+Reference: Bitte spielen Sie With Echoes In The Movement Of Stone von Faith Evans.
+Sample: Ein Richter, der sowohl von seiner alten Fische als auch von diesem Patent patentiert wird.
+Reference: Er besuchte die Kelsey Park School for Boys, wo er ein Studium von Kunst und Fotografie verfolgte.
+Sample: Der von Austinland bekannte ihn, der Nein ist Monument.
+Reference: Ich würde gerne eine ordentliche lange Auszeit nehmen, ohne finanzielle Auswirkungen, aber wir alle wissen, dass das nicht passieren wird.
+Sample: Pfiffen sie hell für Aslu- und Lyfaryteside Byac.
+Reference: Er kniete nieder, um Urim und Thummim zu finden und sie wieder in die Tasche zu stecken.
+Sample: Dabei ist es weiterhin ernst und sie hat in der Tat ein Mädchen von ihm.
+Reference: Das Bild des irakischen Feuers wurde von der Sendestation unterhalb der Kamera ausgestrahlt.
+Sample: Der Verkaufscampus wurde verwendet, um dort begonnen zu werden.
+Reference: Ehe sich Philip erholen konnte, gingen in die von Jeanne alarmierten Wachen an.
+Sample: Nein, er ist ein Janwe A. Theica.
+Reference: Die anderen waren „Die unglaubliche scharlachrote Spinne“, „Die scharlachrote Spinne“ und „Das Netz der scharlachroten Spinne“.
+Sample: Das produzierteakil, das wir durchgehend verwendet haben, verwendete Mühle.
+Reference: Es waren wirklich, glaube ich, zwei- oder dreihundert Leute, die sich gegenseitig den Ellbogen in die Rippen rammten.
+Sample: Als Sual und noch in Sachen.
+Reference: „Der Wind sagte mir, dass du die Liebe kennst“, wandte sich der Jüngling an die Sonne.
+Sample: Schriftzessin und Disami kauft keine Hinweise.
+Reference: Er hatte im Zug eine Erleuchtung.
+WER:
+Generate test with beam=16: BLEU4 = 0.00, 4.7/0.4/0.0/0.0 (BP=0.470, ratio=0.570, syslen=257, reflen=451)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 0.0,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "4.7/0.0/0.0/0.0 (BP = 0.470 ratio = 0.570 hyp_len = 257 ref_len = 451)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Processing completed for postprocessing type: custom
+--------------------------------------------------
+Processing with postprocessing type: llama
+--------------------------------------------------
+Starting processing of ASR output for MT input...
+[INFO] 18:12:33 [Eval::process_asr_output_for_st]: Starting processing...
+[INFO] 18:12:33 [Eval::process_asr_output_for_st]: Processing reference file...
+Loading CoVoST test: 100%|██████████| 15531/15531 [00:00<00:00, 77677.95it/s]
+Filtering test data: 100%|██████████| 15531/15531 [00:00<00:00, 1495105.24it/s]
+100%|██████████| 156/156 [00:00<00:00, 524.31it/s]
+Processing dataset: 100%|██████████| 15531/15531 [00:00<00:00, 123727.87it/s]
+Creating translation dictionary: 100%|██████████| 156/156 [00:00<00:00, 605.83it/s]
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Translating file...
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Processed reference file
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Die Akustik eines Raumes nehme ich am bewusstesten war, wenn ich versuche, einen Snack zu genießen, den ich nicht beabsichtige zu teilen.
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Oh Mann, das ist schrecklich!
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Done processing reference file!
+[INFO] 18:12:34 [Eval::process_asr_output_for_st]: Processing hypothesis file...
+[INFO] 18:12:42 [LLaMA::llama]: Loading LLaMA...
+[INFO] 18:12:42 [LLaMA::llama]: Using device: cuda
+[INFO] 18:12:42 [LLaMA::llama]: Loading Tokenizer
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): huggingface.co:443
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+[INFO] 18:12:44 [LLaMA::llama]: Tokenizer ready.
+[INFO] 18:12:44 [LLaMA::llama]: Loading LLaMA model.
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/config.json HTTP/1.1" 200 0
+INFO:accelerate.utils.modeling:We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Loading checkpoint shards: 100%|██████████| 2/2 [00:23<00:00, 11.74s/it]
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/generation_config.json HTTP/1.1" 200 0
+[INFO] 18:13:23 [LLaMA::llama]: Configuring LLaMA model.
+[INFO] 18:13:23 [LLaMA::llama]: LLaMA ready.
+Processing batches: 100%|██████████| 256/256 [1:21:03<00:00, 19.00s/it]
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: Processed hypothesis file
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: For some reasons, we were dropped from endurance.
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: They sat down at the only table in the place, the crystal much of the year.
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: I never knew of a word between six more and five.
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: Home and let's get it up.
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: It is a dream in the language of the world she said.
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: Done processing hypothesis file!
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: Done processing!
+[INFO] 19:37:18 [Eval::process_asr_output_for_st]: Writing processed lines to file...
+Encoding Dataset: 100%|██████████| 256/256 [00:00<00:00, 18518.22it/s]
+Encoding Dataset: 100%|██████████| 256/256 [00:00<00:00, 76433.79it/s]
+Processing done
+--------------------------------------------------
+Starting translation...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/llama/asr_out
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/llama
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/home/kit/stud/uxude/predictions/eval_st/llama/asr_out', align_suffix=None, destdir='/home/kit/stud/uxude/predictions/eval_st/llama', thresholdtgt=0, thresholdsrc=0, tgtdict='/home/kit/stud/uxude/predictions/eval_st/llama/dict.de.txt', srcdict='/home/kit/stud/uxude/predictions/eval_st/llama/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=8, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6616 types
+INFO:fairseq_cli.preprocess:[en] /home/kit/stud/uxude/predictions/eval_st/llama/asr_out.en: 256 sents, 4648 tokens, 0.043% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 8648 types
+INFO:fairseq_cli.preprocess:[de] /home/kit/stud/uxude/predictions/eval_st/llama/asr_out.de: 256 sents, 5457 tokens, 0.0367% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /home/kit/stud/uxude/predictions/eval_st/llama
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint106.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint105.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint104.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint103.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint102.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/llama
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/llama
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/llama', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6616 types
+INFO:fairseq.tasks.translation:[de] dictionary: 8648 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 256 examples from: /home/kit/stud/uxude/predictions/eval_st/llama/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 256 examples from: /home/kit/stud/uxude/predictions/eval_st/llama/test.en-de.de
+INFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/llama test en-de 256 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 256 sentences (4,698 tokens) in 4.6s (55.84 sentences/s, 1024.79 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/llama/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/llama/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/llama/hyp_mt.txt.sampled
+Sample predictions:
+Sample: Sie betonte, dass es nicht lange dauern würde.
+Reference: Für eine Weile schwieg die Frau.
+Sample: Es hatte eine große Auswahl an Teleskopen.
+Reference: Die Reaktion darauf war riesig.
+Sample: Die höhere Bildungstechnologie steht auch unter Garrot.
+Reference: Das Hochschulwesen lief unter Carroll nicht so gut.
+Sample: Der Mann bewegt sich sehr langsam nach Westen.
+Reference: Die Bank expandiert sehr langsam nach Westen.
+Sample: Am Rande der Brücke gibt es keine Methode.
+Reference: Der Schnee strahlte an der Brückenseite.
+Sample: Ich werde sehen, dass sie die Blumen bekommt.
+Reference: Ich sehe zu, dass sie die Blumen bekommt.
+Sample: Ich war sicher, dass Sie es nicht tun würden.
+Reference: Beim letzten Mal haben Sie nicht für mich gestimmt.
+Sample: Das ist der Punkt, an dem die meisten Menschen aufgeben.
+Reference: Das ist der Punkt, an dem die meisten Menschen aufgeben.
+Sample: Dies ist ein großer Teil der Programmierung ohne Handfreiheit.
+Reference: Das ist eine große Sache für freihändiges Programmieren.
+Sample: Der Junge hofft, vor Angst zu sprechen.
+Reference: Das Herz des Jungen begann von Angst zu sprechen.
+Sample: Ich sehe mit einem Fisch im Panzer nach.
+Reference: Ich bannte einen Fisch im Becken mit meinem Blick.
+Sample: Jede Sprache über germanische Festplatten und Änderungen.
+Reference: Es berichtet von Reisen, Entdeckungen, Büchern und Veränderung.
+Sample: Sie mussten mit ihrem Sohn zum Frühstück wegkommen.
+Reference: Sie waren zu Henderson gegangen, um zu frühstücken.
+Sample: Ich habe eine Katze, die einige Dollar gefunden hat.
+Reference: Ich habe die Ernährungsweise eines Kindes, das 20 Dollar gefunden hat.
+Sample: Courtney sagte, was meine Familie bedeute.
+Reference: Kannst du nicht einsehen, was das für meine Familie bedeutet?
+Sample: Ich kann es kaum glauben, dass das so ist.
+Reference: Ich kann kein Blut sehen.
+Sample: Wir können alle von uns verstreut werden.
+Reference: Hier spricht fast jeder Spanisch.
+Sample: Viele dieser Menschen sind außer Arbeit.
+Reference: Von diesen Menschen sind viele arbeitslos.
+Sample: Sie sieht heute so großartig aus.
+Reference: Sie sieht so wunderschön aus heute.
+Sample: Ja, das ist mir endlich klar geworden.
+Reference: Bist du dir sicher, dass Claire das ist?
+WER:
+Generate test with beam=16: BLEU4 = 10.85, 35.9/17.2/8.7/4.6 (BP=0.864, ratio=0.873, syslen=2565, reflen=2939)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 10.8,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "35.9/17.2/8.7/4.6 (BP = 0.864 ratio = 0.873 hyp_len = 2565 ref_len = 2939)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Processing completed for postprocessing type: llama
+--------------------------------------------------
+Processing with postprocessing type: none
+--------------------------------------------------
+Starting processing of ASR output for MT input...
+[INFO] 19:40:21 [Eval::process_asr_output_for_st]: Starting processing...
+[INFO] 19:40:21 [Eval::process_asr_output_for_st]: Processing reference file...
+Loading CoVoST test: 100%|██████████| 15531/15531 [00:00<00:00, 78623.08it/s]
+Filtering test data: 100%|██████████| 15531/15531 [00:00<00:00, 1480325.77it/s]
+100%|██████████| 156/156 [00:00<00:00, 549.61it/s]
+Processing dataset: 100%|██████████| 15531/15531 [00:00<00:00, 128163.90it/s]
+Creating translation dictionary: 100%|██████████| 156/156 [00:00<00:00, 626.39it/s]
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Translating file...
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Processed reference file
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Die Akustik eines Raumes nehme ich am bewusstesten war, wenn ich versuche, einen Snack zu genießen, den ich nicht beabsichtige zu teilen.
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Oh Mann, das ist schrecklich!
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Done processing reference file!
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Processing hypothesis file...
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Processed hypothesis file
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: for some reasons we were dropped from enduring
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: as they sat down at the only table in the place the crystal much of the earth
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: a never more way of a word between six more or five
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: how am i to get started on
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: its a dream in the language of the world she said
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Done processing hypothesis file!
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Done processing!
+[INFO] 19:40:22 [Eval::process_asr_output_for_st]: Writing processed lines to file...
+Encoding Dataset: 100%|██████████| 15520/15520 [00:00<00:00, 81833.80it/s]
+Encoding Dataset: 100%|██████████| 15520/15520 [00:00<00:00, 99060.76it/s]
+Processing done
+--------------------------------------------------
+Starting translation...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/none/asr_out
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/none
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/home/kit/stud/uxude/predictions/eval_st/none/asr_out', align_suffix=None, destdir='/home/kit/stud/uxude/predictions/eval_st/none', thresholdtgt=0, thresholdsrc=0, tgtdict='/home/kit/stud/uxude/predictions/eval_st/none/dict.de.txt', srcdict='/home/kit/stud/uxude/predictions/eval_st/none/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=8, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6616 types
+INFO:fairseq_cli.preprocess:[en] /home/kit/stud/uxude/predictions/eval_st/none/asr_out.en: 15520 sents, 224788 tokens, 0.0463% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 8648 types
+INFO:fairseq_cli.preprocess:[de] /home/kit/stud/uxude/predictions/eval_st/none/asr_out.de: 15520 sents, 269081 tokens, 0.0334% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /home/kit/stud/uxude/predictions/eval_st/none
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint106.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint105.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint104.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint103.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/checkpoint102.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/none
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/none
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/none', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6616 types
+INFO:fairseq.tasks.translation:[de] dictionary: 8648 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost_paraphrased/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 15,520 examples from: /home/kit/stud/uxude/predictions/eval_st/none/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 15,520 examples from: /home/kit/stud/uxude/predictions/eval_st/none/test.en-de.de
+INFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/none test en-de 15520 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq.logging.progress_bar::    101 / 243 wps=1780
+INFO:fairseq.logging.progress_bar::    201 / 243 wps=1976
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 15,520 sentences (253,240 tokens) in 77.2s (201.12 sentences/s, 3281.76 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/none/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/none/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/none/hyp_mt.txt.sampled
+Sample predictions:
+Sample: Sie weiß alles, was sie weiß.
+Reference: Sie weiß alles.
+Sample: und der letzte
+Reference: Und zuletzt?
+Sample: eine kleine Sonate
+Reference: Eine kurze Sonate
+Sample: Wie gefällt ihm er?
+Reference: Wie war er?
+Sample: Lass mich es sehen.
+Reference: Zeig mal!
+Sample: von Witz.
+Reference: Von John Field.
+Sample: Komm in mein Büro.
+Reference: In mein Büro!
+Sample: Der erste Bürgermeister.
+Reference: Das erste Weihnachtsfest
+Sample: So viel besser.
+Reference: Um so besser.
+Sample: habe eine gute Zeit.
+Reference: Viel Spaß.
+Sample: Es war einfach Recht.
+Reference: Es war perfekt.
+Sample: Ich liebe diesen Morgen.
+Reference: Viel Geld.
+Sample: Das macht Sinn.
+Reference: Macht das Sinn?
+Sample: Seiten des Tages
+Reference: Nutze den Tag.
+Sample: Wie waren wir?
+Reference: Wie wir brüllten!
+Sample: Du machst es.
+Reference: Du machst es.
+Sample: Was ist es?
+Reference: Vorsicht, Stufe!
+Sample: Ich bin mir sicher, ob ich mir sicher bin.
+Reference: Ich werde nicht still sein!
+Sample: Die Station bietet Station an.
+Reference: Der Kuchen überzeugt nicht.
+Sample: Im Allgemeinen bei nein
+Reference: Im Allgemeinen, nein.
+WER:
+Generate test with beam=16: BLEU4 = 12.48, 35.0/16.9/9.1/5.1 (BP=0.966, ratio=0.966, syslen=135742, reflen=140467)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 12.5,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "35.0/16.9/9.1/5.1 (BP = 0.966 ratio = 0.966 hyp_len = 135742 ref_len = 140466)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Processing completed for postprocessing type: none
+--------------------------------------------------
+Results for the different postprocessing types
+--------------------------------------------------
+Postprocessing type: custom
+--------------------------------------------------
+BLEU score:
+{
+ "name": "BLEU",
+ "score": 0.0,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "4.7/0.0/0.0/0.0 (BP = 0.470 ratio = 0.570 hyp_len = 257 ref_len = 451)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+--------------------------------------------------
+TER score:
+Average TER Score: 0.9914696479131463
+--------------------------------------------------
+BERTScore:
+bert-base-multilingual-cased_L9_no-idf_version=0.3.12(hug_trans=4.36.2)_fast-tokenizer P: 0.645001 R: 0.615932 F1: 0.629492
+--------------------------------------------------
+Postprocessing type: llama
+--------------------------------------------------
+BLEU score:
+{
+ "name": "BLEU",
+ "score": 10.8,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "35.9/17.2/8.7/4.6 (BP = 0.864 ratio = 0.873 hyp_len = 2565 ref_len = 2939)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+--------------------------------------------------
+TER score:
+Average TER Score: 0.7858629322655238
+--------------------------------------------------
+BERTScore:
+bert-base-multilingual-cased_L9_no-idf_version=0.3.12(hug_trans=4.36.2)_fast-tokenizer P: 0.796346 R: 0.780444 F1: 0.787984
+--------------------------------------------------
+Postprocessing type: none
+--------------------------------------------------
+BLEU score:
+{
+ "name": "BLEU",
+ "score": 12.5,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "35.0/16.9/9.1/5.1 (BP = 0.966 ratio = 0.966 hyp_len = 135742 ref_len = 140466)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+--------------------------------------------------
+TER score:
+Traceback (most recent call last):
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/pfs/data5/home/kit/stud/uxude/PST/src/eval/calculate_ter.py", line 28, in <module>
+    print('Average TER Score:', calculate_ter(args.hyp_file, args.ref_file))
+  File "/pfs/data5/home/kit/stud/uxude/PST/src/eval/calculate_ter.py", line 17, in calculate_ter
+    total_ter += pyter.ter(hyp_tokens, ref_tokens)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/pyter/__init__.py", line 14, in ter
+    return _ter(inputwords, refwords, ed)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/pyter/__init__.py", line 26, in _ter
+    return (err + mtd(iwords)) / len(rwords)
+ZeroDivisionError: division by zero
+--------------------------------------------------
+BERTScore:
+Warning: Empty reference sentence detected; setting raw BERTScores to 0.
+bert-base-multilingual-cased_L9_no-idf_version=0.3.12(hug_trans=4.36.2)_fast-tokenizer P: 0.783597 R: 0.778902 F1: 0.780983
+--------------------------------------------------
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n512
+Job ID: 23138680
+Cluster: uc2
+User/Group: uxude/stud
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 01:36:25
+CPU Efficiency: 44.83% of 03:35:04 core-walltime
+Job Wall-clock time: 01:47:32
+Memory Utilized: 7.32 GB
+Memory Efficiency: 7.50% of 97.66 GB
+(base) [uxude@uc2n996 eval]$
