@@ -50,7 +50,7 @@ def generate(prompts: list[str]) -> list[str]:
         num_beams=1,
     )
 
-    max_new_tokens = model_inputs.input_ids.shape[-1] * 2
+    max_new_tokens = model_inputs.input_ids.shape[-1] * 0.2
 
     with torch.inference_mode():
         generated_ids = LLM.generate(
