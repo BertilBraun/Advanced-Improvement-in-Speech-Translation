@@ -125,7 +125,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
                 overlap_score = len(tokenized_preprocessed_line.intersection(tokenized_ref_line))
 
                 # Adjust score based on length of the reference line and the processed line
-                overlap_score /= max(len(tokenized_preprocessed_line), len(tokenized_ref_line))
+                overlap_score /= max(len(tokenized_preprocessed_line), len(tokenized_ref_line)) + 1
 
                 if overlap_score > best_match_score:
                     best_match_score = overlap_score
@@ -213,13 +213,6 @@ def __process_file(
     :param process_text_function: The function to process the text.
     :param log_message: The message to log for processing.
     """
-
-    def __sample_print(data_list: list[str]) -> None:
-        logger.info('----------------------------------------')
-        for data in data_list[:5]:
-            logger.info(data)
-        logger.info('----------------------------------------')
-
     logger.info(f'Processing {log_message} file...')
     with open(input_file, 'r', encoding='utf-8') as f:
         lines = [line.strip() for line in f.readlines()]
@@ -228,7 +221,10 @@ def __process_file(
     lines_processed = process_text_function(lines_subsample)
 
     logger.info(f'Processed {log_message} file')
-    __sample_print(lines_processed)
+    logger.info('----------------------------------------')
+    for data in lines_processed[:5]:
+        logger.info(data)
+    logger.info('----------------------------------------')
 
     PROCESSED_LINES[output_file] = lines_processed
 
