@@ -12,7 +12,7 @@ from src.asr.config import cleanup_utterance
 from src.logger_utils import get_logger
 from src.datasets.concrete.covost import CoVoST, CoVoSTWithText
 
-from src.paths import COVOST_ROOT, MT_SPM_MODEL, PUNCTUATION_SPM_MODEL, PUNCTUATION_TRAIN_WORKSPACE
+from src.paths import COVOST_ROOT, MT_SPM_MODEL, PUNCTUATION_TRAIN_WORKSPACE
 
 
 logger = get_logger('Eval::process_asr_output_for_st')
