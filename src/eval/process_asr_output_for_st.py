@@ -143,7 +143,7 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     os.makedirs(PREDICTIONS_DIR, exist_ok=True)
 
     only_best_hypothesis = __get_only_best_hypothesis(lines)
-    bpe = BPE.from_pretrained(MT_SPM_MODEL)
+    bpe = BPE.from_pretrained(PUNCTUATION_SPM_MODEL)
     write_lines(bpe.encode_lines(only_best_hypothesis), TEST_PREF + '.en')
 
     ref_lines = PROCESSED_LINES[args.ref_output_file]
@@ -242,8 +242,7 @@ def process_reference_text(lines: list[str]) -> list[str]:
 
     logger.info('Translating file...')
 
-    translations = [translation_dict[line] if line in translation_dict else line.lower().strip() for line in lines]
-
+    translations = [translation_dict.get(line, line.lower().strip()) for line in lines]
     return translations
 
 
