@@ -270,12 +270,22 @@ if __name__ == '__main__':
     logger.info('Writing processed lines to file...')
 
     min_length = min(len(v) for v in PROCESSED_LINES.values())
+    # filter out empty lines from the processed lines - remove the same index from all files
+
+    for i in range(min_length):
+        for lines_processed in PROCESSED_LINES.values():
+            if not lines_processed[i]:
+                for k in PROCESSED_LINES:
+                    PROCESSED_LINES[k].pop(i)
+                break
+
+    min_length = min(len(v) for v in PROCESSED_LINES.values())
 
     for output_file, lines_processed in PROCESSED_LINES.items():
         if len(lines_processed) > min_length:
-            logger.warning('-------------------------------------------------')
-            logger.warning(f'Output file {output_file} has more lines than the minimum length of {min_length}.')
-            logger.warning('Truncating the file to the minimum length.')
-            logger.warning('-------------------------------------------------')
+            logger.error('-------------------------------------------------')
+            logger.error(f'Output file {output_file} has more lines than the minimum length of {min_length}.')
+            logger.error('Truncating the file to the minimum length.')
+            logger.error('-------------------------------------------------')
 
         __encode_and_save(lines_processed[:min_length], output_file)
