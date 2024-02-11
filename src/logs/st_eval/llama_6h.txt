@@ -1,0 +1,240 @@
+base) [uxude@uc2n994 eval]$ cat eval_st_llama_6h.txt
+No extension needed for workspace ASR.
+No extension needed for workspace MT.
+Fairseq directory exists. Checking if installed...
+fairseq                  0.12.2       /home/kit/stud/uxude/fairseq
+Fairseq is already installed. Skipping installation.
+Setup complete. Starting script execution...
+DEBUG:torchaudio._extension:Failed to initialize sox extension
+Traceback (most recent call last):
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/__init__.py", line 60, in <module>
+    _init_sox()
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 70, in _init_sox
+    _load_lib("libtorchaudio_sox")
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 64, in _load_lib
+    torch.ops.load_library(path)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torch/_ops.py", line 852, in load_library
+    ctypes.CDLL(path)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libsox.so: cannot open shared object file: No such file or directory
+DEBUG:torchaudio._extension.utils:Attempting to load FFmpeg version 6.
+DEBUG:torchaudio._extension.utils:Failed to load FFmpeg 6 extension.
+Traceback (most recent call last):
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 128, in _find_ffmpeg_extension
+    return _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 113, in _find_versionsed_ffmpeg_extension
+    _try_access_avutil(ffmpeg_ver)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 89, in _try_access_avutil
+    torchaudio.lib._torchaudio.find_avutil(libavutil)
+RuntimeError: Error in dlopen: libavutil.so.58: cannot open shared object file: No such file or directory
+Exception raised from DynamicLibrary at /opt/conda/conda-bld/pytorch_1702400366987/work/aten/src/ATen/DynamicLibrary.cpp:38 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::string) + 0x57 (0x14dd8e744617 in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0xc669fc (0x14dddc67e9fc in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: torchaudio::find_avutil(char const*) + 0x1a (0x14dd5a1454ca in /pfs/data5/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/lib/libtorchaudio.so)
+frame #3: <unknown function> + 0x7f7e (0x14dd5a0f5f7e in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/lib/_torchaudio.so)
+frame #4: <unknown function> + 0x12247 (0x14dd5a100247 in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/lib/_torchaudio.so)
+frame #5: python() [0x4fc697]
+<omitting python frames>
+frame #16: python() [0x591d92]
+frame #18: python() [0x5991cd]
+frame #19: python() [0x4fccc4]
+frame #30: python() [0x4fc2a4]
+frame #33: python() [0x515994]
+frame #34: python() [0x4fc697]
+frame #40: python() [0x4fc2a4]
+frame #44: python() [0x591d92]
+frame #46: python() [0x5991cd]
+frame #47: python() [0x4fccc4]
+frame #58: python() [0x4fc2a4]
+frame #61: python() [0x515994]
+frame #62: python() [0x4fc697]
+
+DEBUG:torchaudio._extension.utils:Attempting to load FFmpeg version 5.
+DEBUG:torchaudio._extension.utils:Failed to load FFmpeg 5 extension.
+Traceback (most recent call last):
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 128, in _find_ffmpeg_extension
+    return _find_versionsed_ffmpeg_extension(ffmpeg_ver)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 113, in _find_versionsed_ffmpeg_extension
+    _try_access_avutil(ffmpeg_ver)
+  File "/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/_extension/utils.py", line 89, in _try_access_avutil
+    torchaudio.lib._torchaudio.find_avutil(libavutil)
+RuntimeError: Error in dlopen: libavutil.so.57: cannot open shared object file: No such file or directory
+Exception raised from DynamicLibrary at /opt/conda/conda-bld/pytorch_1702400366987/work/aten/src/ATen/DynamicLibrary.cpp:38 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::string) + 0x57 (0x14dd8e744617 in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0xc669fc (0x14dddc67e9fc in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: torchaudio::find_avutil(char const*) + 0x1a (0x14dd5a1454ca in /pfs/data5/home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/lib/libtorchaudio.so)
+frame #3: <unknown function> + 0x7f7e (0x14dd5a0f5f7e in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/lib/_torchaudio.so)
+frame #4: <unknown function> + 0x12247 (0x14dd5a100247 in /home/kit/stud/uxude/miniconda3/envs/nmt/lib/python3.10/site-packages/torchaudio/lib/_torchaudio.so)
+frame #5: python() [0x4fc697]
+<omitting python frames>
+frame #16: python() [0x591d92]
+frame #18: python() [0x5991cd]
+frame #19: python() [0x4fccc4]
+frame #30: python() [0x4fc2a4]
+frame #33: python() [0x515994]
+frame #34: python() [0x4fc697]
+frame #40: python() [0x4fc2a4]
+frame #44: python() [0x591d92]
+frame #46: python() [0x5991cd]
+frame #47: python() [0x4fccc4]
+frame #58: python() [0x4fc2a4]
+frame #61: python() [0x515994]
+frame #62: python() [0x4fc697]
+
+DEBUG:torchaudio._extension.utils:Attempting to load FFmpeg version 4.
+DEBUG:torchaudio._extension.utils:Found FFmpeg version 4.
+[2024-02-01 20:04:30] [INFO] [Dataset::Prepare Datasets]: Skipping dataset preparation, all config data already exists
+Transcribing the test set...
+Starting transcription...
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models'], output='/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint10.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint9.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint8.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint7.pt', '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/checkpoint6.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating transcriptions...
+Test subset: test
+Data directory: /pfs/work7/workspace/scratch/uxude-ASR/dataset/covost
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt', 'post_process': None, 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': True, 'max_tokens': 50000, 'batch_size': None, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': 50000, 'batch_size_valid': None, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 10, 'beam_mt': 0, 'nbest': 10, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='wer', task='speech_to_text', num_workers=1, skip_invalid_size_inputs_valid_test=True, max_tokens=50000, batch_size=None, required_batch_size_multiple=8, required_seq_len_multiple=1, dataset_impl=None, data_buffer_size=10, train_subset='train', valid_subset='valid', combine_valid_subsets=None, ignore_unused_valid_subsets=False, validate_interval=1, validate_interval_updates=0, validate_after_updates=0, fixed_validation_seed=None, disable_validation=False, max_tokens_valid=50000, batch_size_valid=None, max_valid_steps=None, curriculum=0, gen_subset='test', num_shards=1, shard_id=0, grouped_shuffling=False, update_epoch_batch_itr=False, update_ordered_indices_seed=False, distributed_world_size=1, distributed_num_procs=1, distributed_rank=0, distributed_backend='nccl', distributed_init_method=None, distributed_port=-1, device_id=0, distributed_no_spawn=False, ddp_backend='pytorch_ddp', ddp_comm_hook='none', bucket_cap_mb=25, fix_batches_to_gpus=False, find_unused_parameters=False, gradient_as_bucket_view=False, fast_stat_sync=False, heartbeat_timeout=-1, broadcast_buffers=False, slowmo_momentum=None, slowmo_base_algorithm='localsgd', localsgd_frequency=3, nprocs_per_node=1, pipeline_model_parallel=False, pipeline_balance=None, pipeline_devices=None, pipeline_chunks=0, pipeline_encoder_balance=None, pipeline_encoder_devices=None, pipeline_decoder_balance=None, pipeline_decoder_devices=None, pipeline_checkpoint='never', zero_sharding='none', no_reshard_after_forward=False, fp32_reduce_scatter=False, cpu_offload=False, use_sharded_state=False, not_fsdp_flatten_parameters=False, path='/pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt', post_process=None, quiet=False, model_overrides='{}', results_path=None, beam=10, beam_mt=0, nbest=10, max_len_a=0, max_len_b=200, max_len_a_mt=0, max_len_b_mt=200, min_len=1, match_source_len=False, unnormalized=False, no_early_stop=False, no_beamable_mm=False, lenpen=1, lenpen_mt=1, unkpen=0, replace_unk=None, sacrebleu=False, score_reference=False, prefix_size=0, no_repeat_ngram_size=0, sampling=False, sampling_topk=-1, sampling_topp=-1.0, constraints=None, temperature=1.0, diverse_beam_groups=-1, diverse_beam_strength=0.5, diversity_rate=-1.0, print_alignment=None, print_step=False, lm_path=None, lm_weight=0.0, iter_decode_eos_penalty=0.0, iter_decode_max_iter=10, iter_decode_force_max_iter=False, iter_decode_with_beam=1, iter_decode_with_external_reranker=False, retain_iter_history=False, retain_dropout=False, retain_dropout_modules=None, decoding_format=None, no_seed_provided=False, eos_token=None, save_dir='checkpoints', restore_file='checkpoint_last.pt', continue_once=None, finetune_from_model=None, reset_dataloader=False, reset_lr_scheduler=False, reset_meters=False, reset_optimizer=False, optimizer_overrides='{}', save_interval=1, save_interval_updates=0, keep_interval_updates=-1, keep_interval_updates_pattern=-1, keep_last_epochs=-1, keep_best_checkpoints=-1, no_save=False, no_epoch_checkpoints=False, no_last_checkpoints=False, no_save_optimizer_state=False, best_checkpoint_metric='loss', maximize_best_checkpoint_metric=False, patience=-1, checkpoint_suffix='', checkpoint_shard_count=1, load_checkpoint_on_all_dp_ranks=False, write_checkpoints_asynchronously=False, arch='wav2vec2', data='/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost', config_yaml='config.yaml', multitask_config_yaml=None, max_source_positions=6000, max_target_positions=1024, force_anneal=None, lr_shrink=0.1, warmup_updates=0, wer_tokenizer='none', wer_remove_punct=False, wer_char_level=False, wer_lowercase=False, _name='speech_to_text'), 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'wer', 'wer_tokenizer': 'none', 'wer_remove_punct': False, 'wer_char_level': False, 'wer_lowercase': False}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.speech_to_text:dictionary size (spm.asr.txt): 5,000
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-ASR/train/finetune_asr_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.tasks.speech_to_text:pre-tokenizer: {'tokenizer': None}
+INFO:fairseq.tasks.speech_to_text:tokenizer: {'bpe': 'sentencepiece', 'sentencepiece_model': '/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost/spm.asr.model'}
+WARNING:fairseq.data.audio.data_cfg:Auto converting transforms into feature_transforms, but transforms will be deprecated in the future. Please update this in the config.
+INFO:fairseq.data.audio.speech_to_text_dataset:'test' has 0.00% OOV
+INFO:fairseq.data.audio.speech_to_text_dataset:SpeechToTextDataset(split="test", n_samples=15_531, prepend_tgt_lang_tag=False, n_frames_per_step=1, shuffle=False, feature_transforms=CompositeAudioFeatureTransform(
+    UtteranceCMVN(norm_means=True, norm_vars=True)
+), waveform_transforms=None, dataset_transforms=CompositeAudioDatasetTransform(
+))
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+WARNING:fairseq.tasks.fairseq_task:5 samples have invalid sizes and will be skipped, max_positions=(6000, 1024), first few sample ids=[11198, 697, 6107, 3431, 14638]
+INFO:fairseq.tasks.speech_to_text:pre-tokenizer: {'tokenizer': None}
+INFO:fairseq.tasks.speech_to_text:tokenizer: {'bpe': 'sentencepiece', 'sentencepiece_model': '/pfs/work7/workspace/scratch/uxude-ASR/dataset/covost/spm.asr.model'}
+INFO:fairseq.logging.progress_bar::    101 / 188 wps=582
+DEBUG:fairseq.data.iterators:Data loading buffer is empty or nearly empty. This may indicate a data loading bottleneck, and increasing the number of workers (--num-workers) may help.
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 15,520 sentences (198,865 tokens) in 114.3s (135.83 sentences/s, 1740.50 tokens/s)
+Transcription done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/hyp_asr.txt and /home/kit/stud/uxude/predictions/eval_st/ref_asr.txt
+Sample predictions:
+Sample: for some reason we were brought from enduring
+Reference: for some reason we were blocked from entering
+Sample: for some reason we were brought from entering
+Reference: as they sat down at the only table in the place the crystal merchant laughed
+WER:
+Generate test with beam=10: WER: 36.29
+BLEU:
+sacreBLEU: System and reference streams have different lengths.
+Transcription done
+--------------------------------------------------
+Starten processing of ASR output for MT input...
+[2024-02-01 20:12:00] [INFO] [Eval::process_asr_output_for_st]: Starting processing...
+[2024-02-01 20:12:00] [INFO] [Eval::process_asr_output_for_st]: Processing hypothesis file...
+[2024-02-01 20:12:01] [INFO] [LLaMA::llama]: Loading LLaMA...
+[2024-02-01 20:12:01] [INFO] [LLaMA::llama]: Using device: cuda
+[2024-02-01 20:12:01] [INFO] [LLaMA::llama]: Loading Tokenizer
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): huggingface.co:443
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+[2024-02-01 20:12:02] [INFO] [LLaMA::llama]: Tokenizer ready.
+[2024-02-01 20:12:02] [INFO] [LLaMA::llama]: Loading LLaMA model.
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/config.json HTTP/1.1" 200 0
+INFO:accelerate.utils.modeling:We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Loading checkpoint shards: 100%|██████████| 2/2 [00:20<00:00, 10.44s/it]
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/generation_config.json HTTP/1.1" 200 0
+[2024-02-01 20:12:34] [INFO] [LLaMA::llama]: Configuring LLaMA model.
+[2024-02-01 20:12:34] [INFO] [LLaMA::llama]: LLaMA ready.
+Processing batches: 100%|██████████| 100/100 [32:12<00:00, 19.32s/it]
+[2024-02-01 20:44:46] [INFO] [Eval::process_asr_output_for_st]: Processed hypothesis file
+[2024-02-01 20:44:46] [INFO] [Eval::process_asr_output_for_st]: ----------------------------------------
+[2024-02-01 20:44:46] [INFO] [Eval::process_asr_output_for_st]: For some reason, we were brought from entering.
+[2024-02-01 20:44:46] [INFO] [Eval::process_asr_output_for_st]: As they set down on the only table in the place, the crystal merchandise of laughter.
+[2024-02-01 20:44:46] [INFO] [Eval::process_asr_output_for_st]: ----------------------------------------
+Encoding Dataset: 100%|██████████| 100/100 [00:00<00:00, 51628.56it/s]
+[2024-02-01 20:44:46] [INFO] [Eval::process_asr_output_for_st]: Done processing hypothesis file!
+Loading CoVoST test: 100%|██████████| 15531/15531 [00:00<00:00, 187980.25it/s]
+100%|██████████| 156/156 [00:00<00:00, 297.44it/s]
+Processing dataset: 100%|██████████| 15531/15531 [00:00<00:00, 119250.64it/s]
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Translating file...
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: ----------------------------------------
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: ----------------------------------------
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Processed reference file
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: ----------------------------------------
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: ----------------------------------------
+Encoding Dataset: 100%|██████████| 100/100 [00:00<00:00, 65989.68it/s]
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Done processing reference file!
+[2024-02-01 20:45:12] [INFO] [Eval::process_asr_output_for_st]: Done processing!
+Processing done
+--------------------------------------------------
+Starting translation...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/asr_out
+Binary data directory: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/home/kit/stud/uxude/predictions/eval_st/asr_out', align_suffix=None, destdir='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset', thresholdtgt=0, thresholdsrc=0, tgtdict='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt', srcdict='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=1, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6520 types
+INFO:fairseq_cli.preprocess:[en] /home/kit/stud/uxude/predictions/eval_st/asr_out.en: 100 sents, 1616 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 7560 types
+INFO:fairseq_cli.preprocess:[de] /home/kit/stud/uxude/predictions/eval_st/asr_out.de: 100 sents, 1874 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint214.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint213.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint212.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint211.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint210.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6520 types
+INFO:fairseq.tasks.translation:[de] dictionary: 7560 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 100 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 100 examples from: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/test.en-de.de
+INFO:fairseq.tasks.translation:/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset test en-de 100 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 96 sentences (1,562 tokens) in 2.6s (36.28 sentences/s, 590.24 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/ref_mt.txt
+Sample predictions:
+Sample: Neue Schach beginnt damit, die Poststelle zu beschlagnahmen.
+Reference: Wir fangen einfach an, indem wir das Post-Eigentum beschlagnahmen.
+Sample: Er konnte sehen, dass der alte Mann mehr aus dem Leben wissen wollte.
+Reference: Er bemerkte, dass der alte Mann mehr über sein Leben erfahren wollte.
+WER:
+Generate test with beam=16: BLEU4 = 11.65, 36.9/16.9/8.6/4.5 (BP=0.935, ratio=0.937, syslen=889, reflen=949)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 11.6,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "36.9/16.9/8.6/4.5 (BP = 0.935 ratio = 0.937 hyp_len = 889 ref_len = 949)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}

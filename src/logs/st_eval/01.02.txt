@@ -1,0 +1,594 @@
+(base) [uxude@uc2n994 eval]$ cat eval_st_log_23109949.txt
+No extension needed for workspace ASR.
+No extension needed for workspace MT.
+Fairseq directory exists. Checking if installed...
+fairseq                  0.12.2       /home/kit/stud/uxude/fairseq
+Fairseq is already installed. Skipping installation.
+Setup complete. Starting script execution...
+[INFO] 18:51:14 [Dataset::Prepare Datasets]: Skipping dataset preparation, all config data already exists
+Transcribing the test set...
+Transcription done
+--------------------------------------------------
+Processing with postprocessing type: custom
+--------------------------------------------------
+Starting processing of ASR output for MT input...
+[INFO] 18:51:19 [Eval::process_asr_output_for_st]: Starting processing...
+[INFO] 18:51:19 [Eval::process_asr_output_for_st]: Processing reference file...
+Loading CoVoST test: 100%|██████████| 15531/15531 [00:00<00:00, 83606.48it/s]
+100%|██████████| 156/156 [00:00<00:00, 511.35it/s]
+Processing dataset: 100%|██████████| 15531/15531 [00:00<00:00, 120608.72it/s]
+Creating translation dictionary: 100%|██████████| 156/156 [00:00<00:00, 384.17it/s]
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Translating file...
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Processed reference file
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Die Akustik eines Raumes nehme ich am bewusstesten war, wenn ich versuche, einen Snack zu genießen, den ich nicht beabsichtige zu teilen.
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Oh Mann, das ist schrecklich!
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Done processing reference file!
+[INFO] 18:51:20 [Eval::process_asr_output_for_st]: Processing hypothesis file...
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 66841.50it/s]
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 58279.52it/s]
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/punctuation/test
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/punctuation
+Error: mkl-service + Intel(R) MKL: MKL_THREADING_LAYER=INTEL is incompatible with libgomp.so.1 library.
+        Try to import numpy first or set the threading layer accordingly. Set MKL_SERVICE_FORCE_INTEL to force it.
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost/models/avg_last_5_checkpoint.pt
+Error: mkl-service + Intel(R) MKL: MKL_THREADING_LAYER=INTEL is incompatible with libgomp.so.1 library.
+        Try to import numpy first or set the threading layer accordingly. Set MKL_SERVICE_FORCE_INTEL to force it.
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/punctuation
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/punctuation
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost/models/avg_last_5_checkpoint.pt', 'post_process': None, 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/punctuation', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 4504 types
+INFO:fairseq.tasks.translation:[de] dictionary: 6520 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/train_punctuation_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/punctuation/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/punctuation/test.en-de.de
+INFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/punctuation test en-de 32 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 32 sentences (496 tokens) in 0.5s (59.25 sentences/s, 918.38 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/punctuation/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/punctuation/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/punctuation/hyp_mt.txt.sampled
+Sample predictions:
+Sample: ▁The ▁other ▁town ▁got ▁their ▁re bu il ding ▁and ▁ rack ▁dis t ill ed ▁around ▁the ▁ ch im ney .
+Reference: ▁Der ▁E fe u ▁ist ▁das <<unk>> <<unk>> ge kle tter t ▁und ▁hat ▁sich ▁um ▁den ▁Sch or n stein ▁ge <<unk>> t .
+Sample: ▁May be ▁the ▁church ▁with ▁a ▁ ci gar ette ▁growing ▁from ▁it ▁the n ▁had ▁been ▁h unt ed .
+Reference: <<unk>> ▁war ▁die ▁Kirche , ▁in ▁der ▁der ▁Berg a horn ▁von ▁ innen ▁w uch s , ▁ver fl ucht .
+Sample: ▁Daniel ▁t aught ▁me ▁something ▁of ▁the ▁universe ▁of ▁language ▁and ▁the ▁so ul ▁of ▁the ▁world .
+Reference: ▁Du ▁has t ▁mir ▁dann <<unk>> ▁von ▁der ▁Universal <<unk>> ▁und ▁der ▁Seele ▁der ▁Welt ▁bei <<unk>> .
+Sample: ▁" The ▁Fal con ▁speak ▁car ries ▁bit s ▁off ▁me ▁my ▁cell , ▁but ▁does n ' t ▁say ▁it ."
+Reference: <<unk>> D er ▁Sch n abel ▁des ▁Fal ken <<unk>> ▁Teil chen ▁von ▁mir <<unk>> “ , <<unk>> ▁die ▁W ü ste .
+Sample: ▁The ▁bo y ▁was ▁also ▁sa d den ed , ▁his ▁friend ▁was ▁in ▁personal ▁of ▁his ▁test ing .
+Reference: ▁Der ▁Jung e ▁war <<unk>> ▁tra ur ig ; ▁sein ▁Freund <<unk>> e ▁sein ▁Sch ick s al .
+Sample: ▁As ▁they ▁set ▁down ▁on ▁the ▁only ▁table ▁in ▁the ▁place , ▁the ▁crystal ▁m er chan d ise .
+Reference: ▁Der ▁Kri stall <<unk>> ▁la chte , ▁als ▁sie ▁sich ▁an ▁den <<unk>> n ▁Tisch <<unk>> en .
+Sample: ▁After ▁the ▁owner ▁of ▁the ▁stone , ▁How l ▁went ▁the ▁ s word ▁goes ▁to ▁his ▁friend .
+Reference: <<unk>> F rag ▁den ▁Stand be <<unk>> er , ▁wie <<unk>> ▁das ▁Sch wert ▁ko s tet , “ <<unk>> ▁er ▁zu <<unk>> ▁Freund .
+Sample: ▁It ▁general ly ▁two ▁dis tract s ▁have ▁the ▁points ▁of ▁follow , ▁where ▁are ▁we ▁are ▁looking ?
+Reference: ▁Es ▁l en kt ▁zu <<unk>> ▁ab , <<unk>> ▁der ▁Point er ▁immer ▁deine m ▁Blick <<unk>> .
+Sample: ▁At ▁the ▁end ▁of ▁the ▁United ▁States , ▁the ▁mountain ▁was ▁still ▁re bu il t .
+Reference: ▁Sie ▁such ten <<unk>> ▁den ▁Stein en ▁und <<unk>> en ▁sich ▁langsam ▁vor .
+Sample: ▁The ▁camera ▁driver ▁developed ▁soon ▁look ed ▁to ▁be ▁very ▁concerned ▁with ▁his ▁head ▁of ▁wall .
+Reference: ▁Der ▁Ka mel <<unk>> ▁sch ien ▁sich <<unk>> <<unk>> <<unk>> <<unk>> n ▁um ▁die ▁Krieg s ge <<unk>> ▁zu <<unk>> .
+Sample: ▁This ▁turn ed ▁Har s e mann ▁to ▁her ▁want ed ▁on ▁his ▁sale .
+Reference: ▁Der ▁fr em de <<unk>> ▁z og ▁ein <<unk>> s ▁K rum m sch wert ▁aus <<unk>> ▁auf <<unk>> ▁Sat tel ▁ mont <<unk>> ▁Schei de .
+Sample: ▁Non - vo ur able ▁communication ▁is ▁sometimes ▁more ▁meaning ful ▁than ▁the ▁spoke n ▁words .
+Reference: ▁Non ver bal e <<unk>> ▁ist <<unk>> ▁aus s age k <<unk>> <<unk>> er ▁als ▁die <<unk>> en ▁Wort e .
+Sample: ▁They ▁were ▁rare ly , ▁I ▁think ▁to ▁are ▁three ▁hundred ▁people ▁every ▁one ▁another .
+Reference: ▁Es <<unk>> ▁wirklich , ▁glaube ▁ich , <<unk>> - <<unk>> ▁drei hundert <<unk>> , ▁die ▁sich <<unk>> <<unk>> ▁den ▁E ll bo gen ▁in ▁die ▁Ri ppen ▁ ra mm ten .
+Sample: ▁The ▁bo y ▁in ▁the ▁well at ▁of ▁paper ▁in ▁the ▁city .
+Reference: ▁In ▁der ▁Stadt ▁kann te ▁der ▁Jung e <<unk>> <<unk>> .
+Sample: ▁" The ▁term ▁" " just ▁my ▁two ▁things " " ▁is ▁about ▁a ▁bit ▁about ▁money ."
+Reference: ▁Der <<unk>> <<unk>> n ur <<unk>> <<unk>> ▁C ent “ ▁be <<unk>> t ▁sich ▁auf <<unk>> en , ▁nicht ▁auf ▁Geld .
+Sample: ▁The ▁time ▁the ▁right ▁one ▁understood ▁what ▁the ▁bo y ▁was ▁saying .
+Reference: ▁Der ▁Ka mel <<unk>> ▁ver stand , ▁was ▁der ▁B ub <<unk>> .
+Sample: ▁" " " I t ' s ▁a ▁dream ▁in ▁the ▁language ▁of ▁the ▁world " ", ▁she ▁said ."
+Reference: ▁Sie <<unk>> , ▁dass ▁es <<unk>> ein ▁T raum ▁in ▁der <<unk>> ▁der ▁Welt “ ▁sei .
+Sample: ▁If ▁everything ▁works , ▁you ▁see ▁wind ▁up ▁up ▁after ▁starting .
+Reference: ▁Wenn <<unk>> ▁gut ▁ <<unk>> , ▁ ta ucht <<unk>> ▁dem ▁Start ▁ein ▁Fenster ▁auf .
+Sample: ▁" An d ▁better ▁start ▁to ▁be ▁alone ▁with ▁one ' s ▁bo och ."
+Reference: ▁Und ▁es ▁ist ▁noch <<unk>> <<unk>> ▁zu ▁sein ▁mit <<unk>> es <<unk>> n .
+Sample: ▁This ▁is ▁a ▁big ▁deal ▁for ▁hand s - free ▁co ding .
+Reference: ▁Das ▁ist <<unk>> <<unk>> ▁Sach e <<unk>> ▁frei hä ndig es ▁Programm ieren .
+WER:
+Generate test with beam=16: BLEU4 = 0.00, 9.3/0.0/0.0/0.0 (BP=0.822, ratio=0.836, syslen=464, reflen=555)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 0.0,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "9.3/0.0/0.0/0.0 (BP = 0.822 ratio = 0.836 hyp_len = 464 ref_len = 555)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Decoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 66280.36it/s]
+Decoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 73908.44it/s]
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: Processed hypothesis file
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: The other town got their rebuilding and rack distilled around the chimney.
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: Maybe the church with a cigarette growing from it then had been hunted.
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: Daniel taught me something of the universe of language and the soul of the world.
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: "The Falcon speak carries bits off me my cell, but doesn't say it."
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: The boy was also saddened, his friend was in personal of his testing.
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: Done processing hypothesis file!
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: Done processing!
+[INFO] 18:51:35 [Eval::process_asr_output_for_st]: Writing processed lines to file...
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 60924.98it/s]
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 73063.54it/s]
+Processing done
+--------------------------------------------------
+Starting translation...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/custom/asr_out
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/custom
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/home/kit/stud/uxude/predictions/eval_st/custom/asr_out', align_suffix=None, destdir='/home/kit/stud/uxude/predictions/eval_st/custom', thresholdtgt=0, thresholdsrc=0, tgtdict='/home/kit/stud/uxude/predictions/eval_st/custom/dict.de.txt', srcdict='/home/kit/stud/uxude/predictions/eval_st/custom/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=8, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6520 types
+INFO:fairseq_cli.preprocess:[en] /home/kit/stud/uxude/predictions/eval_st/custom/asr_out.en: 32 sents, 496 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 7560 types
+INFO:fairseq_cli.preprocess:[de] /home/kit/stud/uxude/predictions/eval_st/custom/asr_out.de: 32 sents, 587 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /home/kit/stud/uxude/predictions/eval_st/custom
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint214.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint213.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint212.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint211.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint210.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/custom
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/custom
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/custom', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6520 types
+INFO:fairseq.tasks.translation:[de] dictionary: 7560 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/custom/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/custom/test.en-de.de
+INFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/custom test en-de 32 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 32 sentences (468 tokens) in 0.5s (65.35 sentences/s, 955.73 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/custom/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/custom/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/custom/hyp_mt.txt.sampled
+Sample predictions:
+Sample: Die andere Stadt erhielt ihren Wiederaufbau und die Zahnstange destillierte um den Schornstein.
+Reference: Der Efeu ist das Gebäude hochgeklettert und hat sich um den Schornstein gewickelt.
+Sample: Das Falcon spricht mich von meiner Zelle ab, sagt sie aber nicht.
+Reference: „Der Schnabel des Falken trägt Teilchen von mir selber“, sagte die Wüste.
+Sample: Vielleicht war die Kirche mit einer Zigarette gewachsen, die damals gejagt wurde.
+Reference: Vielleicht war die Kirche, in der der Bergahorn von innen wuchs, verflucht.
+Sample: Der Junge war auch traurig, sein Freund hatte persönliche Tests.
+Reference: Der Junge war auch traurig; sein Freund verfolgte sein Schicksal.
+Sample: Als sie sich auf den einzigen Tisch hinsetzen, dreht das Kristallhändler.
+Reference: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+Sample: „Es ist ein Traum in der Sprache der Welt“, sagte sie.
+Reference: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+Sample: Howl ging nach dem Besitzer des Steins zu seinem Freund.
+Reference: „Frag den Standbesitzer, wie viel das Schwert kostet,“ sagte er zu seinem Freund.
+Sample: Im Allgemeinen haben sie zwei Distrakte nachfolgende Punkte, wo wir sehen?
+Reference: Es lenkt zu sehr ab, wenn der Pointer immer deinem Blick folgt.
+Sample: Der Begriff „Nur meine beiden Dinge“ handelt von Geld.
+Reference: Der Begriff „nur meine zwei Cent“ bezieht sich auf Meinungen, nicht auf Geld.
+Sample: Daniel brachte mir etwas von dem Universum und der Seele der Welt bei.
+Reference: Du hast mir dann etwas von der Universalsprache und der Seele der Welt beigebracht.
+Sample: Die nicht stimmbare Kommunikation ist manchmal bedeutender als die gesprochenen Wörter.
+Reference: Nonverbale Kommunikation ist manchmal aussagekräftiger als die gesprochenen Worte.
+Sample: Der Kamerafahrer sah sich bald sehr befasst mit seinem Wandkopf aus.
+Reference: Der Kameltreiber schien sich jedoch keine großen Sorgen um die Kriegsgefahr zu machen.
+Sample: Am Ende der Vereinigten Staaten wurde der Berg noch wieder aufgebaut.
+Reference: Sie suchten zwischen den Steinen und arbeiteten sich langsam vor.
+Sample: Nur selten dachte ich, sie sind dreihundert Personen alle einander.
+Reference: Es waren wirklich, glaube ich, zwei- oder dreihundert Leute, die sich gegenseitig den Ellbogen in die Rippen rammten.
+Sample: Üblicherweise ist es üblich, das Geld, aber du.
+Reference: Es ist normalerweise üblich, das Geld mitzubringen.
+Sample: So wurde Harsemann zu ihrem Verkauf gedreht.
+Reference: Der fremde Reiter zog ein riesiges Krummschwert aus einer auf seinem Sattel montierten Scheide.
+Sample: Und besser beginnt allein mit seinem Booch.
+Reference: Und es ist noch besser allein zu sein mit jemandes Büchern.
+Sample: Das ist eine große Vereinbarung für Programmierungen ohne Hände.
+Reference: Das ist eine große Sache für freihändiges Programmieren.
+Sample: Jemals verstand man, was der Junge sagte.
+Reference: Der Kameltreiber verstand, was der Bub sagte.
+Sample: Der Junge im Brunnen Papier in der Stadt.
+Reference: In der Stadt kannte der Junge viele Leute.
+WER:
+Generate test with beam=16: BLEU4 = 10.38, 33.2/18.0/10.1/4.0 (BP=0.832, ratio=0.844, syslen=271, reflen=321)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 10.4,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "33.2/18.0/10.1/4.0 (BP = 0.832 ratio = 0.844 hyp_len = 271 ref_len = 321)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Processing completed for postprocessing type: custom
+--------------------------------------------------
+Processing with postprocessing type: llama
+--------------------------------------------------
+Starting processing of ASR output for MT input...
+[INFO] 18:52:05 [Eval::process_asr_output_for_st]: Starting processing...
+[INFO] 18:52:05 [Eval::process_asr_output_for_st]: Processing reference file...
+Loading CoVoST test: 100%|██████████| 15531/15531 [00:00<00:00, 84190.51it/s]
+100%|██████████| 156/156 [00:00<00:00, 554.41it/s]
+Processing dataset: 100%|██████████| 15531/15531 [00:00<00:00, 130327.78it/s]
+Creating translation dictionary: 100%|██████████| 156/156 [00:00<00:00, 430.57it/s]
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Translating file...
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Processed reference file
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Die Akustik eines Raumes nehme ich am bewusstesten war, wenn ich versuche, einen Snack zu genießen, den ich nicht beabsichtige zu teilen.
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Oh Mann, das ist schrecklich!
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Done processing reference file!
+[INFO] 18:52:07 [Eval::process_asr_output_for_st]: Processing hypothesis file...
+[INFO] 18:52:07 [LLaMA::llama]: Loading LLaMA...
+[INFO] 18:52:07 [LLaMA::llama]: Using device: cuda
+[INFO] 18:52:07 [LLaMA::llama]: Loading Tokenizer
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): huggingface.co:443
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+[INFO] 18:52:07 [LLaMA::llama]: Tokenizer ready.
+[INFO] 18:52:07 [LLaMA::llama]: Loading LLaMA model.
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/config.json HTTP/1.1" 200 0
+INFO:accelerate.utils.modeling:We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.60s/it]
+DEBUG:urllib3.connectionpool:https://huggingface.co:443 "HEAD /meta-llama/Llama-2-7b-chat-hf/resolve/main/generation_config.json HTTP/1.1" 200 0
+[INFO] 18:52:16 [LLaMA::llama]: Configuring LLaMA model.
+[INFO] 18:52:16 [LLaMA::llama]: LLaMA ready.
+Processing batches: 100%|██████████| 32/32 [08:45<00:00, 16.41s/it]
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: Processed hypothesis file
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: For some reason, we were brought from entering.
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: As they set down on the only table in the place, the crystal merchandise of laughter.
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: A little boy was overwhelming a pink slide with no kids.
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: All men that's terrible.
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: It's a dream in the language of the world she said.
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: Done processing hypothesis file!
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: Done processing!
+[INFO] 19:03:20 [Eval::process_asr_output_for_st]: Writing processed lines to file...
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 60787.01it/s]
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 77852.51it/s]
+Processing done
+--------------------------------------------------
+Starting translation...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/llama/asr_out
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/llama
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/home/kit/stud/uxude/predictions/eval_st/llama/asr_out', align_suffix=None, destdir='/home/kit/stud/uxude/predictions/eval_st/llama', thresholdtgt=0, thresholdsrc=0, tgtdict='/home/kit/stud/uxude/predictions/eval_st/llama/dict.de.txt', srcdict='/home/kit/stud/uxude/predictions/eval_st/llama/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=8, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6520 types
+INFO:fairseq_cli.preprocess:[en] /home/kit/stud/uxude/predictions/eval_st/llama/asr_out.en: 32 sents, 495 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 7560 types
+INFO:fairseq_cli.preprocess:[de] /home/kit/stud/uxude/predictions/eval_st/llama/asr_out.de: 32 sents, 587 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /home/kit/stud/uxude/predictions/eval_st/llama
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint214.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint213.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint212.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint211.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint210.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/llama
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/llama
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/llama', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6520 types
+INFO:fairseq.tasks.translation:[de] dictionary: 7560 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/llama/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/llama/test.en-de.de
+INFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/llama test en-de 32 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 32 sentences (510 tokens) in 2.6s (12.15 sentences/s, 193.66 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/llama/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/llama/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/llama/hyp_mt.txt.sampled
+Sample predictions:
+Sample: Als sie sich auf den einzigen Tisch hinsetzen, war das Kristallhändlerchen des Lachens.
+Reference: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+Sample: Am Ende des Abends erholte er sich den letzten Endkampf aus dem Piloten.
+Reference: Sie suchten zwischen den Steinen und arbeiteten sich langsam vor.
+Sample: Die andere Stadt erhielt ihren Umbau und das Floß befindet sich noch um den Schornstein herum.
+Reference: Der Efeu ist das Gebäude hochgeklettert und hat sich um den Schornstein gewickelt.
+Sample: Die Falkengeschwindigkeiten tragen mich von meiner Zelle ab, sagen sie aber nicht.
+Reference: „Der Schnabel des Falken trägt Teilchen von mir selber“, sagte die Wüste.
+Sample: Vielleicht wurde die Kirche mit einer Zigarette, aus der damals spukt, verfolgt worden.
+Reference: Vielleicht war die Kirche, in der der Bergahorn von innen wuchs, verflucht.
+Sample: Im Allgemeinen dauert es zwei Ablenkungen, um die nachfolgenden Punkte zu haben, wo wir sehen.
+Reference: Es lenkt zu sehr ab, wenn der Pointer immer deinem Blick folgt.
+Sample: Ein kleiner Junge überwältigte eine rosafarbene Rutsche ohne Kinder.
+Reference: Die Akustik eines Raumes nehme ich am bewusstesten war, wenn ich versuche, einen Snack zu genießen, den ich nicht beabsichtige zu teilen.
+Sample: Nachdem der Eigentümer des Steinsaals das Schwert hatte, sagte er zu seinem Freund.
+Reference: „Frag den Standbesitzer, wie viel das Schwert kostet,“ sagte er zu seinem Freund.
+Sample: Der Begriff „Nicht meine beiden Dinge“ handelt von einem Gürtel und nicht um Geld.
+Reference: Der Begriff „nur meine zwei Cent“ bezieht sich auf Meinungen, nicht auf Geld.
+Sample: Der Junge war auch traurig, dass sein Freund beim Personal Office-Test war.
+Reference: Der Junge war auch traurig; sein Freund verfolgte sein Schicksal.
+Sample: Der Kamerafahrer sah sich bald sehr befasst mit seinem Wandkopf aus.
+Reference: Der Kameltreiber schien sich jedoch keine großen Sorgen um die Kriegsgefahr zu machen.
+Sample: Daniel lehrte mir etwas von der universellen Sprache und der Seele der Welt.
+Reference: Du hast mir dann etwas von der Universalsprache und der Seele der Welt beigebracht.
+Sample: Dadurch wurde Harsemann auf seinem Segel zu ihr gedreht.
+Reference: Der fremde Reiter zog ein riesiges Krummschwert aus einer auf seinem Sattel montierten Scheide.
+Sample: Wenn alles funktioniert, sehen Sie am Anfang Wind ab.
+Reference: Wenn alles gut läuft, taucht nach dem Start ein Fenster auf.
+Sample: Die nichtbale Kommunikation ist manchmal bedeutender als gesprochene Wörter.
+Reference: Nonverbale Kommunikation ist manchmal aussagekräftiger als die gesprochenen Worte.
+Sample: Selten dachte ich, dass es jeden Winter dreihundert Personen gibt.
+Reference: Es waren wirklich, glaube ich, zwei- oder dreihundert Leute, die sich gegenseitig den Ellbogen in die Rippen rammten.
+Sample: Sie sagte: "Es ist ein Traum in der Sprache der Welt".
+Reference: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+Sample: Üblicherweise ist es üblich, das Geld, aber Sie.
+Reference: Es ist normalerweise üblich, das Geld mitzubringen.
+Sample: Der Junge ist in einem Brunnen Papier in der Stadt.
+Reference: In der Stadt kannte der Junge viele Leute.
+Sample: Und besser beginnt, allein mit seinen Büchern zu sein.
+Reference: Und es ist noch besser allein zu sein mit jemandes Büchern.
+WER:
+Generate test with beam=16: BLEU4 = 9.03, 31.1/13.6/7.3/3.0 (BP=0.919, ratio=0.922, syslen=296, reflen=321)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 9.0,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "31.1/13.6/7.3/3.0 (BP = 0.919 ratio = 0.922 hyp_len = 296 ref_len = 321)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Processing completed for postprocessing type: llama
+--------------------------------------------------
+Processing with postprocessing type: none
+--------------------------------------------------
+Starting processing of ASR output for MT input...
+[INFO] 19:04:02 [Eval::process_asr_output_for_st]: Starting processing...
+[INFO] 19:04:02 [Eval::process_asr_output_for_st]: Processing reference file...
+Loading CoVoST test: 100%|██████████| 15531/15531 [00:00<00:00, 80685.07it/s]
+100%|██████████| 156/156 [00:00<00:00, 555.32it/s]
+Processing dataset: 100%|██████████| 15531/15531 [00:00<00:00, 130644.31it/s]
+Creating translation dictionary: 100%|██████████| 156/156 [00:00<00:00, 446.90it/s]
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Translating file...
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Processed reference file
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Aus irgendeinem Grund durften wir nicht hinein.
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Die Akustik eines Raumes nehme ich am bewusstesten war, wenn ich versuche, einen Snack zu genießen, den ich nicht beabsichtige zu teilen.
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Oh Mann, das ist schrecklich!
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Done processing reference file!
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Processing hypothesis file...
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Processed hypothesis file
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: for some reason we were brought from enduring
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: as they set down on the only table in the place the crystal merchandise
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: a notable way overwhelming
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: all men thats terrible
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: its a dream in the language of the world she said
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: ----------------------------------------
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Done processing hypothesis file!
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Done processing!
+[INFO] 19:04:03 [Eval::process_asr_output_for_st]: Writing processed lines to file...
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 60376.85it/s]
+Encoding Dataset: 100%|██████████| 32/32 [00:00<00:00, 84307.62it/s]
+Processing done
+--------------------------------------------------
+Starting translation...
+Starting translation...
+Preprocessing data...
+Source dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.en.txt
+Target dictionary: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/binarized_dataset/dict.de.txt
+Test prefix: /home/kit/stud/uxude/predictions/eval_st/none/asr_out
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/none
+INFO:fairseq_cli.preprocess:Namespace(no_progress_bar=False, log_interval=100, log_format=None, log_file=None, aim_repo=None, aim_run_hash=None, tensorboard_logdir=None, wandb_project=None, azureml_logging=False, seed=1, cpu=False, tpu=False, bf16=False, memory_efficient_bf16=False, fp16=False, memory_efficient_fp16=False, fp16_no_flatten_grads=False, fp16_init_scale=128, fp16_scale_window=None, fp16_scale_tolerance=0.0, on_cpu_convert_precision=False, min_loss_scale=0.0001, threshold_loss_scale=None, amp=False, amp_batch_retries=2, amp_init_scale=128, amp_scale_window=None, user_dir=None, empty_cache_freq=0, all_gather_list_size=16384, model_parallel_size=1, quantization_config_path=None, profile=False, reset_logging=False, suppress_crashes=False, use_plasma_view=False, plasma_path='/tmp/plasma', criterion='cross_entropy', tokenizer=None, bpe=None, optimizer=None, lr_scheduler='fixed', simul_type=None, scoring='bleu', task='translation', source_lang='en', target_lang='de', trainpref=None, validpref=None, testpref='/home/kit/stud/uxude/predictions/eval_st/none/asr_out', align_suffix=None, destdir='/home/kit/stud/uxude/predictions/eval_st/none', thresholdtgt=0, thresholdsrc=0, tgtdict='/home/kit/stud/uxude/predictions/eval_st/none/dict.de.txt', srcdict='/home/kit/stud/uxude/predictions/eval_st/none/dict.en.txt', nwordstgt=-1, nwordssrc=-1, alignfile=None, dataset_impl='mmap', joined_dictionary=False, only_source=False, padding_factor=8, workers=8, dict_only=False)
+INFO:fairseq_cli.preprocess:[en] Dictionary: 6520 types
+INFO:fairseq_cli.preprocess:[en] /home/kit/stud/uxude/predictions/eval_st/none/asr_out.en: 32 sents, 431 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:[de] Dictionary: 7560 types
+INFO:fairseq_cli.preprocess:[de] /home/kit/stud/uxude/predictions/eval_st/none/asr_out.de: 32 sents, 587 tokens, 0.0% replaced (by <unk>)
+INFO:fairseq_cli.preprocess:Wrote preprocessed data to /home/kit/stud/uxude/predictions/eval_st/none
+Preprocessing done
+Average checkpoints...
+Checkpoints folder: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models
+Checkpoint path: /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Namespace(inputs=['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models'], output='/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', num_epoch_checkpoints=5, num_update_checkpoints=None, num_best_checkpoints=0, checkpoint_upper_bound=None)
+averaging checkpoints:  ['/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint214.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint213.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint212.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint211.pt', '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/checkpoint210.pt']
+Finished writing averaged checkpoint to /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+Checkpoints averaged
+Generating translations...
+Binary data directory: /home/kit/stud/uxude/predictions/eval_st/none
+Prediction output directory: /home/kit/stud/uxude/predictions/eval_st/none
+DEBUG:hydra.core.utils:Setting JobRuntime:name=UNKNOWN_NAME
+DEBUG:hydra.core.utils:Setting JobRuntime:name=utils
+INFO:fairseq_cli.generate:{'_name': None, 'common': {'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'aim_repo': None, 'aim_run_hash': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 1, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': False, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'on_cpu_convert_precision': False, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'amp': False, 'amp_batch_retries': 2, 'amp_init_scale': 128, 'amp_scale_window': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}, 'common_eval': {'_name': None, 'path': '/pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt', 'post_process': 'sentencepiece', 'quiet': False, 'model_overrides': '{}', 'results_path': None}, 'distributed_training': {'_name': None, 'distributed_world_size': 1, 'distributed_num_procs': 1, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': None, 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'pytorch_ddp', 'ddp_comm_hook': 'none', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'gradient_as_bucket_view': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_base_algorithm': 'localsgd', 'localsgd_frequency': 3, 'nprocs_per_node': 1, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': False, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'not_fsdp_flatten_parameters': False}, 'dataset': {'_name': None, 'num_workers': 1, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 64, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 64, 'max_valid_steps': None, 'curriculum': 0, 'gen_subset': 'test', 'num_shards': 1, 'shard_id': 0, 'grouped_shuffling': False, 'update_epoch_batch_itr': False, 'update_ordered_indices_seed': False}, 'optimization': {'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False, 'skip_remainder_batch': False, 'debug_param_names': False}, 'checkpoint': {'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'continue_once': None, 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_interval_updates_pattern': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_save_optimizer_state': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 'model_parallel_size': 1}, 'bmuf': {'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 1}, 'generation': {'_name': None, 'beam': 16, 'beam_mt': 0, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'max_len_a_mt': 0.0, 'max_len_b_mt': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'lenpen_mt': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False, 'eos_token': None}, 'eval_lm': {'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 9223372036854775807}, 'interactive': {'_name': None, 'buffer_size': 0, 'input': '-'}, 'model': {'_name': 'wav2vec2', 'extractor_mode': 'default', 'encoder_layers': 12, 'encoder_embed_dim': 768, 'encoder_ffn_embed_dim': 3072, 'encoder_attention_heads': 12, 'activation_fn': 'gelu', 'layer_type': 'transformer', 'dropout': 0.1, 'attention_dropout': 0.1, 'activation_dropout': 0.0, 'encoder_layerdrop': 0.0, 'dropout_input': 0.0, 'dropout_features': 0.0, 'final_dim': 0, 'layer_norm_first': False, 'conv_feature_layers': '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]', 'conv_bias': False, 'logit_temp': 0.1, 'quantize_targets': False, 'quantize_input': False, 'same_quantizer': False, 'target_glu': False, 'feature_grad_mult': 1.0, 'quantizer_depth': 1, 'quantizer_factor': 3, 'latent_vars': 320, 'latent_groups': 2, 'latent_dim': 0, 'mask_length': 10, 'mask_prob': 0.65, 'mask_selection': 'static', 'mask_other': 0.0, 'no_mask_overlap': False, 'mask_min_space': 1, 'require_same_masks': True, 'mask_dropout': 0.0, 'mask_channel_length': 10, 'mask_channel_prob': 0.0, 'mask_channel_before': False, 'mask_channel_selection': 'static', 'mask_channel_other': 0.0, 'no_mask_channel_overlap': False, 'mask_channel_min_space': 1, 'num_negatives': 100, 'negatives_from_everywhere': False, 'cross_sample_negatives': 0, 'codebook_negatives': 0, 'conv_pos': 128, 'conv_pos_groups': 16, 'pos_conv_depth': 1, 'latent_temp': [2.0, 0.5, 0.999995], 'max_positions': 100000, 'checkpoint_activations': False, 'required_seq_len_multiple': 1, 'crop_seq_to_multiple': 1, 'depthwise_conv_kernel_size': 31, 'attn_type': '', 'pos_enc_type': 'abs', 'fp16': False, 'adp_num': -1, 'adp_dim': 64, 'adp_act_fn': 'relu', 'adp_trf_idx': 'all'}, 'task': {'_name': 'translation', 'data': '/home/kit/stud/uxude/predictions/eval_st/none', 'source_lang': 'en', 'target_lang': 'de', 'load_alignments': False, 'left_pad_source': True, 'left_pad_target': False, 'max_source_positions': 1024, 'max_target_positions': 1024, 'upsample_primary': -1, 'truncate_source': False, 'num_batch_buckets': 0, 'train_subset': 'train', 'dataset_impl': None, 'required_seq_len_multiple': 1, 'eval_bleu': False, 'eval_bleu_args': '{}', 'eval_bleu_detok': 'space', 'eval_bleu_detok_args': '{}', 'eval_tokenized_bleu': False, 'eval_bleu_remove_bpe': None, 'eval_bleu_print_samples': False}, 'criterion': {'_name': 'cross_entropy', 'sentence_avg': True}, 'optimizer': None, 'lr_scheduler': {'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}, 'scoring': {'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}, 'bpe': None, 'tokenizer': None, 'ema': {'_name': None, 'store_ema': False, 'ema_decay': 0.9999, 'ema_start_update': 0, 'ema_seed_model': None, 'ema_update_freq': 1, 'ema_fp32': False}, 'simul_type': None}
+INFO:fairseq.tasks.translation:[en] dictionary: 6520 types
+INFO:fairseq.tasks.translation:[de] dictionary: 7560 types
+INFO:fairseq_cli.generate:loading model(s) from /pfs/work7/workspace/scratch/uxude-MT/train/finetune_mt_covost/models/avg_last_5_checkpoint.pt
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/none/test.en-de.en
+INFO:fairseq.data.data_utils:loaded 32 examples from: /home/kit/stud/uxude/predictions/eval_st/none/test.en-de.de
+INFO:fairseq.tasks.translation:/home/kit/stud/uxude/predictions/eval_st/none test en-de 32 examples
+INFO:fairseq.tasks.fairseq_task:can_reuse_epoch_itr = True
+INFO:fairseq.tasks.fairseq_task:reuse_dataloader = True
+INFO:fairseq.tasks.fairseq_task:rebuild_batches = False
+INFO:fairseq.tasks.fairseq_task:creating new batches for epoch 1
+INFO:fairseq_cli.generate:NOTE: hypothesis and token scores are output in base 2
+INFO:fairseq_cli.generate:Translated 32 sentences (470 tokens) in 0.5s (64.96 sentences/s, 954.11 tokens/s)
+Translations done
+Prediction files written for /home/kit/stud/uxude/predictions/eval_st/none/hyp_mt.txt and /home/kit/stud/uxude/predictions/eval_st/none/ref_mt.txt
+Sampled predictions written to /home/kit/stud/uxude/predictions/eval_st/none/hyp_mt.txt.sampled
+Sample predictions:
+Sample: Die andere Stadt erhielt ihren Wiederaufbau und die Zahnstange destillierte um den Schornstein.
+Reference: Der Efeu ist das Gebäude hochgeklettert und hat sich um den Schornstein gewickelt.
+Sample: Vielleicht war die Kirche mit einer Zigarette gewachsen, aus der damals gejagt wurde.
+Reference: Vielleicht war die Kirche, in der der Bergahorn von innen wuchs, verflucht.
+Sample: Daniel brachte mir etwas von dem Universum der Sprache und dem Seele der Welt bei.
+Reference: Du hast mir dann etwas von der Universalsprache und der Seele der Welt beigebracht.
+Sample: Der Falke spricht über mich von meiner Zelle und sagt, sie sei denn
+Reference: „Der Schnabel des Falken trägt Teilchen von mir selber“, sagte die Wüste.
+Sample: Auch der Junge war traurig, dass sein Freund persönlich getestet hatte
+Reference: Der Junge war auch traurig; sein Freund verfolgte sein Schicksal.
+Sample: Als sie sich auf den einzigen Tisch im Ort des Kristallhändlers setzen
+Reference: Der Kristallhändler lachte, als sie sich an den einzigen Tisch setzten.
+Sample: Nachdem der Eigentümer der Steinhülle gegangen war, geht das Schwert zu seinem Freund
+Reference: „Frag den Standbesitzer, wie viel das Schwert kostet,“ sagte er zu seinem Freund.
+Sample: In der Regel haben zwei Distrakte die nachfolgenden Punkte, wo wir sehen
+Reference: Es lenkt zu sehr ab, wenn der Pointer immer deinem Blick folgt.
+Sample: Am Ende der zusammengelegten Staaten wurde der Berg noch wieder aufgebaut.
+Reference: Sie suchten zwischen den Steinen und arbeiteten sich langsam vor.
+Sample: Der Kamerafahrer entwickelte sich bald sehr befasst mit seinem Wandkopf.
+Reference: Der Kameltreiber schien sich jedoch keine großen Sorgen um die Kriegsgefahr zu machen.
+Sample: Dadurch entstand ihr Harsemann im Verkauf, der sie wollte.
+Reference: Der fremde Reiter zog ein riesiges Krummschwert aus einer auf seinem Sattel montierten Scheide.
+Sample: Die nicht-vourierbare Kommunikation ist manchmal bedeutender als die gesprochenen Wörter
+Reference: Nonverbale Kommunikation ist manchmal aussagekräftiger als die gesprochenen Worte.
+Sample: Nur selten dachte ich, dass sie dreihundert Personen gegenseitig sind
+Reference: Es waren wirklich, glaube ich, zwei- oder dreihundert Leute, die sich gegenseitig den Ellbogen in die Rippen rammten.
+Sample: Der Junge im Brunnen des Papiers in der Stadt
+Reference: In der Stadt kannte der Junge viele Leute.
+Sample: In dem Begriff handelt es sich nur um ein bisschen um Geld
+Reference: Der Begriff „nur meine zwei Cent“ bezieht sich auf Meinungen, nicht auf Geld.
+Sample: Mit der Zeit verstand man, was der Junge sagte.
+Reference: Der Kameltreiber verstand, was der Bub sagte.
+Sample: „Das Traum in der Sprache der Welt“, sagte sie
+Reference: Sie sagte, dass es „ein Traum in der Sprache der Welt“ sei.
+Sample: Wenn alles funktioniert, sehen Sie nach dem Start landen
+Reference: Wenn alles gut läuft, taucht nach dem Start ein Fenster auf.
+Sample: und besser beginnen, allein mit einer Spule zu sein
+Reference: Und es ist noch besser allein zu sein mit jemandes Büchern.
+Sample: Dies ist eine große Vereinbarung für handfreie Kodierung
+Reference: Das ist eine große Sache für freihändiges Programmieren.
+WER:
+Generate test with beam=16: BLEU4 = 5.80, 28.8/12.1/4.9/1.0 (BP=0.892, ratio=0.897, syslen=288, reflen=321)
+BLEU:
+{
+ "name": "BLEU",
+ "score": 5.8,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "28.8/12.1/4.9/1.0 (BP = 0.892 ratio = 0.897 hyp_len = 288 ref_len = 321)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+Processing completed for postprocessing type: none
+--------------------------------------------------
+Results for the different postprocessing types
+--------------------------------------------------
+Postprocessing type: custom
+--------------------------------------------------
+BLEU score:
+{
+ "name": "BLEU",
+ "score": 10.4,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "33.2/18.0/10.1/4.0 (BP = 0.832 ratio = 0.844 hyp_len = 271 ref_len = 321)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+--------------------------------------------------
+TER score:
+Average TER Score: 0.7510626526251526
+--------------------------------------------------
+BERTScore:
+bert-base-multilingual-cased_L9_no-idf_version=0.3.12(hug_trans=4.36.2)_fast-tokenizer P: 0.798805 R: 0.778563 F1: 0.788249
+--------------------------------------------------
+Postprocessing type: llama
+--------------------------------------------------
+BLEU score:
+{
+ "name": "BLEU",
+ "score": 9.0,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "31.1/13.6/7.3/3.0 (BP = 0.919 ratio = 0.922 hyp_len = 296 ref_len = 321)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+--------------------------------------------------
+TER score:
+Average TER Score: 0.8178677225552226
+--------------------------------------------------
+BERTScore:
+bert-base-multilingual-cased_L9_no-idf_version=0.3.12(hug_trans=4.36.2)_fast-tokenizer P: 0.797812 R: 0.781721 F1: 0.789316
+--------------------------------------------------
+Postprocessing type: none
+--------------------------------------------------
+BLEU score:
+{
+ "name": "BLEU",
+ "score": 5.8,
+ "signature": "nrefs:1|case:mixed|eff:no|tok:none|smooth:none|version:2.4.0",
+ "verbose_score": "28.8/12.1/4.9/1.0 (BP = 0.892 ratio = 0.897 hyp_len = 288 ref_len = 321)",
+ "nrefs": "1",
+ "case": "mixed",
+ "eff": "no",
+ "tok": "none",
+ "smooth": "none",
+ "version": "2.4.0"
+}
+--------------------------------------------------
+TER score:
+Average TER Score: 0.843964022089022
+--------------------------------------------------
+BERTScore:
+bert-base-multilingual-cased_L9_no-idf_version=0.3.12(hug_trans=4.36.2)_fast-tokenizer P: 0.754577 R: 0.739201 F1: 0.746535
+--------------------------------------------------
