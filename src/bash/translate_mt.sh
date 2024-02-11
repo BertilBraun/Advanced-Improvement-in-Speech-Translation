@@ -41,6 +41,8 @@ echo "Binary data directory: $BINARY_DATA_DIR"
 cp $SRC_DICT $BINARY_DATA_DIR/dict.en.txt
 cp $TGT_DICT $BINARY_DATA_DIR/dict.de.txt
 
+export MKL_SERVICE_FORCE_INTEL=1
+
 fairseq-preprocess \
       --source-lang en --target-lang de \
       --srcdict $BINARY_DATA_DIR/dict.en.txt \

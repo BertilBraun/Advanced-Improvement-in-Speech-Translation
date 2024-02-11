@@ -124,6 +124,9 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
                 # Calculate overlap score
                 overlap_score = len(tokenized_preprocessed_line.intersection(tokenized_ref_line))
 
+                # Adjust score based on length of the reference line and the processed line
+                overlap_score /= max(len(tokenized_preprocessed_line), len(tokenized_ref_line))
+
                 if overlap_score > best_match_score:
                     best_match_score = overlap_score
                     best_match = ref_line
@@ -136,21 +139,21 @@ def custom_postprocessing(lines: list[str]) -> list[str]:
     MODEL_DIR = PUNCTUATION_TRAIN_WORKSPACE / 'models'
 
     PREDICTIONS_DIR = f"{os.environ['HOME']}/predictions/eval_st/punctuation"
-    TEST_PREF = PREDICTIONS_DIR + '/test'
+    TEST_PREF = PREDICTIONS_DIR + '/test.en-de'
     BEAM_SIZE = 16
     DECODE_BPE = 'NONE'
 
     os.makedirs(PREDICTIONS_DIR, exist_ok=True)
 
     only_best_hypothesis = __get_only_best_hypothesis(lines)
-    bpe = BPE.from_pretrained(PUNCTUATION_SPM_MODEL)
+    bpe = BPE.from_pretrained(MT_SPM_MODEL)
     write_lines(bpe.encode_lines(only_best_hypothesis), TEST_PREF + '.en')
 
     ref_lines = PROCESSED_LINES[args.ref_output_file]
     write_lines(bpe.encode_lines(ref_lines), TEST_PREF + '.de')
 
     # copy PUNCTUATION_SPM_MODEL to PREDICTIONS_DIR
-    os.system(f"cp {PUNCTUATION_SPM_MODEL.as_posix().replace('.model', '')}.* {PREDICTIONS_DIR}/")
+    os.system(f"cp {MT_SPM_MODEL.as_posix().replace('.model', '')}.* {PREDICTIONS_DIR}/")
 
     # call generate on the file
     COMMAND = f'./src/bash/translate_mt.sh {BINARY_DATA_DIR}/dict.en.txt {BINARY_DATA_DIR}/dict.de.txt {TEST_PREF} {PREDICTIONS_DIR} {MODEL_DIR.as_posix()} {PREDICTIONS_DIR} {BEAM_SIZE} {DECODE_BPE}'
