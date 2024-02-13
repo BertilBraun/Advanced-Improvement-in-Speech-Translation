@@ -112,6 +112,6 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     bert-score -r $REF -c $HYP --lang de
     echo "--------------------------------------------------"
     echo "COMET:"
-    comet-score -s $SRC -r $REF -t $HYP --gpu
+    comet-score -s $SRC -r $REF -t $HYP --gpus 1
     echo "--------------------------------------------------"
 done
