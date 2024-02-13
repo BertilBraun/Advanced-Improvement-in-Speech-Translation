@@ -22,3 +22,4 @@ cython
 deep_translator
 accelerate
 bitsandbytes
+unbabel-comet

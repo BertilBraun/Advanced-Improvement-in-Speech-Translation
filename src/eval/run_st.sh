@@ -102,4 +102,7 @@ for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     echo "BERTScore:"
     bert-score -r $REF -c $HYP --lang de
     echo "--------------------------------------------------"
+    echo "COMET:"
+    comet-score --ref $REF --hyp $HYP --gpu
+    echo "--------------------------------------------------"
 done
