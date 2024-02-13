@@ -8,7 +8,7 @@ from examples.speech_to_text.data_utils import gen_config_yaml, gen_vocab, save_
 
 from src.datasets.base.asr_dataset import ASRDataset
 from src.datasets.base.st_dataset import STDataset
-from src.datasets.util import iterate_over_dataset, process_dataset_in_parallel
+from src.datasets.util import iterate_over_dataset
 from src.logger_utils import get_logger
 
 logger = get_logger('ASR::Config')
@@ -113,7 +113,7 @@ def __process_dataset_vocab(root_location: Path, dataset: STDataset, spm_filenam
     logger.info('Collecting train text...')
     with open(root_location / 'train_text.txt', 'w') as f:
         for path, sentence, translation, speaker_id, sample_id in iterate_over_dataset(
-            dataset, desc=f'Collections train text'
+            dataset, desc='Collections train text'
         ):
             f.write(cleanup_utterance(sentence) + '\n')
 

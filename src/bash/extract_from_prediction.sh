@@ -4,6 +4,8 @@ INPUT_FILE=$1
 HYP_OUTPUT_FILE=$2
 REF_OUTPUT_FILE=$3
 NUM_SAMPLES_PER_PREDICTION=$4
+SRC_OUTPUT_FILE=$5
+
 SAMPLE_HYP_OUTPUT_FILE=$HYP_OUTPUT_FILE.sampled
 
 # if the number of samples per prediction is not provided, set it to 1
@@ -15,7 +17,13 @@ fi
 grep ^D $INPUT_FILE | sed 's/^D-//g' | cut -f 3 | sed 's/ ##//g' > $HYP_OUTPUT_FILE
 grep ^T $INPUT_FILE | sed 's/^T-//g' | cut -f 2 | sed 's/ ##//g' > $REF_OUTPUT_FILE
 
-echo "Prediction files written for $HYP_OUTPUT_FILE and $REF_OUTPUT_FILE"
+# if SRC_OUTPUT_FILE is provided, write the source sentences to it
+if [ -n "$SRC_OUTPUT_FILE" ]
+then
+    grep ^S $INPUT_FILE | sed 's/^S-//g' | cut -f 2 | sed 's/ ##//g' > $SRC_OUTPUT_FILE
+fi
+
+echo "Prediction files written for $HYP_OUTPUT_FILE and $REF_OUTPUT_FILE and $SRC_OUTPUT_FILE"
 
 # write the first, the num_samples_per_prediction-th, the 2*num_samples_per_prediction-th, etc. predictions to one file named HYP_OUTPUT_FILE + ".sampled"
 # Reset SAMPLE_HYP_OUTPUT_FILE
@@ -43,3 +51,6 @@ tail -n 1 $INPUT_FILE
 
 echo "BLEU:"
 sacrebleu -tok none -s 'none' $REF_OUTPUT_FILE < $SAMPLE_HYP_OUTPUT_FILE
+
+echo "COMET:"
+comet-score -s $SRC_OUTPUT_FILE -r $REF_OUTPUT_FILE -t $SAMPLE_HYP_OUTPUT_FILE --gpu

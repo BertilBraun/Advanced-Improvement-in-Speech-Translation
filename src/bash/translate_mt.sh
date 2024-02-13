@@ -80,4 +80,6 @@ echo "Translations done"
 source src/bash/extract_from_prediction.sh  \
     $PRED_LOG \
     $PRED_OUTPUT_DIR/hyp_mt.txt \
-    $PRED_OUTPUT_DIR/ref_mt.txt
+    $PRED_OUTPUT_DIR/ref_mt.txt \
+    1 \
+    $PRED_OUTPUT_DIR/src_mt.txt
