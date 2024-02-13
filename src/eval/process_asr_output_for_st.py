@@ -269,14 +269,18 @@ if __name__ == '__main__':
     logger.info('Writing processed lines to file...')
 
     min_length = min(len(v) for v in PROCESSED_LINES.values())
+
     # filter out empty lines from the processed lines - remove the same index from all files
+    indices_to_remove = []
 
     for i in range(min_length):
         for lines_processed in PROCESSED_LINES.values():
             if not lines_processed[i]:
-                for k in PROCESSED_LINES:
-                    PROCESSED_LINES[k].pop(i)
+                indices_to_remove.append(i)
                 break
+
+    for k in PROCESSED_LINES:
+        PROCESSED_LINES[k] = [v for i, v in enumerate(PROCESSED_LINES[k]) if i not in indices_to_remove]
 
     min_length = min(len(v) for v in PROCESSED_LINES.values())
 
