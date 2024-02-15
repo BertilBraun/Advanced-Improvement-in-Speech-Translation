@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=eval_st                 # job name
 #SBATCH --partition=gpu_4                  # mby GPU queue for the resource allocation.
-#SBATCH --time=02:00:00                    # wall-clock time limit  
+#SBATCH --time=03:00:00                    # wall-clock time limit  
 #SBATCH --mem=100000                       # memory per node
 #SBATCH --nodes=1                          # number of nodes to be used
 #SBATCH --cpus-per-task=1                  # number of CPUs required per MPI task
@@ -16,7 +16,7 @@ cd ../../
 source setup.sh
 PREDICTION_DIR=~/predictions/eval_st
 
-POSTPROCESSING_TYPES=("custom" "none") # ("custom" "llama" "none") # postprocessing types
+POSTPROCESSING_TYPES=("custom" "llama" "none") # postprocessing types
 NUM_SAMPLES_TO_EVALUATE=1000000000 # number of samples to evaluate (sth like 10 billion to evaluate all)
 
 ASR_TEST_SUBSET=test
@@ -35,13 +35,13 @@ fi
 
 echo "Transcribing the test set..."
 
-# source src/bash/transcribe_asr.sh \
-#         $ASR_TEST_SUBSET \
-#         $ASR_DATA_DIR \
-#         $ASR_MODEL_DIR \
-#         $PREDICTION_DIR \
-#         $ASR_BEAM_SIZE \
-#         $ASR_N_BEST
+source src/bash/transcribe_asr.sh \
+        $ASR_TEST_SUBSET \
+        $ASR_DATA_DIR \
+        $ASR_MODEL_DIR \
+        $PREDICTION_DIR \
+        $ASR_BEAM_SIZE \
+        $ASR_N_BEST
 
 echo "Transcription done"
 
@@ -88,6 +88,7 @@ echo "--------------------------------------------------"
 for TYPE_OF_POSTPROCESSING in "${POSTPROCESSING_TYPES[@]}"; do
     POSTPROCESSING_PREDICTION_DIR=$PREDICTION_DIR/$TYPE_OF_POSTPROCESSING
 
+    # TODO SRC is currently the input of the MT model, not the true transcription of the ASR model
     SRC=$POSTPROCESSING_PREDICTION_DIR/src_mt.txt
     REF=$POSTPROCESSING_PREDICTION_DIR/ref_mt.txt
     HYP=$POSTPROCESSING_PREDICTION_DIR/hyp_mt.txt

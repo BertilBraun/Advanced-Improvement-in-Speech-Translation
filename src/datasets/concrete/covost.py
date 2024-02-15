@@ -96,6 +96,20 @@ class CoVoSTPunctuationReconstructionDataset(MTDataset):
         return data
 
 
+class CoVoSTEnd2End(CoVoST):
+    def __init__(self, root: Path, split: str, source_language: str, target_language: str) -> None:
+        super().__init__(root, split, source_language, target_language)
+
+    def _load_data(self) -> list[DataSample]:
+        data = super()._load_data()
+
+        return [
+            (path, translation, sentence, speaker_id, sample_id)
+            for path, sentence, translation, speaker_id, sample_id in data
+            if translation is not None
+        ]
+
+
 if __name__ == '__main__':
     for split in CoVoST.SPLITS:
         logger.info(f'Fetching split {split}...')

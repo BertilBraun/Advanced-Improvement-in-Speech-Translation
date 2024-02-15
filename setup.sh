@@ -27,7 +27,16 @@ check_and_extend_workspace MT 30
 
 
 # conda initialize
-source ~/miniconda3/bin/activate nmt
+# if conda does not contain a environment named pst, create it based on the environment.yml file
+# use the conda installation in ~/miniconda3
+if [ -d ~/miniconda3/envs/pst ]; then
+    echo "pst environment exists. Skipping environment creation."
+else
+    echo "pst environment does not exist. Creating environment..."
+    conda env create -f environment.yml
+fi
+
+source ~/miniconda3/bin/activate pst
 
 if [ -d ~/fairseq ]; then
     echo "Fairseq directory exists. Checking if installed..."

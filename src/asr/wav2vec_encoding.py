@@ -46,7 +46,7 @@ def process_dataset_to_wav2vec_embeddings(dataset: ASRDataset, output_root: Path
     if batch_waveforms:
         __extract_wav2vec_features_batch(batch_waveforms, batch_paths)
 
-    logger.info(f'Finished  processing wav2vec embeddings for all samples.')
+    logger.info('Finished  processing wav2vec embeddings for all samples.')
 
 
 def __ensure_model_and_processor_loaded() -> None:

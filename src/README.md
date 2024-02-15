@@ -70,6 +70,7 @@ fairseq-generate configs/covost --gen-subset test --path checkpoints/covost/chec
 - If required, rerun `fairseq-preprocess` with the `--testpref` set to the appropriate dataset split name (e.g. `spm/tst.de-en`) so that the `binarized` folder contains the correct test data. This is only required if the test data is not already in the `binarized` folder (i.e. if we want to use a different test set than the one used for training). This requires the `--srcdict` and `--tgtdict` to be set to the dictionaries created during the initial `fairseq-preprocess` step.
 - Call `fairseq-generate` with the created `binarized` folder, set the `--gen-subset` to the appropriate dataset split name and set `--path` to the best checkpoint file in the `checkpoints` folder (e.g. `checkpoints/checkpoint_best.pt`).
   - The output format is on multiple lines, with the first character indicating the type of output on this line:
+    - `S`: source
     - `H`: hypothesis
     - `T`: target (reference truth)
   - The last line of the output is the achieved score (whatever metric was used via `--scoring`).

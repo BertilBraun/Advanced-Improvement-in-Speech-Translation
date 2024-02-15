@@ -51,6 +51,3 @@ tail -n 1 $INPUT_FILE
 
 echo "BLEU:"
 sacrebleu -tok none -s 'none' $REF_OUTPUT_FILE < $SAMPLE_HYP_OUTPUT_FILE
-
-echo "COMET:"
-comet-score -s $SRC_OUTPUT_FILE -r $REF_OUTPUT_FILE -t $SAMPLE_HYP_OUTPUT_FILE --gpus 1

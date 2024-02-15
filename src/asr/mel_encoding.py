@@ -20,4 +20,4 @@ def process_dataset_to_mel_spectrogram(dataset: ASRDataset, output_root: Path) -
 
     process_dataset_in_parallel(dataset, process_sample, desc='Mel')
 
-    logger.info(f'Finished processing mel spectrogram for all samples.')
+    logger.info('Finished processing mel spectrogram for all samples.')

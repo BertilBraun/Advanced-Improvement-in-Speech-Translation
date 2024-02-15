@@ -38,7 +38,7 @@ if __name__ == '__main__':
     from src.mt.config import process_mt_dataset_to_spm_encoding
     from src.asr.config import create_asr_configs
     from src.asr.mel_encoding import process_dataset_to_mel_spectrogram
-    # from src.asr.wav2vec_encoding import process_dataset_to_wav2vec_embeddings
+    from src.asr.wav2vec_encoding import process_dataset_to_wav2vec_embeddings
 
     logger.info('Preparing CoVoST...')
     covost_datasets = [CoVoST(COVOST_ROOT, split, 'en', 'de') for split in CoVoST.SPLITS]
@@ -54,20 +54,22 @@ if __name__ == '__main__':
         ASR_COVOST_MEL_ENCODING_ROOT,
         encoding_function=process_dataset_to_mel_spectrogram,
         spm_filename=ASR_SPM_MODEL.name,
+        vocab_size=200,  # almost character level encoding apparently works better
     )
 
-    # # copy spm model ASR_SPM_MODEL to ASR_COVOST_ROOT
-    # os.system(f"cp {ASR_SPM_MODEL} {ASR_COVOST_WAV2VEC_ROOT}")
-    #
-    # logger.info("Creating ASR configs for CoVoST (wav2vec)...")
-    # create_asr_configs(
-    #     covost_datasets,
-    #     CoVoST.SPLITS,
-    #     ASR_COVOST_WAV2VEC_ROOT,
-    #     ASR_COVOST_WAV2VEC_ENCODING_ROOT,
-    #     encoding_function=process_dataset_to_wav2vec_embeddings,
-    #     spm_filename=ASR_SPM_MODEL.name,
-    # )
+    # copy spm model ASR_SPM_MODEL to ASR_COVOST_ROOT
+    os.system(f'cp {ASR_SPM_MODEL} {ASR_COVOST_WAV2VEC_ROOT}')
+
+    logger.info('Creating ASR configs for CoVoST (wav2vec)...')
+    create_asr_configs(
+        covost_datasets,
+        CoVoST.SPLITS,
+        ASR_COVOST_WAV2VEC_ROOT,
+        ASR_COVOST_WAV2VEC_ENCODING_ROOT,
+        encoding_function=process_dataset_to_wav2vec_embeddings,
+        spm_filename=ASR_SPM_MODEL.name,
+        vocab_size=200,  # almost character level encoding apparently works better
+    )
 
     logger.info('Preparing MT CoVoST...')
     mt_datasets = [CoVoSTWithText(COVOST_ROOT, split, 'en', 'de') for split in CoVoST.SPLITS]

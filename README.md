@@ -1,158 +1,55 @@
-# Project Setup and Execution Guide
+# Advanced Improvement in Speech Translation
 
-1. Connect to the cluster via SSH
+## Overview
 
-    ```bash
-    ssh <username>@uc2.scc.kit.edu
-    ```
+This project, developed as part of our university coursework, focuses on advancing the field of speech-to-text translation through comprehensive experimentation with automatic speech recognition (ASR) and machine translation (MT). Our goal is to improve the understanding and processing of spoken languages using neural network models.
 
-    The very first action should be, to create a shared workspace:
+## Motivation
 
-    ```bash
-    ws_allocate ASR 60 # 60 Days
-    ws_allocate MT 60 # 60 Days
-    ```
+With approximately 7000 spoken languages worldwide and the European Union advocating for citizens to know at least two languages besides their mother tongue, the need for robust speech translation tools has never been more apparent. Our project aims to contribute to this global need by enhancing automatic speech translation capabilities.
 
-    Add users to the workspace:
+## Project Structure
 
-    ```bash
-    module load system/ws_addon
-    
-    # Example: ws_share -t dir-w -u uxude ASR
-    ws_share -t dir-w -u <user> <workspace>
-   
-    setfacl -Rm u:USERNAME:rwX,d:u:USERNAME:rwX $(ws_find ASR)
-    setfacl -Rm u:USERNAME:rwX,d:u:USERNAME:rwX $(ws_find MT)
-    ```
+```text
+.
+├── documentation
+│   └── (Project reports, additional documentation)
+├── src
+│   ├── train
+│   ├── eval
+│   ├── logs
+│   ├── datasets
+│   └── ... (Other directories)
+├── CLUSTER_README.md (Guide on BWUniCluster setup and usage)
+├── environment.yml (Conda environment file)
+├── README.md
+└── requirements.txt
+```
 
-    To access the workspace, run:
+## Approach
 
-    ```bash
-    cd $(ws_find ASR)
-    cd $(ws_find MT)
-    ```
+Our approach is a cascaded system combining ASR and MT to translate spoken language into text. This method allows modular development, detailed error analysis, and flexibility in using different datasets and models.
 
-    To check the remaining time of the workspace, run:
+### Evaluation Metrics
 
-    ```bash
-    ws_list
-    ```
+We utilized various metrics to evaluate our models, including Word Error Rate (WER), BLEU (BiLingual Evaluation Understudy Score), BertScore, and COMET (Crosslingual Optimized Metric for Evaluation of Translation), ensuring a comprehensive assessment of performance.
 
-    To extend the workspace, run:
+## Experiments and Results
 
-    ```bash
-    ws_extend ASR 30 # 30 Days
-    ws_extend MT 30 # 30 Days
-    ```
+Our experiments leveraged the CoVoST 2 dataset, focusing on the English to German translation task. We explored several architectures and techniques, including:
 
-    Note that this is automatically done in the `setup.sh` script once the workspace is about to expire.
+- Convolution-augmented transformer models for ASR.
+- Simple transformer models for MT, enhanced with paraphrase generation and a Cosine Learning Rate Scheduler.
+- Techniques to improve the connection from ASR to MT, including custom models and prompts for LLaMa2.
 
-2. Download the project
+Results indicate significant insights into the cascaded approach's effectiveness and areas for improvement in speech translation systems.
 
-    ```bash
-    git clone https://github.com/BertilBraun/Advanced-Improvement-in-Speech-Translation.git PST
-    ```
+## Conclusions
 
-3. Create a virtual environment
+The project highlighted the challenges of speech translation, including the need for high-quality data and the complexity of integrating ASR and MT systems. Future work will focus on exploring larger datasets, more advanced models, and innovative data augmentation techniques to enhance performance further.
 
-    First, install miniconda by following the instructions [here](https://docs.conda.io/projects/miniconda/en/latest/index.html#quick-command-line-install).
+## Further Reading and Documentation
 
-    ```bash
-    mkdir -p ~/miniconda3
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-    rm -rf ~/miniconda3/miniconda.sh
+For a more detailed explanation of our methods, experiments, and results, please refer to the `documentation` folder and the `CLUSTER_README.md` for setup and usage instructions on the BWUniCluster.
 
-    # Initialize conda in your bash shell
-    ~/miniconda3/bin/conda init bash
-    source ~/.bashrc
-    ```
-
-    Then, create a virtual environment and install the required packages:
-
-    ```bash
-    cd ~/PST
-    conda create --name nmt
-    conda activate nmt
-    # Install required packages from environment.yml
-    conda env update -f environment.yml
-    # Ensure setup completed and install additional packages
-    ./setup.sh
-    ```
-
-    Alternatively, you can create a virtual environment and install the required packages manually:
-
-    ```bash
-    cd ~/PST
-    conda create --name nmt
-    conda activate nmt
-    conda install python=3.10.13
-    ./setup.sh
-    pip install -r requirements.txt
-    ```
-
-4. Running
-
-    Ensure that the scripts start executing on the login node to avoid errors after the job has been submitted to the cluster.
-
-    ```bash
-    ./run_YOUR_SCRIPT.sh
-    ```
-
-    Ensure that the script is executable:
-
-    ```bash
-    chmod +x run_YOUR_SCRIPT.sh
-    ```
-
-5. Submitting to the cluster
-
-    Once you are sure that the script is executable and runs without errors, you can submit it to the cluster.
-
-    Make sure, to have set the correct `SBATCH` parameters in the script, such as `timeouts`, required cluster `cores` and `GPUs` and the `job-name`. Ensure, that the correct and required modules are being loaded by calling the `~/AI-ST/setup.sh` script.
-
-    ```bash
-    #SBATCH --job-name=process_audio                # job name
-    #SBATCH --partition=gpu_4                       # single, gpu_4
-    #SBATCH --time=02:00:00                         # wall-clock time limit  
-    #SBATCH --mem=200000                            # in MB check limits per node
-    #SBATCH --nodes=1                               # number of nodes to be used
-    #SBATCH --cpus-per-task=1                       # number of CPUs required per MPI task
-    #SBATCH --ntasks-per-node=1                     # maximum count of tasks per node
-    #SBATCH --mail-type=ALL                         # Notify user by email when certain event types occur.
-    #SBATCH --gres=gpu:4                            # number of GPUs required per node 
-    #SBATCH --output=../../ASR/logs/output_%j.txt   # standard output and error log
-    #SBATCH --error=../../ASR/logs/error_%j.txt     # %j is the job id, making each log file unique, therefore not overwriting each other
-    ```
-
-    To then submit the script to the cluster, run:
-
-    ```bash
-    sbatch run_YOUR_SCRIPT.sh
-    ```
-
-6. Monitoring
-
-    To monitor the status of your job, run:
-
-    ```bash
-    squeue -u <username>
-    ```
-
-    To cancel a job, run:
-
-    ```bash
-    scancel <job-id>
-    ```
-
-    The logs of the job are stored in the `~/ASR/logs` directory or `~/MT/logs` directory, depending on the task. The output and error logs are named `output_<job-id>.txt` and `error_<job-id>.txt`, respectively. The `job-id` is the number that is returned when submitting the job to the cluster.
-
-7. Downloading the results
-
-    To download the results from the cluster, run:
-
-    ```bash
-    scp [-r] <username>@uc2.scc.kit.edu:~/<PATH-ON-REMOTE> <LOCAL-PATH>
-    ```
-
-    The `-r` flag is only required if you want to download a directory.
+[Link to Presentation and Additional Documentation](/documentation)

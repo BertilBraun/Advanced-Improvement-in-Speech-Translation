@@ -1,1 +1,0 @@
-cd ~/PST && git stash && git pull && chmod +x installs.sh && sbatch installs.sh && squeue -u uxude && rm log.txt && $(echo "" >> log.txt) && tail -f log.txt

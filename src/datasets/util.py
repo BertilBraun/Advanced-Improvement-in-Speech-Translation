@@ -1,4 +1,3 @@
-import numpy as np
 
 from tqdm import tqdm
 from typing import Callable, Iterator, TypeVar
