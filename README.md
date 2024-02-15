@@ -50,6 +50,4 @@ The project highlighted the challenges of speech translation, including the need
 
 ## Further Reading and Documentation
 
-For a more detailed explanation of our methods, experiments, and results, please refer to the `documentation` folder and the `CLUSTER_README.md` for setup and usage instructions on the BWUniCluster.
-
-[Link to Presentation and Additional Documentation](/documentation)
+For a more detailed explanation of our methods, experiments, and results, please refer to the [`documentation`](/documentation) folder and the [`CLUSTER_README.md`](/CLUSTER_README.md) for setup and usage instructions on the BWUniCluster. Checkout the [presentation](/documentation/Presentation.pdf) for a overview and the results of our work.
